@@ -1,0 +1,76 @@
+// Import variables
+@import '~quasar/src/css/variables';
+
+// https://quasar.dev/style/sass-scss-variables
+$body-font-size: 14px;
+$body-line-height: 1.5;
+
+$headings: (
+  h1: (size: 3rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  h2: (size: 2.5rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  h3: (size: 2rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  h4: (size: 1.75rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  h5: (size: 1.25rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  h6: (size: .975rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  subtitle1: (size: .85rem, line-height: 1.5, weight: 700, letter-spacing: unset),
+  subtitle2: (size: .85rem, line-height: 1.5, weight: 600, letter-spacing: unset),
+  body1: (size: .975rem, weight: 600, letter-spacing: unset),
+  body2: (size: .875rem, weight: 600, letter-spacing: unset),
+  overline: (size: .75rem, weight: 600, letter-spacing: unset),
+  caption: (size: .75rem, weight: 600, letter-spacing: unset)
+);
+
+$text-weights: (thin: 400, light: 500, regular: 600, medium: 700, bold: 800, bolder: 900);
+
+$black: #0a0a0a;
+$black-bis: #292a2d;
+$black-ter: #1c1d1e;
+
+$grey: #201f1f;
+$grey-1: #3b3d42;
+$grey-2: #4a4b50;
+$grey-3: #696970;
+$grey-4: #73747b;
+$grey-5: #a9a9b3;
+$grey-6: #c8c8d3;
+
+$primary: #f44336;
+$secondary: #26A69A;
+$accent: #9C27B0;
+
+$dark-page: $black-ter;
+$dark: $black-ter;
+
+$positive: #21BA45;
+$negative: #C10015;
+$info: hsl(204, 86%, 53%);
+$warning: hsl(348, 100%, 61%);
+
+$separator-color: $dark-page;
+$separator-dark-color: $dark;
+
+$generic-border-radius: 2px;
+$typography-font-family: 'Inter', -apple-system, 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+
+$button-border-radius: 2px;
+$button-padding: 4px 12px;
+$button-font-weight: 600;
+$button-font-size: .875rem;
+$button-font-weight: 600;
+
+$toolbar-min-height: 50px;
+$toolbar-padding: 0 16px;
+$toolbar-title-font-size: .875rem;
+$toolbar-inset-size: 58px;
+$toolbar-title-font-size: 14px;
+$toolbar-title-font-weight: normal;
+$toolbar-title-letter-spacing: 0;
+$toolbar-title-padding: 0;
+
+$layout-border: $grey-5;
+
+$menu-background: $black-bis;
+
+$input-font-size: 14px;
+$input-text-color: $grey-5;
+$input-label-color: $grey-5;

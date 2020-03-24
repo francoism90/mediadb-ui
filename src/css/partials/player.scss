@@ -1,0 +1,49 @@
+.player {
+  background: black;
+  position: relative;
+  overflow: hidden;
+
+  video {
+    display: block;
+    margin: 0 auto;
+    min-height: 576px;
+    max-height: 640px;
+    width: 100%;
+
+    @media (max-width: $breakpoint-sm-max) {
+      object-fit: fill;
+      min-height: 320px;
+      max-height: 480px;
+    }
+
+    @media (max-width: $breakpoint-xs-max) {
+      object-fit: fill;
+      min-height: 180px;
+      max-height: 240px;
+    }
+  }
+}
+
+.player.fullscreen {
+  video {
+    min-height: 100% !important;
+    max-height: 100% !important;
+    height: 100% !important;
+    width: 100% !important;
+  }
+}
+
+.player-controls {
+  position: absolute;
+  z-index: 20;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .q-slider__track-container {
+    background: linear-gradient(
+      to right,
+      #a9a9b3 var(--buffered),
+      #696970 var(--buffer)) !important;
+  }
+}

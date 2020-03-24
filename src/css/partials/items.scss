@@ -1,0 +1,18 @@
+.item {
+  video {
+    min-height: 180px;
+    max-height: 180px;
+    height: 180px;
+    object-fit: fill;
+  }
+
+  img {
+    display: block;
+    min-height: 180px;
+    max-height: 180px;
+    height: 180px;
+    width: 100%;
+    max-width: 100%;
+    border: 0;
+  }
+}

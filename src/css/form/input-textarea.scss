@@ -1,0 +1,13 @@
+input::placeholder,
+textarea::placeholder {
+  font-weight: map-get($text-weights, 'regular');
+}
+
+.q-field {
+  &__native,
+  &__prefix,
+  &__suffix,
+  &__input {
+    font-weight: map-get($text-weights, 'regular');
+  }
+}
