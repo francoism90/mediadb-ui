@@ -78,7 +78,7 @@ module.exports = function (ctx) {
     // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       port: 8082,
-      host: 'mediadb-dev.internal',
+      host: 'mediadb.dom',
       open: true
     },
 

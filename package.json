@@ -18,10 +18,10 @@
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "quasar": "^1.9.11",
-    "shaka-player": "^2.5.9",
+    "shaka-player": "^2.5.10",
     "typeface-inter": "^3.12.0",
     "vue-backtotop": "^1.6.1",
-    "vue-i18n": "^8.15.6",
+    "vue-i18n": "^8.15.7",
     "vue-shortkey": "^3.1.7"
   },
   "devDependencies": {

@@ -52,7 +52,6 @@
           @filter="filterTags"
           clearable
           counter
-          fill-input
           use-chips
           stack-label
           hide-dropdown-icon
