@@ -1,6 +1,7 @@
 export default function () {
   return {
     ready: false,
+    model: {},
     callback: {},
     data: {
       buffered: null,

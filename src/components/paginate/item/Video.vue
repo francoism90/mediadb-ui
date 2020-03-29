@@ -45,10 +45,6 @@
 
 <script>
 export default {
-  meta: {
-    title: 'Library'
-  },
-
   data () {
     return {
       expanded: false

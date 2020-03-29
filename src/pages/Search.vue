@@ -16,7 +16,7 @@
         <q-tab name="people" icon="people" label="Users" />
       </q-tabs>
 
-      <q-tab-panels v-model="tab" dark animated>
+      <q-tab-panels keep-alive v-model="tab" dark animated>
         <q-tab-panel name="videos" class="q-px-none">
           <infinite namespace="video_library" item-component="Video" />
         </q-tab-panel>

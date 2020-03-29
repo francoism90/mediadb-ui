@@ -5,6 +5,8 @@
     :class="fullscreen ? 'fullscreen' : null"
     v-shortkey="keys"
     @shortkey="eventHandler"
+    @mousemove="showControls"
+    @mouseleave="hideControls"
   >
    <video
       ref="instance"
@@ -16,7 +18,7 @@
       @dblclick.prevent="eventHandler({ type: 'toggleFullscreen' })"
     />
 
-    <transition name="fade">
+    <transition v-if="ready && controlsActive" name="fade">
       <keep-alive>
         <controls />
       </keep-alive>
@@ -26,9 +28,13 @@
 
 <script>
 import { Player } from 'shaka-player'
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  timers: {
+    hideControls: { time: 3000, autostart: true }
+  },
+
   components: {
     Controls: () => import('components/video/Controls')
   },
@@ -48,6 +54,7 @@ export default {
   data () {
     return {
       instance: null,
+      controlsActive: false,
       fullscreen: false
     }
   },
@@ -59,14 +66,11 @@ export default {
   },
 
   computed: {
-    ...mapState('player', [
-      'ready'
-    ]),
-
     ...mapGetters('player', {
       events: 'getEventListeners',
       options: 'getShakaOptions',
-      keys: 'getKeyBindings'
+      keys: 'getKeyBindings',
+      ready: 'isReady'
     }),
 
     element () {
@@ -100,6 +104,7 @@ export default {
   methods: {
     ...mapActions('player', [
       'create',
+      'thumbnail',
       'update'
     ]),
 
@@ -121,7 +126,7 @@ export default {
       } catch (e) {}
 
       // Init player store
-      this.create()
+      this.create({ data: this.data, meta: this.meta })
     },
 
     async detach () {
@@ -207,7 +212,17 @@ export default {
             message: `${this.data.name} has been updated.`,
             type: 'positive'
           })
+          break
       }
+    },
+
+    hideControls () {
+      this.controlsActive = false
+    },
+
+    showControls () {
+      this.controlsActive = true
+      this.$timer.restart('hideControls')
     }
   }
 }

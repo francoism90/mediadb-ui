@@ -1,6 +1,6 @@
 <template>
   <div v-if="state.ready" :key="id">
-    <q-infinite-scroll @load="onLoad">
+    <q-infinite-scroll scroll-target="body" @load="onLoad">
       <div :class="rowClass">
         <div v-for="(item, index) in state.data" :key="index" :class="columnClass">
           <component :is="itemComponent" :class="componentClass" :item="item" />

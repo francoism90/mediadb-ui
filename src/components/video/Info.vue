@@ -7,7 +7,7 @@
           <div class="text-subtitle2 text-grey-4">
             <router-link class="text-grey-4 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
               {{ Number(data.properties.duration) | timestamp }} •
-              {{ Number(data.properties.duration) | approximate }} views
+              {{ Number(data.views) | approximate }} views
           </div>
           <div class="q-pt-xs">
             <tag v-for="(tag, index) in data.relationships.tags" :key="index" :item="tag" />

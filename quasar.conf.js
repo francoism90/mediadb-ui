@@ -1,8 +1,6 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
-const fs = require('fs')
-
 module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
@@ -11,10 +9,11 @@ module.exports = function (ctx) {
     boot: [
       'i18n',
       'axios',
-      'inter',
+      'backtotop',
       'filters',
+      'inter',
       'shortkey',
-      'backtotop'
+      'timers'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -79,7 +78,8 @@ module.exports = function (ctx) {
     devServer: {
       port: 8082,
       host: 'mediadb.dom',
-      open: true
+      open: true,
+      https: true
     },
 
     // animations: 'all', // --- includes all animations

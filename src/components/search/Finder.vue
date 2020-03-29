@@ -5,7 +5,7 @@
     dense
     square
     filled
-    debounce="500"
+    debounce="1000"
     v-model="query"
     autocomplete="off"
     class="toolbar-input"

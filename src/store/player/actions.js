@@ -1,7 +1,10 @@
-export function create ({ commit }) {
+export function create ({ commit }, model = {}) {
+  // Reset current state
   commit('setReady', false)
   commit('resetState')
 
+  // Set model
+  commit('setModel', model)
   commit('setReady', true)
 }
 

@@ -47,3 +47,11 @@
       #696970 var(--buffer)) !important;
   }
 }
+
+.player-thumbnail {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100px;
+  width: 160px;
+}

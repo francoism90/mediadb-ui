@@ -46,7 +46,7 @@
           v-model="body.tags"
           dark
           filled
-          :input-debounce="350"
+          :input-debounce="300"
           :max-values="15"
           :options="options"
           @filter="filterTags"

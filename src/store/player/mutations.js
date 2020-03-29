@@ -18,3 +18,7 @@ export function setData (state, payload = {}) {
 export function setCallback (state, payload) {
   state.callback = payload
 }
+
+export function setModel (state, payload = {}) {
+  state.model = Object.assign({}, state.model, payload)
+}

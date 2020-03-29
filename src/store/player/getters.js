@@ -1,27 +1,30 @@
-export function getData (state) {
-  return state.data
-}
-
 export function isReady (state) {
   return state.ready
 }
 
+export function getData (state) {
+  return state.data
+}
+
+export function getModel (state) {
+  return state.model
+}
+
 export function getShakaOptions () {
   return {
-    retryParameters: {
-      timeout: 0,
-      maxAttempts: 5,
-      baseDelay: 400,
-      backoffFactor: 2,
-      fuzzFactor: 0.5
-    },
     streaming: {
       rebufferingGoal: 10,
-      bufferingGoal: 120,
-      bufferBehind: 90,
+      bufferingGoal: 90,
+      bufferBehind: 60,
       ignoreTextStreamFailures: true,
       jumpLargeGaps: true,
-      stallEnabled: true
+      retryParameters: {
+        timeout: 0,
+        maxAttempts: 5,
+        baseDelay: 300,
+        backoffFactor: 2,
+        fuzzFactor: 0.5
+      }
     }
   }
 }

@@ -1,14 +1,22 @@
 <template>
   <div :style="cssVars" class="player-controls q-px-md">
-    <q-slider
-      v-model="step"
-      :min="0.0"
-      :max="data.duration"
-      :step="0"
-      dark
-      dense
-      color="primary"
-    />
+    <div v-if="sliderHover" class="player-thumbnail" :style="tooltip">
+      <span class="q-py-xs q-px-sm text-caption bg-black-bis">
+        {{ getTimeByPct(sliderHoverPercent) | timestamp }}
+      </span>
+    </div>
+
+    <div ref="slider" @mousemove="onSliderHover" @mouseleave="onSliderLeave">
+      <q-slider
+        v-model="step"
+        :min="0.0"
+        :max="data.duration"
+        :step="0"
+        dark
+        dense
+        color="primary"
+      />
+    </div>
 
     <div class="row items-center no-wrap q-mb-sm">
       <div class="col">
@@ -58,6 +66,14 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
+  data () {
+    return {
+      sliderHover: false,
+      sliderHoverPercent: 0,
+      sliderHoverPosition: 0
+    }
+  },
+
   computed: {
     ...mapGetters('player', {
       data: 'getData'
@@ -96,7 +112,7 @@ export default {
       },
 
       set (value) {
-        this.$store.dispatch('player/callback', {
+        this.callback({
           type: 'currentTime',
           value: value
         })
@@ -109,13 +125,39 @@ export default {
       }
 
       return 'pause'
+    },
+
+    tooltip () {
+      return {
+        marginLeft: (this.sliderHoverPosition - 80) + 'px' // width % 2
+      }
     }
   },
 
   methods: {
     ...mapActions('player', [
       'callback'
-    ])
+    ]),
+
+    getTimeByPct (percent = 0) {
+      return this.data.duration * (percent / 100)
+    },
+
+    onSliderHover (event) {
+      const sliderWidth = this.$refs.slider.clientWidth
+      const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left
+      const position = event.clientX - sliderOffsetLeft
+      const percent = (position) / sliderWidth * 100
+
+      // Set sliderHover
+      this.sliderHoverPercent = percent
+      this.sliderHoverPosition = position
+      this.sliderHover = true
+    },
+
+    onSliderLeave () {
+      this.sliderHover = false
+    }
   }
 }
 </script>
