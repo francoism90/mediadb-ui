@@ -73,6 +73,7 @@
 export default {
   components: {
     Finder: () => import('components/search/Finder'),
+    CollectEdit: () => import('components/collection/Edit'),
     VideoCollect: () => import('components/video/Collection'),
     VideoEdit: () => import('components/video/Edit')
   },

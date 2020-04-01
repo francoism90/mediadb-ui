@@ -17,12 +17,12 @@ export async function fetch ({ commit, state }) {
     state.meta.current_page &&
     state.meta.current_page >= state.meta.last_page
   ) {
-    return { next: false }
+    return { stop: true }
   }
 
   // Fail-safe on invalid requests
   if (!state.meta.current_page && state.params['page[number]'] > 1) {
-    return { next: false }
+    return { stop: true }
   }
 
   commit('setLoading', true)
@@ -35,7 +35,7 @@ export async function fetch ({ commit, state }) {
   commit('increasePage')
   commit('setLoading', false)
 
-  return { next: true }
+  return { stop: false }
 }
 
 export function reset ({ commit }, route = {}) {

@@ -20,7 +20,8 @@
 export default {
   components: {
     Collect: () => import('components/paginate/item/Collect'),
-    Topic: () => import('components/paginate/item/Topic'),
+    Tag: () => import('components/paginate/item/Tag'),
+    User: () => import('components/paginate/item/User'),
     Video: () => import('components/paginate/item/Video')
   },
 
@@ -89,10 +90,10 @@ export default {
     async onLoad (index, done) {
       // Fetch items
       const response = await this.$store.dispatch(this.namespace + '/fetch')
-      const { next = false } = response
+      const { stop = true } = response
 
       // Stop fetching when true
-      await done(!next)
+      await done(stop)
     }
   }
 }

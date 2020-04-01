@@ -73,7 +73,7 @@ export default {
 
     openManager () {
       this.$store.dispatch('dialog/open', {
-        component: 'VideoEdit',
+        component: 'CollectEdit',
         data: { id: this.item.id }
       })
     }

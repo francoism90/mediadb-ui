@@ -30,7 +30,7 @@ export default {
     return {
       avatars: [
         {
-          value: 'category',
+          value: 'genre',
           color: 'grey-1',
           icon: 'star'
         },
@@ -45,7 +45,7 @@ export default {
           icon: 'language'
         },
         {
-          value: 'people',
+          value: 'person',
           color: 'grey-1',
           icon: 'person'
         }
@@ -69,10 +69,11 @@ export default {
 
   methods: {
     onClick (value) {
-      // this.$router.replace({
-      //   name: 'search',
-      //   query: { q: '#' + value.slug }
-      // }).catch(err => err)
+      this.$store.dispatch('search/query', '#' + value.slug)
+
+      if (this.$route.name !== 'search') {
+        this.$router.replace({ name: 'search' })
+      }
     }
   }
 }

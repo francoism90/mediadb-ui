@@ -4,7 +4,7 @@
       <q-card dark>
         <q-card-section class="row items-center">
           <q-avatar icon="delete_forever" color="primary" text-color="white" />
-          <span class="q-ml-sm">Are you sure you want to delete this video?</span>
+          <span class="q-ml-sm">Are you sure you want to delete this collection?</span>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -139,8 +139,8 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.video_edit) {
-      this.$store.registerModule('video_edit', modelModule)
+    if (!this.$store.state.collect_edit) {
+      this.$store.registerModule('collect_edit', modelModule)
     }
 
     if (!this.$store.state.tags) {
@@ -152,7 +152,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('video_edit', {
+    ...mapGetters('collect_edit', {
       ready: 'isReady',
       data: 'getData'
     }),
@@ -164,10 +164,10 @@ export default {
 
   methods: {
     async setModel () {
-      await this.$store.dispatch('video_edit/fetch', {
-        path: 'media/' + this.props.id,
+      await this.$store.dispatch('collect_edit/fetch', {
+        path: 'collect/' + this.props.id,
         params: {
-          include: 'model,tags'
+          include: 'tags,user'
         }
       })
 
@@ -212,8 +212,8 @@ export default {
         !this.$refs.description.hasError
       ) {
         // Update model
-        await this.$store.dispatch('video_edit/update', {
-          path: 'media/' + this.data.id,
+        await this.$store.dispatch('collect_edit/update', {
+          path: 'collect/' + this.data.id,
           body: this.body
         })
 
@@ -232,8 +232,8 @@ export default {
 
     async onDelete () {
       // Delete model
-      await this.$store.dispatch('video_edit/remove', {
-        path: 'media/' + this.data.id
+      await this.$store.dispatch('collect_edit/remove', {
+        path: 'collect/' + this.data.id
       })
 
       // Notifiy
@@ -249,13 +249,13 @@ export default {
     },
 
     async refresh () {
-      await this.$store.dispatch('video_edit/refresh')
+      await this.$store.dispatch('collect_edit/refresh')
 
       if (
-        this.$store.state.video &&
-        this.$store.state.video.path === `media/${this.data.id}`
+        this.$store.state.collect &&
+        this.$store.state.collect.path === `collect/${this.data.id}`
       ) {
-        await this.$store.dispatch('video/refresh')
+        await this.$store.dispatch('collect/refresh')
       }
     }
   }

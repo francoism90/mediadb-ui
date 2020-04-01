@@ -41,7 +41,7 @@ export default {
           icon: 'language'
         },
         {
-          value: 'people',
+          value: 'person',
           color: 'grey-1',
           icon: 'person'
         }

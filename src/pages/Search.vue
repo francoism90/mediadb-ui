@@ -1,7 +1,7 @@
 <template>
   <q-page class="container fluid">
     <template v-if="!query">
-      <topics />
+      <tags />
     </template>
 
     <template v-else>
@@ -11,22 +11,27 @@
         class="q-py-md text-white"
         :breakpoint="0"
       >
-        <q-tab name="videos" icon="video_library" class="text-overline" label="Videos" />
-        <q-tab name="collect" icon="layers" label="Collections" />
-        <q-tab name="people" icon="people" label="Users" />
+        <q-tab name="videos" icon="video_library" label="Videos" />
+        <q-tab name="collect" icon="collections" label="Collections" />
+        <q-tab name="people" icon="people_alt" label="Users" />
+        <q-tab name="tags" icon="local_offer" label="Tags" />
       </q-tabs>
 
       <q-tab-panels keep-alive v-model="tab" dark animated>
         <q-tab-panel name="videos" class="q-px-none">
-          <infinite namespace="video_library" item-component="Video" />
+          <infinite namespace="video_search" item-component="Video" />
         </q-tab-panel>
 
         <q-tab-panel name="collect" class="q-px-none">
-          <infinite namespace="collect_library" item-component="Collect" />
+          <infinite namespace="collect_search" item-component="Collect" />
         </q-tab-panel>
 
         <q-tab-panel name="people" class="q-px-none">
-          <infinite namespace="video_library" item-component="Video" />
+          <infinite namespace="user_search" item-component="User" />
+        </q-tab-panel>
+
+        <q-tab-panel name="tags" class="q-px-none">
+          <infinite namespace="tag_search" item-component="Topic" />
         </q-tab-panel>
       </q-tab-panels>
     </template>
@@ -40,7 +45,7 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     Infinite: () => import('components/paginate/Infinite'),
-    Topics: () => import('components/search/Topics')
+    Tags: () => import('components/search/Tags')
   },
 
   meta () {
@@ -51,7 +56,13 @@ export default {
 
   data () {
     return {
-      tab: 'videos'
+      tab: 'videos',
+      stores: [
+        'collect_search',
+        'tag_search',
+        'user_search',
+        'video_search'
+      ]
     }
   },
 
@@ -68,23 +79,27 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.video_library) {
-      this.$store.registerModule('video_library', paginateModule)
+    for (const store of this.stores) {
+      if (!this.$store.state[store]) {
+        this.$store.registerModule(store, paginateModule)
+      }
     }
+  },
 
-    if (!this.$store.state.collect_library) {
-      this.$store.registerModule('collect_library', paginateModule)
-    }
+  mounted () {
+    this.reset(this.query)
   },
 
   methods: {
     reset (query) {
       this.resetVideo(query)
       this.resetCollect(query)
+      this.resetUser(query)
+      this.resetTags(query)
     },
 
     resetCollect (query) {
-      this.$store.dispatch('collect_library/reset', {
+      this.$store.dispatch('collect_search/reset', {
         path: 'collect',
         params: {
           include: 'tags,user',
@@ -93,8 +108,30 @@ export default {
       })
     },
 
+    resetTags (query) {
+      this.$store.dispatch('tag_search/reset', {
+        path: 'tags',
+        params: {
+          append: 'media',
+          'page[size]': 12,
+          'filter[query]': query || null
+        }
+      })
+    },
+
+    resetUser (query) {
+      this.$store.dispatch('user_search/reset', {
+        path: 'user',
+        params: {
+          include: 'media',
+          'page[size]': 12,
+          'filter[query]': query || null
+        }
+      })
+    },
+
     resetVideo (query) {
-      this.$store.dispatch('video_library/reset', {
+      this.$store.dispatch('video_search/reset', {
         path: 'media',
         params: {
           include: 'model,tags',

@@ -7,7 +7,7 @@
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
-      item-component="Topic"
+      item-component="Tag"
       row-class="row q-col-gutter-md"
       column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"
     />
@@ -25,7 +25,7 @@ export default {
 
   data () {
     return {
-      namespace: 'topics',
+      namespace: 'tags_search',
       apiRoute: {
         path: 'tags',
         params: {
@@ -34,17 +34,17 @@ export default {
         }
       },
       options: [
-        { label: 'All Topics', value: '*' },
-        { label: 'Categories', value: 'category' },
+        { label: 'All Tags', value: '*' },
+        { label: 'Genres', value: 'genre' },
         { label: 'Languages', value: 'language' },
-        { label: 'People', value: 'people' }
+        { label: 'People', value: 'person' }
       ]
     }
   },
 
   created () {
-    if (!this.$store.state.topics) {
-      this.$store.registerModule('topics', paginateModule)
+    if (!this.$store.state.tags_search) {
+      this.$store.registerModule('tags_search', paginateModule)
     }
   }
 }
