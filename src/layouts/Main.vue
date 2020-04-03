@@ -1,16 +1,12 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <back-to-top visibleoffset="300" bottom="1rem" right="1rem">
-      <q-btn icon="expand_less" dense unelevated text-color="white" color="black" />
-    </back-to-top>
-
+  <q-layout view="hHh Lpr lff">
     <q-dialog v-model="dialog" v-bind="dialogProps">
       <component :is="dialogComponent" :props="dialogData" />
     </q-dialog>
 
     <q-header class="header bg-black q-py-xs" height-hint="58">
       <q-toolbar class="toolbar">
-        <q-btn dense round color="black-ter" icon="menu" @click="drawer = !drawer" />
+        <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
 
         <router-link v-if="$q.screen.gt.xs" to="/" class="q-ml-md text-body2 text-grey-5">
           <q-toolbar-title shrink class="text-weight-bold">
@@ -25,15 +21,42 @@
         <q-space />
 
         <div class="row no-wrap items-center">
-          <q-btn class="q-mr-sm" round dense color="black-ter" icon="add">
+          <q-btn class="q-mr-sm" dense flat round icon="add">
             <q-tooltip>Upload video</q-tooltip>
           </q-btn>
 
-          <q-btn round dense color="black-ter" icon="notifications">
-            <q-badge color="red" text-color="white" floating>
-              2
-            </q-badge>
-            <q-tooltip>Notifications</q-tooltip>
+          <q-btn dense flat round>
+            <q-avatar size="28px" icon="account_circle" />
+
+            <q-menu auto-close dark square content-class="text-weight-light" max-width="400px">
+              <q-list bordered padding dark dense>
+                <q-item>
+                  <q-item-section>
+                    <q-item-label caption>
+                      Signed in as <span class="text-weight-medium">{{ user.name }}</span>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-separator dark spaced />
+
+                <q-item clickable dark>
+                  <q-item-section>Your profile</q-item-section>
+                </q-item>
+                <q-item clickable dark>
+                  <q-item-section>Settings</q-item-section>
+                </q-item>
+                <q-item clickable dark>
+                  <q-item-section>Help</q-item-section>
+                </q-item>
+
+                <q-separator dark spaced />
+
+                <q-item clickable dark @click="logout">
+                  <q-item-section>Sign out</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </q-btn>
         </div>
       </q-toolbar>
@@ -42,29 +65,34 @@
     <q-drawer
       dark
       bordered
+      show-if-above
       v-model="drawer"
-      overlay
+      :mini="miniDrawer"
+      @mouseover="miniDrawer = false"
+      @mouseout="miniDrawer = true"
       :width="240"
-      content-class="bg-black-bis"
+      content-class="bg-black-1"
     >
-      <q-scroll-area class="fit">
-        <q-list v-for="(link, index) in links" :key="index">
-          <q-item :to="{ name: link.name }" exact v-ripple>
-            <q-item-section avatar>
-              <q-icon :name="link.icon" />
-            </q-item-section>
-            <q-item-section>
-              {{ link.label }}
-            </q-item-section>
-          </q-item>
+      <q-list v-for="(link, index) in links" :key="index">
+        <q-item :to="{ name: link.name }" exact v-ripple>
+          <q-item-section avatar>
+            <q-icon :name="link.icon" />
+          </q-item-section>
+          <q-item-section>
+            {{ link.label }}
+          </q-item-section>
+        </q-item>
 
-          <q-separator v-if="link.separator" spaced />
-        </q-list>
-      </q-scroll-area>
+        <q-separator v-if="link.separator" spaced />
+      </q-list>
     </q-drawer>
 
     <q-page-container class="q-pb-lg">
       <router-view />
+
+      <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[32, 32]">
+        <q-btn icon="expand_less" dense unelevated color="black" />
+      </q-page-scroller>
     </q-page-container>
   </q-layout>
 </template>
@@ -80,17 +108,17 @@ export default {
 
   data () {
     return {
-      drawer: false,
+      drawer: true,
+      miniDrawer: true,
+      hideDrawer: ['video'],
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
         { label: 'Subscriptions', name: 'profiles', icon: 'subscriptions', separator: true },
         { label: 'History', name: 'profiles', icon: 'history', separator: false },
         { label: 'Watch later', name: 'profiles', icon: 'watch_later', separator: false },
-        { label: 'Your uploads', name: 'profiles', icon: 'cloud_upload', separator: true },
-        { label: 'Your account', name: 'account', icon: 'account_box', separator: false },
-        { label: 'Settings', name: 'account', icon: 'settings', separator: false },
-        { label: 'Sign out', name: 'account', icon: 'exit_to_app', separator: false }
+        { label: 'Favorites', name: 'profiles', icon: 'favorite', separator: false },
+        { label: 'Your videos', name: 'profiles', icon: 'cloud_upload', separator: false }
       ]
     }
   },
@@ -116,6 +144,43 @@ export default {
 
     dialogData () {
       return this.$store.getters['dialog/getData']
+    },
+
+    user () {
+      return this.$store.getters['user/getData']
+    }
+  },
+
+  watch: {
+    $route: function (route) {
+      this.showHideDrawer(route)
+    }
+  },
+
+  created () {
+    this.showHideDrawer(this.$route)
+  },
+
+  methods: {
+    showHideDrawer (route = {}) {
+      if (
+        (route.name && this.hideDrawer.includes(route.name)) ||
+        this.$q.screen.lt.sm
+      ) {
+        this.drawer = false
+      } else {
+        this.drawer = true
+      }
+    },
+
+    async logout () {
+      try {
+        await this.$store.dispatch('user/logout')
+
+        this.$router.go('/')
+      } catch (e) {
+        alert(e || 'Unable to logout. Please try again later.')
+      }
     }
   }
 }

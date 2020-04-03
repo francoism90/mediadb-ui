@@ -43,7 +43,7 @@
             square
             @remove="scope.removeAtIndex(scope.index)"
             :tabindex="scope.tabindex"
-            color="black-bis"
+            color="black-2"
             text-color="grey-5"
           >
             {{ scope.opt.name }}

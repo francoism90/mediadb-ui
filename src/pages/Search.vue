@@ -31,7 +31,7 @@
         </q-tab-panel>
 
         <q-tab-panel name="tags" class="q-px-none">
-          <infinite namespace="tag_search" item-component="Topic" />
+          <infinite namespace="tag_search" item-component="Tag" />
         </q-tab-panel>
       </q-tab-panels>
     </template>

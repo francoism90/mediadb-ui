@@ -1,7 +1,7 @@
 <template>
   <div :style="cssVars" class="player-controls q-px-md">
     <div v-if="sliderHover" class="player-thumbnail" :style="tooltip">
-      <span class="q-py-xs q-px-sm text-caption bg-black-bis">
+      <span class="q-py-xs q-px-sm text-caption bg-black-2">
         {{ getTimeByPct(sliderHoverPercent) | timestamp }}
       </span>
     </div>
@@ -26,6 +26,22 @@
           color="white"
           :icon="playbackIcon"
           @click="callback({ type: 'togglePlay' })"
+        />
+
+        <q-btn
+          flat
+          dense
+          color="white"
+          icon="replay_10"
+          @click="callback({ type: 'currentTime', value: data.current - 10 })"
+        />
+
+        <q-btn
+          flat
+          dense
+          color="white"
+          icon="forward_10"
+          @click="callback({ type: 'currentTime', value: data.current + 10 })"
         />
 
         <q-btn

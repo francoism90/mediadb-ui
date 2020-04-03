@@ -1,5 +1,5 @@
 <template>
-  <q-card dark square flat class="bg-black-bis">
+  <q-card dark square flat class="bg-black-1">
     <router-link :to="{ name: 'collect', params: { id: item.id, slug: item.slug }}">
       <img src="~assets/placeholders/empty.png" :alt="item.name" />
     </router-link>

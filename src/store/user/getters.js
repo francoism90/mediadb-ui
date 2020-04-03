@@ -1,5 +1,9 @@
-export function getUser (state) {
+export function getData (state) {
   return state.data
+}
+
+export function getMeta (state) {
+  return state.meta
 }
 
 export function isAuthenticated (state) {

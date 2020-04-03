@@ -1,43 +1,53 @@
 <template>
   <q-page>
+    <div class="container fluid">
+      <q-card dark square flat class="bg-black-1 fixed-center" style="min-width: 300px">
+        <q-card-section>
+          <div class="text-h6">Login to MediaDB</div>
+        </q-card-section>
 
-    <div class="q-pa-md" style="max-width: 400px">
+        <q-card-section>
+          <q-form @submit="onSubmit" spellcheck="false" class="q-gutter-md">
+            <q-input
+              v-model="body.email"
+              dark
+              filled
+              clearable
+              type="email"
+              label="Your email"
+              lazy-rules
+              :rules="[
+                val => val && val.length > 0 || 'Required',
+                val => val.length < 256 || 'Please use maximum 255 character',
+              ]"
+            />
 
-      <q-form @submit="onSubmit" class="q-gutter-md">
+            <q-input
+              v-model="body.password"
+              dark
+              filled
+              clearable
+              type="password"
+              label="Your password"
+              lazy-rules
+              :rules="[
+                val => val && val.length > 0 || 'Required',
+                val => val.length < 33 || 'Please use maximum 32 character',
+              ]"
+            />
 
-        <q-input
-          v-model="body.email"
-          filled
-          type="email"
-          label="Your email"
-          lazy-rules
-          :rules="[val => !!val || 'Field is required']"
-        />
-
-        <q-input
-          v-model="body.password"
-          filled
-          type="password"
-          label="Your password"
-          lazy-rules
-          :rules="[val => !!val || 'Field is required']"
-        />
-
-        <div>
-          <q-btn label="Submit" type="submit" color="primary"/>
-        </div>
-
-      </q-form>
-
+            <div>
+              <q-btn type="submit" label="Log In" color="primary" />
+            </div>
+          </q-form>
+        </q-card-section>
+      </q-card>
     </div>
-
   </q-page>
 </template>
 
 <script>
 export default {
-  name: 'Login',
-
   data () {
     return {
       body: {

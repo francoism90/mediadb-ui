@@ -20,7 +20,7 @@
 
     <q-separator />
 
-    <form @submit.prevent.stop="onSubmit">
+    <q-form @submit="onSubmit">
       <q-card-section style="max-height: 50vh" class="scroll q-gutter-lg">
         <q-input
           ref="name"
@@ -75,7 +75,7 @@
             square
             @remove="scope.removeAtIndex(scope.index)"
             :tabindex="scope.tabindex"
-            color="black-bis"
+            color="black-2"
             text-color="grey-5"
           >
             {{ scope.opt.name }}
@@ -110,7 +110,7 @@
         <q-btn flat label="Delete" color="primary" @click="confirm = true" />
         <q-btn flat type="submit" label="Save" color="primary" />
       </q-card-actions>
-    </form>
+    </q-form>
   </q-card>
 </template>
 
@@ -223,6 +223,7 @@ export default {
         // Notifiy
         this.$q.notify({
           progress: true,
+          timeout: 1500,
           position: 'top',
           message: `${this.data.name} has been updated.`,
           type: 'positive'

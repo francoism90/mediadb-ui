@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="bg-black-bis q-py-lg">
+    <section class="bg-black-3 q-py-lg">
       <div class="container row items-start">
         <div class="col">
           <div class="text-subtitle1 text-grey-5">{{ data.name }}</div>

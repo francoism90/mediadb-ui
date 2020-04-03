@@ -1,8 +1,9 @@
 // Colors to map
 $colors: (
   'black': $black,
-  'black-bis': $black-bis,
-  'black-ter': $black-ter,
+  'black-1': $black-1,
+  'black-2': $black-2,
+  'black-3': $black-3,
 );
 
 @each $name, $color in $colors {
