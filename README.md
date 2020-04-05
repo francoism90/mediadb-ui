@@ -1,26 +1,38 @@
 # MediaDB (client)
 
-A Quasar Framework app
+## Build your own streaming service
 
-## Install the dependencies
-```bash
-yarn
-```
+### Intro
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
-quasar dev
-```
+A Quasar Framework app for [MediaDB](https://github.com/francoism90/mediadb).
 
-### Lint the files
-```bash
-yarn run lint
-```
+### Requirements
 
-### Build the app for production
+- Running [MediaDB](https://github.com/francoism90/mediadb) instance
+- `npm` or `yarn`
+
+## Install
+
+Note: it is recommend to clone/install MediaDB projects to `/srv/http/mediadb/api` (mediadb-api) and `/srv/http/mediadb/ui` (mediadb-ui).
+
+### Build project
+
 ```bash
+cd /srv/http/mediadb/ui
+npm install
 quasar build
 ```
 
-### Customize the configuration
+### Configuration
+
 See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
+## Development
+
+### Live project
+
+```bash
+cd /srv/http/mediadb/ui
+npm install
+quasar dev
+```
