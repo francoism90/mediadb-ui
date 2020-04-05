@@ -1,4 +1,4 @@
-# MediaDB (client)
+# MediaDB (UI)
 
 ## Build your own streaming service
 
