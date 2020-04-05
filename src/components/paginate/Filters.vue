@@ -1,16 +1,18 @@
 <template>
-  <div v-if="state.ready" :key="namespace">
+  <div :key="namespace">
     <q-select
+      :name="field"
+      :loading="!state.ready"
       dark
-      borderless
       square
       dense
       v-model="model"
       dropdown-icon="keyboard_arrow_down"
       :options="options"
-      :options-dark="true"
-      :options-square="true"
-      :options-sanitize="true"
+      option-label="label"
+      option-value="value"
+      options-dark
+      options-sanitize
       :display-value="model.label"
       popup-content-class="dropdown"
       @input="onChange"

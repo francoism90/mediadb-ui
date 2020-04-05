@@ -9,7 +9,7 @@
         <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
 
         <router-link v-if="$q.screen.gt.xs" to="/" class="q-ml-md text-body2 text-grey-5">
-          <q-toolbar-title shrink class="text-weight-bold">
+          <q-toolbar-title shrink>
             MediaDB
           </q-toolbar-title>
         </router-link>
@@ -28,7 +28,7 @@
           <q-btn dense flat round>
             <q-avatar size="28px" icon="account_circle" />
 
-            <q-menu auto-close dark square content-class="text-weight-light" max-width="400px">
+            <q-menu auto-close dark square max-width="400px">
               <q-list bordered padding dark dense>
                 <q-item>
                   <q-item-section>
@@ -65,12 +65,13 @@
     <q-drawer
       dark
       bordered
-      show-if-above
+      persistent
       v-model="drawer"
       :mini="miniDrawer"
       @mouseover="miniDrawer = false"
       @mouseout="miniDrawer = true"
       :width="240"
+      :breakpoint="500"
       content-class="bg-black-1"
     >
       <q-list v-for="(link, index) in links" :key="index">
@@ -90,7 +91,7 @@
     <q-page-container class="q-pb-lg">
       <router-view />
 
-      <q-page-scroller position="bottom-right" :scroll-offset="150" :offset="[32, 32]">
+      <q-page-scroller position="bottom-right" :scroll-offset="175" :offset="[32, 32]">
         <q-btn icon="expand_less" dense unelevated color="black" />
       </q-page-scroller>
     </q-page-container>
@@ -114,11 +115,11 @@ export default {
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
-        { label: 'Subscriptions', name: 'profiles', icon: 'subscriptions', separator: true },
-        { label: 'History', name: 'profiles', icon: 'history', separator: false },
-        { label: 'Watch later', name: 'profiles', icon: 'watch_later', separator: false },
-        { label: 'Favorites', name: 'profiles', icon: 'favorite', separator: false },
-        { label: 'Your videos', name: 'profiles', icon: 'cloud_upload', separator: false }
+        { label: 'Profiles', name: 'profiles', icon: 'people_alt', separator: true },
+        { label: 'History', name: 'history', icon: 'history', separator: false },
+        { label: 'Watch later', name: 'history', icon: 'watch_later', separator: false },
+        { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
+        { label: 'Your videos', name: 'history', icon: 'cloud_upload', separator: false }
       ]
     }
   },
@@ -134,16 +135,16 @@ export default {
       }
     },
 
-    dialogProps () {
-      return this.$store.getters['dialog/getProps']
-    },
-
     dialogComponent () {
       return this.$store.getters['dialog/getComponent']
     },
 
     dialogData () {
       return this.$store.getters['dialog/getData']
+    },
+
+    dialogProps () {
+      return this.$store.getters['dialog/getProps']
     },
 
     user () {
@@ -165,7 +166,7 @@ export default {
     showHideDrawer (route = {}) {
       if (
         (route.name && this.hideDrawer.includes(route.name)) ||
-        this.$q.screen.lt.sm
+        this.$q.screen.lt.md
       ) {
         this.drawer = false
       } else {
@@ -177,9 +178,10 @@ export default {
       try {
         await this.$store.dispatch('user/logout')
 
+        // Reload app
         this.$router.go('/')
       } catch (e) {
-        alert(e || 'Unable to logout. Please try again later.')
+        alert(e || 'Unable to logout. Please clear cookies.')
       }
     }
   }

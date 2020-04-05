@@ -63,7 +63,7 @@ export default {
       try {
         await this.$store.dispatch('user/login', this.body)
 
-        this.$router.push(this.$route.query.redirect || '/')
+        this.$router.replace(this.$route.query.redirect || '/')
       } catch (e) {
         alert(e || 'Unable to login. Please try again later.')
       }

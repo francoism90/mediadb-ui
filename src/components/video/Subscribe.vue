@@ -32,21 +32,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-
-  data () {
-    return {
-      manage: [
-        { label: 'Collections', name: 'collections', icon: 'favorite', action: false },
-        { label: 'Users', name: 'profiles', icon: 'menu_open', action: false },
-        { label: 'Library', name: 'home', icon: 'add', action: false },
-        { label: 'Library', name: 'home', icon: 'flag', action: false }
-      ],
-      links: [
-        { label: 'Library', name: 'home', icon: 'get_app', action: false },
-        { label: 'Users', name: 'profiles', icon: 'share', action: false }
-      ]
-    }
   }
 }
 </script>

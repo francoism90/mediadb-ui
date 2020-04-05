@@ -7,9 +7,9 @@
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
-      item-component="Collect"
+      item-component="User"
       row-class="row q-col-gutter-md"
-      column-class="col-xs-12 col-sm-4 col-md-3 col-lg-2"
+      column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"
     />
   </q-page>
 </template>
@@ -25,33 +25,27 @@ export default {
 
   meta () {
     return {
-      title: 'Collections'
+      title: 'Profiles'
     }
   },
 
   data () {
     return {
-      namespace: 'collects',
+      namespace: 'users',
       apiRoute: {
-        path: 'collect',
-        params: {
-          include: 'user,tags'
-        }
+        path: 'user'
       },
       sorters: [
-        { label: 'Recommended for You', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
-        { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
         { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' }
+        { label: 'Popular this month', value: 'popular-month' },
+        { label: 'Most viewed', value: 'views' }
       ]
     }
   },
 
   created () {
-    if (!this.$store.state.collects) {
-      this.$store.registerModule('collects', paginateModule)
+    if (!this.$store.state.users) {
+      this.$store.registerModule('users', paginateModule)
     }
   }
 }

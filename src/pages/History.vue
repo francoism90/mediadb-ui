@@ -6,7 +6,7 @@
 <script>
 export default {
   meta: {
-    title: 'Account'
+    title: 'History'
   }
 }
 </script>

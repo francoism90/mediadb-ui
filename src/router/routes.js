@@ -14,7 +14,7 @@ const routes = [
   {
     name: 'profiles',
     path: '/profiles',
-    component: () => import('pages/Account.vue'),
+    component: () => import('pages/Profiles.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
@@ -32,9 +32,9 @@ const routes = [
     props: true
   },
   {
-    name: 'account',
-    path: '/account',
-    component: () => import('pages/Account.vue'),
+    name: 'history',
+    path: '/history',
+    component: () => import('pages/History.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {

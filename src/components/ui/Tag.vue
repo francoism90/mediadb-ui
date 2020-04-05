@@ -72,7 +72,7 @@ export default {
       this.$store.dispatch('search/query', '#' + value.slug)
 
       if (this.$route.name !== 'search') {
-        this.$router.replace({ name: 'search' })
+        this.$router.push({ name: 'search' })
       }
     }
   }

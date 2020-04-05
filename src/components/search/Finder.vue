@@ -41,7 +41,7 @@ export default {
   methods: {
     onFocus () {
       if (this.$route.name !== 'search') {
-        this.$router.replace({ name: 'search' })
+        this.$router.push({ name: 'search' })
       }
     }
   }

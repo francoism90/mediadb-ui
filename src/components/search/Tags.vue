@@ -1,7 +1,8 @@
 <template>
   <div>
     <q-btn-group class="q-py-md" unelevated>
-      <filters class="q-pr-md" :namespace="namespace" field="filter[type]" :options="options" />
+      <filters :namespace="namespace" field="sort" :options="sorters" class="q-mr-lg" />
+      <filters :namespace="namespace" field="filter[type]" :options="types" />
     </q-btn-group>
 
     <infinite
@@ -33,8 +34,12 @@ export default {
           'page[size]': 14
         }
       },
-      options: [
-        { label: 'All Tags', value: '*' },
+      sorters: [
+        { label: 'Alphabetical', value: 'name' },
+        { label: 'Number of Items', value: 'media' }
+      ],
+      types: [
+        { label: 'All Types', value: '*' },
         { label: 'Genres', value: 'genre' },
         { label: 'Languages', value: 'language' },
         { label: 'People', value: 'person' }

@@ -62,7 +62,6 @@
           option-value="id"
           options-dark
           options-sanitize
-          popup-content-class="text-weight-light"
           use-input
         >
           <template v-slot:prepend>
