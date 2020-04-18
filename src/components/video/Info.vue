@@ -1,11 +1,11 @@
 <template>
   <div>
-    <section class="bg-black-3 q-py-lg">
+    <section class="bg-grey-10 q-py-lg">
       <div class="container row items-start">
         <div class="col">
           <div class="text-subtitle1 text-grey-5">{{ data.name }}</div>
-          <div class="text-subtitle2 text-grey-4">
-            <router-link class="text-grey-4 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
+          <div class="text-subtitle2 text-grey-6">
+            <router-link class="text-grey-6 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
               {{ Number(data.properties.duration) | timestamp }} •
               {{ Number(data.views) | approximate }} views
           </div>
@@ -24,7 +24,7 @@
       <actions class="container q-py-md" :data="data" :meta="meta" />
     </section>
 
-    <section class="bg-grey-1">
+    <section class="bg-grey-9">
       <subscribe class="container q-py-md" :data="data" :meta="meta" />
     </section>
   </div>

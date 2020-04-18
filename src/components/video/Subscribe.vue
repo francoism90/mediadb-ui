@@ -4,7 +4,7 @@
       <router-link to="/" class="text-subtitle1 text-grey-5">
         {{ data.relationships.user.name }}
       </router-link>
-      <div class="text-subtitle2 text-grey-4">
+      <div class="text-subtitle2 text-grey-6">
         {{ Number(data.relationships.user.views) | approximate }} subscribers
       </div>
     </div>
@@ -12,8 +12,8 @@
     <div class="col-auto">
       <q-btn
         unelevated
-        color="grey-2"
-        text-color="grey-6"
+        color="grey-8"
+        text-color="grey-4"
         label="Subscribe"
       />
     </div>

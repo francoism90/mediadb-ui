@@ -1,7 +1,7 @@
 <template>
   <div :style="cssVars" class="player-controls q-px-md">
     <div v-if="sliderHover" class="player-thumbnail" :style="tooltip">
-      <span class="q-py-xs q-px-sm text-caption bg-black-2">
+      <span class="q-py-xs q-px-sm text-caption bg-grey-11">
         {{ getTimeByPct(sliderHoverPercent) | timestamp }}
       </span>
     </div>
@@ -160,8 +160,8 @@ export default {
     },
 
     onSliderHover (event) {
-      const sliderWidth = this.$refs.slider.clientWidth
-      const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left
+      const sliderWidth = this.$refs.slider.clientWidth || 0
+      const sliderOffsetLeft = this.$refs.slider.getBoundingClientRect().left || 0
       const position = event.clientX - sliderOffsetLeft
       const percent = (position) / sliderWidth * 100
 

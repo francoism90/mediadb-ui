@@ -1,5 +1,5 @@
 <template>
-  <q-card v-if="ready" :key="data.id" dark style="width: 700px; max-width: 80vw;">
+  <q-card v-if="ready" :key="data.id" dark style="width: 530px">
     <q-dialog v-model="confirm" persistent>
       <q-card dark>
         <q-card-section class="row items-center">
@@ -46,17 +46,18 @@
           v-model="body.tags"
           dark
           filled
-          :input-debounce="300"
+          :input-debounce="500"
           :max-values="15"
           :options="options"
+          :loading="loading"
           @filter="filterTags"
           clearable
           counter
           use-chips
-          stack-label
           hide-dropdown-icon
           hint="Max 15 selections"
           label="Select tags"
+          stack-label
           multiple
           option-label="name"
           option-value="id"
@@ -67,19 +68,18 @@
           <template v-slot:prepend>
             <q-icon name="local_offer" />
           </template>
-          <template v-slot:selected-item="scope">
-          <q-chip
-            removable
-            dense
-            square
-            @remove="scope.removeAtIndex(scope.index)"
-            :tabindex="scope.tabindex"
-            color="black-2"
-            text-color="grey-5"
-          >
-            {{ scope.opt.name }}
-          </q-chip>
-        </template>
+
+          <template v-slot:option="scope">
+            <q-item
+              v-bind="scope.itemProps"
+              v-on="scope.itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="scope.opt.name" />
+                <q-item-label caption class="text-capitalize">{{ scope.opt.type }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
         </q-select>
 
         <q-input
@@ -156,6 +156,10 @@ export default {
       data: 'getData'
     }),
 
+    loading () {
+      return this.$store.getters['tags/isLoading']
+    },
+
     options () {
       return this.$store.getters['tags/getData']
     }
@@ -180,7 +184,8 @@ export default {
       await this.$store.dispatch('tags/create', {
         path: 'tags',
         params: {
-          'page[size]': 9
+          'page[size]': 5,
+          sort: 'media'
         }
       })
     },
@@ -189,14 +194,13 @@ export default {
       // Reset items
       this.$store.dispatch('tags/reset', {
         params: {
-          'filter[query]': val
+          'filter[query]': val || null,
+          sort: val.length ? null : 'media'
         }
       })
 
       // Fetch tags
-      if (val) {
-        await this.$store.dispatch('tags/fetch')
-      }
+      await this.$store.dispatch('tags/fetch')
 
       // Update options
       update()

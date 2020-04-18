@@ -2,7 +2,7 @@
   <q-page v-if="ready" :key="data.id" class="container fluid">
     <section class="q-pt-lg">
       <div class="text-h5">{{ data.name }}</div>
-      <div class="text-subtitle2 text-grey-4">
+      <div class="text-subtitle2 text-grey-6">
         <router-link class="text-grey-4 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
         {{ Number(data.media) | approximate }} items •
         {{ Number(data.views) | approximate }} views

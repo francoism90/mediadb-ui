@@ -4,7 +4,7 @@
     square
     clickable
     @click.prevent="onClick(item)"
-    color="grey-2"
+    color="grey-8"
     class="q-ml-none q-mr-sm text-weight-light"
     :size="size"
   >
@@ -31,22 +31,22 @@ export default {
       avatars: [
         {
           value: 'genre',
-          color: 'grey-1',
+          color: 'grey-9',
           icon: 'star'
         },
         {
           value: 'default',
-          color: 'grey-1',
+          color: 'grey-9',
           icon: 'label'
         },
         {
           value: 'language',
-          color: 'grey-1',
+          color: 'grey-9',
           icon: 'language'
         },
         {
           value: 'person',
-          color: 'grey-1',
+          color: 'grey-9',
           icon: 'person'
         }
       ]

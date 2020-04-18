@@ -4,7 +4,7 @@
       <component :is="dialogComponent" :props="dialogData" />
     </q-dialog>
 
-    <q-header class="header bg-black q-py-xs" height-hint="58">
+    <q-header class="header bg-grey-14 q-py-xs" height-hint="58">
       <q-toolbar class="toolbar">
         <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
 
@@ -33,7 +33,7 @@
                 <q-item>
                   <q-item-section>
                     <q-item-label caption>
-                      Signed in as <span class="text-weight-medium">{{ user.name }}</span>
+                      Signed in as <span class="text-weight-medium">{{ session.name }}</span>
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -72,7 +72,7 @@
       @mouseout="miniDrawer = true"
       :width="240"
       :breakpoint="500"
-      content-class="bg-black-1"
+      content-class="bg-grey-12"
     >
       <q-list v-for="(link, index) in links" :key="index">
         <q-item :to="{ name: link.name }" exact v-ripple>
@@ -103,7 +103,7 @@ export default {
   components: {
     Finder: () => import('components/search/Finder'),
     CollectEdit: () => import('components/collection/Edit'),
-    VideoCollect: () => import('components/video/Collection'),
+    VideoCollect: () => import('components/video/Collections'),
     VideoEdit: () => import('components/video/Edit')
   },
 
@@ -147,8 +147,8 @@ export default {
       return this.$store.getters['dialog/getProps']
     },
 
-    user () {
-      return this.$store.getters['user/getData']
+    session () {
+      return this.$store.getters['session/getData']
     }
   },
 
@@ -176,7 +176,7 @@ export default {
 
     async logout () {
       try {
-        await this.$store.dispatch('user/logout')
+        await this.$store.dispatch('session/logout')
 
         // Reload app
         this.$router.go('/')

@@ -35,7 +35,7 @@ export default {
       apiRoute: {
         path: 'collect',
         params: {
-          include: 'user,tags'
+          include: 'tags,user'
         }
       },
       sorters: [

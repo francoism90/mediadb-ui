@@ -1,7 +1,7 @@
 <template>
   <q-page>
     <div class="container fluid">
-      <q-card dark square flat class="bg-black-1 fixed-center" style="min-width: 300px">
+      <q-card dark square flat class="bg-grey-12 fixed-center" style="min-width: 300px">
         <q-card-section>
           <div class="text-h6">Login to MediaDB</div>
         </q-card-section>
@@ -61,7 +61,7 @@ export default {
   methods: {
     async onSubmit () {
       try {
-        await this.$store.dispatch('user/login', this.body)
+        await this.$store.dispatch('session/login', this.body)
 
         this.$router.replace(this.$route.query.redirect || '/')
       } catch (e) {

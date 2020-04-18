@@ -5,7 +5,7 @@
         v-for="(item, index) in manage"
         :key="index"
         dense
-        text-color="grey-6"
+        text-color="grey-5"
         no-caps
         :icon="item.icon"
         @click="callback(item.action)"
@@ -19,7 +19,7 @@
         v-for="(item, index) in links"
         :key="index"
         dense
-        text-color="grey-6"
+        text-color="grey-5"
         no-caps
         :icon="item.icon"
         @click="callback(item.action)"

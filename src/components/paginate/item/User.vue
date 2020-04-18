@@ -1,7 +1,7 @@
 <template>
   <q-item clickable dark class="no-padding" @click.prevent="onClick(item)" v-ripple>
       <q-item-section side>
-        <q-avatar square size="48px" color="grey-4" text-color="grey-6">
+        <q-avatar square size="48px" color="grey-6" text-color="grey-3">
           {{ item.name.charAt(0) }}
         </q-avatar>
       </q-item-section>

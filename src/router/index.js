@@ -20,23 +20,22 @@ export default function ({ store, ssrContext }) {
       return savedPosition || { x: 0, y: 0 }
     },
     routes,
-
-    // Leave these as they are and change in quasar.conf.js instead!
-    // quasar.conf.js -> build -> vueRouterMode
-    // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
   })
 
   Router.beforeEach(async (to, from, next) => {
     // Fetch user info
-    await store.dispatch('user/fetch')
+    await store.dispatch('session/fetch')
 
-    const isAuthenticated = store.getters['user/isAuthenticated']
+    // Is authenticated
+    const isAuthenticated = store.getters['session/isAuthenticated']
 
-    // Needs auth
-    if (to.matched.some(record => record.meta.auth) && !isAuthenticated) {
+    // Validate route on auth
+    if (to.name !== 'login' && to.meta.auth === true && !isAuthenticated) {
       next({ name: 'login', query: { redirect: to.fullPath } })
+    } else if (['join', 'login'].includes(to.name) && isAuthenticated) {
+      next({ name: 'home' })
     } else {
       next()
     }

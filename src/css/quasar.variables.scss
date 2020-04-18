@@ -22,33 +22,36 @@ $headings: (
 
 $text-weights: (thin: 300, light: 400, regular: 500, medium: 600, bold: 700, bolder: 800);
 
-$black: #0a0a0a;
-$black-1: #292a2d;
-$black-2: #1c1d1e;
-$black-3: #252628;
-
-$grey: #201f1f;
-$grey-1: #3b3d42;
-$grey-2: #4a4b50;
-$grey-3: #696970;
-$grey-4: #73747b;
+$grey: #9e9e9e;
+$grey-1: #f5f5f5;
+$grey-2: #eeeeee;
+$grey-3: #e0e0e0;
+$grey-4: #bdbdbd;
 $grey-5: #a9a9b3;
-$grey-6: #c8c8d3;
+$grey-6: #73747b;
+$grey-7: #696970;
+$grey-8: #4a4b50;
+$grey-9: #3b3d42;
+$grey-10: #252628;
+$grey-11: #1c1d1e;
+$grey-12: #292a2d;
+$grey-13: #201f1f;
+$grey-14: #0a0a0a;
 
 $primary: #f44336;
 $secondary: #26A69A;
 $accent: #9C27B0;
 
-$dark-page: $black-2;
-$dark: $black-2;
+$dark-page: $grey-11;
+$dark: $grey-11;
 
 $positive: #21BA45;
 $negative: #C10015;
 $info: hsl(204, 86%, 53%);
 $warning: hsl(348, 100%, 61%);
 
-$separator-color: $black-2;
-$separator-dark-color: $black-1;
+$separator-color: $grey-11;
+$separator-dark-color: $grey-12;
 
 $generic-border-radius: 2px;
 $typography-font-family: 'Inter', -apple-system, 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
@@ -68,7 +71,7 @@ $toolbar-title-padding: 0;
 
 $layout-border: $grey-5;
 
-$menu-background: $black-2;
+$menu-background: $grey-11;
 
 $input-font-size: 14px;
 $input-text-color: $grey-5;

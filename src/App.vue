@@ -1,6 +1,6 @@
 <template>
-  <div v-if="layout" id="q-app">
-    <component :is="layout">
+  <div id="q-app">
+    <component :is="layout || 'Auth'">
       <router-view />
     </component>
   </div>
@@ -16,8 +16,8 @@ export default {
   },
 
   components: {
-    Main: () => import('layouts/Main'),
-    User: () => import('layouts/User')
+    Auth: () => import('layouts/Auth'),
+    Main: () => import('layouts/Main')
   },
 
   computed: {

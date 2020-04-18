@@ -1,5 +1,5 @@
 <template>
-  <q-card dark square flat class="bg-black-1">
+  <q-card dark square flat class="bg-grey-12">
     <router-link :to="{ name: 'video', params: { id: item.id, slug: item.slug }}">
       <preview :poster="item.placeholder" :src="item.preview" />
     </router-link>
@@ -8,8 +8,8 @@
       <div class="row items-start no-wrap">
         <div class="col">
           <div @click="expanded = !expanded" class="cursor-pointer text-subtitle1 text-grey-5">{{ item.name }}</div>
-          <div class="text-subtitle2 text-grey-4">
-            <router-link class="text-grey-4 no-decoration" to="/">{{ item.relationships.user.name }}</router-link> •
+          <div class="text-subtitle2 text-grey-6">
+            <router-link class="text-grey-6 no-decoration" to="/">{{ item.relationships.user.name }}</router-link> •
               {{ Number(item.properties.duration) | timestamp }} •
               {{ Number(item.views) | approximate }} views
           </div>
@@ -20,7 +20,7 @@
 
         <div class="col-auto">
           <q-btn
-            color="grey-7"
+            color="grey-6"
             round
             flat
             dense

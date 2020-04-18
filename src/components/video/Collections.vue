@@ -1,5 +1,5 @@
 <template>
-  <q-card v-if="ready" :key="data.id" dark style="width: 700px; max-width: 80vw;">
+  <q-card v-if="ready" :key="data.id" dark style="width: 530px">
     <q-card-section>
       <div class="text-h6">{{ data.name }}</div>
     </q-card-section>
@@ -19,7 +19,7 @@
           @filter="filterCollects"
           clearable
           counter
-          fill-input
+          use-input
           use-chips
           stack-label
           hide-dropdown-icon
@@ -27,11 +27,10 @@
           label="Select collection"
           multiple
           option-label="name"
-          option-value="slug"
+          option-value="id"
           options-dark
           options-sanitize
-          popup-content-class="text-weight-light"
-          use-input
+          @new-value="createCollection"
         >
           <template v-slot:prepend>
             <q-icon name="local_offer" />
@@ -43,7 +42,7 @@
             square
             @remove="scope.removeAtIndex(scope.index)"
             :tabindex="scope.tabindex"
-            color="black-2"
+            color="grey-11"
             text-color="grey-5"
           >
             {{ scope.opt.name }}
@@ -62,9 +61,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
-import { mapGetters } from 'vuex'
+import find from 'lodash/find'
 
 export default {
   props: {
@@ -92,7 +92,7 @@ export default {
     }
 
     this.setModel()
-    this.setCollection()
+    this.setCollections()
   },
 
   computed: {
@@ -120,7 +120,7 @@ export default {
       this.body.collect = this.meta.collects || []
     },
 
-    async setCollection () {
+    async setCollections () {
       await this.$store.dispatch('user_collect/create', {
         path: 'collect',
         params: {
@@ -139,7 +139,7 @@ export default {
       })
 
       // Fetch tags
-      if (val) {
+      if (val.length) {
         await this.$store.dispatch('user_collect/fetch')
       }
 
@@ -179,6 +179,20 @@ export default {
       ) {
         await this.$store.dispatch('video/refresh')
       }
+    },
+
+    createCollection (val, done) {
+      const optionExists = find(this.options, { name: val })
+      const collectExists = find(this.body.collect, { name: val })
+
+      if (val.length > 0 && !optionExists && !collectExists) {
+        this.body.collect.push({
+          id: val,
+          name: val
+        })
+      }
+
+      done(null)
     }
   }
 }

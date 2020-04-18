@@ -47,7 +47,7 @@ const routes = [
     name: 'login',
     path: '/login',
     component: () => import('pages/user/Login.vue'),
-    meta: { auth: false, layout: 'User' }
+    meta: { auth: false, layout: 'Auth' }
   }
 ]
 
