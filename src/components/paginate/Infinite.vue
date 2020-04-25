@@ -1,11 +1,18 @@
 <template>
-  <div v-if="state.ready" :key="id">
-    <q-infinite-scroll scroll-target="body" @load="onLoad">
-      <div :class="rowClass">
-        <div v-for="(item, index) in state.data" :key="index" :class="columnClass">
+  <q-pull-to-refresh v-if="state.ready" :key="state.id" :disable="!refreshable" @refresh="onRefresh">
+    <q-infinite-scroll :debounce="300" scroll-target="body" @load="onLoad">
+      <transition-group
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+        name="list"
+        tag="div"
+        :class="rowClass"
+      >
+        <div v-for="(item, index) in state.data" :key="`key-${index}`" :class="columnClass">
           <component :is="itemComponent" :class="componentClass" :item="item" />
         </div>
-      </div>
+      </transition-group>
 
       <template v-slot:loading>
         <div class="row justify-center q-my-md">
@@ -13,7 +20,7 @@
         </div>
       </template>
     </q-infinite-scroll>
-  </div>
+  </q-pull-to-refresh>
 </template>
 
 <script>
@@ -23,12 +30,6 @@ export default {
     Tag: () => import('components/paginate/item/Tag'),
     User: () => import('components/paginate/item/User'),
     Video: () => import('components/paginate/item/Video')
-  },
-
-  data () {
-    return {
-      id: +new Date()
-    }
   },
 
   props: {
@@ -65,6 +66,11 @@ export default {
     componentClass: {
       type: String,
       default: 'item'
+    },
+
+    refreshable: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -78,14 +84,6 @@ export default {
     this.$store.dispatch(this.namespace + '/create', this.apiRoute)
   },
 
-  mounted () {
-    this.$store.subscribeAction((action) => {
-      if (action.type === this.namespace + '/reset') {
-        this.id += 1
-      }
-    })
-  },
-
   methods: {
     async onLoad (index, done) {
       // Fetch items
@@ -94,6 +92,11 @@ export default {
 
       // Stop fetching when true
       await done(stop)
+    },
+
+    async onRefresh (done) {
+      await this.$store.dispatch(this.namespace + '/reset')
+      done()
     }
   }
 }

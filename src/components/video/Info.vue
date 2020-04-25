@@ -20,7 +20,7 @@
       </div>
     </section>
 
-    <section v-if="$q.screen.lt.sm" class="bg-grey-2 text-center">
+    <section v-if="$q.screen.lt.sm" class="bg-grey-8 text-center">
       <actions class="container q-py-md" :data="data" :meta="meta" />
     </section>
 

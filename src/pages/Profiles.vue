@@ -7,6 +7,7 @@
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
+      :refreshable="true"
       item-component="User"
       row-class="row q-col-gutter-md"
       column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"

@@ -41,6 +41,10 @@ export function setItems (state, payload) {
   }
 }
 
+export function resetId (state) {
+  state.id = +new Date()
+}
+
 export function resetPage (state) {
   state.params['page[number]'] = 1
 }

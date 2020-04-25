@@ -1,57 +1,53 @@
 <template>
-  <q-card dark square flat class="bg-grey-12">
-    <router-link :to="{ name: 'collect', params: { id: item.id, slug: item.slug }}">
+  <q-card draggable="false" dark square flat class="bg-grey-12">
+    <q-menu touch-position context-menu dark square @before-show="setMenuActive(true)" @hide="setMenuActive(false)">
+      <q-list bordered padding dark style="width: 260px">
+         <q-item clickable dark v-close-popup @click.prevent="edit">
+          <q-item-section side>
+            <q-icon name="edit" />
+          </q-item-section>
+          <q-item-section>Edit</q-item-section>
+        </q-item>
+
+        <q-item clickable dark v-close-popup @click.prevent="edit">
+          <q-item-section side>
+            <q-icon name="bookmark" />
+          </q-item-section>
+          <q-item-section>Bookmark</q-item-section>
+        </q-item>
+
+        <q-item clickable dark v-close-popup>
+          <q-item-section side>
+            <q-icon name="share" />
+          </q-item-section>
+          <q-item-section>Share</q-item-section>
+        </q-item>
+      </q-list>
+    </q-menu>
+
+    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="open">
       <img src="~assets/placeholders/empty.png" :alt="item.name" />
-    </router-link>
+    </a>
 
     <q-card-section class="q-py-sm">
-      <div class="row items-start no-wrap">
-        <div class="col">
-          <div @click="expanded = !expanded" class="cursor-pointer text-subtitle1 text-grey-5">{{ item.name }}</div>
-          <div class="text-subtitle2 text-grey-6">
-            <router-link class="text-grey-6 no-decoration" to="/">{{ item.relationships.user.name }}</router-link> •
-              {{ Number(item.media) | approximate }} items •
-              {{ Number(item.views) | approximate }} views
-          </div>
-          <div class="q-pt-xs">
-            <tag v-for="(tag, index) in item.relationships.tags" :key="index" :item="tag" />
-          </div>
-        </div>
-
-        <div class="col-auto">
-          <q-btn
-            color="grey-6"
-            round
-            flat
-            dense
-            :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
-            @click.native="expanded = !expanded"
-          />
-        </div>
+      <div class="cursor-pointer text-subtitle1 text-grey-5">{{ item.name }}</div>
+      <div class="text-subtitle2 text-grey-6">
+        <router-link class="text-grey-6 no-decoration" to="/">{{ item.relationships.user.name }}</router-link> •
+        {{ Number(item.media || 0) | approximate }} items •
+        {{ Number(item.views || 0) | approximate }} views
+      </div>
+      <div class="q-pt-xs">
+        <tag v-for="(tag, index) in item.relationships.tags" :key="index" :item="tag" />
       </div>
     </q-card-section>
-
-    <div v-show="expanded">
-      <q-separator />
-
-      <q-btn-group spread stretch flat>
-        <q-btn @click.prevent="openManager" flat no-wrap class="q-pa-xs" color="grey-5" size="11px" icon="create" label="Edit" />
-        <q-btn flat no-wrap class="q-pa-xs" color="grey-5" size="11px" icon="send" label="Share" />
-        <q-btn flat no-wrap class="q-pa-xs" color="grey-5" size="11px" icon="add" label="Save" />
-      </q-btn-group>
-    </div>
   </q-card>
 </template>
 
 <script>
 export default {
-  meta: {
-    title: 'Collections'
-  },
-
   data () {
     return {
-      expanded: false
+      menuActive: false
     }
   },
 
@@ -67,15 +63,26 @@ export default {
   },
 
   methods: {
-    toggleActions () {
-      this.expanded = !this.expanded
-    },
-
-    openManager () {
+    edit () {
       this.$store.dispatch('dialog/open', {
         component: 'CollectEdit',
         data: { id: this.item.id }
       })
+    },
+
+    open () {
+      if (!this.menuActive) {
+        this.$router.push({
+          name: 'collect',
+          params: {
+            id: this.item.id, slug: this.item.slug
+          }
+        })
+      }
+    },
+
+    setMenuActive (value) {
+      this.menuActive = value
     }
   }
 }

@@ -14,18 +14,18 @@
       </q-card>
     </q-dialog>
 
-    <q-card-section>
-      <div class="text-h6">{{ data.name }}</div>
-    </q-card-section>
-
-    <q-separator />
+    <q-toolbar>
+      <q-toolbar-title class="q-mx-xs">{{ data.name }}</q-toolbar-title>
+      <q-btn flat round dense icon="close" v-close-popup />
+    </q-toolbar>
 
     <q-form @submit="onSubmit">
-      <q-card-section style="max-height: 50vh" class="scroll q-gutter-lg">
+      <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
         <q-input
           ref="name"
           v-model="body.name"
           dark
+          square
           filled
           label="Name"
           clearable
@@ -45,8 +45,9 @@
           ref="tags"
           v-model="body.tags"
           dark
+          square
           filled
-          :input-debounce="500"
+          :input-debounce="400"
           :max-values="15"
           :options="options"
           :loading="loading"
@@ -80,12 +81,26 @@
               </q-item-section>
             </q-item>
           </template>
+
+          <template v-slot:selected-item="scope">
+            <q-chip
+              removable
+              dense
+              square
+              @remove="scope.removeAtIndex(scope.index)"
+              :tabindex="scope.tabindex"
+            >
+              <span>{{ scope.opt.name }}</span>&nbsp;
+              <span class="text-capitalize">({{ scope.opt.type }})</span>
+            </q-chip>
+          </template>
         </q-select>
 
         <q-input
           ref="description"
           v-model="body.description"
           dark
+          square
           filled
           clearable
           autogrow
@@ -103,9 +118,7 @@
         </q-input>
       </q-card-section>
 
-      <q-separator />
-
-      <q-card-actions align="right">
+      <q-card-actions align="right" class="q-mx-sm">
         <q-btn flat label="Delete" color="primary" @click="confirm = true" />
         <q-btn flat type="submit" label="Save" color="primary" />
       </q-card-actions>

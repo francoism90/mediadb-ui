@@ -1,5 +1,10 @@
 <template>
-  <div @mouseover.prevent="onHover" @mouseout.prevent="onHover">
+  <div
+    class="preview"
+    @mouseover.prevent="onHover"
+    @mouseout.prevent="onHover"
+    v-intersection="onIntersection"
+  >
     <video
       ref="player"
       class="fit"
@@ -10,7 +15,6 @@
       disableRemotePlayback
       :poster="poster"
       :src="src"
-      @contextmenu.prevent
     />
       <source ref="source" :src="src" :type="mimetype" />
   </div>
@@ -51,6 +55,28 @@ export default {
 
   methods: {
     onHover () {
+      if (this.$q.screen.lt.md) {
+        return
+      }
+
+      this.playPreview()
+    },
+
+    onIntersection (entry) {
+      if (this.$q.screen.gt.xs) {
+        return
+      }
+
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          this.playPreview()
+        }, 2500)
+      } else {
+        this.player.pause()
+      }
+    },
+
+    playPreview () {
       if (this.player.readyState > 2 && this.player.paused === true) {
         this.player.play()
       } else {

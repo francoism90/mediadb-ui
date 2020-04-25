@@ -1,24 +1,26 @@
 <template>
   <div
     ref="element"
-    class="player"
+    class="video-container relative-position"
     :class="fullscreen ? 'fullscreen' : null"
     v-shortkey="keys"
     @shortkey="eventHandler"
     @mousemove="showControls"
     @mouseleave="hideControls"
   >
-   <video
+    <video
       ref="instance"
+      class="absolute-center"
       playsinline
       preload="auto"
       :poster="data.placeholder"
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
-      @dblclick.prevent="eventHandler({ type: 'toggleFullscreen' })"
     />
 
-    <transition v-if="ready && controlsActive" name="fade">
+    <directives />
+
+    <transition v-if="controlsActive" name="fade">
       <keep-alive>
         <controls />
       </keep-alive>
@@ -36,7 +38,8 @@ export default {
   },
 
   components: {
-    Controls: () => import('components/video/Controls')
+    Controls: () => import('components/video/Controls'),
+    Directives: () => import('components/video/Directives')
   },
 
   props: {
@@ -69,8 +72,7 @@ export default {
     ...mapGetters('player', {
       events: 'getEventListeners',
       options: 'getShakaOptions',
-      keys: 'getKeyBindings',
-      ready: 'isReady'
+      keys: 'getKeyBindings'
     }),
 
     element () {

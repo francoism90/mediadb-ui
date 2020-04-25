@@ -4,8 +4,8 @@
       <div class="text-h5">{{ data.name }}</div>
       <div class="text-subtitle2 text-grey-6">
         <router-link class="text-grey-4 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
-        {{ Number(data.media) | approximate }} items •
-        {{ Number(data.views) | approximate }} views
+        {{ Number(data.media || 0) | approximate }} items •
+        {{ Number(data.views || 0) | approximate }} views
       </div>
     </section>
 

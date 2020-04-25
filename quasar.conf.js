@@ -49,15 +49,12 @@ module.exports = function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       distDir: 'public',
-
-      // rtl: false, // https://quasar.dev/options/rtl-support
-      // showProgress: false,
-      // gzip: true,
-      // analyze: true,
-
-      // Options below are automatically set depending on the env, set them if you want to override
-      // preloadChunks: false,
-      // extractCSS: false,
+      showProgress: true,
+      gzip: true,
+      preloadChunks: true,
+      extractCSS: true,
+      minify: true,
+      webpackManifest: true,
 
       // https://quasar.dev/quasar-cli/cli-documentation/handling-webpack
       extendWebpack (cfg) {
@@ -73,17 +70,15 @@ module.exports = function (ctx) {
       }
     },
 
-    // Full list of options: https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       port: 8082,
       host: 'mediadb.dom',
-      open: true,
-      https: true
+      open: true
     },
 
-    // animations: 'all', // --- includes all animations
     // https://quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -100,8 +95,8 @@ module.exports = function (ctx) {
         description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#292a2d',
-        theme_color: '#027be3',
+        background_color: '#1c1d1e',
+        theme_color: '#292a2d',
         icons: [
           {
             src: 'statics/icons/icon-128x128.png',

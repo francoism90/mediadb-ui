@@ -7,6 +7,7 @@
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
+      :refreshable="true"
       item-component="Video"
     />
   </q-page>

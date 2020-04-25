@@ -8,6 +8,7 @@
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
+      :refreshable="true"
       item-component="Tag"
       row-class="row q-col-gutter-md"
       column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"
@@ -26,12 +27,12 @@ export default {
 
   data () {
     return {
-      namespace: 'tags_search',
+      namespace: 'topics',
       apiRoute: {
         path: 'tags',
         params: {
           append: 'media',
-          'page[size]': 14
+          'page[size]': 12
         }
       },
       sorters: [
@@ -48,8 +49,8 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.tags_search) {
-      this.$store.registerModule('tags_search', paginateModule)
+    if (!this.$store.state.topics) {
+      this.$store.registerModule('topics', paginateModule)
     }
   }
 }

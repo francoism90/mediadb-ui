@@ -1,6 +1,6 @@
 <template>
-  <div :style="cssVars" class="player-controls q-px-md">
-    <div v-if="sliderHover" class="player-thumbnail" :style="tooltip">
+  <div class="absolute player-controls q-px-md" :style="cssVars">
+    <div v-if="sliderHover" class="player-label" :style="tooltip">
       <span class="q-py-xs q-px-sm text-caption bg-grey-11">
         {{ getTimeByPct(sliderHoverPercent) | timestamp }}
       </span>
@@ -18,7 +18,7 @@
       />
     </div>
 
-    <div class="row items-center no-wrap q-mb-sm">
+    <div class="full-width row justify-between items-center content-center no-wrap q-mb-sm">
       <div class="col">
         <q-btn
           flat

@@ -16,7 +16,7 @@
 
         <q-space />
 
-        <finder class="q-mx-lg" />
+        <find class="q-mx-lg" />
 
         <q-space />
 
@@ -30,7 +30,7 @@
 
             <q-menu auto-close dark square max-width="400px">
               <q-list bordered padding dark dense>
-                <q-item>
+                <q-item dark>
                   <q-item-section>
                     <q-item-label caption>
                       Signed in as <span class="text-weight-medium">{{ session.name }}</span>
@@ -101,7 +101,7 @@
 <script>
 export default {
   components: {
-    Finder: () => import('components/search/Finder'),
+    Find: () => import('components/search/Find'),
     CollectEdit: () => import('components/collection/Edit'),
     VideoCollect: () => import('components/video/Collections'),
     VideoEdit: () => import('components/video/Edit')

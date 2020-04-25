@@ -36,7 +36,8 @@ export default {
         path: 'media',
         params: {
           include: 'model,tags',
-          'filter[related]': this.data.id
+          'filter[related]': this.data.id,
+          'page[size]': 6
         }
       }
     }

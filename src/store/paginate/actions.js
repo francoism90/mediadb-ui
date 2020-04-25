@@ -40,6 +40,7 @@ export async function fetch ({ commit, state }) {
 
 export function reset ({ commit }, route = {}) {
   commit('setRoute', route)
+  commit('resetId')
   commit('resetItems')
   commit('resetPage')
 }

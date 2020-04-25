@@ -1,62 +1,59 @@
 <template>
   <q-card v-if="ready" :key="data.id" dark style="width: 530px">
-    <q-card-section>
-      <div class="text-h6">{{ data.name }}</div>
-    </q-card-section>
+    <q-toolbar>
+      <q-toolbar-title class="q-mx-xs">{{ data.name }}</q-toolbar-title>
+      <q-btn flat round dense icon="close" v-close-popup />
+    </q-toolbar>
 
-    <q-separator />
-
-    <form @submit.prevent.stop="onSubmit">
-      <q-card-section style="max-height: 50vh" class="scroll q-gutter-lg">
+    <q-form @submit="onSubmit">
+      <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
         <q-select
           ref="collect"
           v-model="body.collect"
           dark
+          square
           filled
-          :input-debounce="350"
+          :input-debounce="400"
           :max-values="15"
           :options="options"
-          @filter="filterCollects"
+          @filter="filterOptions"
           clearable
           counter
           use-input
           use-chips
-          stack-label
           hide-dropdown-icon
           hint="Max 15 selections"
           label="Select collection"
+          stack-label
           multiple
           option-label="name"
           option-value="id"
           options-dark
           options-sanitize
-          @new-value="createCollection"
+          @new-value="createOption"
         >
           <template v-slot:prepend>
-            <q-icon name="local_offer" />
+            <q-icon name="playlist_add" />
           </template>
+
           <template v-slot:selected-item="scope">
-          <q-chip
-            removable
-            dense
-            square
-            @remove="scope.removeAtIndex(scope.index)"
-            :tabindex="scope.tabindex"
-            color="grey-11"
-            text-color="grey-5"
-          >
-            {{ scope.opt.name }}
-          </q-chip>
-        </template>
+            <q-chip
+              removable
+              dense
+              square
+              @remove="scope.removeAtIndex(scope.index)"
+              :tabindex="scope.tabindex"
+            >
+              {{ scope.opt.name }}
+            </q-chip>
+          </template>
         </q-select>
       </q-card-section>
 
-      <q-separator />
-
-      <q-card-actions align="right">
+      <q-card-actions align="right"  class="q-mx-sm">
         <q-btn flat type="submit" label="Save" color="primary" />
       </q-card-actions>
-    </form>
+    </q-form>
   </q-card>
 </template>
 
@@ -92,7 +89,7 @@ export default {
     }
 
     this.setModel()
-    this.setCollections()
+    this.setOptions()
   },
 
   computed: {
@@ -120,7 +117,7 @@ export default {
       this.body.collect = this.meta.collects || []
     },
 
-    async setCollections () {
+    async setOptions () {
       await this.$store.dispatch('user_collect/create', {
         path: 'collect',
         params: {
@@ -130,7 +127,7 @@ export default {
       })
     },
 
-    async filterCollects (val, update, abort) {
+    async filterOptions (val, update, abort) {
       // Reset items
       this.$store.dispatch('user_collect/reset', {
         params: {
@@ -181,7 +178,7 @@ export default {
       }
     },
 
-    createCollection (val, done) {
+    createOption (val, done) {
       const optionExists = find(this.options, { name: val })
       const collectExists = find(this.body.collect, { name: val })
 

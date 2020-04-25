@@ -19,19 +19,19 @@
 
       <q-tab-panels keep-alive v-model="tab" dark animated>
         <q-tab-panel name="videos" class="q-px-none">
-          <infinite namespace="video_search" item-component="Video" />
+          <infinite namespace="videos_search" item-component="Video" />
         </q-tab-panel>
 
         <q-tab-panel name="collect" class="q-px-none">
-          <infinite namespace="collect_search" item-component="Collect" />
+          <infinite namespace="collects_search" item-component="Collect" />
         </q-tab-panel>
 
         <q-tab-panel name="people" class="q-px-none">
-          <infinite namespace="user_search" item-component="User" />
+          <infinite namespace="users_search" item-component="User" />
         </q-tab-panel>
 
         <q-tab-panel name="tags" class="q-px-none">
-          <infinite namespace="tag_search" item-component="Tag" />
+          <infinite namespace="tags_search" item-component="Tag" />
         </q-tab-panel>
       </q-tab-panels>
     </template>
@@ -58,10 +58,26 @@ export default {
     return {
       tab: 'videos',
       stores: [
-        'collect_search',
-        'tag_search',
-        'user_search',
-        'video_search'
+        {
+          module: 'collects_search',
+          path: 'collect',
+          params: { include: 'tags,user' }
+        },
+        {
+          module: 'tags_search',
+          path: 'tags',
+          params: { include: 'media' }
+        },
+        {
+          module: 'users_search',
+          path: 'user',
+          params: { include: 'media' }
+        },
+        {
+          module: 'videos_search',
+          path: 'media',
+          params: { include: 'model,tags' }
+        }
       ]
     }
   },
@@ -73,71 +89,29 @@ export default {
   },
 
   watch: {
-    query: function (value) {
-      this.reset(value)
+    query: function (value = null) {
+      this.resetStores(value)
     }
   },
 
   created () {
     for (const store of this.stores) {
-      if (!this.$store.state[store]) {
-        this.$store.registerModule(store, paginateModule)
+      if (!this.$store.state[store.module]) {
+        this.$store.registerModule(store.module, paginateModule)
       }
     }
   },
 
-  mounted () {
-    this.reset(this.query)
-  },
-
   methods: {
-    reset (query) {
-      this.resetVideo(query)
-      this.resetCollect(query)
-      this.resetUser(query)
-      this.resetTags(query)
-    },
-
-    resetCollect (query) {
-      this.$store.dispatch('collect_search/reset', {
-        path: 'collect',
-        params: {
-          include: 'tags,user',
-          'filter[query]': query || null
+    resetStores (query = null) {
+      for (const store of this.stores) {
+        if (this.$store.state[store.module]) {
+          this.$store.dispatch(store.module + '/reset', {
+            path: store.path,
+            params: { 'filter[query]': query, ...store.params }
+          })
         }
-      })
-    },
-
-    resetTags (query) {
-      this.$store.dispatch('tag_search/reset', {
-        path: 'tags',
-        params: {
-          append: 'media',
-          'page[size]': 12,
-          'filter[query]': query || null
-        }
-      })
-    },
-
-    resetUser (query) {
-      this.$store.dispatch('user_search/reset', {
-        path: 'user',
-        params: {
-          include: 'media',
-          'page[size]': 12,
-          'filter[query]': query || null
-        }
-      })
-    },
-
-    resetVideo (query) {
-      this.$store.dispatch('video_search/reset', {
-        path: 'media',
-        params: {
-          include: 'model,tags',
-          'filter[query]': query || null
-        }
-      })
+      }
     }
   }
 }

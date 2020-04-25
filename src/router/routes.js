@@ -6,6 +6,24 @@ const routes = [
     meta: { auth: true, layout: 'Main' }
   },
   {
+    name: '403',
+    path: '/403',
+    component: () => import('pages/error/403.vue'),
+    meta: { auth: false, layout: 'Auth' }
+  },
+  {
+    name: '429',
+    path: '/429',
+    component: () => import('pages/error/429.vue'),
+    meta: { auth: false, layout: 'Auth' }
+  },
+  {
+    name: '500',
+    path: '/500',
+    component: () => import('pages/error/500.vue'),
+    meta: { auth: false, layout: 'Auth' }
+  },
+  {
     name: 'collections',
     path: '/collections',
     component: () => import('pages/Collections.vue'),
@@ -51,7 +69,6 @@ const routes = [
   }
 ]
 
-// Always leave this as last one
 if (process.env.MODE !== 'ssr') {
   routes.push({
     path: '*',

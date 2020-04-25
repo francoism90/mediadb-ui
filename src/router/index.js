@@ -25,13 +25,17 @@ export default function ({ store, ssrContext }) {
   })
 
   Router.beforeEach(async (to, from, next) => {
+    // Call next on (API) errors
+    if (['/403', '/404', '/429', '/500'].includes(to.path)) {
+      next()
+    }
+
     // Fetch user info
     await store.dispatch('session/fetch')
 
-    // Is authenticated
     const isAuthenticated = store.getters['session/isAuthenticated']
 
-    // Validate route on auth
+    // Validate authentication
     if (to.name !== 'login' && to.meta.auth === true && !isAuthenticated) {
       next({ name: 'login', query: { redirect: to.fullPath } })
     } else if (['join', 'login'].includes(to.name) && isAuthenticated) {

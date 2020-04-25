@@ -1,13 +1,7 @@
 .item {
-  video {
-    min-height: 180px;
-    max-height: 180px;
-    height: 180px;
-    object-fit: fill;
-  }
-
-  img {
+  .preview, img, video {
     display: block;
+    object-fit: fill;
     min-height: 180px;
     max-height: 180px;
     height: 180px;
