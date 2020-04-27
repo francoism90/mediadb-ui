@@ -70,7 +70,7 @@ export default {
       if (entry.isIntersecting) {
         setTimeout(() => {
           this.playPreview()
-        }, 2500)
+        }, 3000)
       } else {
         this.player.pause()
       }

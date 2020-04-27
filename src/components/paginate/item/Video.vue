@@ -1,38 +1,24 @@
 <template>
   <q-card dark square flat class="bg-grey-12" draggable="false">
-    <q-menu touch-position context-menu dark square @before-show="setMenuActive(true)" @hide="setMenuActive(false)">
+    <q-menu touch-position context-menu dark square @before-show="menuActive = true" @hide="menuActive = false">
       <q-list bordered padding dark style="width: 260px">
-        <q-item clickable dark v-close-popup>
+        <q-item
+          v-for="(entity, index) in menu"
+          :key="`menu-${index}`"
+          clickable
+          dark
+          v-close-popup
+          @click.prevent="open(entity.name)"
+        >
           <q-item-section side>
-            <q-icon name="playlist_play" />
+            <q-icon :name="entity.icon" />
           </q-item-section>
-          <q-item-section>Play next</q-item-section>
-        </q-item>
-
-        <q-item clickable dark v-close-popup @click.prevent="edit">
-          <q-item-section side>
-            <q-icon name="edit" />
-          </q-item-section>
-          <q-item-section>Edit</q-item-section>
-        </q-item>
-
-        <q-item clickable dark v-close-popup @click.prevent="save">
-          <q-item-section side>
-            <q-icon name="playlist_add" />
-          </q-item-section>
-          <q-item-section>Save to..</q-item-section>
-        </q-item>
-
-        <q-item clickable dark v-close-popup>
-          <q-item-section side>
-            <q-icon name="share" />
-          </q-item-section>
-          <q-item-section>Share</q-item-section>
+          <q-item-section>{{ entity.label }}</q-item-section>
         </q-item>
       </q-list>
     </q-menu>
 
-    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="open">
+    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
       <preview :poster="item.placeholder" :src="item.preview" />
     </a>
 
@@ -54,7 +40,14 @@
 export default {
   data () {
     return {
-      menuActive: false
+      menuActive: false,
+      menu: [
+        { label: 'Play', name: 'play', icon: 'play_arrow' },
+        { label: 'Edit', name: 'edit', icon: 'edit' },
+        { label: 'Queue', name: 'next', icon: 'playlist_play' },
+        { label: 'Save to..', name: 'save', icon: 'playlist_add' },
+        { label: 'Share', name: 'share', icon: 'share' }
+      ]
     }
   },
 
@@ -71,33 +64,35 @@ export default {
   },
 
   methods: {
-    edit () {
-      this.$store.dispatch('dialog/open', {
-        component: 'VideoEdit',
-        data: { id: this.item.id }
-      })
-    },
-
-    save () {
-      this.$store.dispatch('dialog/open', {
-        component: 'VideoCollect',
-        data: { id: this.item.id }
-      })
-    },
-
-    open () {
-      if (!this.menuActive) {
-        this.$router.push({
-          name: 'video',
-          params: {
-            id: this.item.id, slug: this.item.slug
-          }
-        })
+    open (key) {
+      switch (key) {
+        case 'play':
+          this.$router.push({
+            name: 'video',
+            params: {
+              id: this.item.id, slug: this.item.slug
+            }
+          })
+          break
+        case 'edit':
+          this.$store.dispatch('dialog/open', {
+            component: 'VideoEdit',
+            data: { id: this.item.id }
+          })
+          break
+        case 'save':
+          this.$store.dispatch('dialog/open', {
+            component: 'VideoSave',
+            data: { id: this.item.id }
+          })
+          break
       }
     },
 
-    setMenuActive (value) {
-      this.menuActive = value
+    onClick () {
+      if (!this.menuActive) {
+        this.open('play')
+      }
     }
   }
 }

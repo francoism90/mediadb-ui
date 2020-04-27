@@ -1,31 +1,24 @@
 <template>
   <q-card draggable="false" dark square flat class="bg-grey-12">
-    <q-menu touch-position context-menu dark square @before-show="setMenuActive(true)" @hide="setMenuActive(false)">
+    <q-menu touch-position context-menu dark square @before-show="menuActive = true" @hide="menuActive = false">
       <q-list bordered padding dark style="width: 260px">
-         <q-item clickable dark v-close-popup @click.prevent="edit">
+        <q-item
+          v-for="(entity, index) in menu"
+          :key="`menu-${index}`"
+          clickable
+          dark
+          v-close-popup
+          @click.prevent="open(entity.name)"
+        >
           <q-item-section side>
-            <q-icon name="edit" />
+            <q-icon :name="entity.icon" />
           </q-item-section>
-          <q-item-section>Edit</q-item-section>
-        </q-item>
-
-        <q-item clickable dark v-close-popup @click.prevent="edit">
-          <q-item-section side>
-            <q-icon name="bookmark" />
-          </q-item-section>
-          <q-item-section>Bookmark</q-item-section>
-        </q-item>
-
-        <q-item clickable dark v-close-popup>
-          <q-item-section side>
-            <q-icon name="share" />
-          </q-item-section>
-          <q-item-section>Share</q-item-section>
+          <q-item-section>{{ entity.label }}</q-item-section>
         </q-item>
       </q-list>
     </q-menu>
 
-    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="open">
+    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
       <img src="~assets/placeholders/empty.png" :alt="item.name" />
     </a>
 
@@ -47,7 +40,13 @@
 export default {
   data () {
     return {
-      menuActive: false
+      menuActive: false,
+      menu: [
+        { label: 'Open', name: 'show', icon: 'folder_open' },
+        { label: 'Edit', name: 'edit', icon: 'edit' },
+        { label: 'Bookmark', name: 'save', icon: 'bookmark' },
+        { label: 'Share', name: 'share', icon: 'share' }
+      ]
     }
   },
 
@@ -63,26 +62,29 @@ export default {
   },
 
   methods: {
-    edit () {
-      this.$store.dispatch('dialog/open', {
-        component: 'CollectEdit',
-        data: { id: this.item.id }
-      })
-    },
-
-    open () {
-      if (!this.menuActive) {
-        this.$router.push({
-          name: 'collect',
-          params: {
-            id: this.item.id, slug: this.item.slug
-          }
-        })
+    open (key) {
+      switch (key) {
+        case 'show':
+          this.$router.push({
+            name: 'collect',
+            params: {
+              id: this.item.id, slug: this.item.slug
+            }
+          })
+          break
+        case 'edit':
+          this.$store.dispatch('dialog/open', {
+            component: 'CollectionEdit',
+            data: { id: this.item.id }
+          })
+          break
       }
     },
 
-    setMenuActive (value) {
-      this.menuActive = value
+    onClick () {
+      if (!this.menuActive) {
+        this.open('show')
+      }
     }
   }
 }

@@ -26,7 +26,7 @@
 <script>
 export default {
   components: {
-    Collect: () => import('components/paginate/item/Collection'),
+    Collection: () => import('components/paginate/item/Collection'),
     Tag: () => import('components/paginate/item/Tag'),
     User: () => import('components/paginate/item/User'),
     Video: () => import('components/paginate/item/Video')

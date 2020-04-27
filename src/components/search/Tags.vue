@@ -32,7 +32,7 @@ export default {
         path: 'tags',
         params: {
           append: 'media',
-          'page[size]': 12
+          'page[size]': 16
         }
       },
       sorters: [

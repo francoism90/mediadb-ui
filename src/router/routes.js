@@ -2,7 +2,7 @@ const routes = [
   {
     name: 'home',
     path: '/',
-    component: () => import('pages/Library.vue'),
+    component: () => import('pages/app/Library.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
@@ -26,45 +26,45 @@ const routes = [
   {
     name: 'collections',
     path: '/collections',
-    component: () => import('pages/Collections.vue'),
+    component: () => import('pages/app/Collections.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'profiles',
     path: '/profiles',
-    component: () => import('pages/Profiles.vue'),
+    component: () => import('pages/app/Profiles.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'collect',
     path: '/collect/:id/:slug?',
-    component: () => import('pages/Collection.vue'),
+    component: () => import('pages/app/Collection.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },
   {
     name: 'video',
     path: '/video/:id/:slug?',
-    component: () => import('pages/Video.vue'),
+    component: () => import('pages/app/Video.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },
   {
     name: 'history',
     path: '/history',
-    component: () => import('pages/History.vue'),
+    component: () => import('pages/app/History.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'search',
     path: '/search',
-    component: () => import('pages/Search.vue'),
+    component: () => import('pages/app/Search.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'login',
     path: '/login',
-    component: () => import('pages/user/Login.vue'),
+    component: () => import('pages/auth/Login.vue'),
     meta: { auth: false, layout: 'Auth' }
   }
 ]

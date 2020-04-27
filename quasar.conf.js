@@ -74,7 +74,8 @@ module.exports = function (ctx) {
     devServer: {
       port: 8082,
       host: 'mediadb.dom',
-      open: true
+      open: true,
+      https: true
     },
 
     // https://quasar.dev/options/animations

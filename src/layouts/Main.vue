@@ -1,8 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-dialog v-model="dialog" v-bind="dialogProps">
-      <component :is="dialogComponent" :props="dialogData" />
-    </q-dialog>
+    <dialogs />
 
     <q-header class="header bg-grey-14 q-py-xs" height-hint="58">
       <q-toolbar class="toolbar">
@@ -101,10 +99,8 @@
 <script>
 export default {
   components: {
-    Find: () => import('components/search/Find'),
-    CollectEdit: () => import('components/collection/Edit'),
-    VideoCollect: () => import('components/video/Collections'),
-    VideoEdit: () => import('components/video/Edit')
+    Dialogs: () => import('components/ui/Dialog'),
+    Find: () => import('components/search/Find')
   },
 
   data () {
@@ -125,28 +121,6 @@ export default {
   },
 
   computed: {
-    dialog: {
-      get () {
-        return this.$store.getters['dialog/getModel']
-      },
-
-      set (value) {
-        this.$store.commit('dialog/setModel', value)
-      }
-    },
-
-    dialogComponent () {
-      return this.$store.getters['dialog/getComponent']
-    },
-
-    dialogData () {
-      return this.$store.getters['dialog/getData']
-    },
-
-    dialogProps () {
-      return this.$store.getters['dialog/getProps']
-    },
-
     session () {
       return this.$store.getters['session/getData']
     }
@@ -181,7 +155,7 @@ export default {
         // Reload app
         this.$router.go('/')
       } catch (e) {
-        alert(e || 'Unable to logout. Please clear cookies.')
+        alert(e || 'Unable to logout.')
       }
     }
   }
