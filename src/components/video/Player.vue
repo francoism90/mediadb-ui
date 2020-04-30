@@ -195,7 +195,7 @@ export default {
 
         case 'save':
           this.$store.dispatch('dialog/open', {
-            component: 'VideoCollect',
+            component: 'VideoSave',
             data: { id: this.data.id }
           })
           break

@@ -53,6 +53,7 @@ export function getEventListeners () {
 export function getKeyBindings () {
   return {
     edit: ['c'],
+    save: ['a'],
     snapshot: ['s'],
     toggleFullscreen: ['f'],
     toggleMute: ['m'],

@@ -1,1 +1,1 @@
-require('typeface-inter')
+require('@francoism90/typeface-inter')

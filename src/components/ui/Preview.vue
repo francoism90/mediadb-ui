@@ -5,23 +5,40 @@
     @mouseout.prevent="onHover"
     v-intersection="onIntersection"
   >
-    <video
-      ref="player"
-      class="fit"
-      preload="metadata"
-      playsinline
-      loop
-      muted
-      disableRemotePlayback
-      :poster="poster"
-      :src="src"
-    />
-      <source ref="source" :src="src" :type="mimetype" />
+    <template v-if="!showPreview">
+      <q-img
+        :src="poster"
+        width="100%"
+        height="100%"
+        loading="lazy"
+        spinner-color="white"
+      />
+    </template>
+
+    <template v-else>
+      <video
+        ref="player"
+        :src="src"
+        class="fit"
+        autoplay
+        playsinline
+        muted
+        disableRemotePlayback
+        @abort="showPreview = false"
+        @ended="showPreview = false"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      showPreview: false
+    }
+  },
+
   props: {
     poster: {
       type: String,
@@ -50,37 +67,25 @@ export default {
   },
 
   beforeDestroy () {
-    this.player.pause()
+    if (this.player) {
+      this.player.pause()
+    }
   },
 
   methods: {
     onHover () {
-      if (this.$q.screen.lt.md) {
-        return
+      if (this.$q.screen.gt.xs) {
+        setTimeout(() => {
+          this.showPreview = true
+        }, 100)
       }
-
-      this.playPreview()
     },
 
     onIntersection (entry) {
-      if (this.$q.screen.gt.xs) {
-        return
-      }
-
-      if (entry.isIntersecting) {
+      if (entry.isIntersecting && this.$q.screen.lt.md) {
         setTimeout(() => {
-          this.playPreview()
+          this.showPreview = true
         }, 3000)
-      } else {
-        this.player.pause()
-      }
-    },
-
-    playPreview () {
-      if (this.player.readyState > 2 && this.player.paused === true) {
-        this.player.play()
-      } else {
-        this.player.pause()
       }
     }
   }
