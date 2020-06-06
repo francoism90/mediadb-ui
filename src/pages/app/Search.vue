@@ -46,7 +46,7 @@ export default {
 
   meta () {
     return {
-      title: 'Library'
+      title: 'Search'
     }
   },
 
@@ -60,7 +60,7 @@ export default {
           icon: 'video_library',
           component: 'Video',
           path: 'media',
-          params: { include: 'model,tags' }
+          params: { include: 'model,tags', 'page[size]': 15 }
         },
         {
           name: 'collects_search',
@@ -68,7 +68,7 @@ export default {
           icon: 'collections',
           component: 'Collect',
           path: 'collect',
-          params: { include: 'tags,user' }
+          params: { include: 'tags,user', 'page[size]': 15 }
 
         },
         {
@@ -77,15 +77,7 @@ export default {
           icon: 'people_alt',
           component: 'User',
           path: 'user',
-          params: { include: 'media' }
-        },
-        {
-          name: 'tags_search',
-          label: 'Tags',
-          icon: 'local_offer',
-          component: 'Tag',
-          path: 'tags',
-          params: { include: 'media' }
+          params: { include: 'media', 'page[size]': 10 }
         }
       ]
     }
@@ -97,18 +89,24 @@ export default {
     })
   },
 
-  watch: {
-    query: function (value = null) {
-      this.resetStores(value)
-    }
-  },
-
   created () {
     for (const store of this.stores) {
       if (!this.$store.state[store.name]) {
         this.$store.registerModule(store.name, paginateModule)
+
+        // setup each store
+        this.$store.dispatch(store.name + '/create', {
+          path: store.path,
+          params: { 'filter[query]': this.query, ...store.params }
+        })
       }
     }
+
+    this.$store.subscribeAction((action, state) => {
+      if (action.type === 'search/query') {
+        this.resetStores(action.payload)
+      }
+    })
   },
 
   methods: {
@@ -117,7 +115,7 @@ export default {
         if (this.$store.state[store.name]) {
           this.$store.dispatch(store.name + '/reset', {
             path: store.path,
-            params: { 'filter[query]': query, ...store.params }
+            params: { 'filter[query]': query }
           })
         }
       }

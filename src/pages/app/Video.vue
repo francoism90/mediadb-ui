@@ -11,8 +11,14 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
+  data () {
+    return {
+      title: ''
+    }
+  },
+
   components: {
-    Player: () => import('components/video/Player'),
+    Player: () => import('components/player/Video'),
     Info: () => import('components/video/Info'),
     Next: () => import('components/video/Next')
   },
@@ -20,12 +26,6 @@ export default {
   meta () {
     return {
       title: this.title
-    }
-  },
-
-  data () {
-    return {
-      title: ''
     }
   },
 

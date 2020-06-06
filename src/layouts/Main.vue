@@ -137,9 +137,9 @@ export default {
   },
 
   methods: {
-    showHideDrawer (route = {}) {
+    showHideDrawer (route = null) {
       if (
-        (route.name && this.hideDrawer.includes(route.name)) ||
+        (route && route.name && this.hideDrawer.includes(route.name)) ||
         this.$q.screen.lt.md
       ) {
         this.drawer = false

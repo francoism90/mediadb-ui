@@ -1,5 +1,5 @@
 <template>
-  <q-form autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false" class="toolbar-input">
+  <div class="toolbar-input">
     <q-input
       dark
       clearable
@@ -17,7 +17,7 @@
         <q-icon name="search" color="grey-5"  />
       </template>
     </q-input>
-  </q-form>
+  </div>
 </template>
 
 <script>

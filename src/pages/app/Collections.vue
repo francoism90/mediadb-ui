@@ -36,7 +36,8 @@ export default {
       apiRoute: {
         path: 'collect',
         params: {
-          include: 'tags,user'
+          include: 'tags,user',
+          'page[size]': 30
         }
       },
       sorters: [

@@ -37,7 +37,7 @@ export default {
         params: {
           include: 'model,tags',
           'filter[related]': this.data.id,
-          'page[size]': 6
+          'page[size]': 12
         }
       }
     }

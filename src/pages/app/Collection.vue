@@ -46,7 +46,8 @@ export default {
         path: 'media',
         params: {
           include: 'model,tags',
-          'filter[collect]': this.id
+          'filter[collect]': this.id,
+          'page[size]': 30
         }
       },
       sorters: [

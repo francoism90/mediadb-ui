@@ -34,7 +34,8 @@ export default {
     return {
       namespace: 'users',
       apiRoute: {
-        path: 'user'
+        path: 'user',
+        'page[size]': 30
       },
       sorters: [
         { label: 'Popular this week', value: 'popular-week' },

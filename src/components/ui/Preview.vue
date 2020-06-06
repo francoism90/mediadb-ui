@@ -59,10 +59,6 @@ export default {
   computed: {
     player () {
       return this.$refs.player
-    },
-
-    source () {
-      return this.$refs.source
     }
   },
 
@@ -85,7 +81,7 @@ export default {
       if (entry.isIntersecting && this.$q.screen.lt.md) {
         setTimeout(() => {
           this.showPreview = true
-        }, 3000)
+        }, 2500)
       }
     }
   }

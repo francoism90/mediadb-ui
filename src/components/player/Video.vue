@@ -2,9 +2,11 @@
   <div
     ref="element"
     class="video-container relative-position"
-    :class="fullscreen ? 'fullscreen' : null"
+    :class="isFullscreen ? 'fullscreen' : null"
     v-shortkey="keys"
     @shortkey="eventHandler"
+    @click="showControls"
+    @dblclick="eventHandler({ type: 'toggleFullscreen' })"
     @mousemove="showControls"
     @mouseleave="hideControls"
   >
@@ -17,8 +19,6 @@
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
     />
-
-    <directives />
 
     <transition v-if="controlsActive" name="fade">
       <keep-alive>
@@ -34,12 +34,11 @@ import { mapActions, mapGetters } from 'vuex'
 
 export default {
   timers: {
-    hideControls: { time: 3000, autostart: true }
+    hideControls: { time: 3500, autostart: true }
   },
 
   components: {
-    Controls: () => import('components/video/Controls'),
-    Directives: () => import('components/video/Directives')
+    Controls: () => import('./controls/Container')
   },
 
   props: {
@@ -58,13 +57,13 @@ export default {
     return {
       instance: null,
       controlsActive: false,
-      fullscreen: false
+      isFullscreen: false
     }
   },
 
   watch: {
     '$q.fullscreen.isActive' (value) {
-      this.fullscreen = value
+      this.isFullscreen = value
     }
   },
 
@@ -72,6 +71,7 @@ export default {
     ...mapGetters('player', {
       events: 'getEventListeners',
       options: 'getShakaOptions',
+      props: 'getPropsBindings',
       keys: 'getKeyBindings'
     }),
 
@@ -143,16 +143,14 @@ export default {
         return
       }
 
-      this.update({
-        buffered: this.player.buffered,
-        current: this.player.currentTime,
-        duration: this.player.duration,
-        ended: this.player.ended,
-        error: this.player.error,
-        paused: this.player.paused,
-        readyState: this.player.readyState,
-        volume: this.player.volume
-      })
+      // Get current player data
+      const data = {}
+
+      for (const prop of this.props) {
+        data[prop] = this.player[prop] || null
+      }
+
+      this.update(data)
     },
 
     async eventHandler (payload) {
@@ -171,10 +169,6 @@ export default {
           } else {
             this.player.pause()
           }
-          break
-
-        case 'toggleMute':
-          this.player.volume = (this.player.volume === 0) ? 1 : 0
           break
 
         case 'toggleFullscreen':
@@ -201,13 +195,11 @@ export default {
           break
 
         case 'snapshot':
-          // Update model
           await this.$store.dispatch('model/update', {
             path: 'media/' + this.data.id,
             body: { snapshot: this.player.currentTime }
           })
 
-          // Notifiy
           this.$q.notify({
             progress: true,
             position: 'top',

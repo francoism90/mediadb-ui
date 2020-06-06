@@ -45,8 +45,19 @@ export function getEventListeners () {
     'stalled',
     'suspend',
     'timeupdate',
-    'volumechange',
     'waiting'
+  ]
+}
+
+export function getPropsBindings () {
+  return [
+    'buffered',
+    'currentTime',
+    'duration',
+    'ended',
+    'error',
+    'paused',
+    'readyState'
   ]
 }
 
@@ -56,7 +67,6 @@ export function getKeyBindings () {
     save: ['a'],
     snapshot: ['s'],
     toggleFullscreen: ['f'],
-    toggleMute: ['m'],
     togglePlay: ['space']
   }
 }

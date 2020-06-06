@@ -34,7 +34,8 @@ export default {
       apiRoute: {
         path: 'media',
         params: {
-          include: 'model,tags'
+          include: 'model,tags',
+          'page[size]': 30
         }
       },
       sorters: [

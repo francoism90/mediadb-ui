@@ -5,7 +5,7 @@ export default function () {
     callback: {},
     data: {
       buffered: null,
-      current: 0,
+      currentTime: 0,
       duration: 0,
       ended: false,
       error: null,
