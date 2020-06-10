@@ -6,8 +6,8 @@
       dense
       square
       filled
-      debounce="1000"
-      v-model="query"
+      debounce="950"
+      v-model="model"
       @focus="onFocus"
       input-class="text-grey-5 text-weight-light"
       :placeholder="placeholder"
@@ -21,15 +21,21 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 export default {
   computed: {
-    query: {
+    ...mapGetters('search', {
+      query: 'getQuery'
+    }),
+
+    model: {
       get () {
-        return this.$store.state.search.query
+        return this.query
       },
 
       set (value) {
-        this.$store.dispatch('search/query', value)
+        this.setQuery({ query: value })
       }
     },
 
@@ -39,6 +45,10 @@ export default {
   },
 
   methods: {
+    ...mapActions('search', {
+      setQuery: 'query'
+    }),
+
     onFocus () {
       if (this.$route.name !== 'search') {
         this.$router.push({ name: 'search' })

@@ -36,6 +36,12 @@ const routes = [
     meta: { auth: true, layout: 'Main' }
   },
   {
+    name: 'tags',
+    path: '/tags',
+    component: () => import('pages/app/Tags.vue'),
+    meta: { auth: true, layout: 'Main' }
+  },
+  {
     name: 'collect',
     path: '/collect/:id/:slug?',
     component: () => import('pages/app/Collection.vue'),

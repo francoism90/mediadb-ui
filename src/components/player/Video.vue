@@ -6,7 +6,7 @@
     v-shortkey="keys"
     @shortkey="eventHandler"
     @click="showControls"
-    @dblclick="eventHandler({ type: 'toggleFullscreen' })"
+    @wheel="onWheel"
     @mousemove="showControls"
     @mouseleave="hideControls"
   >
@@ -207,6 +207,18 @@ export default {
             type: 'positive'
           })
           break
+      }
+    },
+
+    onWheel (event) {
+      if (event.deltaX < 0) {
+        this.eventHandler(
+          { type: 'currentTime', value: this.player.currentTime - 10 }
+        )
+      } else if (event.deltaX > 0) {
+        this.eventHandler(
+          { type: 'currentTime', value: this.player.currentTime + 10 }
+        )
       }
     },
 

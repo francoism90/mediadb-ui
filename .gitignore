@@ -2,7 +2,8 @@
 .thumbs.db
 node_modules
 
-# Quasar core related directories
+# Quasar core related directories and files
+quasar.conf.js
 .quasar
 /dist
 /public

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <q-page class="container fluid">
     <q-btn-group class="q-py-md" unelevated>
       <filters :namespace="namespace" field="sort" :options="sorters" class="q-mr-lg" />
       <filters :namespace="namespace" field="filter[type]" :options="types" />
@@ -13,7 +13,7 @@
       row-class="row q-col-gutter-md"
       column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"
     />
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -27,7 +27,7 @@ export default {
 
   data () {
     return {
-      namespace: 'topics',
+      namespace: 'tags',
       apiRoute: {
         path: 'tags',
         params: {
@@ -49,8 +49,8 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.topics) {
-      this.$store.registerModule('topics', paginateModule)
+    if (!this.$store.state.tags) {
+      this.$store.registerModule('tags', paginateModule)
     }
   }
 }

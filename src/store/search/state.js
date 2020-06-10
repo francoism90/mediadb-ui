@@ -1,5 +1,6 @@
 export default function () {
   return {
-    query: ''
+    query: null,
+    type: null
   }
 }

@@ -155,8 +155,8 @@ export default {
       this.$store.registerModule('video_edit', modelModule)
     }
 
-    if (!this.$store.state.tags) {
-      this.$store.registerModule('tags', paginateModule)
+    if (!this.$store.state.tagger) {
+      this.$store.registerModule('tagger', paginateModule)
     }
 
     this.setModel()
@@ -170,11 +170,11 @@ export default {
     }),
 
     loading () {
-      return this.$store.getters['tags/isLoading']
+      return this.$store.getters['tagger/isLoading']
     },
 
     options () {
-      return this.$store.getters['tags/getData']
+      return this.$store.getters['tagger/getData']
     }
   },
 
@@ -194,7 +194,7 @@ export default {
     },
 
     async setTags () {
-      await this.$store.dispatch('tags/create', {
+      await this.$store.dispatch('tagger/create', {
         path: 'tags',
         params: {
           'page[size]': 5,
@@ -204,19 +204,16 @@ export default {
     },
 
     async filterTags (val, update, abort) {
-      // Reset items
-      this.$store.dispatch('tags/reset', {
+      this.$store.dispatch('tagger/reset', {
         params: {
           'filter[query]': val || null,
           sort: val.length ? null : 'media'
         }
       })
 
-      // Fetch tags
-      await this.$store.dispatch('tags/fetch')
+      await this.$store.dispatch('tagger/fetch')
 
-      // Update options
-      update()
+      update() // update options
     },
 
     async onSubmit () {

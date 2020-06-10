@@ -14,7 +14,7 @@
 
         <q-space />
 
-        <find class="q-mx-lg" />
+        <search class="q-mx-lg" />
 
         <q-space />
 
@@ -100,7 +100,7 @@
 export default {
   components: {
     Dialogs: () => import('components/ui/Dialog'),
-    Find: () => import('components/search/Find')
+    Search: () => import('components/ui/Search')
   },
 
   data () {
@@ -111,7 +111,8 @@ export default {
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
-        { label: 'Profiles', name: 'profiles', icon: 'people_alt', separator: true },
+        { label: 'People', name: 'profiles', icon: 'people_alt', separator: false },
+        { label: 'Tags', name: 'tags', icon: 'label', separator: true },
         { label: 'History', name: 'history', icon: 'history', separator: false },
         { label: 'Watch later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },

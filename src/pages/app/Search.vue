@@ -1,47 +1,47 @@
 <template>
   <q-page class="container fluid">
-    <template v-if="!query">
-      <tags />
+    <template v-if="type && query">
+      <q-btn-group class="q-py-md" unelevated>
+        <q-select
+          dark
+          square
+          dense
+          v-model="model"
+          dropdown-icon="keyboard_arrow_down"
+          :options="types"
+          option-label="label"
+          option-value="value"
+          options-dark
+          options-sanitize
+          :display-value="model.label"
+          popup-content-class="dropdown"
+        />
+      </q-btn-group>
+
+      <infinite
+        :namespace="type.module"
+        :api-route="type.apiRoute"
+        :item-component="type.component"
+      />
     </template>
 
     <template v-else>
-      <q-tabs
-        v-model="tab"
-        inline-label
-        class="q-py-md text-white"
-        :breakpoint="0"
-      >
-        <q-tab
-          v-for="(item, index) in stores"
-          :key="`tab-${index}`"
-          :name="item.name"
-          :icon="item.icon"
-          :label="item.label"
-        />
-      </q-tabs>
-
-      <q-tab-panels keep-alive v-model="tab" dark animated>
-        <q-tab-panel
-          v-for="(item, index) in stores"
-          :key="`panel-${index}`"
-          :name="item.name"
-          class="q-px-none"
-        >
-          <infinite :namespace="item.name" :item-component="item.component" />
-        </q-tab-panel>
-      </q-tab-panels>
+      <div class="fixed-center text-center">
+        <p><q-icon name="search" style="font-size: 4rem;" /></p>
+        <p class="text-h5 q-mb-xs">Search MediaDB</p>
+        <p class="text-body2">Find videos, collections and users.</p>
+      </div>
     </template>
   </q-page>
 </template>
 
 <script>
 import paginateModule from 'src/store/paginate'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   components: {
-    Infinite: () => import('components/paginate/Infinite'),
-    Tags: () => import('components/search/Tags')
+    Infinite: () => import('components/paginate/Infinite')
   },
 
   meta () {
@@ -50,73 +50,37 @@ export default {
     }
   },
 
-  data () {
-    return {
-      tab: 'videos_search',
-      stores: [
-        {
-          name: 'videos_search',
-          label: 'Videos',
-          icon: 'video_library',
-          component: 'Video',
-          path: 'media',
-          params: { include: 'model,tags', 'page[size]': 15 }
-        },
-        {
-          name: 'collects_search',
-          label: 'Collections',
-          icon: 'collections',
-          component: 'Collect',
-          path: 'collect',
-          params: { include: 'tags,user', 'page[size]': 15 }
-
-        },
-        {
-          name: 'users_search',
-          label: 'Users',
-          icon: 'people_alt',
-          component: 'User',
-          path: 'user',
-          params: { include: 'media', 'page[size]': 10 }
-        }
-      ]
-    }
-  },
-
   computed: {
     ...mapGetters('search', {
-      query: 'getQuery'
-    })
+      query: 'getQuery',
+      type: 'getType',
+      types: 'getTypes'
+    }),
+
+    model: {
+      get () {
+        return this.type
+      },
+
+      set (value) {
+        this.setQuery({ type: value.module, query: this.query })
+      }
+    }
   },
 
   created () {
-    for (const store of this.stores) {
-      if (!this.$store.state[store.name]) {
-        this.$store.registerModule(store.name, paginateModule)
-
-        // setup each store
-        this.$store.dispatch(store.name + '/create', {
-          path: store.path,
-          params: { 'filter[query]': this.query, ...store.params }
-        })
-      }
-    }
-
-    this.$store.subscribeAction((action, state) => {
-      if (action.type === 'search/query') {
-        this.resetStores(action.payload)
-      }
-    })
+    this.createStores()
   },
 
   methods: {
-    resetStores (query = null) {
-      for (const store of this.stores) {
-        if (this.$store.state[store.name]) {
-          this.$store.dispatch(store.name + '/reset', {
-            path: store.path,
-            params: { 'filter[query]': query }
-          })
+    ...mapActions('search', {
+      setQuery: 'query'
+    }),
+
+    createStores () {
+      for (const type of this.types) {
+        if (!this.$store.state[type.module]) {
+          this.$store.registerModule(type.module, paginateModule)
         }
       }
     }

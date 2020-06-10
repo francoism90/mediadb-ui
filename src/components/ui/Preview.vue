@@ -1,9 +1,9 @@
 <template>
   <div
     class="preview"
-    @mouseover.prevent="onHover"
-    @mouseout.prevent="onHover"
-    v-intersection="onIntersection"
+    @mouseover="showPreview = true"
+    @mouseout="showPreview = false"
+    v-touch-hold:50="onTouch"
   >
     <template v-if="!showPreview">
       <q-img
@@ -69,19 +69,9 @@ export default {
   },
 
   methods: {
-    onHover () {
-      if (this.$q.screen.gt.xs) {
-        setTimeout(() => {
-          this.showPreview = true
-        }, 100)
-      }
-    },
-
-    onIntersection (entry) {
-      if (entry.isIntersecting && this.$q.screen.lt.md) {
-        setTimeout(() => {
-          this.showPreview = true
-        }, 2500)
+    onTouch () {
+      if (this.$q.screen.lt.md) {
+        this.showPreview = true
       }
     }
   }
