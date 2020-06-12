@@ -4,7 +4,7 @@ export function query ({ commit, dispatch, getters, state }, payload = {}) {
   commit('setType', type || state.type)
   commit('setQuery', query)
 
-  // Create the paginate module (if not exists)
+  // Create the paginate module
   dispatch(
     getters.getType.module + '/create',
     getters.getType.apiRoute,

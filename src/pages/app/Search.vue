@@ -69,21 +69,17 @@ export default {
   },
 
   created () {
-    this.createStores()
+    for (const type of this.types) {
+      if (!this.$store.state[type.module]) {
+        this.$store.registerModule(type.module, paginateModule)
+      }
+    }
   },
 
   methods: {
     ...mapActions('search', {
       setQuery: 'query'
-    }),
-
-    createStores () {
-      for (const type of this.types) {
-        if (!this.$store.state[type.module]) {
-          this.$store.registerModule(type.module, paginateModule)
-        }
-      }
-    }
+    })
   }
 }
 </script>
