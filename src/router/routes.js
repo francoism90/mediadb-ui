@@ -24,27 +24,28 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
-    name: 'collections',
-    path: '/collections',
-    component: () => import('pages/app/Collections.vue'),
+    name: 'channels',
+    path: '/channels',
+    component: () => import('pages/app/Channels.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
-    name: 'profiles',
-    path: '/profiles',
-    component: () => import('pages/app/Profiles.vue'),
+    name: 'channel',
+    path: '/channel/:id',
+    component: () => import('pages/app/Channel.vue'),
+    meta: { auth: true, layout: 'Main' },
+    props: true
+  },
+  {
+    name: 'playlists',
+    path: '/playlists',
+    component: () => import('pages/app/Playlists.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
-    name: 'tags',
-    path: '/tags',
-    component: () => import('pages/app/Tags.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'collect',
-    path: '/collect/:id/:slug?',
-    component: () => import('pages/app/Collection.vue'),
+    name: 'playlist',
+    path: '/playlist/:id',
+    component: () => import('pages/app/Playlist.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },
@@ -54,6 +55,12 @@ const routes = [
     component: () => import('pages/app/Video.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
+  },
+  {
+    name: 'tags',
+    path: '/tags',
+    component: () => import('pages/app/Tags.vue'),
+    meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'history',

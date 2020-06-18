@@ -50,7 +50,7 @@ export default {
     return {
       manage: [
         { label: 'Favorite', icon: 'favorite_border', action: false },
-        { label: 'Save', icon: 'playlist_add', action: { type: 'save' } },
+        { label: 'Snapshot', icon: 'photo', action: { type: 'snapshot' } },
         { label: 'Edit', icon: 'menu_open', action: { type: 'edit' } }
       ],
       links: [

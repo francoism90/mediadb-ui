@@ -1,6 +1,6 @@
 <template>
   <q-page class="container fluid">
-    <template v-if="type && query">
+    <template v-if="ready && type && query">
       <q-btn-group class="q-py-md" unelevated>
         <q-select
           dark
@@ -29,7 +29,7 @@
       <div class="fixed-center text-center">
         <p><q-icon name="search" style="font-size: 4rem;" /></p>
         <p class="text-h5 q-mb-xs">Search MediaDB</p>
-        <p class="text-body2">Find videos, collections and users.</p>
+        <p class="text-body2">Find videos, channels, playlists and tags.</p>
       </div>
     </template>
   </q-page>
@@ -46,6 +46,7 @@ export default {
 
   meta () {
     return {
+      ready: false,
       title: 'Search'
     }
   },
@@ -74,6 +75,9 @@ export default {
         this.$store.registerModule(type.module, paginateModule)
       }
     }
+
+    // Prevent init stores error
+    this.ready = true
   },
 
   methods: {

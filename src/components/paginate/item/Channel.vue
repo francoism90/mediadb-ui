@@ -22,14 +22,12 @@
       <img src="~assets/placeholders/empty.png" :alt="item.name" />
     </a>
 
-    <q-card-section class="q-py-sm">
-      <div class="cursor-pointer text-subtitle1 text-grey-5">{{ item.name }}</div>
+    <q-card-section class="q-py-md">
+      <div class="text-subtitle1 text-grey-5">{{ item.name }}</div>
       <div class="text-subtitle2 text-grey-6">
-        <router-link class="text-grey-6 no-decoration" to="/">{{ item.relationships.user.name }}</router-link> •
-        {{ Number(item.media || 0) | approximate }} items •
-        {{ Number(item.views || 0) | approximate }} views
+        {{ Number(item.items || 0) | approximate }} items
       </div>
-      <div class="q-pt-xs">
+      <div v-if="item.relationships.tags.length" class="q-pt-xs">
         <tag v-for="(tag, index) in item.relationships.tags" :key="index" :item="tag" />
       </div>
     </q-card-section>
@@ -66,15 +64,15 @@ export default {
       switch (key) {
         case 'show':
           this.$router.push({
-            name: 'collect',
+            name: 'channel',
             params: {
-              id: this.item.id, slug: this.item.slug
+              id: this.item.id
             }
           })
           break
         case 'edit':
           this.$store.dispatch('dialog/open', {
-            component: 'CollectionEdit',
+            component: 'ChannelEdit',
             data: { id: this.item.id }
           })
           break

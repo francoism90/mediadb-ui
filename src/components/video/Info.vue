@@ -5,11 +5,10 @@
         <div class="col">
           <div class="text-subtitle1 text-grey-5">{{ data.name }}</div>
           <div class="text-subtitle2 text-grey-6">
-            <router-link class="text-grey-6 no-decoration" to="/">{{ data.relationships.user.name }}</router-link> •
-              {{ Number(data.properties.duration) | timestamp }} •
-              {{ Number(data.views) | approximate }} views
+            {{ Number(data.properties.duration) | timestamp }} •
+            {{ Number(data.views) | approximate }} views
           </div>
-          <div class="q-pt-xs">
+          <div v-if="data.relationships.tags.length" class="q-pt-xs">
             <tag v-for="(tag, index) in data.relationships.tags" :key="index" :item="tag" />
           </div>
         </div>

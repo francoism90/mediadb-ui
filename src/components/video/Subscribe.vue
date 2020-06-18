@@ -1,11 +1,11 @@
 <template>
   <div class="row items-center no-wrap">
     <div class="col">
-      <router-link to="/" class="text-subtitle1 text-grey-5">
-        {{ data.relationships.user.name }}
-      </router-link>
+      <a @click.prevent="openChannel" class="text-subtitle1 text-grey-5 cursor-pointer">
+        {{ data.relationships.model.name }}
+      </a>
       <div class="text-subtitle2 text-grey-6">
-        {{ Number(data.relationships.user.views) | approximate }} subscribers
+        {{ Number(data.relationships.model.views) | approximate }} subscribers
       </div>
     </div>
 
@@ -31,6 +31,17 @@ export default {
     meta: {
       type: Object,
       required: true
+    }
+  },
+
+  methods: {
+    openChannel () {
+      this.$router.push({
+        name: 'channel',
+        params: {
+          id: this.data.relationships.model.id
+        }
+      })
     }
   }
 }

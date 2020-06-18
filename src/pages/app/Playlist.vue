@@ -1,8 +1,7 @@
 <template>
   <q-page v-if="ready" :key="data.id">
-    <player :data="data" :meta="meta" />
     <info :data="data" :meta="meta" />
-    <next :data="data" :meta="meta" />
+    <items :data="data" :meta="meta" />
   </q-page>
 </template>
 
@@ -11,38 +10,33 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
-  data () {
-    return {
-      title: ''
-    }
-  },
-
-  components: {
-    Player: () => import('components/player/Video'),
-    Info: () => import('components/video/Info'),
-    Next: () => import('components/video/Next')
-  },
-
   meta () {
     return {
       title: this.title
     }
   },
 
+  data () {
+    return {
+      title: '',
+      namespace: `playlist_${this.id}`
+    }
+  },
+
+  components: {
+    Info: () => import('components/playlist/Info'),
+    Items: () => import('components/playlist/Items')
+  },
+
   props: {
     id: {
       type: String,
       required: true
-    },
-
-    slug: {
-      type: String,
-      default: null
     }
   },
 
   computed: {
-    ...mapGetters('video', {
+    ...mapGetters('playlist', {
       ready: 'isReady',
       data: 'getData',
       meta: 'getMeta'
@@ -62,15 +56,15 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.video) {
-      this.$store.registerModule('video', modelModule)
+    if (!this.$store.state.playlist) {
+      this.$store.registerModule('playlist', modelModule)
     }
   },
 
   methods: {
     async fetch (id) {
-      await this.$store.dispatch('video/fetch', {
-        path: 'media/' + id
+      await this.$store.dispatch('playlist/fetch', {
+        path: 'playlist/' + id
       })
 
       this.title = this.data.name

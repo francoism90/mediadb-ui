@@ -1,8 +1,7 @@
-.video-container {
-  z-index: 10;
+.player {
   background: black;
   overflow: hidden;
-  height: 100vh;
+  min-height: 240px;
   max-height: 640px;
 
   @media (max-width: $breakpoint-sm-max) {
@@ -14,20 +13,24 @@
   }
 
   video {
-    height: 100%;
-    width: 100%;
+    z-index: 10;
   }
 }
 
-.video-container.fullscreen {
+.player.fullscreen {
   max-height: initial !important;
 }
 
-.player-controls {
+.player-container {
   z-index: 20;
-  bottom: 0;
-  left: 0;
-  right: 0;
+}
+
+.player-directives {
+  z-index: 30;
+}
+
+.player-controls {
+  z-index: 40;
 
   .q-slider__track-container {
     background: linear-gradient(
@@ -38,6 +41,7 @@
 }
 
 .player-tooltip {
+  z-index: 50;
   display: flex;
   align-items: flex-end;
   justify-content: center;

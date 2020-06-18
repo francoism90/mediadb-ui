@@ -127,9 +127,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
-import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -181,10 +181,7 @@ export default {
   methods: {
     async setModel () {
       await this.$store.dispatch('video_edit/fetch', {
-        path: 'media/' + this.props.id,
-        params: {
-          include: 'model,tags'
-        }
+        path: 'media/' + this.props.id
       })
 
       // Set current models

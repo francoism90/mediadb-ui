@@ -9,7 +9,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    CollectionEdit: () => import('components/collection/Edit'),
+    PlaylistEdit: () => import('components/playlist/Edit'),
     VideoEdit: () => import('components/video/Edit'),
     VideoSave: () => import('components/video/Save')
   },

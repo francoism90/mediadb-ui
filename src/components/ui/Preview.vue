@@ -3,7 +3,7 @@
     class="preview"
     @mouseover="showPreview = true"
     @mouseout="showPreview = false"
-    v-touch-hold:50="onTouch"
+    v-touch-pan.horizontal.prevent="onTouch"
   >
     <template v-if="!showPreview">
       <q-img

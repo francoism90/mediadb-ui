@@ -1,16 +1,15 @@
 <template>
-  <q-page class="container fluid">
-    <q-btn-group class="q-py-md" unelevated>
+  <div class="container fluid">
+    <q-btn-group class="q-pb-md" unelevated>
       <filters :namespace="namespace" field="sort" :options="sorters" />
     </q-btn-group>
 
     <infinite
       :namespace="namespace"
       :api-route="apiRoute"
-      :refreshable="true"
       item-component="Video"
     />
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -22,36 +21,43 @@ export default {
     Filters: () => import('components/paginate/Filters')
   },
 
-  meta () {
-    return {
-      title: 'Library'
-    }
-  },
-
   data () {
     return {
-      namespace: 'library',
+      namespace: `channel_${this.data.id}`,
       apiRoute: {
         path: 'media',
         params: {
           include: 'model,tags',
-          'page[size]': 12
+          'filter[channel]': this.data.id,
+          'page[size]': 12,
+          sort: 'recent'
         }
       },
       sorters: [
-        { label: 'Recommended for You', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
         { label: 'Most recent', value: 'recent' },
         { label: 'Most viewed', value: 'views' },
         { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' }
+        { label: 'Popular this month', value: 'popular-month' },
+        { label: 'Recommended for You', value: 'recommended' }
       ]
     }
   },
 
+  props: {
+    data: {
+      type: Object,
+      required: true
+    },
+
+    meta: {
+      type: Object,
+      required: true
+    }
+  },
+
   created () {
-    if (!this.$store.state.library) {
-      this.$store.registerModule('library', paginateModule)
+    if (!this.$store.state[this.namespace]) {
+      this.$store.registerModule(this.namespace, paginateModule)
     }
   }
 }

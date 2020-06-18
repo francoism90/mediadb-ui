@@ -15,7 +15,7 @@
       </transition-group>
 
       <template v-slot:loading>
-        <div class="row justify-center q-my-md">
+        <div class="row no-wrap justify-center q-my-md">
           <q-spinner color="primary" size="xs" />
         </div>
       </template>
@@ -26,9 +26,9 @@
 <script>
 export default {
   components: {
-    Collection: () => import('components/paginate/item/Collection'),
+    Channel: () => import('components/paginate/item/Channel'),
+    Playlist: () => import('components/paginate/item/Playlist'),
     Tag: () => import('components/paginate/item/Tag'),
-    User: () => import('components/paginate/item/User'),
     Video: () => import('components/paginate/item/Video')
   },
 

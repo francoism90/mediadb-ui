@@ -68,10 +68,13 @@ export default {
   methods: {
     onClick (value) {
       this.$store.dispatch('search/query', {
+        type: 's_default',
         query: '#' + value.slug
       })
 
-      this.$router.push({ name: 'search' })
+      if (this.$route.name !== 'search') {
+        this.$router.push({ name: 'search' })
+      }
     }
   }
 }

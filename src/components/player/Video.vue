@@ -1,21 +1,20 @@
 <template>
   <div
     ref="element"
-    class="video-container relative-position"
+    class="relative-position window-height player"
     :class="isFullscreen ? 'fullscreen' : null"
     v-shortkey="keys"
     @shortkey="eventHandler"
-    @click="showControls"
     @wheel="onWheel"
     @mousemove="showControls"
     @mouseleave="hideControls"
   >
     <video
       ref="instance"
-      class="absolute-center"
+      class="absolute fit"
       playsinline
       preload="auto"
-      :poster="data.placeholder"
+      :poster="data.thumbnail"
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
     />
@@ -183,13 +182,6 @@ export default {
         case 'edit':
           this.$store.dispatch('dialog/open', {
             component: 'VideoEdit',
-            data: { id: this.data.id }
-          })
-          break
-
-        case 'save':
-          this.$store.dispatch('dialog/open', {
-            component: 'VideoSave',
             data: { id: this.data.id }
           })
           break

@@ -1,5 +1,5 @@
 <template>
-  <q-card dark square flat class="bg-grey-12" draggable="false">
+  <q-card draggable="false" dark square flat class="bg-grey-12">
     <q-menu touch-position context-menu dark square @before-show="menuActive = true" @hide="menuActive = false">
       <q-list bordered padding dark style="width: 260px">
         <q-item
@@ -19,20 +19,13 @@
     </q-menu>
 
     <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
-      <preview :poster="item.thumbnail" :src="item.preview" />
+      <img src="~assets/placeholders/empty.png" :alt="item.name" />
     </a>
 
     <q-card-section class="q-py-md">
       <div class="text-subtitle1 text-grey-5">{{ item.name }}</div>
       <div class="text-subtitle2 text-grey-6">
-        <a v-if="$route.name !== 'channel'" class="text-grey-6 no-decoration cursor-pointer" @click.prevent="open('channel')">
-          {{ item.relationships.model.name }}
-        </a>
-        <span v-else>
-          {{ String(item.created_at) | datestamp }}
-        </span> •
-        {{ Number(item.properties.duration || 0) | timestamp }} •
-        {{ Number(item.views || 0) | approximate }} views
+        {{ Number(item.items || 0) | approximate }} items
       </div>
       <div v-if="item.relationships.tags.length" class="q-pt-xs">
         <tag v-for="(tag, index) in item.relationships.tags" :key="index" :item="tag" />
@@ -47,19 +40,15 @@ export default {
     return {
       menuActive: false,
       menu: [
-        { label: 'Play', name: 'play', icon: 'play_arrow' },
+        { label: 'Open', name: 'show', icon: 'folder_open' },
         { label: 'Edit', name: 'edit', icon: 'edit' },
-        { label: 'Add to Playlist', name: 'save', icon: 'playlist_add' },
-        { label: 'Favorite Video', name: 'like', icon: 'favorite' },
-        { label: 'Add to Watch Later', name: 'watchlist', icon: 'watch_later' },
-        { label: 'View Channel', name: 'channel', icon: 'live_tv' },
+        { label: 'Bookmark', name: 'save', icon: 'bookmark' },
         { label: 'Share', name: 'share', icon: 'share' }
       ]
     }
   },
 
   components: {
-    Preview: () => import('components/ui/Preview'),
     Tag: () => import('components/ui/Tag')
   },
 
@@ -73,31 +62,17 @@ export default {
   methods: {
     open (key) {
       switch (key) {
-        case 'play':
+        case 'show':
           this.$router.push({
-            name: 'video',
+            name: 'playlist',
             params: {
-              id: this.item.id, slug: this.item.slug
-            }
-          })
-          break
-        case 'channel':
-          this.$router.push({
-            name: 'channel',
-            params: {
-              id: this.item.relationships.model.id
+              id: this.item.id
             }
           })
           break
         case 'edit':
           this.$store.dispatch('dialog/open', {
-            component: 'VideoEdit',
-            data: { id: this.item.id }
-          })
-          break
-        case 'save':
-          this.$store.dispatch('dialog/open', {
-            component: 'VideoSave',
+            component: 'PlaylistEdit',
             data: { id: this.item.id }
           })
           break
@@ -106,7 +81,7 @@ export default {
 
     onClick () {
       if (!this.menuActive) {
-        this.open('play')
+        this.open('show')
       }
     }
   }

@@ -8,32 +8,44 @@
     <q-form @submit="onSubmit">
       <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
         <q-select
-          ref="collect"
-          v-model="body.collect"
+          ref="playlists"
+          v-model="body.playlists"
           dark
           square
           filled
           :input-debounce="400"
           :max-values="15"
           :options="options"
-          @filter="filterOptions"
+          :loading="loading"
+          @filter="filterPlaylists"
           clearable
           counter
-          use-input
           use-chips
           hide-dropdown-icon
           hint="Max 15 selections"
-          label="Select collection"
+          label="Select playlists"
           stack-label
           multiple
           option-label="name"
           option-value="id"
           options-dark
           options-sanitize
+          use-input
           @new-value="createOption"
         >
           <template v-slot:prepend>
             <q-icon name="playlist_add" />
+          </template>
+
+          <template v-slot:option="scope">
+            <q-item
+              v-bind="scope.itemProps"
+              v-on="scope.itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="scope.opt.name" />
+              </q-item-section>
+            </q-item>
           </template>
 
           <template v-slot:selected-item="scope">
@@ -44,13 +56,13 @@
               @remove="scope.removeAtIndex(scope.index)"
               :tabindex="scope.tabindex"
             >
-              {{ scope.opt.name }}
+              <span>{{ scope.opt.name }}</span>
             </q-chip>
           </template>
         </q-select>
       </q-card-section>
 
-      <q-card-actions align="right"  class="q-mx-sm">
+      <q-card-actions align="right" class="q-mx-sm">
         <q-btn flat type="submit" label="Save" color="primary" />
       </q-card-actions>
     </q-form>
@@ -59,9 +71,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import find from 'lodash/find'
 import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
-import find from 'lodash/find'
 
 export default {
   props: {
@@ -74,82 +86,80 @@ export default {
   data () {
     return {
       body: {
-        collect: []
+        playlists: []
       }
     }
   },
 
   created () {
-    if (!this.$store.state.manager) {
-      this.$store.registerModule('manager', modelModule)
+    if (!this.$store.state.video_save) {
+      this.$store.registerModule('video_save', modelModule)
     }
 
-    if (!this.$store.state.user_collect) {
-      this.$store.registerModule('user_collect', paginateModule)
+    if (!this.$store.state.saver) {
+      this.$store.registerModule('saver', paginateModule)
     }
 
     this.setModel()
-    this.setOptions()
+    this.setPlaylists()
   },
 
   computed: {
-    ...mapGetters('manager', {
+    ...mapGetters('video_save', {
       ready: 'isReady',
       data: 'getData',
       meta: 'getMeta'
     }),
 
+    loading () {
+      return this.$store.getters['saver/isLoading']
+    },
+
     options () {
-      return this.$store.getters['user_collect/getData']
+      return this.$store.getters['saver/getData']
     }
   },
 
   methods: {
     async setModel () {
-      await this.$store.dispatch('manager/fetch', {
-        path: 'media/' + this.props.id,
-        params: {
-          include: 'model'
-        }
+      await this.$store.dispatch('video_save/fetch', {
+        path: 'media/' + this.props.id
       })
 
       // Set current models
-      this.body.collect = this.meta.collects || []
+      this.body.playlists = this.meta.user_playlists || []
     },
 
-    async setOptions () {
-      await this.$store.dispatch('user_collect/create', {
-        path: 'collect',
+    async setPlaylists () {
+      await this.$store.dispatch('saver/create', {
+        path: 'playlist',
         params: {
-          'filter[type]': 'user',
-          'page[size]': 9
+          'page[size]': 5,
+          'filter[user]': true,
+          sort: '-updated_at'
         }
       })
     },
 
-    async filterOptions (val, update, abort) {
-      // Reset items
-      this.$store.dispatch('user_collect/reset', {
+    async filterPlaylists (val, update, abort) {
+      this.$store.dispatch('saver/reset', {
         params: {
-          'filter[query]': val || null
+          'filter[query]': val || null,
+          sort: val.length ? null : '-updated_at'
         }
       })
 
-      // Fetch tags
-      if (val.length) {
-        await this.$store.dispatch('user_collect/fetch')
-      }
+      await this.$store.dispatch('saver/fetch')
 
-      // Update options
-      update()
+      update() // update options
     },
 
     async onSubmit () {
-      this.$refs.collect.validate()
+      this.$refs.playlists.validate()
 
-      if (!this.$refs.collect.hasError) {
+      if (!this.$refs.playlists.hasError) {
       // Update model
-        await this.$store.dispatch('manager/update', {
+        await this.$store.dispatch('video_save/update', {
           path: 'media/' + this.data.id,
           body: this.body
         })
@@ -160,6 +170,7 @@ export default {
         // Notifiy
         this.$q.notify({
           progress: true,
+          timeout: 1500,
           position: 'top',
           message: `${this.data.name} has been updated.`,
           type: 'positive'
@@ -168,11 +179,11 @@ export default {
     },
 
     async refresh () {
-      await this.$store.dispatch('manager/refresh')
+      await this.$store.dispatch('video_save/refresh')
 
       if (
         this.$store.state.video &&
-        this.$store.state.video.path === `media/${this.data.id}`
+        this.$store.state.video.path === `playlist/${this.data.id}`
       ) {
         await this.$store.dispatch('video/refresh')
       }
@@ -180,10 +191,10 @@ export default {
 
     createOption (val, done) {
       const optionExists = find(this.options, { name: val })
-      const collectExists = find(this.body.collect, { name: val })
+      const playlistExists = find(this.body.playlists, { name: val })
 
-      if (val.length > 0 && !optionExists && !collectExists) {
-        this.body.collect.push({
+      if (val.length > 0 && !optionExists && !playlistExists) {
+        this.body.playlists.push({
           id: val,
           name: val
         })

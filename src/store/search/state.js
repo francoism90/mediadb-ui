@@ -1,6 +1,6 @@
 export default function () {
   return {
     query: null,
-    type: null
+    type: 's_default'
   }
 }

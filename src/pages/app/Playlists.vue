@@ -8,7 +8,9 @@
       :namespace="namespace"
       :api-route="apiRoute"
       :refreshable="true"
-      item-component="Video"
+      item-component="Playlist"
+      row-class="row q-col-gutter-md"
+      column-class="col-xs-12 col-sm-6 col-md-3 col-lg-2"
     />
   </q-page>
 </template>
@@ -24,23 +26,24 @@ export default {
 
   meta () {
     return {
-      title: 'Library'
+      title: 'Playlists'
     }
   },
 
   data () {
     return {
-      namespace: 'library',
+      namespace: 'playlists',
       apiRoute: {
-        path: 'media',
+        path: 'playlist',
         params: {
           include: 'model,tags',
-          'page[size]': 12
+          'page[size]': 30
         }
       },
       sorters: [
         { label: 'Recommended for You', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
+        { label: 'Alphabetical', value: 'name' },
         { label: 'Most recent', value: 'recent' },
         { label: 'Most viewed', value: 'views' },
         { label: 'Popular this week', value: 'popular-week' },
@@ -50,8 +53,8 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.library) {
-      this.$store.registerModule('library', paginateModule)
+    if (!this.$store.state.playlists) {
+      this.$store.registerModule('playlists', paginateModule)
     }
   }
 }

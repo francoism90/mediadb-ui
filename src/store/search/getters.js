@@ -10,35 +10,49 @@ export function getTypes (state) {
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 15
+          'page[size]': 12
         }
       }
     },
     {
-      module: 's_collects',
-      label: 'Collections',
-      icon: 'collections',
-      component: 'Collection',
+      module: 's_channels',
+      label: 'Channels',
+      icon: 'live_tv',
+      component: 'Channel',
       apiRoute: {
-        path: 'collect',
+        path: 'channel',
         params: {
-          include: 'tags,user',
+          include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 15
+          'page[size]': 16
         }
       }
     },
     {
-      module: 's_users',
-      label: 'Users',
-      icon: 'people_alt',
-      component: 'User',
+      module: 's_playlists',
+      label: 'Playlists',
+      icon: 'layers',
+      component: 'Playlist',
       apiRoute: {
-        path: 'user',
+        path: 'playlist',
         params: {
-          include: 'media',
+          include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 10
+          'page[size]': 16
+        }
+      }
+    },
+    {
+      module: 's_tags',
+      label: 'Tags',
+      icon: 'label',
+      component: 'Tag',
+      apiRoute: {
+        path: 'tags',
+        params: {
+          append: 'media',
+          'filter[query]': state.query,
+          'page[size]': 16
         }
       }
     }
@@ -46,7 +60,7 @@ export function getTypes (state) {
 }
 
 export function getType (state, getters) {
-  return getters.getTypes.find(x => x.module === (state.type || 's_default'))
+  return getters.getTypes.find(x => x.module === (state.type))
 }
 
 export function getQuery (state) {

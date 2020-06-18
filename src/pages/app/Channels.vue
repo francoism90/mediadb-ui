@@ -8,9 +8,9 @@
       :namespace="namespace"
       :api-route="apiRoute"
       :refreshable="true"
-      item-component="User"
+      item-component="Channel"
       row-class="row q-col-gutter-md"
-      column-class="col-xs-6 col-sm-4 col-md-3 col-lg-2"
+      column-class="col-xs-12 col-sm-6 col-md-3 col-lg-2"
     />
   </q-page>
 </template>
@@ -26,28 +26,35 @@ export default {
 
   meta () {
     return {
-      title: 'Profiles'
+      title: 'Channels'
     }
   },
 
   data () {
     return {
-      namespace: 'users',
+      namespace: 'channels',
       apiRoute: {
-        path: 'user',
-        'page[size]': 30
+        path: 'channel',
+        params: {
+          include: 'model,tags',
+          'page[size]': 30
+        }
       },
       sorters: [
+        { label: 'Recommended for You', value: 'recommended' },
+        { label: 'Trending', value: 'trending' },
+        { label: 'Alphabetical', value: 'name' },
+        { label: 'Most recent', value: 'recent' },
+        { label: 'Most viewed', value: 'views' },
         { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' },
-        { label: 'Most viewed', value: 'views' }
+        { label: 'Popular this month', value: 'popular-month' }
       ]
     }
   },
 
   created () {
-    if (!this.$store.state.users) {
-      this.$store.registerModule('users', paginateModule)
+    if (!this.$store.state.channels) {
+      this.$store.registerModule('channels', paginateModule)
     }
   }
 }

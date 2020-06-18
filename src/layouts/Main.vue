@@ -20,7 +20,7 @@
 
         <div class="row no-wrap items-center">
           <q-btn class="q-mr-sm" dense flat round icon="add">
-            <q-tooltip>Upload video</q-tooltip>
+            <q-tooltip>Add Items</q-tooltip>
           </q-btn>
 
           <q-btn dense flat round>
@@ -29,7 +29,7 @@
             <q-menu auto-close dark square max-width="400px">
               <q-list bordered padding dark dense>
                 <q-item dark>
-                  <q-item-section>
+                  <q-item-section no-wrap>
                     <q-item-label caption>
                       Signed in as <span class="text-weight-medium">{{ session.name }}</span>
                     </q-item-label>
@@ -39,19 +39,19 @@
                 <q-separator dark spaced />
 
                 <q-item clickable dark>
-                  <q-item-section>Your profile</q-item-section>
+                  <q-item-section no-wrap>Your profile</q-item-section>
                 </q-item>
                 <q-item clickable dark>
-                  <q-item-section>Settings</q-item-section>
+                  <q-item-section no-wrap>Settings</q-item-section>
                 </q-item>
                 <q-item clickable dark>
-                  <q-item-section>Help</q-item-section>
+                  <q-item-section no-wrap>Help</q-item-section>
                 </q-item>
 
                 <q-separator dark spaced />
 
                 <q-item clickable dark @click="logout">
-                  <q-item-section>Sign out</q-item-section>
+                  <q-item-section no-wrap>Sign out</q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -97,6 +97,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   components: {
     Dialogs: () => import('components/ui/Dialog'),
@@ -110,9 +112,9 @@ export default {
       hideDrawer: ['video'],
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
-        { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
-        { label: 'People', name: 'profiles', icon: 'people_alt', separator: false },
-        { label: 'Tags', name: 'tags', icon: 'label', separator: true },
+        { label: 'Channels', name: 'channels', icon: 'live_tv', separator: false },
+        { label: 'Tags', name: 'tags', icon: 'label', separator: false },
+        { label: 'Playlists', name: 'playlists', icon: 'layers', separator: true },
         { label: 'History', name: 'history', icon: 'history', separator: false },
         { label: 'Watch later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
@@ -122,9 +124,9 @@ export default {
   },
 
   computed: {
-    session () {
-      return this.$store.getters['session/getData']
-    }
+    ...mapGetters('session', {
+      session: 'getData'
+    })
   },
 
   watch: {

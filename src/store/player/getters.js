@@ -13,15 +13,15 @@ export function getModel (state) {
 export function getShakaOptions () {
   return {
     streaming: {
-      rebufferingGoal: 10,
-      bufferingGoal: 90,
-      bufferBehind: 60,
+      rebufferingGoal: 2,
+      bufferingGoal: 10,
+      bufferBehind: 30,
       ignoreTextStreamFailures: true,
       jumpLargeGaps: true,
       retryParameters: {
         timeout: 0,
-        maxAttempts: 5,
-        baseDelay: 300,
+        maxAttempts: 3,
+        baseDelay: 250,
         backoffFactor: 2,
         fuzzFactor: 0.5
       }

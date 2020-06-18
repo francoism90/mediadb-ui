@@ -4,7 +4,7 @@
       <q-card dark>
         <q-card-section class="row items-center">
           <q-avatar icon="delete_forever" color="primary" text-color="white" />
-          <span class="q-ml-sm">Are you sure you want to delete this collection?</span>
+          <span class="q-ml-sm">Are you sure you want to delete this playlist?</span>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -20,7 +20,7 @@
     </q-toolbar>
 
     <q-form @submit="onSubmit">
-      <q-card-section style="max-height: 50vh" class="scroll q-gutter-lg">
+      <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
         <q-input
           ref="name"
           v-model="body.name"
@@ -47,7 +47,7 @@
           dark
           square
           filled
-          :input-debounce="500"
+          :input-debounce="400"
           :max-values="15"
           :options="options"
           :loading="loading"
@@ -127,9 +127,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
-import { mapGetters } from 'vuex'
 
 export default {
   props: {
@@ -151,8 +151,8 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.collect_edit) {
-      this.$store.registerModule('collect_edit', modelModule)
+    if (!this.$store.state.playlist_edit) {
+      this.$store.registerModule('playlist_edit', modelModule)
     }
 
     if (!this.$store.state.tagger) {
@@ -164,7 +164,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('collect_edit', {
+    ...mapGetters('playlist_edit', {
       ready: 'isReady',
       data: 'getData'
     }),
@@ -180,11 +180,8 @@ export default {
 
   methods: {
     async setModel () {
-      await this.$store.dispatch('collect_edit/fetch', {
-        path: 'collect/' + this.props.id,
-        params: {
-          include: 'tags,user'
-        }
+      await this.$store.dispatch('playlist_edit/fetch', {
+        path: 'playlist/' + this.props.id
       })
 
       // Set current models
@@ -225,8 +222,8 @@ export default {
         !this.$refs.description.hasError
       ) {
         // Update model
-        await this.$store.dispatch('collect_edit/update', {
-          path: 'collect/' + this.data.id,
+        await this.$store.dispatch('playlist_edit/update', {
+          path: 'playlist/' + this.data.id,
           body: this.body
         })
 
@@ -246,8 +243,8 @@ export default {
 
     async onDelete () {
       // Delete model
-      await this.$store.dispatch('collect_edit/remove', {
-        path: 'collect/' + this.data.id
+      await this.$store.dispatch('playlist_edit/remove', {
+        path: 'playlist/' + this.data.id
       })
 
       // Notifiy
@@ -263,13 +260,13 @@ export default {
     },
 
     async refresh () {
-      await this.$store.dispatch('collect_edit/refresh')
+      await this.$store.dispatch('playlist_edit/refresh')
 
       if (
-        this.$store.state.collect &&
-        this.$store.state.collect.path === `collect/${this.data.id}`
+        this.$store.state.video &&
+        this.$store.state.video.path === `media/${this.data.id}`
       ) {
-        await this.$store.dispatch('collect/refresh')
+        await this.$store.dispatch('video/refresh')
       }
     }
   }
