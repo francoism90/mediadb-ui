@@ -7,8 +7,16 @@
 </template>
 
 <script>
+import paginateModule from 'src/store/paginate'
+
 export default {
-  name: 'App',
+  preFetch ({ store }) {
+    for (const type of store.getters['search/getTypes']) {
+      if (!store.state[type.module]) {
+        store.registerModule(type.module, paginateModule)
+      }
+    }
+  },
 
   meta: {
     title: '',
@@ -17,6 +25,7 @@ export default {
 
   components: {
     Auth: () => import('layouts/Auth'),
+    Error: () => import('layouts/Error'),
     Main: () => import('layouts/Main')
   },
 

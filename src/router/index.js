@@ -24,26 +24,5 @@ export default function ({ store, ssrContext }) {
     base: process.env.VUE_ROUTER_BASE
   })
 
-  Router.beforeEach(async (to, from, next) => {
-    // Call next on (API) errors
-    if (['/403', '/404', '/429', '/500'].includes(to.path)) {
-      next()
-    }
-
-    // Fetch user info
-    await store.dispatch('session/fetch')
-
-    const isAuthenticated = store.getters['session/isAuthenticated']
-
-    // Validate authentication
-    if (to.name !== 'login' && to.meta.auth === true && !isAuthenticated) {
-      next({ name: 'login', query: { redirect: to.fullPath } })
-    } else if (['join', 'login'].includes(to.name) && isAuthenticated) {
-      next({ name: 'home' })
-    } else {
-      next()
-    }
-  })
-
   return Router
 }

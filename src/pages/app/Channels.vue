@@ -19,6 +19,12 @@
 import paginateModule from 'src/store/paginate'
 
 export default {
+  preFetch ({ store }) {
+    if (!store.state.channels) {
+      store.registerModule('channels', paginateModule)
+    }
+  },
+
   components: {
     Infinite: () => import('components/paginate/Infinite'),
     Filters: () => import('components/paginate/Filters')
@@ -49,12 +55,6 @@ export default {
         { label: 'Popular this week', value: 'popular-week' },
         { label: 'Popular this month', value: 'popular-month' }
       ]
-    }
-  },
-
-  created () {
-    if (!this.$store.state.channels) {
-      this.$store.registerModule('channels', paginateModule)
     }
   }
 }

@@ -11,10 +11,14 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
-  data () {
-    return {
-      title: ''
+  preFetch ({ store, currentRoute }) {
+    if (!store.state.video) {
+      store.registerModule('video', modelModule)
     }
+
+    store.dispatch('video/fetch', {
+      path: 'media/' + currentRoute.params.id
+    })
   },
 
   components: {
@@ -25,7 +29,7 @@ export default {
 
   meta () {
     return {
-      title: this.title
+      title: this.data.name
     }
   },
 
@@ -47,34 +51,6 @@ export default {
       data: 'getData',
       meta: 'getMeta'
     })
-  },
-
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.fetch(to.params.id)
-      next()
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.fetch(to.params.id)
-    next()
-  },
-
-  created () {
-    if (!this.$store.state.video) {
-      this.$store.registerModule('video', modelModule)
-    }
-  },
-
-  methods: {
-    async fetch (id) {
-      await this.$store.dispatch('video/fetch', {
-        path: 'media/' + id
-      })
-
-      this.title = this.data.name
-    }
   }
 }
 </script>

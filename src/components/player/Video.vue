@@ -187,7 +187,7 @@ export default {
           break
 
         case 'snapshot':
-          await this.$store.dispatch('model/update', {
+          await this.$store.dispatch('video/update', {
             path: 'media/' + this.data.id,
             body: { snapshot: this.player.currentTime }
           })

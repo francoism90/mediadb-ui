@@ -1,6 +1,6 @@
 <template>
   <q-page class="container fluid">
-    <template v-if="ready && type && query">
+    <template v-if="type && query">
       <q-btn-group class="q-py-md" unelevated>
         <q-select
           dark
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-import paginateModule from 'src/store/paginate'
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
@@ -46,7 +45,6 @@ export default {
 
   meta () {
     return {
-      ready: false,
       title: 'Search'
     }
   },
@@ -67,17 +65,6 @@ export default {
         this.setQuery({ type: value.module, query: this.query })
       }
     }
-  },
-
-  created () {
-    for (const type of this.types) {
-      if (!this.$store.state[type.module]) {
-        this.$store.registerModule(type.module, paginateModule)
-      }
-    }
-
-    // Prevent init stores error
-    this.ready = true
   },
 
   methods: {

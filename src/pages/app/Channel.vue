@@ -6,20 +6,23 @@
 </template>
 
 <script>
-import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
+import modelModule from 'src/store/model'
 
 export default {
-  meta () {
-    return {
-      title: this.title
+  preFetch ({ store, currentRoute }) {
+    if (!store.state.channel) {
+      store.registerModule('channel', modelModule)
     }
+
+    store.dispatch('channel/fetch', {
+      path: 'channel/' + currentRoute.params.id
+    })
   },
 
-  data () {
+  meta () {
     return {
-      title: '',
-      namespace: `channel_${this.id}`
+      title: this.data.name
     }
   },
 
@@ -32,6 +35,11 @@ export default {
     id: {
       type: String,
       required: true
+    },
+
+    slug: {
+      type: String,
+      default: null
     }
   },
 
@@ -41,34 +49,6 @@ export default {
       data: 'getData',
       meta: 'getMeta'
     })
-  },
-
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.fetch(to.params.id)
-      next()
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.fetch(to.params.id)
-    next()
-  },
-
-  created () {
-    if (!this.$store.state.channel) {
-      this.$store.registerModule('channel', modelModule)
-    }
-  },
-
-  methods: {
-    async fetch (id) {
-      await this.$store.dispatch('channel/fetch', {
-        path: 'channel/' + id
-      })
-
-      this.title = this.data.name
-    }
   }
 }
 </script>

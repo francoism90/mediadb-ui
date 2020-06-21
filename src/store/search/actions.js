@@ -1,20 +1,24 @@
-export function query ({ commit, dispatch, getters, state }, payload = {}) {
+export function query ({ commit, dispatch, state }, payload = {}) {
   const { type = null, query = null } = payload
 
   commit('setType', type || state.type)
   commit('setQuery', query)
 
-  // Create the paginate module
-  dispatch(
-    getters.getType.module + '/create',
-    getters.getType.apiRoute,
-    { root: true }
-  )
+  dispatch('resetStores')
+}
 
-  // Reset the paginate module
-  dispatch(
-    getters.getType.module + '/reset',
-    getters.getType.apiRoute,
-    { root: true }
-  )
+export function resetStores ({ dispatch, getters }) {
+  for (const type of getters.getTypes) {
+    dispatch(
+      type.module + '/create',
+      type.apiRoute,
+      { root: true }
+    )
+
+    dispatch(
+      type.module + '/reset',
+      type.apiRoute,
+      { root: true }
+    )
+  }
 }

@@ -9,19 +9,19 @@ const routes = [
     name: '403',
     path: '/403',
     component: () => import('pages/error/403.vue'),
-    meta: { auth: false, layout: 'Auth' }
+    meta: { auth: false, layout: 'Error' }
   },
   {
     name: '429',
     path: '/429',
     component: () => import('pages/error/429.vue'),
-    meta: { auth: false, layout: 'Auth' }
+    meta: { auth: false, layout: 'Error' }
   },
   {
     name: '500',
     path: '/500',
     component: () => import('pages/error/500.vue'),
-    meta: { auth: false, layout: 'Auth' }
+    meta: { auth: false, layout: 'Error' }
   },
   {
     name: 'channels',
@@ -31,7 +31,7 @@ const routes = [
   },
   {
     name: 'channel',
-    path: '/channel/:id',
+    path: '/channel/:id/:slug?',
     component: () => import('pages/app/Channel.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
@@ -44,7 +44,7 @@ const routes = [
   },
   {
     name: 'playlist',
-    path: '/playlist/:id',
+    path: '/playlist/:id/:slug?',
     component: () => import('pages/app/Playlist.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
@@ -79,14 +79,12 @@ const routes = [
     path: '/login',
     component: () => import('pages/auth/Login.vue'),
     meta: { auth: false, layout: 'Auth' }
+  },
+  {
+    path: '*',
+    component: () => import('pages/error/404.vue'),
+    meta: { auth: false, layout: 'Error' }
   }
 ]
-
-if (process.env.MODE !== 'ssr') {
-  routes.push({
-    path: '*',
-    component: () => import('pages/error/404.vue')
-  })
-}
 
 export default routes

@@ -19,7 +19,12 @@
     </q-menu>
 
     <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
-      <preview :poster="item.thumbnail" :src="item.preview" />
+      <preview
+        class="item-preview"
+        :name="item.name"
+        :poster="item.thumbnail"
+        :src="item.preview"
+      />
     </a>
 
     <q-card-section class="q-py-md">
@@ -77,7 +82,8 @@ export default {
           this.$router.push({
             name: 'video',
             params: {
-              id: this.item.id, slug: this.item.slug
+              id: this.item.id,
+              slug: this.item.slug
             }
           })
           break

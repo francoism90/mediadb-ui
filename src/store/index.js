@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import dialog from './dialog'
-import model from './model'
 import player from './player'
 import search from './search'
 import session from './session'
@@ -21,11 +20,10 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      session,
       dialog,
-      model,
       player,
-      search
+      search,
+      session
     },
 
     // enable strict mode (adds overhead!)

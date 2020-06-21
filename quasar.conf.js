@@ -1,12 +1,18 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
+const fs = require('fs')
+
 module.exports = function (ctx) {
   return {
+    // https://quasar.dev/quasar-cli/supporting-ts
+    supportTS: false,
+
     // https://quasar.dev/quasar-cli/cli-documentation/boot-files
     boot: [
       'i18n',
       'axios',
+      'auth',
       'filters',
       'inter',
       'shortkey',
@@ -18,39 +24,20 @@ module.exports = function (ctx) {
       'app.scss'
     ],
 
+    // https://quasar.dev/quasar-cli/prefetch-feature
+    preFetch: true,
+
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       'material-icons'
     ],
 
-    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
-    framework: {
-      config: {
-        dark: 'true'
-      },
-      iconSet: 'material-icons', // Quasar icon set
-      lang: 'en-us', // Quasar language pack
-      all: 'auto',
-      components: [],
-      directives: [],
-      plugins: [
-        'AppFullscreen',
-        'Notify',
-        'Meta'
-      ]
-    },
-
-    // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: false,
-
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      modern: true,
       vueRouterMode: 'history',
-      distDir: 'public',
+      preloadChunks: true,
       showProgress: true,
       gzip: true,
-      preloadChunks: true,
       extractCSS: true,
       minify: true,
       webpackManifest: true,
@@ -61,10 +48,7 @@ module.exports = function (ctx) {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /node_modules/,
-          options: {
-            formatter: require('eslint').CLIEngine.getFormatter('stylish')
-          }
+          exclude: /node_modules/
         })
       }
     },
@@ -74,11 +58,36 @@ module.exports = function (ctx) {
       port: 8082,
       host: 'mediadb.dom',
       open: true,
-      https: true
+      https: {
+        key: fs.readFileSync('/etc/nginx/ssl/key.pem'),
+        cert: fs.readFileSync('/etc/nginx/ssl/cert.pem')
+      }
+    },
+
+    // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
+    framework: {
+      iconSet: 'material-icons', // Quasar icon set
+      lang: 'en-us', // Quasar language pack
+      config: {},
+
+      // Possible values for "importStrategy":
+      // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
+      // * 'all'  - Manually specify what to import
+      importStrategy: 'auto',
+
+      // Quasar plugins
+      plugins: [
+        'AppFullscreen',
+        'Notify',
+        'Meta'
+      ]
     },
 
     // https://quasar.dev/options/animations
-    animations: 'all',
+    animations: [
+      'fadeIn',
+      'fadeOut'
+    ],
 
     // https://quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {
@@ -90,36 +99,36 @@ module.exports = function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       workboxOptions: {}, // only for GenerateSW
       manifest: {
-        name: 'MediaDB',
-        short_name: 'MediaDB',
-        description: 'Build your own streaming service',
+        name: 'Quasar App',
+        short_name: 'Quasar App',
+        description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#1c1d1e',
-        theme_color: '#292a2d',
+        background_color: '#ffffff',
+        theme_color: '#027be3',
         icons: [
           {
-            src: 'statics/icons/icon-128x128.png',
+            src: 'icons/icon-128x128.png',
             sizes: '128x128',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-256x256.png',
+            src: 'icons/icon-256x256.png',
             sizes: '256x256',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-384x384.png',
+            src: 'icons/icon-384x384.png',
             sizes: '384x384',
             type: 'image/png'
           },
           {
-            src: 'statics/icons/icon-512x512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }
@@ -129,8 +138,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
-      // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
-      id: 'org.cordova.quasar.app'
+    // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
     // https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
@@ -157,7 +165,6 @@ module.exports = function (ctx) {
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
         appId: 'client'
       },
 

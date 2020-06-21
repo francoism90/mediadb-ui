@@ -20,6 +20,12 @@
 import paginateModule from 'src/store/paginate'
 
 export default {
+  preFetch ({ store, currentRoute }) {
+    if (!store.state.tags) {
+      store.registerModule('tags', paginateModule)
+    }
+  },
+
   components: {
     Infinite: () => import('components/paginate/Infinite'),
     Filters: () => import('components/paginate/Filters')
@@ -45,12 +51,6 @@ export default {
         { label: 'Languages', value: 'language' },
         { label: 'People', value: 'person' }
       ]
-    }
-  },
-
-  created () {
-    if (!this.$store.state.tags) {
-      this.$store.registerModule('tags', paginateModule)
     }
   }
 }

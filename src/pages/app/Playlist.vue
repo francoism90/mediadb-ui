@@ -10,16 +10,19 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
-  meta () {
-    return {
-      title: this.title
+  preFetch ({ store, currentRoute }) {
+    if (!store.state.playlist) {
+      store.registerModule('playlist', modelModule)
     }
+
+    store.dispatch('playlist/fetch', {
+      path: 'playlist/' + currentRoute.params.id
+    })
   },
 
-  data () {
+  meta () {
     return {
-      title: '',
-      namespace: `playlist_${this.id}`
+      title: this.data.name
     }
   },
 
@@ -32,6 +35,11 @@ export default {
     id: {
       type: String,
       required: true
+    },
+
+    slug: {
+      type: String,
+      default: null
     }
   },
 
@@ -41,34 +49,6 @@ export default {
       data: 'getData',
       meta: 'getMeta'
     })
-  },
-
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.fetch(to.params.id)
-      next()
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.fetch(to.params.id)
-    next()
-  },
-
-  created () {
-    if (!this.$store.state.playlist) {
-      this.$store.registerModule('playlist', modelModule)
-    }
-  },
-
-  methods: {
-    async fetch (id) {
-      await this.$store.dispatch('playlist/fetch', {
-        path: 'playlist/' + id
-      })
-
-      this.title = this.data.name
-    }
   }
 }
 </script>

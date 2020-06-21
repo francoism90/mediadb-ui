@@ -9,6 +9,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
+    ChannelEdit: () => import('components/channel/Edit'),
     PlaylistEdit: () => import('components/playlist/Edit'),
     VideoEdit: () => import('components/video/Edit'),
     VideoSave: () => import('components/video/Save')

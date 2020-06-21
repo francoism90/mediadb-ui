@@ -1,12 +1,9 @@
-.item {
-  .preview, img, video {
-    display: block;
+.item-preview {
+  height: 180px;
+  min-height: 180px;
+  max-height: 180px;
+
+  video {
     object-fit: fill;
-    min-height: 180px;
-    max-height: 180px;
-    height: 180px;
-    width: 100%;
-    max-width: 100%;
-    border: 0;
   }
 }

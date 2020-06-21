@@ -1,17 +1,15 @@
 <template>
   <div
-    class="preview"
     @mouseover="showPreview = true"
     @mouseout="showPreview = false"
     v-touch-pan.horizontal.prevent="onTouch"
   >
     <template v-if="!showPreview">
       <q-img
+        :alt="name"
         :src="poster"
-        width="100%"
-        height="100%"
         loading="lazy"
-        spinner-color="white"
+        class="no-border fit"
       />
     </template>
 
@@ -19,7 +17,7 @@
       <video
         ref="player"
         :src="src"
-        class="fit"
+        class="no-border fit"
         autoplay
         playsinline
         muted
@@ -40,6 +38,11 @@ export default {
   },
 
   props: {
+    name: {
+      type: String,
+      required: true
+    },
+
     poster: {
       type: String,
       default: null

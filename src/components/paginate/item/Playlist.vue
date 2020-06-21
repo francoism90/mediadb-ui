@@ -18,8 +18,13 @@
       </q-list>
     </q-menu>
 
-    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
-      <img src="~assets/placeholders/empty.png" :alt="item.name" />
+    <a class="item-preview" :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
+      <q-img
+        :alt="item.name"
+        src="~assets/placeholders/empty.png"
+        class="no-border fit"
+        loading="lazy"
+      />
     </a>
 
     <q-card-section class="q-py-md">
@@ -66,7 +71,8 @@ export default {
           this.$router.push({
             name: 'playlist',
             params: {
-              id: this.item.id
+              id: this.item.id,
+              slug: this.item.slug
             }
           })
           break
