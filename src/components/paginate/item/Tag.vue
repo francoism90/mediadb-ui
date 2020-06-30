@@ -68,7 +68,7 @@ export default {
   methods: {
     onClick (value) {
       this.$store.dispatch('search/query', {
-        type: 's_default',
+        type: null,
         query: '#' + value.slug
       })
 

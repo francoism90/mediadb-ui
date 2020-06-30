@@ -1,27 +1,24 @@
 <template>
   <q-page class="container fluid">
-    <template v-if="type && query">
-      <q-btn-group class="q-py-md" unelevated>
-        <q-select
-          dark
-          square
-          dense
-          v-model="model"
-          dropdown-icon="keyboard_arrow_down"
-          :options="types"
-          option-label="label"
-          option-value="value"
-          options-dark
-          options-sanitize
-          :display-value="model.label"
-          popup-content-class="dropdown"
+    <template v-if="ready && !type && query">
+      <div v-for="type in modules" :key="type.namespace">
+        <items
+          v-if="hasItems(type.namespace)"
+          :namespace="type.namespace"
+          :item-component="type.itemComponent"
+          :label="type.label"
+          :summary="true"
+          :query="query"
         />
-      </q-btn-group>
+      </div>
+    </template>
 
-      <infinite
-        :namespace="type.module"
-        :api-route="type.apiRoute"
-        :item-component="type.component"
+    <template v-else-if="ready && type && query">
+      <items
+        :namespace="type.namespace"
+        :item-component="type.itemComponent"
+        :label="type.label"
+        :query="query"
       />
     </template>
 
@@ -36,11 +33,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Infinite: () => import('components/paginate/Infinite')
+    Items: () => import('components/search/Items')
   },
 
   meta () {
@@ -51,26 +48,17 @@ export default {
 
   computed: {
     ...mapGetters('search', {
+      modules: 'getModules',
       query: 'getQuery',
-      type: 'getType',
-      types: 'getTypes'
-    }),
-
-    model: {
-      get () {
-        return this.type
-      },
-
-      set (value) {
-        this.setQuery({ type: value.module, query: this.query })
-      }
-    }
+      ready: 'isReady',
+      type: 'getType'
+    })
   },
 
   methods: {
-    ...mapActions('search', {
-      setQuery: 'query'
-    })
+    hasItems (namespace = null) {
+      return (this.$store.getters[namespace + '/getTotal'] > 0)
+    }
   }
 }
 </script>

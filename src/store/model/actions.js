@@ -19,11 +19,14 @@ export async function fetch ({ commit, dispatch }, route = {}) {
 }
 
 export async function refresh ({ commit, state }) {
+  commit('setReady', false)
+
   const response = await axiosInstance.get(state.path, {
     params: state.params
   })
 
   commit('setModel', response.data)
+  commit('setReady', true)
 }
 
 export async function remove ({ state }, params = {}) {

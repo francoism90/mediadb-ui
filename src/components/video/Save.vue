@@ -13,7 +13,7 @@
           dark
           square
           filled
-          :input-debounce="400"
+          :input-debounce="300"
           :max-values="15"
           :options="options"
           :loading="loading"
@@ -92,46 +92,50 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.video_save) {
-      this.$store.registerModule('video_save', modelModule)
+    if (!this.$store.hasModule('model_save')) {
+      this.$store.registerModule('model_save', modelModule)
     }
 
-    if (!this.$store.state.saver) {
-      this.$store.registerModule('saver', paginateModule)
+    if (!this.$store.hasModule('selector')) {
+      this.$store.registerModule('selector', paginateModule)
     }
 
     this.setModel()
     this.setPlaylists()
   },
 
+  beforeDestroy () {
+    this.$store.unregisterModule('model_save')
+    this.$store.unregisterModule('selector')
+  },
+
   computed: {
-    ...mapGetters('video_save', {
+    ...mapGetters('model_save', {
       ready: 'isReady',
       data: 'getData',
       meta: 'getMeta'
     }),
 
     loading () {
-      return this.$store.getters['saver/isLoading']
+      return this.$store.getters['selector/isLoading']
     },
 
     options () {
-      return this.$store.getters['saver/getData']
+      return this.$store.getters['selector/getData']
     }
   },
 
   methods: {
     async setModel () {
-      await this.$store.dispatch('video_save/fetch', {
+      await this.$store.dispatch('model_save/fetch', {
         path: 'media/' + this.props.id
       })
 
-      // Set current models
       this.body.playlists = this.meta.user_playlists || []
     },
 
     async setPlaylists () {
-      await this.$store.dispatch('saver/create', {
+      await this.$store.dispatch('selector/create', {
         path: 'playlist',
         params: {
           'page[size]': 5,
@@ -142,14 +146,12 @@ export default {
     },
 
     async filterPlaylists (val, update, abort) {
-      this.$store.dispatch('saver/reset', {
+      await this.$store.dispatch('selector/reset', {
         params: {
           'filter[query]': val || null,
           sort: val.length ? null : '-updated_at'
         }
       })
-
-      await this.$store.dispatch('saver/fetch')
 
       update() // update options
     },
@@ -158,16 +160,13 @@ export default {
       this.$refs.playlists.validate()
 
       if (!this.$refs.playlists.hasError) {
-      // Update model
-        await this.$store.dispatch('video_save/update', {
+        await this.$store.dispatch('model_save/update', {
           path: 'media/' + this.data.id,
           body: this.body
         })
 
-        // Refresh stores
-        await this.refresh()
+        await this.$store.dispatch('model_save/refresh')
 
-        // Notifiy
         this.$q.notify({
           progress: true,
           timeout: 1500,
@@ -175,17 +174,6 @@ export default {
           message: `${this.data.name} has been updated.`,
           type: 'positive'
         })
-      }
-    },
-
-    async refresh () {
-      await this.$store.dispatch('video_save/refresh')
-
-      if (
-        this.$store.state.video &&
-        this.$store.state.video.path === `playlist/${this.data.id}`
-      ) {
-        await this.$store.dispatch('video/refresh')
       }
     },
 

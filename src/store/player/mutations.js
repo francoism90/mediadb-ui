@@ -4,7 +4,7 @@ export function resetState (state) {
   state = Object.assign(state, defaultState())
 }
 
-export function setReady (state, payload) {
+export function setReady (state, payload = false) {
   state.ready = payload
 }
 
@@ -15,7 +15,7 @@ export function setData (state, payload = {}) {
   state.data = Object.assign({}, state.data, finalState)
 }
 
-export function setCallback (state, payload) {
+export function setCallback (state, payload = {}) {
   state.callback = payload
 }
 

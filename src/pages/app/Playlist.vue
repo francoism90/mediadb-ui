@@ -10,12 +10,12 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    if (!store.state.playlist) {
+  async preFetch ({ store, currentRoute }) {
+    if (!store.hasModule('playlist')) {
       store.registerModule('playlist', modelModule)
     }
 
-    store.dispatch('playlist/fetch', {
+    await store.dispatch('playlist/fetch', {
       path: 'playlist/' + currentRoute.params.id
     })
   },

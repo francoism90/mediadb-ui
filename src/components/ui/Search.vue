@@ -6,10 +6,10 @@
       dense
       square
       filled
-      debounce="950"
       v-model="model"
       @focus="onFocus"
       input-class="text-grey-5 text-weight-light"
+      :debounce="900"
       :placeholder="placeholder"
       type="search"
     >
@@ -35,7 +35,7 @@ export default {
       },
 
       set (value) {
-        this.setQuery({ query: value })
+        this.setQuery({ type: null, query: value })
       }
     },
 

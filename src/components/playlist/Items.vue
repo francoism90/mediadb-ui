@@ -35,10 +35,11 @@ export default {
       },
       sorters: [
         { label: 'Most recent', value: 'recent' },
+        { label: 'Recommended for You', value: 'recommended' },
         { label: 'Most viewed', value: 'views' },
-        { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' },
-        { label: 'Recommended for You', value: 'recommended' }
+        { label: 'Trending', value: 'trending' },
+        { label: 'Alphabetical', value: 'name' },
+        { label: 'Duration', value: 'duration' }
       ]
     }
   },
@@ -55,9 +56,12 @@ export default {
     }
   },
 
-  created () {
-    if (!this.$store.state[this.namespace]) {
+  async created () {
+    if (!this.$store.hasModule(this.namespace)) {
       this.$store.registerModule(this.namespace, paginateModule)
+
+      // Fetch first page
+      await this.$store.dispatch(this.namespace + '/create', this.apiRoute)
     }
   }
 }

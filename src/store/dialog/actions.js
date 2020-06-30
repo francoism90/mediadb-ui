@@ -5,14 +5,14 @@ export function open ({ commit }, params = {}) {
 
   commit('setComponent', component)
   commit('setData', data)
-  commit('setProps', props)
+  commit('setOptions', props)
 
-  commit('setModel', true)
+  commit('setActive', true)
 }
 
 export function close ({ commit }, params = {}) {
   const { props = {} } = params
 
-  commit('setProps', props)
-  commit('setModel', false)
+  commit('setOptions', props)
+  commit('setActive', false)
 }

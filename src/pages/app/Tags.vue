@@ -21,7 +21,7 @@ import paginateModule from 'src/store/paginate'
 
 export default {
   preFetch ({ store, currentRoute }) {
-    if (!store.state.tags) {
+    if (!store.hasModule('tags')) {
       store.registerModule('tags', paginateModule)
     }
   },
@@ -52,6 +52,10 @@ export default {
         { label: 'People', value: 'person' }
       ]
     }
+  },
+
+  async created () {
+    await this.$store.dispatch('tags/create', this.apiRoute)
   }
 }
 </script>

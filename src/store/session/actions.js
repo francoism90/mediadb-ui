@@ -1,12 +1,14 @@
 import { axiosInstance } from 'boot/axios'
 
 export async function fetch ({ commit }) {
+  commit('setReady', false)
+
   try {
     const response = await axiosInstance.get('auth/me')
 
     commit('setUser', response.data)
   } catch (e) {
-    commit('setUser', { data: {}, meta: {} })
+    commit('setUser')
   }
 
   commit('setReady', true)

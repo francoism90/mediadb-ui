@@ -1,7 +1,7 @@
 export default function () {
   return {
-    model: false,
-    props: {},
+    active: false,
+    options: {},
     data: {},
     component: null
   }

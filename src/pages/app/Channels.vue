@@ -6,7 +6,6 @@
 
     <infinite
       :namespace="namespace"
-      :api-route="apiRoute"
       :refreshable="true"
       item-component="Channel"
       row-class="row q-col-gutter-md"
@@ -20,7 +19,7 @@ import paginateModule from 'src/store/paginate'
 
 export default {
   preFetch ({ store }) {
-    if (!store.state.channels) {
+    if (!store.hasModule('channels')) {
       store.registerModule('channels', paginateModule)
     }
   },
@@ -43,7 +42,7 @@ export default {
         path: 'channel',
         params: {
           include: 'model,tags',
-          'page[size]': 30
+          'page[size]': 16
         }
       },
       sorters: [
@@ -56,6 +55,10 @@ export default {
         { label: 'Popular this month', value: 'popular-month' }
       ]
     }
+  },
+
+  async created () {
+    await this.$store.dispatch('channels/create', this.apiRoute)
   }
 }
 </script>

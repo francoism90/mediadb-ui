@@ -1,5 +1,5 @@
 <template>
-  <div class="fit" @click.prevent="callback({ type: 'togglePlay' })">
+  <div class="fit" @click.prevent="callback({ type: 'togglePlay' })" @dblclick.prevent="callback({ type: 'toggleFullscreen' })">
     <q-menu touch-position context-menu dark square>
       <q-list bordered padding dark style="width: 260px">
         <q-item
@@ -29,7 +29,7 @@ export default {
       menu: [
         { label: 'Copy Video URL', name: 'play', icon: 'play_arrow' },
         { label: 'Keyboard Shortcuts', name: 'edit', icon: 'edit' },
-        { label: 'Debug Information', name: 'edit', icon: 'edit' }
+        { label: 'Debug Information', name: 'info', icon: 'info' }
       ]
     }
   },

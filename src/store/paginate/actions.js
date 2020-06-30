@@ -1,28 +1,26 @@
 import { axiosInstance } from 'boot/axios'
 
-export function create ({ commit, state }, route = {}) {
+export async function create ({ commit, dispatch, state }, route = {}) {
   const { path = null } = route
+
+  commit('setReady', false)
 
   if (path && state.path === null) {
     commit('resetState')
     commit('setRoute', route)
+
+    // Fetch first page
+    await dispatch('fetch')
   }
 
+  // Set as ready
   commit('setReady', true)
 }
 
-export async function fetch ({ commit, state }) {
-  if (
-    state.meta &&
-    state.meta.current_page &&
-    state.meta.current_page >= state.meta.last_page
-  ) {
-    return { stop: true }
-  }
-
-  // Fail-safe on invalid requests
-  if (!state.meta.current_page && state.params['page[number]'] > 1) {
-    return { stop: true }
+export async function fetch ({ commit, getters, state }) {
+  // We got all results
+  if (getters.isLastPage) {
+    return
   }
 
   commit('setLoading', true)
@@ -34,16 +32,21 @@ export async function fetch ({ commit, state }) {
   commit('setItems', response.data)
   commit('increasePage')
   commit('setLoading', false)
-
-  return { stop: false }
 }
 
-export function reset ({ commit }, route = {}) {
+export async function reset ({ commit, dispatch }, route = {}) {
   // Update route (if needed)
+  commit('setReady', false)
   commit('setRoute', route)
 
   // Reset all items
   commit('resetId')
   commit('resetItems')
   commit('resetPage')
+
+  // Fetch first page
+  await dispatch('fetch')
+
+  // Set ready
+  commit('setReady', true)
 }

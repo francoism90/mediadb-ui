@@ -1,6 +1,6 @@
 <template>
-  <q-pull-to-refresh v-if="state.ready" :key="state.id" :disable="!refreshable" @refresh="onRefresh">
-    <q-infinite-scroll :debounce="300" scroll-target="body" @load="onLoad">
+  <q-pull-to-refresh v-if="isReady" :key="state.id" :disable="!refreshable" @refresh="onRefresh">
+    <q-infinite-scroll :disable="!loadable" :debounce="300" scroll-target="body" @load="onLoad">
       <transition-group
         appear
         enter-active-class="animated fadeIn"
@@ -38,14 +38,14 @@ export default {
       required: true
     },
 
-    apiRoute: {
-      type: Object,
-      default: () => {
-        return {
-          path: null,
-          params: {}
-        }
-      }
+    loadable: {
+      type: Boolean,
+      default: true
+    },
+
+    refreshable: {
+      type: Boolean,
+      default: false
     },
 
     itemComponent: {
@@ -66,32 +66,32 @@ export default {
     componentClass: {
       type: String,
       default: 'item'
-    },
-
-    refreshable: {
-      type: Boolean,
-      default: false
     }
   },
 
   computed: {
     state () {
       return this.$store.state[this.namespace]
-    }
-  },
+    },
 
-  created () {
-    this.$store.dispatch(this.namespace + '/create', this.apiRoute)
+    isReady () {
+      return this.$store.getters[this.namespace + '/isReady']
+    },
+
+    isLastPage () {
+      return this.$store.getters[this.namespace + '/isLastPage']
+    }
   },
 
   methods: {
     async onLoad (index, done) {
-      // Fetch items
-      const response = await this.$store.dispatch(this.namespace + '/fetch')
-      const { stop = true } = response
+      if (this.isLastPage || !this.loadable) {
+        done(true)
+      }
 
-      // Stop fetching when true
-      await done(stop)
+      await this.$store.dispatch(this.namespace + '/fetch')
+
+      done(this.isLastPage)
     },
 
     async onRefresh (done) {

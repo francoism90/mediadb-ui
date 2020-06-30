@@ -16,15 +16,7 @@ export function getShakaOptions () {
       rebufferingGoal: 2,
       bufferingGoal: 10,
       bufferBehind: 30,
-      ignoreTextStreamFailures: true,
-      jumpLargeGaps: true,
-      retryParameters: {
-        timeout: 0,
-        maxAttempts: 3,
-        baseDelay: 250,
-        backoffFactor: 2,
-        fuzzFactor: 0.5
-      }
+      jumpLargeGaps: true
     }
   }
 }
@@ -49,7 +41,7 @@ export function getEventListeners () {
   ]
 }
 
-export function getPropsBindings () {
+export function getPlayerBindings () {
   return [
     'buffered',
     'currentTime',
@@ -64,6 +56,7 @@ export function getPropsBindings () {
 export function getKeyBindings () {
   return {
     edit: ['c'],
+    info: ['d'],
     save: ['a'],
     snapshot: ['s'],
     toggleFullscreen: ['f'],

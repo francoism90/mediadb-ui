@@ -14,6 +14,7 @@
       class="absolute fit"
       playsinline
       preload="auto"
+      autoplay
       :poster="data.thumbnail"
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
@@ -70,7 +71,7 @@ export default {
     ...mapGetters('player', {
       events: 'getEventListeners',
       options: 'getShakaOptions',
-      props: 'getPropsBindings',
+      bindings: 'getPlayerBindings',
       keys: 'getKeyBindings'
     }),
 
@@ -83,10 +84,13 @@ export default {
     }
   },
 
+  created () {
+    this.create({ data: this.data, meta: this.meta })
+  },
+
   mounted () {
     this.initialize()
 
-    // Subscribe to callbacks
     this.$store.subscribeAction((action) => {
       if (action.type === 'player/callback') {
         this.eventHandler(action.payload)
@@ -96,7 +100,7 @@ export default {
 
   beforeDestroy () {
     for (const event of this.events) {
-      this.player.removeEventListener(event, this.dispatch)
+      this.player.removeEventListener(event, this.dispatchEvent)
     }
 
     this.detach()
@@ -122,12 +126,9 @@ export default {
 
         // Add event listeners
         for (const event of this.events) {
-          this.player.addEventListener(event, this.dispatch)
+          this.player.addEventListener(event, this.dispatchEvent)
         }
       } catch (e) {}
-
-      // Init player store
-      this.create({ data: this.data, meta: this.meta })
     },
 
     async detach () {
@@ -137,16 +138,15 @@ export default {
       } catch (e) {}
     },
 
-    dispatch () {
+    dispatchEvent () {
       if (!this.player) {
         return
       }
 
-      // Get current player data
       const data = {}
 
-      for (const prop of this.props) {
-        data[prop] = this.player[prop] || null
+      for (const key of this.bindings) {
+        data[key] = this.player[key] || null
       }
 
       this.update(data)
@@ -182,6 +182,13 @@ export default {
         case 'edit':
           this.$store.dispatch('dialog/open', {
             component: 'VideoEdit',
+            data: { id: this.data.id }
+          })
+          break
+
+        case 'info':
+          this.$store.dispatch('dialog/open', {
+            component: 'PlayerInfo',
             data: { id: this.data.id }
           })
           break

@@ -4,7 +4,7 @@ export function resetState (state) {
   state = Object.assign(state, defaultState())
 }
 
-export function setRoute (state, payload) {
+export function setRoute (state, payload = {}) {
   const { path = null, params = {} } = payload
 
   const currentParams = state.params || {}
@@ -14,11 +14,11 @@ export function setRoute (state, payload) {
   state.params = Object.assign({}, state.params, finalParams)
 }
 
-export function setLoading (state, payload) {
+export function setLoading (state, payload = false) {
   state.loading = payload
 }
 
-export function setReady (state, payload) {
+export function setReady (state, payload = false) {
   state.ready = payload
 }
 
@@ -27,7 +27,7 @@ export function resetItems (state) {
   state.meta = {}
 }
 
-export function setItems (state, payload) {
+export function setItems (state, payload = {}) {
   const { data = [], meta = {} } = payload
 
   if (meta) {

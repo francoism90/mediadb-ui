@@ -12,13 +12,13 @@ export function setData (state, payload = {}) {
   state.data = Object.assign({}, state.data, payload)
 }
 
-export function setModel (state, payload = false) {
-  state.model = payload
+export function setActive (state, payload = false) {
+  state.active = payload
 }
 
-export function setProps (state, payload = {}) {
-  const currentProps = state.props || {}
-  const finalProps = { ...currentProps, ...payload }
+export function setOptions (state, payload = {}) {
+  const currentOptions = state.options || {}
+  const finalOptions = { ...currentOptions, ...payload }
 
-  state.props = Object.assign({}, state.props, finalProps)
+  state.options = Object.assign({}, state.options, finalOptions)
 }

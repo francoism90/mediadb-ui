@@ -10,12 +10,12 @@ import { mapGetters } from 'vuex'
 import modelModule from 'src/store/model'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    if (!store.state.channel) {
+  async preFetch ({ store, currentRoute }) {
+    if (!store.hasModule('channel')) {
       store.registerModule('channel', modelModule)
     }
 
-    store.dispatch('channel/fetch', {
+    await store.dispatch('channel/fetch', {
       path: 'channel/' + currentRoute.params.id
     })
   },

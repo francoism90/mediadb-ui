@@ -1,12 +1,26 @@
-export function getTypes (state) {
+export function getModules (state) {
   return [
     {
-      module: 's_default',
+      namespace: 'search_videos',
       label: 'Videos',
       icon: 'video_library',
-      component: 'Video',
+      itemComponent: 'Video',
       apiRoute: {
         path: 'media',
+        params: {
+          include: 'model,tags',
+          'filter[query]': state.query,
+          'page[size]': 9
+        }
+      }
+    },
+    {
+      namespace: 'search_channels',
+      label: 'Channels',
+      icon: 'live_tv',
+      itemComponent: 'Channel',
+      apiRoute: {
+        path: 'channel',
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
@@ -15,52 +29,42 @@ export function getTypes (state) {
       }
     },
     {
-      module: 's_channels',
-      label: 'Channels',
-      icon: 'live_tv',
-      component: 'Channel',
-      apiRoute: {
-        path: 'channel',
-        params: {
-          include: 'model,tags',
-          'filter[query]': state.query,
-          'page[size]': 16
-        }
-      }
-    },
-    {
-      module: 's_playlists',
+      namespace: 'search_playlists',
       label: 'Playlists',
       icon: 'layers',
-      component: 'Playlist',
+      itemComponent: 'Playlist',
       apiRoute: {
         path: 'playlist',
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 16
+          'page[size]': 12
         }
       }
     },
     {
-      module: 's_tags',
+      namespace: 'search_tags',
       label: 'Tags',
       icon: 'label',
-      component: 'Tag',
+      itemComponent: 'Tag',
       apiRoute: {
         path: 'tags',
         params: {
           append: 'media',
           'filter[query]': state.query,
-          'page[size]': 16
+          'page[size]': 12
         }
       }
     }
   ]
 }
 
+export function isReady (state) {
+  return state.ready
+}
+
 export function getType (state, getters) {
-  return getters.getTypes.find(x => x.module === (state.type))
+  return getters.getModules.find(x => x.namespace === (state.type))
 }
 
 export function getQuery (state) {

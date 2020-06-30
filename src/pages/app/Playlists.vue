@@ -20,7 +20,7 @@ import paginateModule from 'src/store/paginate'
 
 export default {
   preFetch ({ store }) {
-    if (!store.state.playlists) {
+    if (!store.hasModule('playlists')) {
       store.registerModule('playlists', paginateModule)
     }
   },
@@ -56,6 +56,10 @@ export default {
         { label: 'Popular this month', value: 'popular-month' }
       ]
     }
+  },
+
+  async created () {
+    await this.$store.dispatch('playlists/create', this.apiRoute)
   }
 }
 </script>

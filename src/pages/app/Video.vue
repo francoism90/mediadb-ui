@@ -11,12 +11,12 @@ import modelModule from 'src/store/model'
 import { mapGetters } from 'vuex'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    if (!store.state.video) {
+  async preFetch ({ store, currentRoute }) {
+    if (!store.hasModule('video')) {
       store.registerModule('video', modelModule)
     }
 
-    store.dispatch('video/fetch', {
+    await store.dispatch('video/fetch', {
       path: 'media/' + currentRoute.params.id
     })
   },

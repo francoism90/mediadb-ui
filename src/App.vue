@@ -10,10 +10,16 @@
 import paginateModule from 'src/store/paginate'
 
 export default {
-  preFetch ({ store }) {
-    for (const type of store.getters['search/getTypes']) {
-      if (!store.state[type.module]) {
-        store.registerModule(type.module, paginateModule)
+  async preFetch ({ store }) {
+    for (const searchModule of store.getters['search/getModules']) {
+      if (!store.hasModule(searchModule.namespace)) {
+        store.registerModule(searchModule.namespace, paginateModule)
+
+        // Fetch first page
+        await store.dispatch(
+          searchModule.namespace + '/create',
+          searchModule.apiRoute
+        )
       }
     }
   },

@@ -6,7 +6,7 @@
       </span>
     </div>
 
-    <div ref="seeker" @mousemove="onseekerHover" @mouseleave="onSeekerLeave">
+    <div ref="seeker" @mousemove="onSeekerHover" @mouseleave="onSeekerLeave">
       <q-slider
         v-model="step"
         :min="0.0"
@@ -96,13 +96,12 @@ export default {
       return this.data.duration * (percent / 100)
     },
 
-    onseekerHover (event) {
+    onSeekerHover (event) {
       const seekerWidth = this.$refs.seeker.clientWidth || 0
       const seekerOffsetLeft = this.$refs.seeker.getBoundingClientRect().left || 0
       const position = event.clientX - seekerOffsetLeft
       const percent = (position) / seekerWidth * 100
 
-      // Set seekerHover
       this.seekerHoverPercent = percent
       this.seekerHoverPosition = position
       this.seekerHover = percent > 0

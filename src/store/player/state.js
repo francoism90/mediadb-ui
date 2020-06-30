@@ -10,8 +10,7 @@ export default function () {
       ended: false,
       error: null,
       paused: false,
-      readyState: 0,
-      volume: 1
+      readyState: 0
     }
   }
 }

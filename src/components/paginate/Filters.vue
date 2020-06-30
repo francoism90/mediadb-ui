@@ -58,8 +58,8 @@ export default {
   },
 
   methods: {
-    onChange (option) {
-      this.$store.dispatch(this.namespace + '/reset', {
+    async onChange (option) {
+      await this.$store.dispatch(this.namespace + '/reset', {
         params: { [this.field]: option.value || null }
       })
     }

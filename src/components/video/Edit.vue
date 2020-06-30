@@ -47,11 +47,11 @@
           dark
           square
           filled
-          :input-debounce="400"
+          :input-debounce="300"
           :max-values="15"
           :options="options"
           :loading="loading"
-          @filter="filterTags"
+          @filter="FilterOptions"
           clearable
           counter
           use-chips
@@ -151,36 +151,41 @@ export default {
   },
 
   created () {
-    if (!this.$store.state.video_edit) {
-      this.$store.registerModule('video_edit', modelModule)
+    if (!this.$store.hasModule('model_edit')) {
+      this.$store.registerModule('model_edit', modelModule)
     }
 
-    if (!this.$store.state.tagger) {
-      this.$store.registerModule('tagger', paginateModule)
+    if (!this.$store.hasModule('selector')) {
+      this.$store.registerModule('selector', paginateModule)
     }
 
     this.setModel()
-    this.setTags()
+    this.setOptions()
+  },
+
+  beforeDestroy () {
+    this.$store.unregisterModule('model_edit')
+    this.$store.unregisterModule('selector')
   },
 
   computed: {
-    ...mapGetters('video_edit', {
+    ...mapGetters('model_edit', {
       ready: 'isReady',
       data: 'getData'
     }),
 
     loading () {
-      return this.$store.getters['tagger/isLoading']
+      return this.$store.getters['selector/isLoading']
     },
 
     options () {
-      return this.$store.getters['tagger/getData']
+      return this.$store.getters['selector/getData']
     }
   },
 
   methods: {
     async setModel () {
-      await this.$store.dispatch('video_edit/fetch', {
+      await this.$store.dispatch('model_edit/fetch', {
         path: 'media/' + this.props.id
       })
 
@@ -190,8 +195,8 @@ export default {
       this.body.tags = this.data.relationships.tags || []
     },
 
-    async setTags () {
-      await this.$store.dispatch('tagger/create', {
+    async setOptions () {
+      await this.$store.dispatch('selector/create', {
         path: 'tags',
         params: {
           'page[size]': 5,
@@ -200,15 +205,13 @@ export default {
       })
     },
 
-    async filterTags (val, update, abort) {
-      this.$store.dispatch('tagger/reset', {
+    async FilterOptions (val, update, abort) {
+      await this.$store.dispatch('selector/reset', {
         params: {
           'filter[query]': val || null,
           sort: val.length ? null : 'media'
         }
       })
-
-      await this.$store.dispatch('tagger/fetch')
 
       update() // update options
     },
@@ -221,16 +224,13 @@ export default {
         !this.$refs.name.hasError &&
         !this.$refs.description.hasError
       ) {
-        // Update model
-        await this.$store.dispatch('video_edit/update', {
+        await this.$store.dispatch('model_edit/update', {
           path: 'media/' + this.data.id,
           body: this.body
         })
 
-        // Refresh stores
-        await this.refresh()
+        await this.refreshStores()
 
-        // Notifiy
         this.$q.notify({
           progress: true,
           timeout: 1500,
@@ -242,12 +242,10 @@ export default {
     },
 
     async onDelete () {
-      // Delete model
-      await this.$store.dispatch('video_edit/remove', {
+      await this.$store.dispatch('model_edit/remove', {
         path: 'media/' + this.data.id
       })
 
-      // Notifiy
       this.$q.notify({
         progress: true,
         position: 'top',
@@ -255,17 +253,13 @@ export default {
         type: 'positive'
       })
 
-      // Close modal
       this.$store.dispatch('dialog/close')
     },
 
-    async refresh () {
-      await this.$store.dispatch('video_edit/refresh')
+    async refreshStores () {
+      await this.$store.dispatch('model_edit/refresh')
 
-      if (
-        this.$store.state.video &&
-        this.$store.state.video.path === `media/${this.data.id}`
-      ) {
+      if (this.$store.hasModule('video')) {
         await this.$store.dispatch('video/refresh')
       }
     }

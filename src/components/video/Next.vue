@@ -3,7 +3,6 @@
     <div class="q-py-lg text-caption text-uppercase">Next</div>
     <infinite
       :namespace="namespace"
-      :api-route="apiRoute"
       item-component="Video"
     />
   </div>
@@ -31,7 +30,7 @@ export default {
 
   data () {
     return {
-      namespace: `next_${this.data.id}`,
+      namespace: 'next',
       apiRoute: {
         path: 'media',
         params: {
@@ -43,10 +42,17 @@ export default {
     }
   },
 
-  created () {
-    if (!this.$store.state[this.namespace]) {
+  async created () {
+    if (!this.$store.hasModule(this.namespace)) {
       this.$store.registerModule(this.namespace, paginateModule)
+
+      // Fetch first page
+      await this.$store.dispatch(this.namespace + '/create', this.apiRoute)
     }
+  },
+
+  beforeDestroy () {
+    this.$store.unregisterModule(this.namespace)
   }
 }
 </script>

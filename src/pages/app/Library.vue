@@ -6,7 +6,6 @@
 
     <infinite
       :namespace="namespace"
-      :api-route="apiRoute"
       :refreshable="true"
       item-component="Video"
     />
@@ -18,7 +17,7 @@ import paginateModule from 'src/store/paginate'
 
 export default {
   preFetch ({ store }) {
-    if (!store.state.library) {
+    if (!store.hasModule('library')) {
       store.registerModule('library', paginateModule)
     }
   },
@@ -53,6 +52,10 @@ export default {
         { label: 'Popular this month', value: 'popular-month' }
       ]
     }
+  },
+
+  async created () {
+    await this.$store.dispatch('library/create', this.apiRoute)
   }
 }
 </script>
