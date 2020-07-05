@@ -1,10 +1,7 @@
 <template>
   <div class="container fluid">
     <div class="q-py-lg text-caption text-uppercase">Next</div>
-    <infinite
-      :namespace="namespace"
-      item-component="Video"
-    />
+    <infinite :namespace="namespace" item-component="Video" />
   </div>
 </template>
 
@@ -36,7 +33,8 @@ export default {
         params: {
           include: 'model,tags',
           'filter[related]': this.data.id,
-          'page[size]': 12
+          'page[size]': 12,
+          sort: 'relevance'
         }
       }
     }

@@ -43,7 +43,7 @@
               v-on="scope.itemEvents"
             >
               <q-item-section>
-                <q-item-label v-html="scope.opt.name" />
+                <q-item-label v-text="scope.opt.name" />
               </q-item-section>
             </q-item>
           </template>
@@ -91,22 +91,22 @@ export default {
     }
   },
 
-  created () {
+  async created () {
     if (!this.$store.hasModule('model_save')) {
       this.$store.registerModule('model_save', modelModule)
     }
 
-    if (!this.$store.hasModule('selector')) {
-      this.$store.registerModule('selector', paginateModule)
+    if (!this.$store.hasModule('model_playlists')) {
+      this.$store.registerModule('model_playlists', paginateModule)
     }
 
-    this.setModel()
-    this.setPlaylists()
+    await this.setModel()
+    await this.setPlaylists()
   },
 
   beforeDestroy () {
     this.$store.unregisterModule('model_save')
-    this.$store.unregisterModule('selector')
+    this.$store.unregisterModule('model_playlists')
   },
 
   computed: {
@@ -117,11 +117,11 @@ export default {
     }),
 
     loading () {
-      return this.$store.getters['selector/isLoading']
+      return this.$store.getters['model_playlists/isLoading']
     },
 
     options () {
-      return this.$store.getters['selector/getData']
+      return this.$store.getters['model_playlists/getData']
     }
   },
 
@@ -135,21 +135,21 @@ export default {
     },
 
     async setPlaylists () {
-      await this.$store.dispatch('selector/create', {
+      await this.$store.dispatch('model_playlists/create', {
         path: 'playlist',
         params: {
           'page[size]': 5,
           'filter[user]': true,
-          sort: '-updated_at'
+          sort: 'updated'
         }
       })
     },
 
     async filterPlaylists (val, update, abort) {
-      await this.$store.dispatch('selector/reset', {
+      await this.$store.dispatch('model_playlists/reset', {
         params: {
           'filter[query]': val || null,
-          sort: val.length ? null : '-updated_at'
+          sort: val.length ? 'relevance' : 'updated'
         }
       })
 

@@ -34,8 +34,8 @@ export default {
         return this.query
       },
 
-      set (value) {
-        this.setQuery({ type: null, query: value })
+      async set (value) {
+        await this.setQuery({ type: null, query: value })
       }
     },
 

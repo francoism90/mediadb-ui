@@ -19,6 +19,14 @@ export function setCallback (state, payload = {}) {
   state.callback = payload
 }
 
+export function setControls (state, payload = false) {
+  state.controls = payload
+}
+
+export function setFullscreen (state, payload = false) {
+  state.fullscreen = payload
+}
+
 export function setModel (state, payload = {}) {
   state.model = Object.assign({}, state.model, payload)
 }

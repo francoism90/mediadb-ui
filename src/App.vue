@@ -15,7 +15,7 @@ export default {
       if (!store.hasModule(searchModule.namespace)) {
         store.registerModule(searchModule.namespace, paginateModule)
 
-        // Fetch first page
+        // Register search api's
         await store.dispatch(
           searchModule.namespace + '/create',
           searchModule.apiRoute

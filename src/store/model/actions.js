@@ -14,8 +14,6 @@ export async function fetch ({ commit, dispatch }, route = {}) {
   commit('setRoute', route)
 
   await dispatch('refresh')
-
-  commit('setReady', true)
 }
 
 export async function refresh ({ commit, state }) {
@@ -32,15 +30,17 @@ export async function refresh ({ commit, state }) {
 export async function remove ({ state }, params = {}) {
   const { path = null, body = {} } = params
 
-  const response = await axiosInstance.delete(path, body)
+  const response = await axiosInstance.delete(path || state.path, body)
 
   return response
 }
 
-export async function update ({ state }, params = {}) {
+export async function update ({ commit, state }, params = {}) {
   const { path = null, body = {} } = params
 
-  const response = await axiosInstance.put(path, body)
+  const response = await axiosInstance.put(path || state.path, body)
+
+  commit('setModel', response.data)
 
   return response
 }

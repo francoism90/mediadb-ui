@@ -1,15 +1,31 @@
 <template>
   <div class="q-pb-md">
-    <div class="row q-py-lg">
-      <div class="col">
-        <span class="text-body2">{{ label }}</span>
-      </div>
+    <div class="row items-center q-py-lg">
+      <template v-if="summary">
+        <div class="col">
+          <span class="text-body2">{{ label }}</span>
+        </div>
 
-      <div v-if="summary" class="col-auto">
-        <a class="text-caption text-uppercase cursor-pointer" @click="viewAll">
-          View All
-        </a>
-      </div>
+        <div class="col-auto">
+          <a class="text-caption text-uppercase cursor-pointer" @click="setQuery(namespace)">
+            Filter {{ label }}
+          </a>
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="col">
+          <q-btn-group unelevated>
+            <filters :namespace="namespace" field="sort" :options="sorters" />
+          </q-btn-group>
+        </div>
+
+        <div class="col-auto">
+          <a class="text-caption text-uppercase cursor-pointer" @click="setQuery">
+            Show Overview
+          </a>
+        </div>
+      </template>
     </div>
 
     <infinite
@@ -23,7 +39,20 @@
 <script>
 export default {
   components: {
-    Infinite: () => import('components/paginate/Infinite')
+    Infinite: () => import('components/paginate/Infinite'),
+    Filters: () => import('components/paginate/Filters')
+  },
+
+  data () {
+    return {
+      sorters: [
+        { label: 'Relevance', value: 'relevance' },
+        { label: 'Recommended for You', value: 'recommended' },
+        { label: 'Trending', value: 'trending' },
+        { label: 'Most recent', value: 'recent' },
+        { label: 'Most viewed', value: 'views' }
+      ]
+    }
   },
 
   props: {
@@ -54,9 +83,9 @@ export default {
   },
 
   methods: {
-    viewAll () {
-      this.$store.dispatch('search/query', {
-        type: this.namespace,
+    async setQuery (namespace = null) {
+      await this.$store.dispatch('search/query', {
+        type: namespace,
         query: this.query
       })
     }

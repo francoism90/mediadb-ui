@@ -23,7 +23,8 @@
     "shaka-player": "^3.0.1",
     "vue-i18n": "^8.18.2",
     "vue-shortkey": "^3.1.7",
-    "vue-timers": "^2.0.4"
+    "vue-timers": "^2.0.4",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.1",
@@ -31,7 +32,7 @@
     "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",

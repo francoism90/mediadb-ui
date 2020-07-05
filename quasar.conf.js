@@ -16,7 +16,8 @@ module.exports = function (ctx) {
       'filters',
       'inter',
       'shortkey',
-      'timers'
+      'timers',
+      'validate'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css

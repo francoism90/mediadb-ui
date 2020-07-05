@@ -11,6 +11,8 @@ export default function () {
       error: null,
       paused: false,
       readyState: 0
-    }
+    },
+    controls: true,
+    fullscreen: false
   }
 }

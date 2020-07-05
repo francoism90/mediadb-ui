@@ -48,8 +48,8 @@ export default {
         { label: 'Trending', value: 'trending' },
         { label: 'Most recent', value: 'recent' },
         { label: 'Most viewed', value: 'views' },
-        { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' }
+        { label: 'Shortest to Longest', value: 'shortest' },
+        { label: 'Longest to Shortest', value: 'longest' }
       ]
     }
   },

@@ -10,7 +10,8 @@ export function getModules (state) {
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 9
+          'page[size]': 9,
+          sort: 'relevance'
         }
       }
     },
@@ -24,7 +25,8 @@ export function getModules (state) {
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 12
+          'page[size]': 12,
+          sort: 'relevance'
         }
       }
     },
@@ -38,7 +40,8 @@ export function getModules (state) {
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
-          'page[size]': 12
+          'page[size]': 12,
+          sort: 'relevance'
         }
       }
     },
@@ -52,7 +55,8 @@ export function getModules (state) {
         params: {
           append: 'media',
           'filter[query]': state.query,
-          'page[size]': 12
+          'page[size]': 12,
+          sort: 'relevance'
         }
       }
     }

@@ -1,7 +1,7 @@
 export default function () {
   return {
-    query: null,
     ready: false,
+    query: null,
     type: null
   }
 }

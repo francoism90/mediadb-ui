@@ -25,10 +25,10 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    Directives: () => import('./Directives'),
-    Seeker: () => import('./Seeker'),
-    Playback: () => import('./Playback'),
-    Settings: () => import('./Settings')
+    Directives: () => import('./controls/Directives'),
+    Seeker: () => import('./controls/Seeker'),
+    Playback: () => import('./controls/Playback'),
+    Settings: () => import('./controls/Settings')
   },
 
   computed: {

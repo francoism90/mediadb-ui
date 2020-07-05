@@ -1,14 +1,13 @@
 <template>
   <div class="fit" @click.prevent="callback({ type: 'togglePlay' })" @dblclick.prevent="callback({ type: 'toggleFullscreen' })">
-    <q-menu touch-position context-menu dark square>
+    <q-menu auto-close touch-position context-menu dark square @before-show="setControls(true)" @hide="setControls(false)">
       <q-list bordered padding dark style="width: 260px">
         <q-item
           v-for="(entity, index) in menu"
           :key="`menu-${index}`"
           clickable
           dark
-          v-close-popup
-          @click.prevent="open(entity.name)"
+          @click.prevent="callback({ type: entity.name })"
         >
           <q-item-section side>
             <q-icon :name="entity.icon" />
@@ -21,7 +20,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 export default {
   data () {
@@ -44,6 +43,10 @@ export default {
   methods: {
     ...mapActions('player', [
       'callback'
+    ]),
+
+    ...mapMutations('player', [
+      'setControls'
     ])
   }
 }

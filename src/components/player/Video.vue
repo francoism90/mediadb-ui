@@ -2,12 +2,11 @@
   <div
     ref="element"
     class="relative-position window-height player"
-    :class="isFullscreen ? 'fullscreen' : null"
-    v-shortkey="keys"
+    :class="fullscreen ? 'fullscreen' : null"
+    v-shortkey="keyBindings"
     @shortkey="eventHandler"
     @wheel="onWheel"
-    @mousemove="showControls"
-    @mouseleave="hideControls"
+    @mousemove="showControls()"
   >
     <video
       ref="instance"
@@ -20,9 +19,9 @@
       :width="data.properties.width || 480"
     />
 
-    <transition v-if="controlsActive" name="fade">
+    <transition v-if="controls" name="fade">
       <keep-alive>
-        <controls />
+        <video-container />
       </keep-alive>
     </transition>
   </div>
@@ -30,7 +29,7 @@
 
 <script>
 import { Player } from 'shaka-player'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
   timers: {
@@ -38,7 +37,7 @@ export default {
   },
 
   components: {
-    Controls: () => import('./controls/Container')
+    VideoContainer: () => import('./Container')
   },
 
   props: {
@@ -56,24 +55,46 @@ export default {
   data () {
     return {
       instance: null,
-      controlsActive: false,
-      isFullscreen: false
+      settings: {
+        streaming: {
+          rebufferingGoal: 2,
+          bufferingGoal: 10,
+          bufferBehind: 30,
+          jumpLargeGaps: true
+        }
+      },
+      bindings: [
+        'buffered', 'currentTime', 'duration', 'ended',
+        'error', 'muted', 'paused', 'readyState'
+      ],
+      listeners: [
+        'durationchange', 'emptied', 'error', 'ended',
+        'loadedmetadata', 'pause', 'play', 'playing',
+        'progress', 'seeked', 'seeking', 'stalled',
+        'suspend', 'timeupdate', 'waiting'
+      ],
+      keyBindings: {
+        edit: ['c'],
+        info: ['d'],
+        save: ['a'],
+        snapshot: ['s'],
+        toggleFullscreen: ['f'],
+        togglePlay: ['space']
+      }
     }
   },
 
   watch: {
-    '$q.fullscreen.isActive' (value) {
-      this.isFullscreen = value
+    '$q.fullscreen.isActive' (value = false) {
+      this.setFullscreen(value)
     }
   },
 
   computed: {
-    ...mapGetters('player', {
-      events: 'getEventListeners',
-      options: 'getShakaOptions',
-      bindings: 'getPlayerBindings',
-      keys: 'getKeyBindings'
-    }),
+    ...mapState('player', [
+      'controls',
+      'fullscreen'
+    ]),
 
     element () {
       return this.$refs.element
@@ -84,12 +105,12 @@ export default {
     }
   },
 
-  created () {
-    this.create({ data: this.data, meta: this.meta })
+  async created () {
+    await this.create({ data: this.data, meta: this.meta })
   },
 
-  mounted () {
-    this.initialize()
+  async mounted () {
+    await this.initialize()
 
     this.$store.subscribeAction((action) => {
       if (action.type === 'player/callback') {
@@ -99,8 +120,8 @@ export default {
   },
 
   beforeDestroy () {
-    for (const event of this.events) {
-      this.player.removeEventListener(event, this.dispatchEvent)
+    for (const listener of this.listeners) {
+      this.player.removeEventListener(listener, this.dispatchEvents)
     }
 
     this.detach()
@@ -113,6 +134,11 @@ export default {
       'update'
     ]),
 
+    ...mapMutations('player', [
+      'setControls',
+      'setFullscreen'
+    ]),
+
     async initialize () {
       if (!Player.isBrowserSupported()) {
         alert('Browser is not supported')
@@ -121,12 +147,12 @@ export default {
       try {
         this.instance = new Player(this.player)
 
-        await this.instance.configure(this.options)
+        await this.instance.configure(this.settings)
         await this.instance.load(this.meta.stream_url)
 
         // Add event listeners
-        for (const event of this.events) {
-          this.player.addEventListener(event, this.dispatchEvent)
+        for (const listener of this.listeners) {
+          this.player.addEventListener(listener, this.dispatchEvents)
         }
       } catch (e) {}
     },
@@ -138,7 +164,7 @@ export default {
       } catch (e) {}
     },
 
-    dispatchEvent () {
+    async dispatchEvents () {
       if (!this.player) {
         return
       }
@@ -149,7 +175,7 @@ export default {
         data[key] = this.player[key] || null
       }
 
-      this.update(data)
+      await this.update(data)
     },
 
     async eventHandler (payload) {
@@ -209,6 +235,15 @@ export default {
       }
     },
 
+    hideControls () {
+      this.setControls(false)
+    },
+
+    showControls () {
+      this.setControls(true)
+      this.$timer.restart('hideControls')
+    },
+
     onWheel (event) {
       if (event.deltaX < 0) {
         this.eventHandler(
@@ -219,15 +254,6 @@ export default {
           { type: 'currentTime', value: this.player.currentTime + 10 }
         )
       }
-    },
-
-    hideControls () {
-      this.controlsActive = false
-    },
-
-    showControls () {
-      this.controlsActive = true
-      this.$timer.restart('hideControls')
     }
   }
 }
