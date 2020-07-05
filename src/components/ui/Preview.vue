@@ -1,8 +1,8 @@
 <template>
   <div
+    v-touch-pan.horizontal.prevent="onTouch"
     @mouseover="showPreview = true"
     @mouseout="showPreview = false"
-    v-touch-pan.horizontal.prevent="onTouch"
   >
     <template v-if="!showPreview">
       <q-img
@@ -31,11 +31,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      showPreview: false
-    }
-  },
 
   props: {
     name: {
@@ -56,6 +51,11 @@ export default {
     mimetype: {
       type: String,
       default: 'video/mp4'
+    }
+  },
+  data () {
+    return {
+      showPreview: false
     }
   },
 

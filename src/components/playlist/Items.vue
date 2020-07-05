@@ -1,7 +1,14 @@
 <template>
   <div class="container fluid">
-    <q-btn-group class="q-pb-md" unelevated>
-      <filters :namespace="namespace" field="sort" :options="sorters" />
+    <q-btn-group
+      class="q-pb-md"
+      unelevated
+    >
+      <filters
+        :namespace="namespace"
+        field="sort"
+        :options="sorters"
+      />
     </q-btn-group>
 
     <infinite
@@ -19,6 +26,18 @@ export default {
   components: {
     Infinite: () => import('components/paginate/Infinite'),
     Filters: () => import('components/paginate/Filters')
+  },
+
+  props: {
+    data: {
+      type: Object,
+      required: true
+    },
+
+    meta: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {
@@ -41,18 +60,6 @@ export default {
         { label: 'Alphabetical', value: 'name' },
         { label: 'Duration', value: 'duration' }
       ]
-    }
-  },
-
-  props: {
-    data: {
-      type: Object,
-      required: true
-    },
-
-    meta: {
-      type: Object,
-      required: true
     }
   },
 

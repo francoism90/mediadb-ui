@@ -3,12 +3,16 @@
     dark
     square
     clickable
-    @click.prevent="onClick(item)"
     color="grey-8"
     class="q-ml-none q-mr-sm text-weight-light"
     :size="size"
+    @click.prevent="onClick(item)"
   >
-    <q-avatar :icon="icon" :color="color" text-color="white" /> {{ item.name }}
+    <q-avatar
+      :icon="icon"
+      :color="color"
+      text-color="white"
+    /> {{ item.name }}
   </q-chip>
 </template>
 

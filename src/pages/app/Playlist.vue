@@ -1,7 +1,16 @@
 <template>
-  <q-page v-if="ready" :key="data.id">
-    <info :data="data" :meta="meta" />
-    <items :data="data" :meta="meta" />
+  <q-page
+    v-if="ready"
+    :key="data.id"
+  >
+    <info
+      :data="data"
+      :meta="meta"
+    />
+    <items
+      :data="data"
+      :meta="meta"
+    />
   </q-page>
 </template>
 

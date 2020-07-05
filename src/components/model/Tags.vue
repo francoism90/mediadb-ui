@@ -8,7 +8,6 @@
     :max-values="15"
     :options="options"
     :loading="loading"
-    @filter="filterOptions"
     clearable
     counter
     use-chips
@@ -21,16 +20,25 @@
     options-dark
     options-sanitize
     use-input
+    @filter="filterOptions"
   >
     <template v-slot:prepend>
       <q-icon name="local_offer" />
     </template>
 
     <template v-slot:option="scope">
-      <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
+      <q-item
+        v-bind="scope.itemProps"
+        v-on="scope.itemEvents"
+      >
         <q-item-section>
           <q-item-label v-text="scope.opt.name" />
-          <q-item-label caption class="text-capitalize">{{ scope.opt.type }}</q-item-label>
+          <q-item-label
+            caption
+            class="text-capitalize"
+          >
+            {{ scope.opt.type }}
+          </q-item-label>
         </q-item-section>
       </q-item>
     </template>
@@ -40,8 +48,8 @@
         removable
         dense
         square
-        @remove="scope.removeAtIndex(scope.index)"
         :tabindex="scope.tabindex"
+        @remove="scope.removeAtIndex(scope.index)"
       >
         <span>{{ scope.opt.name }}</span>&nbsp;
         <span class="text-capitalize">({{ scope.opt.type }})</span>

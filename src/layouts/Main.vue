@@ -2,11 +2,24 @@
   <q-layout view="hHh Lpr lff">
     <dialogs />
 
-    <q-header class="header bg-grey-14 q-py-xs" height-hint="58">
+    <q-header
+      class="header bg-grey-14 q-py-xs"
+      height-hint="58"
+    >
       <q-toolbar class="toolbar">
-        <q-btn flat dense round icon="menu" @click="drawer = !drawer" />
+        <q-btn
+          flat
+          dense
+          round
+          icon="menu"
+          @click="drawer = !drawer"
+        />
 
-        <router-link v-if="$q.screen.gt.xs" to="/" class="q-ml-md text-body2 text-grey-5">
+        <router-link
+          v-if="$q.screen.gt.xs"
+          to="/"
+          class="q-ml-md text-body2 text-grey-5"
+        >
           <q-toolbar-title shrink>
             MediaDB
           </q-toolbar-title>
@@ -19,15 +32,38 @@
         <q-space />
 
         <div class="row no-wrap items-center">
-          <q-btn class="q-mr-sm" dense flat round icon="add">
+          <q-btn
+            class="q-mr-sm"
+            dense
+            flat
+            round
+            icon="add"
+          >
             <q-tooltip>Add Items</q-tooltip>
           </q-btn>
 
-          <q-btn dense flat round>
-            <q-avatar size="28px" icon="account_circle" />
+          <q-btn
+            dense
+            flat
+            round
+          >
+            <q-avatar
+              size="28px"
+              icon="account_circle"
+            />
 
-            <q-menu auto-close dark square max-width="400px">
-              <q-list bordered padding dark dense>
+            <q-menu
+              auto-close
+              dark
+              square
+              max-width="400px"
+            >
+              <q-list
+                bordered
+                padding
+                dark
+                dense
+              >
                 <q-item dark>
                   <q-item-section no-wrap>
                     <q-item-label caption>
@@ -36,22 +72,49 @@
                   </q-item-section>
                 </q-item>
 
-                <q-separator dark spaced />
+                <q-separator
+                  dark
+                  spaced
+                />
 
-                <q-item clickable dark>
-                  <q-item-section no-wrap>Your profile</q-item-section>
+                <q-item
+                  clickable
+                  dark
+                >
+                  <q-item-section no-wrap>
+                    Your profile
+                  </q-item-section>
                 </q-item>
-                <q-item clickable dark>
-                  <q-item-section no-wrap>Settings</q-item-section>
+                <q-item
+                  clickable
+                  dark
+                >
+                  <q-item-section no-wrap>
+                    Settings
+                  </q-item-section>
                 </q-item>
-                <q-item clickable dark>
-                  <q-item-section no-wrap>Help</q-item-section>
+                <q-item
+                  clickable
+                  dark
+                >
+                  <q-item-section no-wrap>
+                    Help
+                  </q-item-section>
                 </q-item>
 
-                <q-separator dark spaced />
+                <q-separator
+                  dark
+                  spaced
+                />
 
-                <q-item clickable dark @click="logout">
-                  <q-item-section no-wrap>Sign out</q-item-section>
+                <q-item
+                  clickable
+                  dark
+                  @click="logout"
+                >
+                  <q-item-section no-wrap>
+                    Sign out
+                  </q-item-section>
                 </q-item>
               </q-list>
             </q-menu>
@@ -61,19 +124,26 @@
     </q-header>
 
     <q-drawer
+      v-model="drawer"
       dark
       bordered
       persistent
-      v-model="drawer"
       :mini="miniDrawer"
-      @mouseover="miniDrawer = false"
-      @mouseout="miniDrawer = true"
       :width="240"
       :breakpoint="500"
       content-class="bg-grey-12"
+      @mouseover="miniDrawer = false"
+      @mouseout="miniDrawer = true"
     >
-      <q-list v-for="(link, index) in links" :key="index">
-        <q-item :to="{ name: link.name }" exact v-ripple>
+      <q-list
+        v-for="(link, index) in links"
+        :key="index"
+      >
+        <q-item
+          v-ripple
+          :to="{ name: link.name }"
+          exact
+        >
           <q-item-section avatar>
             <q-icon :name="link.icon" />
           </q-item-section>
@@ -82,15 +152,27 @@
           </q-item-section>
         </q-item>
 
-        <q-separator v-if="link.separator" spaced />
+        <q-separator
+          v-if="link.separator"
+          spaced
+        />
       </q-list>
     </q-drawer>
 
     <q-page-container class="q-pb-lg">
       <router-view />
 
-      <q-page-scroller position="bottom-right" :scroll-offset="175" :offset="[32, 32]">
-        <q-btn icon="expand_less" dense unelevated color="black" />
+      <q-page-scroller
+        position="bottom-right"
+        :scroll-offset="175"
+        :offset="[32, 32]"
+      >
+        <q-btn
+          icon="expand_less"
+          dense
+          unelevated
+          color="black"
+        />
       </q-page-scroller>
     </q-page-container>
   </q-layout>

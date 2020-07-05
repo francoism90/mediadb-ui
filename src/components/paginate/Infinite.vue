@@ -1,6 +1,16 @@
 <template>
-  <q-pull-to-refresh v-if="isReady" :key="state.id" :disable="!refreshable" @refresh="onRefresh">
-    <q-infinite-scroll :disable="!loadable" :debounce="300" scroll-target="body" @load="onLoad">
+  <q-pull-to-refresh
+    v-if="isReady"
+    :key="state.id"
+    :disable="!refreshable"
+    @refresh="onRefresh"
+  >
+    <q-infinite-scroll
+      :disable="!loadable"
+      :debounce="300"
+      scroll-target="body"
+      @load="onLoad"
+    >
       <transition-group
         appear
         enter-active-class="animated fadeIn"
@@ -9,14 +19,25 @@
         tag="div"
         :class="rowClass"
       >
-        <div v-for="(item, index) in state.data" :key="`key-${index}`" :class="columnClass">
-          <component :is="itemComponent" :class="componentClass" :item="item" />
+        <div
+          v-for="(item, index) in state.data"
+          :key="`key-${index}`"
+          :class="columnClass"
+        >
+          <component
+            :is="itemComponent"
+            :class="componentClass"
+            :item="item"
+          />
         </div>
       </transition-group>
 
       <template v-slot:loading>
         <div class="row no-wrap justify-center q-my-md">
-          <q-spinner color="primary" size="xs" />
+          <q-spinner
+            color="primary"
+            size="xs"
+          />
         </div>
       </template>
     </q-infinite-scroll>

@@ -1,13 +1,25 @@
 <template>
   <q-page>
     <div class="container fluid">
-      <q-card dark square flat class="bg-grey-12 fixed-center" style="min-width: 300px">
+      <q-card
+        dark
+        square
+        flat
+        class="bg-grey-12 fixed-center"
+        style="min-width: 300px"
+      >
         <q-card-section>
-          <div class="text-h6">Login to MediaDB</div>
+          <div class="text-h6">
+            Login to MediaDB
+          </div>
         </q-card-section>
 
         <q-card-section>
-          <q-form @submit="onSubmit" spellcheck="false" class="q-gutter-md">
+          <q-form
+            spellcheck="false"
+            class="q-gutter-md"
+            @submit="onSubmit"
+          >
             <q-input
               v-model="body.email"
               dark
@@ -37,7 +49,11 @@
             />
 
             <div>
-              <q-btn type="submit" label="Log In" color="primary" />
+              <q-btn
+                type="submit"
+                label="Log In"
+                color="primary"
+              />
             </div>
           </q-form>
         </q-card-section>

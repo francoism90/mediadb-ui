@@ -1,6 +1,12 @@
 <template>
-  <q-dialog v-model="dialog" v-bind="getOptions">
-    <component :is="getComponent" :props="getData" />
+  <q-dialog
+    v-model="dialog"
+    v-bind="getOptions"
+  >
+    <component
+      :is="getComponent"
+      :props="getData"
+    />
   </q-dialog>
 </template>
 

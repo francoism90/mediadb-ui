@@ -1,10 +1,20 @@
 <template>
   <div class="container fluid">
-    <q-btn-group class="q-pb-md" unelevated>
-      <filters :namespace="namespace" field="sort" :options="sorters" />
+    <q-btn-group
+      class="q-pb-md"
+      unelevated
+    >
+      <filters
+        :namespace="namespace"
+        field="sort"
+        :options="sorters"
+      />
     </q-btn-group>
 
-    <infinite :namespace="namespace" item-component="Video" />
+    <infinite
+      :namespace="namespace"
+      item-component="Video"
+    />
   </div>
 </template>
 
@@ -15,6 +25,18 @@ export default {
   components: {
     Infinite: () => import('components/paginate/Infinite'),
     Filters: () => import('components/paginate/Filters')
+  },
+
+  props: {
+    data: {
+      type: Object,
+      required: true
+    },
+
+    meta: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {
@@ -37,18 +59,6 @@ export default {
         { label: 'Shortest to Longest', value: 'shortest' },
         { label: 'Longest to Shortest', value: 'longest' }
       ]
-    }
-  },
-
-  props: {
-    data: {
-      type: Object,
-      required: true
-    },
-
-    meta: {
-      type: Object,
-      required: true
     }
   },
 

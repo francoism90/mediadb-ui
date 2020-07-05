@@ -16,7 +16,7 @@
 
     <template v-slot:error>
       <span v-if="!$v.name.required">Field is required</span>
-      <span v-if="!$v.name.maxLength">Must have at most {{$v.name.$params.maxLength.max}} characters</span>
+      <span v-if="!$v.name.maxLength">Must have at most {{ $v.name.$params.maxLength.max }} characters</span>
     </template>
   </q-input>
 </template>

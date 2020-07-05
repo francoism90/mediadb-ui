@@ -1,7 +1,24 @@
 <template>
-  <div class="fit" @click.prevent="callback({ type: 'togglePlay' })" @dblclick.prevent="callback({ type: 'toggleFullscreen' })">
-    <q-menu auto-close touch-position context-menu dark square @before-show="setControls(true)" @hide="setControls(false)">
-      <q-list bordered padding dark style="width: 260px">
+  <div
+    class="fit"
+    @click.prevent="callback({ type: 'togglePlay' })"
+    @dblclick.prevent="callback({ type: 'toggleFullscreen' })"
+  >
+    <q-menu
+      auto-close
+      touch-position
+      context-menu
+      dark
+      square
+      @before-show="setControls(true)"
+      @hide="setControls(false)"
+    >
+      <q-list
+        bordered
+        padding
+        dark
+        style="width: 260px"
+      >
         <q-item
           v-for="(entity, index) in menu"
           :key="`menu-${index}`"
@@ -23,6 +40,13 @@
 import { mapActions, mapMutations } from 'vuex'
 
 export default {
+
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       menu: [
@@ -30,13 +54,6 @@ export default {
         { label: 'Keyboard Shortcuts', name: 'edit', icon: 'edit' },
         { label: 'Debug Information', name: 'info', icon: 'info' }
       ]
-    }
-  },
-
-  props: {
-    data: {
-      type: Object,
-      required: true
     }
   },
 

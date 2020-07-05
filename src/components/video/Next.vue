@@ -1,7 +1,12 @@
 <template>
   <div class="container fluid">
-    <div class="q-py-lg text-caption text-uppercase">Next</div>
-    <infinite :namespace="namespace" item-component="Video" />
+    <div class="q-py-lg text-caption text-uppercase">
+      Next
+    </div>
+    <infinite
+      :namespace="namespace"
+      item-component="Video"
+    />
   </div>
 </template>
 

@@ -1,20 +1,23 @@
 <template>
   <div class="toolbar-input">
     <q-input
+      v-model="model"
       dark
       clearable
       dense
       square
       filled
-      v-model="model"
-      @focus="onFocus"
       input-class="text-grey-5 text-weight-light"
       :debounce="900"
       :placeholder="placeholder"
       type="search"
+      @focus="onFocus"
     >
       <template v-slot:prepend>
-        <q-icon name="search" color="grey-5"  />
+        <q-icon
+          name="search"
+          color="grey-5"
+        />
       </template>
     </q-input>
   </div>

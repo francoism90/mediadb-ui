@@ -4,8 +4,8 @@
       flat
       dense
       color="white"
-      @click="callback({ type: 'toggleFullscreen' })"
       :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+      @click="callback({ type: 'toggleFullscreen' })"
     />
   </div>
 </template>

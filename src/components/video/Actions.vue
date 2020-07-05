@@ -1,6 +1,9 @@
 <template>
   <div>
-    <q-btn-group class="q-mr-md" flat>
+    <q-btn-group
+      class="q-mr-md"
+      flat
+    >
       <q-btn
         v-for="(item, index) in manage"
         :key="index"
@@ -14,7 +17,10 @@
       </q-btn>
     </q-btn-group>
 
-    <q-btn-group class="q-ml-md" flat>
+    <q-btn-group
+      class="q-ml-md"
+      flat
+    >
       <q-btn
         v-for="(item, index) in links"
         :key="index"

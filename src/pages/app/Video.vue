@@ -1,8 +1,20 @@
 <template>
-  <q-page v-if="ready" :key="data.id">
-    <player :data="data" :meta="meta" />
-    <info :data="data" :meta="meta" />
-    <next :data="data" :meta="meta" />
+  <q-page
+    v-if="ready"
+    :key="data.id"
+  >
+    <player
+      :data="data"
+      :meta="meta"
+    />
+    <info
+      :data="data"
+      :meta="meta"
+    />
+    <next
+      :data="data"
+      :meta="meta"
+    />
   </q-page>
 </template>
 

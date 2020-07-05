@@ -1,9 +1,9 @@
 <template>
   <div
     ref="element"
+    v-shortkey="keyBindings"
     class="relative-position window-height player"
     :class="fullscreen ? 'fullscreen' : null"
-    v-shortkey="keyBindings"
     @shortkey="eventHandler"
     @wheel="onWheel"
     @mousemove="showControls()"
@@ -19,7 +19,10 @@
       :width="data.properties.width || 480"
     />
 
-    <transition v-if="controls" name="fade">
+    <transition
+      v-if="controls"
+      name="fade"
+    >
       <keep-alive>
         <video-container />
       </keep-alive>
@@ -84,12 +87,6 @@ export default {
     }
   },
 
-  watch: {
-    '$q.fullscreen.isActive' (value = false) {
-      this.setFullscreen(value)
-    }
-  },
-
   computed: {
     ...mapState('player', [
       'controls',
@@ -102,6 +99,12 @@ export default {
 
     player () {
       return this.$refs.instance
+    }
+  },
+
+  watch: {
+    '$q.fullscreen.isActive' (value = false) {
+      this.setFullscreen(value)
     }
   },
 

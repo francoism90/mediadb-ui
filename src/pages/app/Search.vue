@@ -1,7 +1,10 @@
 <template>
   <q-page class="container fluid">
     <template v-if="ready && !type && query">
-      <div v-for="type in modules" :key="type.namespace">
+      <div
+        v-for="type in modules"
+        :key="type.namespace"
+      >
         <items
           v-if="hasItems(type.namespace)"
           :namespace="type.namespace"
@@ -24,9 +27,18 @@
 
     <template v-else>
       <div class="fixed-center text-center">
-        <p><q-icon name="search" style="font-size: 4rem;" /></p>
-        <p class="text-h5 q-mb-xs">Search MediaDB</p>
-        <p class="text-body2">Find videos, channels, playlists and tags.</p>
+        <p>
+          <q-icon
+            name="search"
+            style="font-size: 4rem;"
+          />
+        </p>
+        <p class="text-h5 q-mb-xs">
+          Search MediaDB
+        </p>
+        <p class="text-body2">
+          Find videos, channels, playlists and tags.
+        </p>
       </div>
     </template>
   </q-page>

@@ -1,7 +1,10 @@
 <template>
   <div class="row items-center no-wrap">
     <div class="col">
-      <a @click.prevent="openChannel" class="text-subtitle1 text-grey-5 cursor-pointer">
+      <a
+        class="text-subtitle1 text-grey-5 cursor-pointer"
+        @click.prevent="openChannel"
+      >
         {{ data.relationships.model.name }}
       </a>
       <div class="text-subtitle2 text-grey-6">

@@ -1,13 +1,31 @@
 <template>
-  <q-card dark square flat class="bg-grey-12" draggable="false">
-    <q-menu touch-position context-menu dark square @before-show="menuActive = true" @hide="menuActive = false">
-      <q-list bordered padding dark style="width: 260px">
+  <q-card
+    dark
+    square
+    flat
+    class="bg-grey-12"
+    draggable="false"
+  >
+    <q-menu
+      touch-position
+      context-menu
+      dark
+      square
+      @before-show="menuActive = true"
+      @hide="menuActive = false"
+    >
+      <q-list
+        bordered
+        padding
+        dark
+        style="width: 260px"
+      >
         <q-item
           v-for="(entity, index) in menu"
           :key="`menu-${index}`"
+          v-close-popup
           clickable
           dark
-          v-close-popup
           @click.prevent="open(entity.name)"
         >
           <q-item-section side>
@@ -18,7 +36,10 @@
       </q-list>
     </q-menu>
 
-    <a :class="menuActive ? '' : 'cursor-pointer'" @click.prevent="onClick">
+    <a
+      :class="menuActive ? '' : 'cursor-pointer'"
+      @click.prevent="onClick"
+    >
       <preview
         class="item-preview"
         :name="item.name"
@@ -28,9 +49,15 @@
     </a>
 
     <q-card-section class="q-py-md">
-      <div class="text-subtitle1 text-grey-5">{{ item.name }}</div>
+      <div class="text-subtitle1 text-grey-5">
+        {{ item.name }}
+      </div>
       <div class="text-subtitle2 text-grey-6">
-        <a v-if="$route.name !== 'channel'" class="text-grey-6 no-decoration cursor-pointer" @click.prevent="open('channel')">
+        <a
+          v-if="$route.name !== 'channel'"
+          class="text-grey-6 no-decoration cursor-pointer"
+          @click.prevent="open('channel')"
+        >
           {{ item.relationships.model.name }}
         </a>
         <span v-else>
@@ -39,8 +66,15 @@
         {{ Number(item.properties.duration || 0) | timestamp }} •
         {{ Number(item.views || 0) | approximate }} views
       </div>
-      <div v-if="item.relationships.tags.length" class="q-pt-xs">
-        <tag v-for="(tag, index) in item.relationships.tags" :key="index" :item="tag" />
+      <div
+        v-if="item.relationships.tags.length"
+        class="q-pt-xs"
+      >
+        <tag
+          v-for="(tag, index) in item.relationships.tags"
+          :key="index"
+          :item="tag"
+        />
       </div>
     </q-card-section>
   </q-card>
@@ -48,6 +82,18 @@
 
 <script>
 export default {
+
+  components: {
+    Preview: () => import('components/ui/Preview'),
+    Tag: () => import('components/ui/Tag')
+  },
+
+  props: {
+    item: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       menuActive: false,
@@ -60,18 +106,6 @@ export default {
         { label: 'View Channel', name: 'channel', icon: 'live_tv' },
         { label: 'Share', name: 'share', icon: 'share' }
       ]
-    }
-  },
-
-  components: {
-    Preview: () => import('components/ui/Preview'),
-    Tag: () => import('components/ui/Tag')
-  },
-
-  props: {
-    item: {
-      type: Object,
-      required: true
     }
   },
 

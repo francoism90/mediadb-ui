@@ -8,7 +8,6 @@
     :input-debounce="300"
     :options="options"
     :loading="loading"
-    @filter="filterOptions"
     clearable
     use-chips
     hide-dropdown-icon
@@ -19,6 +18,7 @@
     options-dark
     options-sanitize
     use-input
+    @filter="filterOptions"
   >
     <template v-slot:prepend>
       <q-icon name="live_tv" />
@@ -29,7 +29,11 @@
     </template>
 
     <template v-slot:selected-item="scope">
-      <q-chip dense square :tabindex="scope.tabindex">
+      <q-chip
+        dense
+        square
+        :tabindex="scope.tabindex"
+      >
         <span>{{ scope.opt.name }}</span>
       </q-chip>
     </template>

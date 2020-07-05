@@ -1,12 +1,28 @@
 <template>
-  <q-card v-if="ready" :key="data.id" dark style="width: 530px">
+  <q-card
+    v-if="ready"
+    :key="data.id"
+    dark
+    style="width: 530px"
+  >
     <q-toolbar>
-      <q-toolbar-title class="q-mx-xs">{{ data.name }}</q-toolbar-title>
-      <q-btn flat round dense icon="close" v-close-popup />
+      <q-toolbar-title class="q-mx-xs">
+        {{ data.name }}
+      </q-toolbar-title>
+      <q-btn
+        v-close-popup
+        flat
+        round
+        dense
+        icon="close"
+      />
     </q-toolbar>
 
     <q-form @submit="onSubmit">
-      <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
+      <q-card-section
+        style="max-height: 50vh"
+        class="scroll q-gutter-y-md"
+      >
         <q-select
           ref="playlists"
           v-model="body.playlists"
@@ -17,7 +33,6 @@
           :max-values="15"
           :options="options"
           :loading="loading"
-          @filter="filterPlaylists"
           clearable
           counter
           use-chips
@@ -31,6 +46,7 @@
           options-dark
           options-sanitize
           use-input
+          @filter="filterPlaylists"
           @new-value="createOption"
         >
           <template v-slot:prepend>
@@ -53,8 +69,8 @@
               removable
               dense
               square
-              @remove="scope.removeAtIndex(scope.index)"
               :tabindex="scope.tabindex"
+              @remove="scope.removeAtIndex(scope.index)"
             >
               <span>{{ scope.opt.name }}</span>
             </q-chip>
@@ -62,8 +78,16 @@
         </q-select>
       </q-card-section>
 
-      <q-card-actions align="right" class="q-mx-sm">
-        <q-btn flat type="submit" label="Save" color="primary" />
+      <q-card-actions
+        align="right"
+        class="q-mx-sm"
+      >
+        <q-btn
+          flat
+          type="submit"
+          label="Save"
+          color="primary"
+        />
       </q-card-actions>
     </q-form>
   </q-card>
@@ -91,6 +115,22 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters('model_save', {
+      ready: 'isReady',
+      data: 'getData',
+      meta: 'getMeta'
+    }),
+
+    loading () {
+      return this.$store.getters['model_playlists/isLoading']
+    },
+
+    options () {
+      return this.$store.getters['model_playlists/getData']
+    }
+  },
+
   async created () {
     if (!this.$store.hasModule('model_save')) {
       this.$store.registerModule('model_save', modelModule)
@@ -107,22 +147,6 @@ export default {
   beforeDestroy () {
     this.$store.unregisterModule('model_save')
     this.$store.unregisterModule('model_playlists')
-  },
-
-  computed: {
-    ...mapGetters('model_save', {
-      ready: 'isReady',
-      data: 'getData',
-      meta: 'getMeta'
-    }),
-
-    loading () {
-      return this.$store.getters['model_playlists/isLoading']
-    },
-
-    options () {
-      return this.$store.getters['model_playlists/getData']
-    }
   },
 
   methods: {

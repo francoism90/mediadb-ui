@@ -1,12 +1,23 @@
 <template>
-  <div class="player-seeker" :style="cssVars">
-    <div v-if="seekerHover" class="player-tooltip" :style="tooltip">
+  <div
+    class="player-seeker"
+    :style="cssVars"
+  >
+    <div
+      v-if="seekerHover"
+      class="player-tooltip"
+      :style="tooltip"
+    >
       <span class="q-py-xs q-px-sm text-caption bg-grey-11">
         {{ getTimeByPct(seekerHoverPercent) | timestamp }}
       </span>
     </div>
 
-    <div ref="seeker" @mousemove="onSeekerHover" @mouseleave="onSeekerLeave">
+    <div
+      ref="seeker"
+      @mousemove="onSeekerHover"
+      @mouseleave="onSeekerLeave"
+    >
       <q-slider
         v-model="step"
         :min="0.0"

@@ -1,13 +1,27 @@
 <template>
   <q-card dark>
     <q-card-section class="row items-center">
-      <q-avatar icon="delete_forever" color="primary" text-color="white" />
+      <q-avatar
+        icon="delete_forever"
+        color="primary"
+        text-color="white"
+      />
       <span class="q-ml-sm">Are you sure you want to delete this item?</span>
     </q-card-section>
 
     <q-card-actions align="right">
-      <q-btn flat label="Cancel" color="primary" v-close-popup />
-      <q-btn flat label="Confirm" color="primary" @click.prevent="onConfirm" />
+      <q-btn
+        v-close-popup
+        flat
+        label="Cancel"
+        color="primary"
+      />
+      <q-btn
+        flat
+        label="Confirm"
+        color="primary"
+        @click.prevent="onConfirm"
+      />
     </q-card-actions>
   </q-card>
 </template>

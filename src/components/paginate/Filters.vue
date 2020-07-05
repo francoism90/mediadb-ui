@@ -1,12 +1,12 @@
 <template>
   <div :key="namespace">
     <q-select
+      v-model="model"
       :name="field"
       :loading="!state.ready"
       dark
       square
       dense
-      v-model="model"
       dropdown-icon="keyboard_arrow_down"
       :options="options"
       option-label="label"

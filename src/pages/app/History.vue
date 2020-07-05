@@ -1,6 +1,5 @@
 <template>
-  <q-page padding>
-  </q-page>
+  <q-page padding />
 </template>
 
 <script>

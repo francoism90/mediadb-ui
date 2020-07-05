@@ -1,8 +1,20 @@
 <template>
   <q-page class="container fluid">
-    <q-btn-group class="q-py-md" unelevated>
-      <filters :namespace="namespace" field="sort" :options="sorters" class="q-mr-lg" />
-      <filters :namespace="namespace" field="filter[type]" :options="types" />
+    <q-btn-group
+      class="q-py-md"
+      unelevated
+    >
+      <filters
+        :namespace="namespace"
+        field="sort"
+        :options="sorters"
+        class="q-mr-lg"
+      />
+      <filters
+        :namespace="namespace"
+        field="filter[type]"
+        :options="types"
+      />
     </q-btn-group>
 
     <infinite

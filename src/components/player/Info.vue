@@ -1,13 +1,29 @@
 <template>
-  <q-card v-if="ready" :key="data.id" dark style="width: 530px">
-    <q-card-section style="max-height: 50vh" class="scroll q-gutter-y-md">
+  <q-card
+    v-if="ready"
+    :key="data.id"
+    dark
+    style="width: 530px"
+  >
+    <q-card-section
+      style="max-height: 50vh"
+      class="scroll q-gutter-y-md"
+    >
       <p>
         {{ data.properties }}
       </p>
     </q-card-section>
 
-    <q-card-actions align="right" class="q-mx-sm">
-      <q-btn flat label="OK" color="primary" v-close-popup />
+    <q-card-actions
+      align="right"
+      class="q-mx-sm"
+    >
+      <q-btn
+        v-close-popup
+        flat
+        label="OK"
+        color="primary"
+      />
     </q-card-actions>
   </q-card>
 </template>
@@ -24,6 +40,13 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters('model_info', {
+      ready: 'isReady',
+      data: 'getData'
+    })
+  },
+
   created () {
     if (!this.$store.hasModule('model_info')) {
       this.$store.registerModule('model_info', modelModule)
@@ -34,13 +57,6 @@ export default {
 
   beforeDestroy () {
     this.$store.unregisterModule('model_info')
-  },
-
-  computed: {
-    ...mapGetters('model_info', {
-      ready: 'isReady',
-      data: 'getData'
-    })
   },
 
   methods: {
