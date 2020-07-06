@@ -49,13 +49,13 @@ export default {
       apiRoute: {
         path: 'tags',
         params: {
-          append: 'media',
+          append: 'items',
           'page[size]': 30
         }
       },
       sorters: [
         { label: 'Alphabetical', value: 'name' },
-        { label: 'Number of Items', value: 'media' }
+        { label: 'Number of Items', value: 'items' }
       ],
       types: [
         { label: 'All Types', value: '*' },

@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { dom } from 'quasar'
 import { mapActions } from 'vuex'
 
 export default {
@@ -108,9 +109,9 @@ export default {
     },
 
     onSeekerHover (event) {
-      const seekerWidth = this.$refs.seeker.clientWidth || 0
-      const seekerOffsetLeft = this.$refs.seeker.getBoundingClientRect().left || 0
-      const position = event.clientX - seekerOffsetLeft
+      const seekerWidth = dom.width(this.$refs.seeker)
+      const seekerOffset = dom.offset(this.$refs.seeker)
+      const position = event.clientX - seekerOffset.left
       const percent = (position) / seekerWidth * 100
 
       this.seekerHoverPercent = percent

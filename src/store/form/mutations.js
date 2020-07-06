@@ -1,3 +1,4 @@
+import { find, has } from 'lodash'
 import defaultState from './state'
 
 export function resetState (state) {
@@ -16,4 +17,19 @@ export function setValidation (state, payload = {}) {
   const finalValidations = { ...currentValidations, ...payload }
 
   state.validations = Object.assign({}, state.validations, finalValidations)
+}
+
+export function createOption (state, payload = {}) {
+  const { name = '', value = {}, options = [] } = payload
+
+  if (has(value, 'id') === false) {
+    return
+  }
+
+  const existing = find(options, { id: value.id })
+  const selected = find(state.data[name], { id: value.id })
+
+  if (!existing && !selected) {
+    state.data[name].push(value)
+  }
 }

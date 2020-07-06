@@ -3,6 +3,8 @@ export default function () {
     ready: false,
     model: {},
     callback: {},
+    controls: true,
+    fullscreen: false,
     data: {
       buffered: null,
       currentTime: 0,
@@ -11,8 +13,6 @@ export default function () {
       error: null,
       paused: false,
       readyState: 0
-    },
-    controls: true,
-    fullscreen: false
+    }
   }
 }

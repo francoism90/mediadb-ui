@@ -1,6 +1,6 @@
 export default ({ router, store, Vue }) => {
   router.beforeEach(async (to, from, next) => {
-  // Handle rate limiting errors
+  // Rate limiting errors
     if (['/429'].includes(to.path)) {
       next()
     }

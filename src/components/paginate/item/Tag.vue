@@ -24,7 +24,7 @@
         class="text-grey-5"
         caption
       >
-        {{ Number(item.media || 0) | approximate }} items
+        {{ Number(item.items || 0) | approximate }} items
       </q-item-label>
     </q-item-section>
   </q-item>

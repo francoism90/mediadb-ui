@@ -7,6 +7,7 @@ export function getModules (state) {
       itemComponent: 'Video',
       apiRoute: {
         path: 'media',
+        initialize: false,
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
@@ -22,6 +23,7 @@ export function getModules (state) {
       itemComponent: 'Channel',
       apiRoute: {
         path: 'channel',
+        initialize: false,
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
@@ -37,6 +39,7 @@ export function getModules (state) {
       itemComponent: 'Playlist',
       apiRoute: {
         path: 'playlist',
+        initialize: false,
         params: {
           include: 'model,tags',
           'filter[query]': state.query,
@@ -52,8 +55,9 @@ export function getModules (state) {
       itemComponent: 'Tag',
       apiRoute: {
         path: 'tags',
+        initialize: false,
         params: {
-          append: 'media',
+          append: 'items',
           'filter[query]': state.query,
           'page[size]': 12,
           sort: 'relevance'

@@ -101,7 +101,7 @@ export default {
         path: 'tags',
         params: {
           'page[size]': 5,
-          sort: 'media' // TODO: use generic name
+          sort: 'items'
         }
       })
     },
@@ -110,7 +110,7 @@ export default {
       await this.$store.dispatch(this.namespace + '_tags/reset', {
         params: {
           'filter[query]': val || null,
-          sort: val.length ? 'relevance' : 'media' // TODO: use generic name
+          sort: val.length ? 'relevance' : 'items'
         }
       })
 

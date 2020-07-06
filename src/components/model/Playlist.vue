@@ -1,31 +1,30 @@
 <template>
   <q-select
-    v-model="channel"
+    v-model="playlists"
     dark
     square
     filled
-    :error="$v.channel.$invalid"
     :input-debounce="300"
+    :max-values="15"
     :options="options"
     :loading="loading"
     clearable
+    counter
     use-chips
     hide-dropdown-icon
-    label="Channel"
+    label="Playlists"
     stack-label
+    multiple
     option-label="name"
     option-value="id"
     options-dark
     options-sanitize
     use-input
     @filter="filterOptions"
+    @new-value="createOption"
   >
     <template v-slot:prepend>
-      <q-icon name="live_tv" />
-    </template>
-
-    <template v-slot:error>
-      <span v-if="!$v.channel.required">Field is required</span>
+      <q-icon name="local_offer" />
     </template>
 
     <template v-slot:selected-item="scope">
@@ -37,50 +36,53 @@
         {{ scope.opt.name }}
       </q-chip>
     </template>
+
+    <template v-slot:selected-item="scope">
+      <q-chip
+        removable
+        dense
+        square
+        :tabindex="scope.tabindex"
+        @remove="scope.removeAtIndex(scope.index)"
+      >
+        {{ scope.opt.name }}
+      </q-chip>
+    </template>
   </q-select>
 </template>
 
 <script>
 import { validateHandler } from 'src/mixins/form'
-import { required } from 'vuelidate/lib/validators'
 import paginateModule from 'src/store/paginate'
 
 export default {
   mixins: [validateHandler],
 
-  validations: {
-    channel: {
-      required
-    }
-  },
-
   computed: {
     loading () {
-      return this.$store.getters[this.namespace + '_channel/isLoading']
+      return this.$store.getters[this.namespace + '_playlists/isLoading']
     },
 
     options () {
-      return this.$store.getters[this.namespace + '_channel/getData']
+      return this.$store.getters[this.namespace + '_playlists/getData']
     },
 
-    channel: {
+    playlists: {
       get () {
-        return this.data.model
+        return this.data.playlists
       },
 
       set (value) {
         this.$store.commit(this.namespace + '/setData', {
-          model: value
+          playlists: value
         })
-
-        this.validate('channel')
       }
     }
   },
 
   async created () {
-    if (!this.$store.hasModule(this.namespace + '_channel')) {
-      this.$store.registerModule(this.namespace + '_channel', paginateModule)
+    if (!this.$store.hasModule(this.namespace + '_playlists')) {
+      this.$store.registerModule(this.namespace + '_playlists', paginateModule)
     }
 
     await this.setOptions()
@@ -88,17 +90,18 @@ export default {
 
   methods: {
     async setOptions () {
-      await this.$store.dispatch(this.namespace + '_channel/create', {
-        path: 'channel',
+      await this.$store.dispatch(this.namespace + '_playlists/create', {
+        path: 'playlist',
         params: {
-          'page[size]': 5,
+          'page[size]': 6,
+          'filter[user]': true,
           sort: 'updated'
         }
       })
     },
 
     async filterOptions (val, update, abort) {
-      await this.$store.dispatch(this.namespace + '_channel/reset', {
+      await this.$store.dispatch(this.namespace + '_playlists/reset', {
         params: {
           'filter[query]': val || null,
           sort: val.length ? 'relevance' : 'updated'
@@ -106,6 +109,16 @@ export default {
       })
 
       update()
+    },
+
+    createOption (val, done) {
+      this.$store.commit(this.namespace + '/createOption', {
+        name: 'playlists',
+        value: { id: val, name: val },
+        options: this.options
+      })
+
+      done(null)
     }
   }
 }

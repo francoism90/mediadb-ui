@@ -67,7 +67,6 @@ export default {
     if (!this.$store.hasModule(this.namespace)) {
       this.$store.registerModule(this.namespace, paginateModule)
 
-      // Fetch first page
       await this.$store.dispatch(this.namespace + '/create', this.apiRoute)
     }
   }

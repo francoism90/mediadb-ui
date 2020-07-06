@@ -14,7 +14,7 @@ export default function ({ Vue, router }) {
   axiosInstance.interceptors.response.use((response) => {
     return response
   }, (error) => {
-    // Upstream rate limiting error
+    // Upstream rate limiting
     if (error.response.status === 429 && router.currentRoute.path !== '/429') {
       router.push({ path: '/429', query: { redirect: router.currentRoute.fullPath } })
     }
