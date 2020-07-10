@@ -12,16 +12,16 @@
       flat
       dense
       color="white"
-      icon="replay_10"
-      @click="callback({ type: 'currentTime', value: data.currentTime - 10 })"
+      icon="replay_5"
+      @click="callback({ type: 'rewind' })"
     />
 
     <q-btn
       flat
       dense
       color="white"
-      icon="forward_10"
-      @click="callback({ type: 'currentTime', value: data.currentTime + 10 })"
+      icon="forward_5"
+      @click="callback({ type: 'forward' })"
     />
 
     <span class="q-px-sm text-white">

@@ -30,8 +30,8 @@
       class="scroll q-gutter-y-md"
     >
       <model-name />
-      <model-channel />
       <model-tags />
+      <model-channel />
       <model-description />
     </q-card-section>
 

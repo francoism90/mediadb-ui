@@ -17,7 +17,7 @@
     "approximate-number": "^2.0.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "quasar": "^1.12.8",
     "shaka-player": "^3.0.1",
@@ -27,7 +27,7 @@
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.1",
+    "@quasar/app": "^2.0.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.4.0",
     "eslint-config-standard": "^14.1.1",

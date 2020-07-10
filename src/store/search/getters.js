@@ -25,6 +25,7 @@ export function getModules (state) {
         path: 'channel',
         initialize: false,
         params: {
+          append: 'items',
           include: 'model,tags',
           'filter[query]': state.query,
           'page[size]': 12,
@@ -41,6 +42,7 @@ export function getModules (state) {
         path: 'playlist',
         initialize: false,
         params: {
+          append: 'items',
           include: 'model,tags',
           'filter[query]': state.query,
           'page[size]': 12,

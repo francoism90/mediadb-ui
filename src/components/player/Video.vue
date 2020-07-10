@@ -78,6 +78,8 @@ export default {
       ],
       keyBindings: {
         edit: ['c'],
+        rewind: ['arrowleft'],
+        forward: ['arrowright'],
         info: ['d'],
         save: ['a'],
         snapshot: ['s'],
@@ -189,6 +191,14 @@ export default {
           this.player.currentTime = value
           break
 
+        case 'rewind':
+          this.player.currentTime = this.player.currentTime - 5
+          break
+
+        case 'forward':
+          this.player.currentTime = this.player.currentTime + 5
+          break
+
         case 'togglePlay':
           if (
             this.player.readyState > 1 &&
@@ -249,13 +259,9 @@ export default {
 
     onWheel (event) {
       if (event.deltaX < 0) {
-        this.eventHandler(
-          { type: 'currentTime', value: this.player.currentTime - 10 }
-        )
+        this.eventHandler({ type: 'rewind' })
       } else if (event.deltaX > 0) {
-        this.eventHandler(
-          { type: 'currentTime', value: this.player.currentTime + 10 }
-        )
+        this.eventHandler({ type: 'forward' })
       }
     }
   }

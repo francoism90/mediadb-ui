@@ -49,6 +49,7 @@ export default {
       apiRoute: {
         path: 'playlist',
         params: {
+          append: 'items',
           include: 'model,tags',
           'page[size]': 30
         }

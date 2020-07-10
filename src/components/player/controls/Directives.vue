@@ -1,7 +1,6 @@
 <template>
   <div
     class="fit"
-    @click.prevent="callback({ type: 'togglePlay' })"
     @dblclick.prevent="callback({ type: 'toggleFullscreen' })"
   >
     <q-menu
