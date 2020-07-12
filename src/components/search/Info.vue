@@ -1,6 +1,6 @@
 <template>
   <div class="fixed-center text-center">
-    <template v-if="!ready && !query">
+    <template v-if="!query">
       <p>
         <q-icon
           name="search"
@@ -11,11 +11,11 @@
         Search MediaDB
       </p>
       <p class="text-body2">
-        Find videos, channels, playlists and tags.
+        Find media, channels, playlists and tags.
       </p>
     </template>
 
-    <template v-else-if="ready && !store && query && items === 0">
+    <template v-else-if="ready && query && items === 0">
       <p>
         <q-icon
           name="error_outline"
@@ -42,9 +42,7 @@ export default {
 
     store: {
       type: Object,
-      default: () => {
-        return {}
-      }
+      default: null
     },
 
     query: {

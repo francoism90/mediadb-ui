@@ -103,7 +103,6 @@ export default {
         { label: 'Edit', name: 'edit', icon: 'edit' },
         { label: 'Add to Playlist', name: 'save', icon: 'playlist_add' },
         { label: 'Favorite Video', name: 'like', icon: 'favorite' },
-        { label: 'Add to Watch Later', name: 'watchlist', icon: 'watch_later' },
         { label: 'View Channel', name: 'channel', icon: 'live_tv' },
         { label: 'Share', name: 'share', icon: 'share' }
       ]

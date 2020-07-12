@@ -198,7 +198,6 @@ export default {
         { label: 'Tags', name: 'tags', icon: 'label', separator: false },
         { label: 'Playlists', name: 'playlists', icon: 'layers', separator: true },
         { label: 'History', name: 'history', icon: 'history', separator: false },
-        { label: 'Watch later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
         { label: 'Your videos', name: 'history', icon: 'cloud_upload', separator: false }
       ]

@@ -46,6 +46,7 @@ export default {
       apiRoute: {
         path: 'media',
         params: {
+          append: 'preview,thumbnail',
           include: 'model,tags',
           'filter[playlist]': this.data.id,
           'page[size]': 12,

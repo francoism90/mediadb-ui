@@ -46,6 +46,7 @@ export default {
       apiRoute: {
         path: 'media',
         params: {
+          append: 'preview,thumbnail',
           include: 'model,tags',
           'page[size]': 12
         }

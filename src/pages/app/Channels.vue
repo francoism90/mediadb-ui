@@ -48,7 +48,7 @@ export default {
       apiRoute: {
         path: 'channel',
         params: {
-          append: 'items',
+          append: 'thumbnail,items',
           include: 'model,tags',
           'page[size]': 16
         }

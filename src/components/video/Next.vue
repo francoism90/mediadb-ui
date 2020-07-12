@@ -36,6 +36,7 @@ export default {
       apiRoute: {
         path: 'media',
         params: {
+          append: 'preview,thumbnail',
           include: 'model,tags',
           'filter[related]': this.data.id,
           'page[size]': 12,

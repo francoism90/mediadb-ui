@@ -43,8 +43,8 @@
     >
       <q-img
         :alt="item.name"
-        src="~assets/placeholders/empty.png"
-        class="no-border fit"
+        :src="item.thumbnail"
+        class="no-border fit bg-grey-8"
         loading="lazy"
       />
     </a>

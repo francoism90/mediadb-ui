@@ -38,7 +38,7 @@ export default {
 
     meta: {
       type: Object,
-      required: true
+      default: null
     }
   },
 
@@ -139,7 +139,7 @@ export default {
         this.instance = new Player(this.player)
 
         await this.instance.configure(this.settings)
-        await this.instance.load(this.meta.stream_url)
+        await this.instance.load(this.data.stream_url)
 
         for (const listener of this.listeners) {
           this.player.addEventListener(listener, this.dispatchEvents)
@@ -200,12 +200,12 @@ export default {
 
         case 'download':
           this.player.pause()
-          window.location.href = this.meta.download_url || ''
+          window.location.href = this.data.download_url || ''
           break
 
         case 'stream':
           this.player.pause()
-          window.location.href = this.meta.stream_url || ''
+          window.location.href = this.data.stream_url || ''
           break
 
         case 'edit':
