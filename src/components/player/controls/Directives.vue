@@ -1,6 +1,8 @@
 <template>
   <div
     class="fit"
+    @wheel="onWheel"
+    @click.prevent="callback({ type: 'togglePlay' })"
     @dblclick.prevent="callback({ type: 'toggleFullscreen' })"
   >
     <q-menu
@@ -9,8 +11,6 @@
       context-menu
       dark
       square
-      @before-show="setControls(true)"
-      @hide="setControls(false)"
     >
       <q-list
         bordered
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
 
@@ -49,8 +49,8 @@ export default {
   data () {
     return {
       menu: [
-        { label: 'Copy Video URL', name: 'play', icon: 'play_arrow' },
-        { label: 'Keyboard Shortcuts', name: 'edit', icon: 'edit' },
+        { label: 'Copy Video URL', name: 'play', icon: 'content_copy' },
+        { label: 'Open Video URL', name: 'stream', icon: 'open_in_new' },
         { label: 'Debug Information', name: 'info', icon: 'info' }
       ]
     }
@@ -61,9 +61,13 @@ export default {
       'callback'
     ]),
 
-    ...mapMutations('player', [
-      'setControls'
-    ])
+    onWheel (event) {
+      if (event.deltaX < 0) {
+        this.callback({ type: 'rewind' })
+      } else if (event.deltaX > 0) {
+        this.callback({ type: 'forward' })
+      }
+    }
   }
 }
 </script>

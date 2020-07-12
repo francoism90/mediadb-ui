@@ -1,9 +1,9 @@
 export async function query ({ commit, dispatch }, payload = {}) {
-  const { type = null, query = null } = payload
+  const { store = null, query = null } = payload
 
-  // Set query & type (optional)
+  // Set query & store (optional)
   commit('setReady', false)
-  commit('setType', type)
+  commit('setStore', store)
   commit('setQuery', query)
 
   // Reset stores to filter on query
@@ -14,7 +14,7 @@ export async function query ({ commit, dispatch }, payload = {}) {
 }
 
 export async function resetStores ({ dispatch, getters }) {
-  for (const searchModule of getters.getModules) {
+  for (const searchModule of getters.getStores) {
     await dispatch(
       searchModule.namespace + '/reset',
       searchModule.apiRoute,

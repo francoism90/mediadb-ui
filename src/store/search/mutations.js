@@ -12,6 +12,6 @@ export function setReady (state, payload = false) {
   state.ready = payload
 }
 
-export function setType (state, value = null) {
-  state.type = value
+export function setStore (state, value = null) {
+  state.store = value
 }

@@ -37,7 +37,7 @@
     </q-menu>
 
     <a
-      class="item-preview"
+      class="block item-preview"
       :class="menuActive ? '' : 'cursor-pointer'"
       @click.prevent="onClick"
     >

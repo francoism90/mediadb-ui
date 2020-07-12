@@ -1,32 +1,23 @@
 <template>
   <div
+    v-if="data && meta"
     ref="element"
     v-shortkey="keyBindings"
     class="relative-position window-height player"
     :class="fullscreen ? 'fullscreen' : null"
     @shortkey="eventHandler"
-    @wheel="onWheel"
-    @mousemove="showControls()"
   >
     <video
       ref="instance"
       class="absolute fit"
       playsinline
       preload="auto"
-      autoplay
       :poster="data.thumbnail"
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
+      @canplay="player.play()"
     />
-
-    <transition
-      v-if="controls"
-      name="fade"
-    >
-      <keep-alive>
-        <video-container />
-      </keep-alive>
-    </transition>
+    <control-container />
   </div>
 </template>
 
@@ -35,12 +26,8 @@ import { Player } from 'shaka-player'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
-  timers: {
-    hideControls: { time: 3500, autostart: true }
-  },
-
   components: {
-    VideoContainer: () => import('./Container')
+    ControlContainer: () => import('./controls/Container')
   },
 
   props: {
@@ -124,12 +111,12 @@ export default {
     })
   },
 
-  beforeDestroy () {
+  async beforeDestroy () {
     for (const listener of this.listeners) {
       this.player.removeEventListener(listener, this.dispatchEvents)
     }
 
-    this.detach()
+    await this.detach()
   },
 
   methods: {
@@ -140,7 +127,6 @@ export default {
     ]),
 
     ...mapMutations('player', [
-      'setControls',
       'setFullscreen'
     ]),
 
@@ -155,7 +141,6 @@ export default {
         await this.instance.configure(this.settings)
         await this.instance.load(this.meta.stream_url)
 
-        // Add event listeners
         for (const listener of this.listeners) {
           this.player.addEventListener(listener, this.dispatchEvents)
         }
@@ -187,18 +172,6 @@ export default {
       const { srcKey = null, type = null, value = null } = payload
 
       switch (srcKey || type) {
-        case 'currentTime':
-          this.player.currentTime = value
-          break
-
-        case 'rewind':
-          this.player.currentTime = this.player.currentTime - 5
-          break
-
-        case 'forward':
-          this.player.currentTime = this.player.currentTime + 5
-          break
-
         case 'togglePlay':
           if (
             this.player.readyState > 1 &&
@@ -213,14 +186,38 @@ export default {
           this.$q.fullscreen.toggle(this.element)
           break
 
+        case 'currentTime':
+          this.player.currentTime = value
+          break
+
+        case 'rewind':
+          this.player.currentTime = this.player.currentTime - 5
+          break
+
+        case 'forward':
+          this.player.currentTime = this.player.currentTime + 5
+          break
+
         case 'download':
           this.player.pause()
           window.location.href = this.meta.download_url || ''
           break
 
+        case 'stream':
+          this.player.pause()
+          window.location.href = this.meta.stream_url || ''
+          break
+
         case 'edit':
           this.$store.dispatch('dialog/open', {
             component: 'VideoEdit',
+            data: { id: this.data.id }
+          })
+          break
+
+        case 'save':
+          this.$store.dispatch('dialog/open', {
+            component: 'VideoSave',
             data: { id: this.data.id }
           })
           break
@@ -245,23 +242,6 @@ export default {
             type: 'positive'
           })
           break
-      }
-    },
-
-    hideControls () {
-      this.setControls(false)
-    },
-
-    showControls () {
-      this.setControls(true)
-      this.$timer.restart('hideControls')
-    },
-
-    onWheel (event) {
-      if (event.deltaX < 0) {
-        this.eventHandler({ type: 'rewind' })
-      } else if (event.deltaX > 0) {
-        this.eventHandler({ type: 'forward' })
       }
     }
   }

@@ -46,13 +46,9 @@ export default {
     src: {
       type: String,
       default: null
-    },
-
-    mimetype: {
-      type: String,
-      default: 'video/mp4'
     }
   },
+
   data () {
     return {
       showPreview: false

@@ -57,6 +57,7 @@ export default {
       manage: [
         { label: 'Favorite', icon: 'favorite_border', action: false },
         { label: 'Snapshot', icon: 'photo', action: { type: 'snapshot' } },
+        { label: 'Save', icon: 'playlist_add', action: { type: 'save' } },
         { label: 'Edit', icon: 'menu_open', action: { type: 'edit' } }
       ],
       links: [

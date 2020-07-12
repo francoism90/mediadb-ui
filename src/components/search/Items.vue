@@ -1,5 +1,8 @@
 <template>
-  <div class="q-pb-md">
+  <div
+    v-if="items > 0"
+    class="q-pb-md"
+  >
     <div class="row items-center q-py-lg">
       <template v-if="summary">
         <div class="col">
@@ -11,7 +14,7 @@
             class="text-caption text-uppercase cursor-pointer"
             @click="setQuery(namespace)"
           >
-            Filter {{ label }}
+            Filter {{ label }} ({{ items }})
           </a>
         </div>
       </template>
@@ -59,6 +62,11 @@ export default {
       default: null
     },
 
+    summary: {
+      type: Boolean,
+      default: false
+    },
+
     itemComponent: {
       type: String,
       default: null
@@ -69,9 +77,9 @@ export default {
       default: null
     },
 
-    summary: {
-      type: Boolean,
-      default: false
+    items: {
+      type: Number,
+      default: 0
     },
 
     query: {
@@ -84,7 +92,6 @@ export default {
     return {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
-        { label: 'Recommended for You', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
         { label: 'Most recent', value: 'recent' },
         { label: 'Most viewed', value: 'views' }
@@ -95,7 +102,7 @@ export default {
   methods: {
     async setQuery (namespace = null) {
       await this.$store.dispatch('search/query', {
-        type: namespace,
+        store: namespace,
         query: this.query
       })
     }

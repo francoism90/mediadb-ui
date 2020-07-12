@@ -1,4 +1,5 @@
-export function getModules (state) {
+
+export function getStores (state) {
   return [
     {
       namespace: 'search_videos',
@@ -69,14 +70,28 @@ export function getModules (state) {
   ]
 }
 
-export function isReady (state) {
-  return state.ready
-}
+export function getStore (state, getters) {
+  if (!state.store) {
+    return null
+  }
 
-export function getType (state, getters) {
-  return getters.getModules.find(x => x.namespace === (state.type))
+  return getters.getStores.find(x => x.namespace === (state.store))
 }
 
 export function getQuery (state) {
   return state.query
+}
+
+export function getItemCount (state, getters, rootState, rootGetters) {
+  let items = 0
+
+  for (const store of getters.getStores) {
+    items += rootGetters[store.namespace + '/getItemCount']
+  }
+
+  return items
+}
+
+export function isReady (state) {
+  return state.ready
 }

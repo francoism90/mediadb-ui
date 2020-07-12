@@ -6,7 +6,7 @@ export function getMeta (state) {
   return state.meta
 }
 
-export function getTotal (state) {
+export function getItemCount (state) {
   return state.meta && state.meta.total ? state.meta.total : 0
 }
 

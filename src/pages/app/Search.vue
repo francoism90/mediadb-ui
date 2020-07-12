@@ -1,45 +1,36 @@
 <template>
   <q-page class="container fluid">
-    <template v-if="ready && !type && query">
+    <info
+      :ready="ready"
+      :items="items"
+      :query="query"
+      :store="store"
+    />
+
+    <template v-if="ready && !store && query">
       <div
-        v-for="type in modules"
-        :key="type.namespace"
+        v-for="storeModule in stores"
+        :key="storeModule.namespace"
       >
         <items
-          v-if="hasItems(type.namespace)"
-          :namespace="type.namespace"
-          :item-component="type.itemComponent"
-          :label="type.label"
-          :summary="true"
+          :namespace="storeModule.namespace"
+          :item-component="storeModule.itemComponent"
+          :items="storeItems(storeModule.namespace)"
+          :label="storeModule.label"
           :query="query"
+          :summary="true"
         />
       </div>
     </template>
 
-    <template v-else-if="ready && type && query">
+    <template v-else-if="ready && store && query">
       <items
-        :namespace="type.namespace"
-        :item-component="type.itemComponent"
-        :label="type.label"
+        :namespace="store.namespace"
+        :item-component="store.itemComponent"
+        :items="storeItems(store.namespace)"
+        :label="store.label"
         :query="query"
       />
-    </template>
-
-    <template v-else>
-      <div class="fixed-center text-center">
-        <p>
-          <q-icon
-            name="search"
-            style="font-size: 4rem;"
-          />
-        </p>
-        <p class="text-h5 q-mb-xs">
-          Search MediaDB
-        </p>
-        <p class="text-body2">
-          Find videos, channels, playlists and tags.
-        </p>
-      </div>
     </template>
   </q-page>
 </template>
@@ -49,6 +40,7 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
+    Info: () => import('components/search/Info'),
     Items: () => import('components/search/Items')
   },
 
@@ -60,16 +52,17 @@ export default {
 
   computed: {
     ...mapGetters('search', {
-      modules: 'getModules',
+      items: 'getItemCount',
       query: 'getQuery',
       ready: 'isReady',
-      type: 'getType'
+      store: 'getStore',
+      stores: 'getStores'
     })
   },
 
   methods: {
-    hasItems (namespace = null) {
-      return (this.$store.getters[namespace + '/getTotal'] > 0)
+    storeItems (namespace = null) {
+      return this.$store.getters[namespace + '/getItemCount']
     }
   }
 }
