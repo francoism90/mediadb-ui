@@ -92,9 +92,10 @@ export default {
     return {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
-        { label: 'Trending', value: 'trending' },
         { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' }
+        { label: 'Most viewed', value: 'views' },
+        { label: 'Shortest to Longest', value: 'shortest' },
+        { label: 'Longest to Shortest', value: 'longest' }
       ]
     }
   },

@@ -49,8 +49,6 @@ export default {
   data () {
     return {
       menu: [
-        { label: 'Copy Video URL', name: 'play', icon: 'content_copy' },
-        { label: 'Open Video URL', name: 'stream', icon: 'open_in_new' },
         { label: 'Debug Information', name: 'info', icon: 'info' }
       ]
     }

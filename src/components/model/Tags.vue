@@ -99,7 +99,7 @@ export default {
     async setOptions () {
       await this.$store.dispatch(this.namespace + '_tags/create', {
         path: 'tags',
-        prefetch: false,
+
         params: {
           'page[size]': 5,
           sort: 'items'

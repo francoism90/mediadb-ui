@@ -44,6 +44,7 @@ export default {
     return {
       namespace: 'library',
       apiRoute: {
+        preFetch: true,
         path: 'media',
         params: {
           append: 'preview,thumbnail',
@@ -55,9 +56,7 @@ export default {
         { label: 'Recommended for You', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
         { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
-        { label: 'Shortest to Longest', value: 'shortest' },
-        { label: 'Longest to Shortest', value: 'longest' }
+        { label: 'Most viewed', value: 'views' }
       ]
     }
   },

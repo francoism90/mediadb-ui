@@ -44,6 +44,7 @@ export default {
     return {
       namespace: `playlist_${this.data.id}`,
       apiRoute: {
+        preFetch: true,
         path: 'media',
         params: {
           append: 'preview,thumbnail',
@@ -55,11 +56,11 @@ export default {
       },
       sorters: [
         { label: 'Most recent', value: 'recent' },
-        { label: 'Recommended for You', value: 'recommended' },
         { label: 'Most viewed', value: 'views' },
-        { label: 'Trending', value: 'trending' },
+        { label: 'At Random', value: 'recommended' },
         { label: 'Alphabetical', value: 'name' },
-        { label: 'Duration', value: 'duration' }
+        { label: 'Shortest to Longest', value: 'shortest' },
+        { label: 'Longest to Shortest', value: 'longest' }
       ]
     }
   },

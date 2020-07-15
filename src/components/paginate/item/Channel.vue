@@ -44,7 +44,10 @@
       <q-img
         :alt="item.name"
         :src="item.thumbnail"
-        class="no-border fit bg-grey-8"
+        :ratio="1"
+        placeholder-src="~assets/placeholders/320x480.png"
+        width="100%"
+        height="180px"
         loading="lazy"
       />
     </a>

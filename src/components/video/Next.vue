@@ -34,6 +34,7 @@ export default {
     return {
       namespace: 'next',
       apiRoute: {
+        preFetch: true,
         path: 'media',
         params: {
           append: 'preview,thumbnail',

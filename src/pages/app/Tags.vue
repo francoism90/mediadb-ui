@@ -47,6 +47,7 @@ export default {
     return {
       namespace: 'tags',
       apiRoute: {
+        preFetch: true,
         path: 'tags',
         params: {
           append: 'items',

@@ -8,7 +8,6 @@ export function getStores (state) {
       itemComponent: 'Video',
       apiRoute: {
         path: 'media',
-        prefetch: false,
         params: {
           append: 'preview,thumbnail',
           include: 'model,tags',
@@ -25,7 +24,6 @@ export function getStores (state) {
       itemComponent: 'Channel',
       apiRoute: {
         path: 'channel',
-        prefetch: false,
         params: {
           append: 'thumbnail,items',
           include: 'model,tags',
@@ -42,7 +40,6 @@ export function getStores (state) {
       itemComponent: 'Playlist',
       apiRoute: {
         path: 'playlist',
-        prefetch: false,
         params: {
           append: 'thumbnail,items',
           include: 'model,tags',
@@ -59,7 +56,6 @@ export function getStores (state) {
       itemComponent: 'Tag',
       apiRoute: {
         path: 'tags',
-        prefetch: false,
         params: {
           append: 'items',
           'filter[query]': state.query,

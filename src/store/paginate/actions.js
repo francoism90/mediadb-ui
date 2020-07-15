@@ -1,7 +1,7 @@
 import { axiosInstance } from 'boot/axios'
 
 export async function create ({ commit, dispatch, state }, route = {}) {
-  const { path = null, prefetch = true } = route
+  const { path = null, preFetch = false } = route
 
   commit('setReady', false)
 
@@ -10,7 +10,7 @@ export async function create ({ commit, dispatch, state }, route = {}) {
     commit('setRoute', route)
 
     // Fetch first page
-    if (prefetch) {
+    if (preFetch) {
       await dispatch('fetch')
     }
   }

@@ -47,12 +47,12 @@ export default {
     })
   },
 
-  created () {
+  async created () {
     if (!this.$store.hasModule('model_info')) {
       this.$store.registerModule('model_info', modelModule)
     }
 
-    this.setModel()
+    await this.setModel()
   },
 
   beforeDestroy () {

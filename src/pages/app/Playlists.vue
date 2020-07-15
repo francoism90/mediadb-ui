@@ -47,11 +47,12 @@ export default {
     return {
       namespace: 'playlists',
       apiRoute: {
+        preFetch: true,
         path: 'playlist',
         params: {
           append: 'thumbnail,items',
           include: 'model,tags',
-          'page[size]': 30
+          'page[size]': 16
         }
       },
       sorters: [
@@ -59,9 +60,7 @@ export default {
         { label: 'Trending', value: 'trending' },
         { label: 'Alphabetical', value: 'name' },
         { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
-        { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' }
+        { label: 'Most viewed', value: 'views' }
       ]
     }
   },

@@ -46,6 +46,7 @@ export default {
     return {
       namespace: 'channels',
       apiRoute: {
+        preFetch: true,
         path: 'channel',
         params: {
           append: 'thumbnail,items',
@@ -58,9 +59,7 @@ export default {
         { label: 'Trending', value: 'trending' },
         { label: 'Alphabetical', value: 'name' },
         { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
-        { label: 'Popular this week', value: 'popular-week' },
-        { label: 'Popular this month', value: 'popular-month' }
+        { label: 'Most viewed', value: 'views' }
       ]
     }
   },

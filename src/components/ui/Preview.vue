@@ -8,8 +8,12 @@
       <q-img
         :alt="name"
         :src="poster"
+        :ratio="1"
+        placeholder-src="~assets/placeholders/320x480.png"
+        position="0 0"
+        width="100%"
+        height="180px"
         loading="lazy"
-        class="no-border fit"
       />
     </template>
 
@@ -17,7 +21,6 @@
       <video
         ref="player"
         :src="src"
-        class="no-border fit"
         autoplay
         playsinline
         muted

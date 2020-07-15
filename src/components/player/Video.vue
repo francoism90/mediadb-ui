@@ -203,11 +203,6 @@ export default {
           window.location.href = this.data.download_url || ''
           break
 
-        case 'stream':
-          this.player.pause()
-          window.location.href = this.data.stream_url || ''
-          break
-
         case 'edit':
           this.$store.dispatch('dialog/open', {
             component: 'VideoEdit',

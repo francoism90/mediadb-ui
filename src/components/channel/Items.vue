@@ -43,6 +43,7 @@ export default {
     return {
       namespace: `channel_${this.data.id}`,
       apiRoute: {
+        preFetch: true,
         path: 'media',
         params: {
           append: 'preview,thumbnail',
