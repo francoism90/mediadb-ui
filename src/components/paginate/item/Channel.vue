@@ -37,7 +37,7 @@
     </q-menu>
 
     <a
-      class="block item-preview"
+      class="block item-placeholder"
       :class="menuActive ? '' : 'cursor-pointer'"
       @click.prevent="onClick"
     >
@@ -45,6 +45,7 @@
         :alt="item.name"
         :src="item.thumbnail"
         :ratio="1"
+        img-class="item-cover"
         placeholder-src="~assets/placeholders/320x480.png"
         width="100%"
         height="180px"

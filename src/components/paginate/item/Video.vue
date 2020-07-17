@@ -37,12 +37,11 @@
     </q-menu>
 
     <a
-      class="block item-preview"
+      class="block item-placeholder"
       :class="menuActive ? '' : 'cursor-pointer'"
       @click.prevent="onClick"
     >
       <preview
-        class="item-preview"
         :name="item.name"
         :poster="item.thumbnail"
         :src="item.preview"
