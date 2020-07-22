@@ -25,6 +25,7 @@
         autoplay
         playsinline
         muted
+        disablePictureInPicture
         disableRemotePlayback
         @abort="showPreview = false"
         @ended="showPreview = false"
@@ -35,7 +36,6 @@
 
 <script>
 export default {
-
   props: {
     name: {
       type: String,

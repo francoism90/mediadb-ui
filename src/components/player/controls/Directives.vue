@@ -39,7 +39,6 @@
 import { mapActions } from 'vuex'
 
 export default {
-
   props: {
     data: {
       type: Object,

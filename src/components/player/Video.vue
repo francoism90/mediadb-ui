@@ -12,11 +12,11 @@
       class="absolute fit"
       playsinline
       preload="auto"
-      :poster="data.thumbnail"
+      :poster="data.thumbnail_url"
       :height="data.properties.height || 360"
       :width="data.properties.width || 480"
-      @canplay="player.play()"
     />
+
     <control-container />
   </div>
 </template>
@@ -50,7 +50,9 @@ export default {
           rebufferingGoal: 2,
           bufferingGoal: 10,
           bufferBehind: 30,
-          jumpLargeGaps: true
+          jumpLargeGaps: true,
+          ignoreTextStreamFailures: true,
+          alwaysStreamText: true
         }
       },
       bindings: [
@@ -122,12 +124,12 @@ export default {
   methods: {
     ...mapActions('player', [
       'create',
-      'thumbnail',
       'update'
     ]),
 
     ...mapMutations('player', [
-      'setFullscreen'
+      'setFullscreen',
+      'setTrack'
     ]),
 
     async initialize () {
@@ -141,9 +143,29 @@ export default {
         await this.instance.configure(this.settings)
         await this.instance.load(this.data.stream_url)
 
+        // Add sprite metadata
+        const metadata = await this.instance.addTextTrack(
+          this.data.sprite_url,
+          'eng',
+          'metadata',
+          'text/vtt'
+        )
+
+        await this.instance.selectTextTrack(metadata)
+
+        // Add listeners
         for (const listener of this.listeners) {
           this.player.addEventListener(listener, this.dispatchEvents)
         }
+
+        // Active text tracks
+        this.setTrack({
+          key: 'metadata-sprite',
+          value: this.player.textTracks[0]
+        })
+
+        // Start the video
+        this.player.play()
       } catch (e) {}
     },
 

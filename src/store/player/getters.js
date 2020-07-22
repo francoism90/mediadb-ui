@@ -9,3 +9,7 @@ export function getData (state) {
 export function getModel (state) {
   return state.model
 }
+
+export function getTracks (state) {
+  return state.tracks
+}

@@ -9,7 +9,7 @@ export function getStores (state) {
       apiRoute: {
         path: 'media',
         params: {
-          append: 'preview,thumbnail',
+          append: 'preview_url,thumbnail_url',
           include: 'model,tags',
           'filter[query]': state.query,
           'page[size]': 9,
@@ -25,7 +25,7 @@ export function getStores (state) {
       apiRoute: {
         path: 'channel',
         params: {
-          append: 'thumbnail,items',
+          append: 'thumbnail_url,items',
           include: 'model,tags',
           'filter[query]': state.query,
           'page[size]': 12,
@@ -41,7 +41,7 @@ export function getStores (state) {
       apiRoute: {
         path: 'playlist',
         params: {
-          append: 'thumbnail,items',
+          append: 'thumbnail_url,items',
           include: 'model,tags',
           'filter[query]': state.query,
           'page[size]': 12,

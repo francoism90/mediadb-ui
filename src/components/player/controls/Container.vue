@@ -18,7 +18,11 @@
       @mousemove="showControls()"
       @mouseover="showControls()"
     >
-      <seeker :data="data" />
+      <seeker
+        :data="data"
+        :model="model"
+        :tracks="tracks"
+      />
 
       <div class="row no-wrap justify-between items-center q-mb-sm">
         <div class="col">
@@ -55,7 +59,9 @@ export default {
     ]),
 
     ...mapGetters('player', {
-      data: 'getData'
+      data: 'getData',
+      model: 'getModel',
+      tracks: 'getTracks'
     })
   },
 

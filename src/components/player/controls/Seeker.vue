@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="data && model"
     class="player-seeker"
     :style="cssVars"
   >
@@ -40,11 +41,22 @@ export default {
     data: {
       type: Object,
       required: true
+    },
+
+    model: {
+      type: Object,
+      required: true
+    },
+
+    tracks: {
+      type: Array,
+      default: null
     }
   },
 
   data () {
     return {
+      activeCue: { url: '', x: 0, y: 0 },
       seekerHover: false,
       seekerHoverPercent: 0,
       seekerHoverPosition: 0
@@ -92,9 +104,23 @@ export default {
       }
     },
 
+    tooltipMargin () {
+      if (this.seekerHoverPercent <= 5) {
+        return 0
+      }
+
+      if (this.seekerHoverPercent >= 95) {
+        return '0 0 0 auto'
+      }
+
+      return `0 ${this.seekerHoverPosition - 80}px`
+    },
+
     tooltip () {
       return {
-        marginLeft: (this.seekerHoverPosition - 80) + 'px' // width % 2
+        backgroundImage: `url(${this.activeCue.url})`,
+        backgroundPosition: `-${this.activeCue.x}px -${this.activeCue.y}px`,
+        margin: this.tooltipMargin
       }
     }
   },
@@ -108,11 +134,43 @@ export default {
       return this.data.duration * (percent / 100)
     },
 
+    setTrackCue (percent = 0) {
+      const tracks = this.tracks['metadata-sprite']
+
+      const cues = tracks.cues || null
+      const time = Math.floor(this.getTimeByPct(percent))
+
+      if (!tracks || !cues) {
+        return
+      }
+
+      for (const cue in cues) {
+        const vttCue = cues[cue]
+
+        if (!vttCue.startTime || !vttCue.endTime || !vttCue.text) {
+          continue
+        }
+
+        if (vttCue.startTime >= time && time <= vttCue.endTime) {
+          const metadata = JSON.parse(vttCue.text)
+
+          this.activeCue = {
+            url: metadata.url,
+            x: metadata.x,
+            y: metadata.y
+          }
+          break
+        }
+      }
+    },
+
     onSeekerHover (event) {
       const seekerWidth = dom.width(this.$refs.seeker)
       const seekerOffset = dom.offset(this.$refs.seeker)
       const position = event.clientX - seekerOffset.left
       const percent = (position) / seekerWidth * 100
+
+      this.setTrackCue(percent)
 
       this.seekerHoverPercent = percent
       this.seekerHoverPosition = position

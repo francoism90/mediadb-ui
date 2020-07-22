@@ -27,6 +27,12 @@ export function setFullscreen (state, payload = false) {
   state.fullscreen = payload
 }
 
+export function setTrack (state, payload = {}) {
+  const { key = null, value = {} } = payload
+
+  state.tracks[key] = value
+}
+
 export function setModel (state, payload = {}) {
   state.model = Object.assign({}, state.model, payload)
 }

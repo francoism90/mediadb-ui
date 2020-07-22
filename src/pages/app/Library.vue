@@ -47,7 +47,7 @@ export default {
         preFetch: true,
         path: 'media',
         params: {
-          append: 'preview,thumbnail',
+          append: 'preview_url,thumbnail_url',
           include: 'model,tags',
           'page[size]': 12
         }

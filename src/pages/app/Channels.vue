@@ -49,7 +49,7 @@ export default {
         preFetch: true,
         path: 'channel',
         params: {
-          append: 'thumbnail,items',
+          append: 'thumbnail_url,items',
           include: 'model,tags',
           'page[size]': 16
         }

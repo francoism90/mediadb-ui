@@ -43,8 +43,8 @@
     >
       <preview
         :name="item.name"
-        :poster="item.thumbnail"
-        :src="item.preview"
+        :poster="item.thumbnail_url"
+        :src="item.preview_url"
       />
     </a>
 
@@ -82,7 +82,6 @@
 
 <script>
 export default {
-
   components: {
     Preview: () => import('components/ui/Preview'),
     Tag: () => import('components/ui/Tag')

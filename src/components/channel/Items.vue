@@ -46,7 +46,7 @@ export default {
         preFetch: true,
         path: 'media',
         params: {
-          append: 'preview,thumbnail',
+          append: 'preview_url,thumbnail_url',
           include: 'model,tags',
           'filter[channel]': this.data.id,
           'page[size]': 12,

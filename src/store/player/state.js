@@ -5,6 +5,7 @@ export default function () {
     callback: {},
     controls: true,
     fullscreen: false,
+    tracks: [],
     data: {
       buffered: null,
       currentTime: 0,
