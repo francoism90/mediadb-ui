@@ -21,7 +21,7 @@
     "moment": "^2.27.0",
     "quasar": "^1.12.13",
     "shaka-player": "^3.0.1",
-    "vue-i18n": "^8.18.2",
+    "vue-i18n": "^8.19.0",
     "vue-shortkey": "^3.1.7",
     "vue-timers": "^2.0.4",
     "vuelidate": "^0.7.5"

@@ -3,5 +3,5 @@ export function create ({ commit }, params = {}) {
 
   commit('resetState')
   commit('setData', data)
-  commit('setValidation', validations)
+  commit('setValidations', validations)
 }

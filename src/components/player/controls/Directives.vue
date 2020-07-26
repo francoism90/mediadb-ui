@@ -1,7 +1,8 @@
 <template>
   <div
+    v-touch-swipe.mouse.left.right="handleSwipe"
     class="fit"
-    @wheel="onWheel"
+    @wheel="handleWheel"
     @click.prevent="callback({ type: 'togglePlay' })"
     @dblclick.prevent="callback({ type: 'toggleFullscreen' })"
   >
@@ -58,10 +59,18 @@ export default {
       'callback'
     ]),
 
-    onWheel (event) {
+    handleWheel (event) {
       if (event.deltaX < 0) {
         this.callback({ type: 'rewind' })
       } else if (event.deltaX > 0) {
+        this.callback({ type: 'forward' })
+      }
+    },
+
+    handleSwipe ({ evt, ...info }) {
+      if (info.direction === 'left') {
+        this.callback({ type: 'rewind' })
+      } else if (info.direction === 'right') {
         this.callback({ type: 'forward' })
       }
     }

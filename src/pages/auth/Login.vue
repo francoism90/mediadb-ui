@@ -21,7 +21,7 @@
             @submit="onSubmit"
           >
             <q-input
-              v-model="body.email"
+              v-model.trim="body.email"
               dark
               filled
               clearable
@@ -35,7 +35,7 @@
             />
 
             <q-input
-              v-model="body.password"
+              v-model.trim="body.password"
               dark
               filled
               clearable
@@ -81,7 +81,13 @@ export default {
 
         this.$router.replace(this.$route.query.redirect || '/')
       } catch (e) {
-        alert(e || 'Unable to login. Please try again later.')
+        this.$q.notify({
+          progress: true,
+          timeout: 1500,
+          position: 'top',
+          message: e.response.data ? e.response.data.message : 'Unable to login.',
+          type: 'negative'
+        })
       }
     }
   }

@@ -20,7 +20,7 @@ export const validateHandler = {
 
       this.$v[key].$touch()
 
-      this.$store.commit(this.namespace + '/setValidation', {
+      this.$store.commit(this.namespace + '/setValidations', {
         [key]: {
           invalid: this.$v[key].$invalid,
           dirty: this.$v[key].$dirty,

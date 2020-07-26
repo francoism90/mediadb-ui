@@ -1,6 +1,6 @@
 <template>
   <div
-    v-touch-pan.horizontal.prevent="onTouch"
+    v-touch-pan.horizontal.prevent="handleSwipe"
     @mouseover="showPreview = true"
     @mouseout="showPreview = false"
   >
@@ -72,10 +72,8 @@ export default {
   },
 
   methods: {
-    onTouch () {
-      if (this.$q.screen.lt.md) {
-        this.showPreview = true
-      }
+    handleSwipe ({ evt, ...info }) {
+      this.showPreview = true
     }
   }
 }

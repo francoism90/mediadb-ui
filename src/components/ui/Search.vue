@@ -1,7 +1,7 @@
 <template>
   <div class="toolbar-input">
     <q-input
-      v-model="model"
+      v-model.trim="model"
       dark
       clearable
       dense

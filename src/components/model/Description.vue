@@ -1,6 +1,6 @@
 <template>
   <q-input
-    v-model="description"
+    v-model.trim="description"
     dark
     square
     filled

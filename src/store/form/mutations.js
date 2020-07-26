@@ -12,7 +12,7 @@ export function setData (state, payload = {}) {
   state.data = Object.assign({}, state.data, finalData)
 }
 
-export function setValidation (state, payload = {}) {
+export function setValidations (state, payload = {}) {
   const currentValidations = state.validations || {}
   const finalValidations = { ...currentValidations, ...payload }
 
