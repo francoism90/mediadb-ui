@@ -37,7 +37,7 @@
             dense
             flat
             round
-            icon="add"
+            icon="notifications"
           >
             <q-tooltip>Add Items</q-tooltip>
           </q-btn>
@@ -197,9 +197,10 @@ export default {
         { label: 'Channels', name: 'channels', icon: 'live_tv', separator: false },
         { label: 'Tags', name: 'tags', icon: 'label', separator: false },
         { label: 'Playlists', name: 'playlists', icon: 'layers', separator: true },
-        { label: 'History', name: 'history', icon: 'history', separator: false },
+        { label: 'Subscriptions', name: 'history', icon: 'subscriptions', separator: false },
+        { label: 'Watch Later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
-        { label: 'Your videos', name: 'history', icon: 'cloud_upload', separator: false }
+        { label: 'History', name: 'history', icon: 'history', separator: false }
       ]
     }
   },

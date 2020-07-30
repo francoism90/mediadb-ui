@@ -90,7 +90,6 @@ export default {
     async setOptions () {
       await this.$store.dispatch(this.namespace + '_channel/create', {
         path: 'channel',
-
         params: {
           'page[size]': 5,
           sort: 'updated'

@@ -92,8 +92,8 @@ export default {
     return {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
-        { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Viewed', value: 'views' },
         { label: 'Shortest to Longest', value: 'shortest' },
         { label: 'Longest to Shortest', value: 'longest' }
       ]

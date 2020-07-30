@@ -54,8 +54,8 @@ export default {
         }
       },
       sorters: [
-        { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' },
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Viewed', value: 'views' },
         { label: 'At Random', value: 'recommended' },
         { label: 'Alphabetical', value: 'name' },
         { label: 'Shortest to Longest', value: 'shortest' },

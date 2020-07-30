@@ -1,6 +1,6 @@
 <template>
-  <section class="container fluid q-py-md">
-    <div class="fit row wrap justify-between items-center q-col-gutter-md">
+  <section class="container fluid q-pt-lg q-pb-sm">
+    <div class="fit row wrap justify-between items-start q-col-gutter-y-md">
       <div class="col-6 col-md-6 col-xs-12">
         <div class="text-h5 text-grey-5">
           {{ data.name }}

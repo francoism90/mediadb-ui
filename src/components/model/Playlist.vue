@@ -92,10 +92,9 @@ export default {
     async setOptions () {
       await this.$store.dispatch(this.namespace + '_playlists/create', {
         path: 'playlist',
-
         params: {
           'page[size]': 6,
-          'filter[user]': true,
+          'filter[type]': 'user',
           sort: 'updated'
         }
       })

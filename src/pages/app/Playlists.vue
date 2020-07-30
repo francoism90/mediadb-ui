@@ -8,6 +8,12 @@
         :namespace="namespace"
         field="sort"
         :options="sorters"
+        class="q-mr-lg"
+      />
+      <filters
+        :namespace="namespace"
+        field="filter[type]"
+        :options="types"
       />
     </q-btn-group>
 
@@ -52,15 +58,20 @@ export default {
         params: {
           append: 'thumbnail_url,items',
           include: 'model,tags',
+          'filter[type]': 'user',
           'page[size]': 16
         }
       },
       sorters: [
-        { label: 'Recommended for You', value: 'recommended' },
+        { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
         { label: 'Alphabetical', value: 'name' },
-        { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' }
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Viewed', value: 'views' }
+      ],
+      types: [
+        { label: 'My Playlists', value: 'user' },
+        { label: 'Community', value: 'community' }
       ]
     }
   },

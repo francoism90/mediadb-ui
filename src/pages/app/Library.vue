@@ -53,10 +53,10 @@ export default {
         }
       },
       sorters: [
-        { label: 'Recommended for You', value: 'recommended' },
+        { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
-        { label: 'Most recent', value: 'recent' },
-        { label: 'Most viewed', value: 'views' }
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Viewed', value: 'views' }
       ]
     }
   },

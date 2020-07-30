@@ -12,7 +12,7 @@
         img-class="item-cover"
         placeholder-src="~assets/placeholders/320x480.png"
         width="100%"
-        height="180px"
+        height="160px"
         loading="lazy"
       />
     </template>
