@@ -1,75 +1,147 @@
 <template>
   <q-card
-    v-if="ready"
-    :key="data.id"
+    v-if="channel"
     dark
-    style="width: 530px"
+    style="width: 520px"
   >
     <q-dialog
       v-model="deleteDialog"
       persistent
     >
-      <model-delete />
+      <q-card dark>
+        <q-card-section class="row items-center">
+          <q-avatar
+            icon="delete_forever"
+            color="primary"
+            text-color="white"
+          />
+          <span class="q-ml-sm">Are you sure you want to delete this channel?</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            v-close-popup
+            flat
+            label="Cancel"
+            color="primary"
+          />
+          <q-btn
+            flat
+            label="Confirm"
+            color="primary"
+            @click.prevent="onDelete"
+          />
+        </q-card-actions>
+      </q-card>
     </q-dialog>
 
-    <q-toolbar>
-      <q-toolbar-title class="q-mx-xs">
-        {{ data.name }}
-      </q-toolbar-title>
-      <q-btn
-        v-close-popup
-        flat
-        round
-        dense
-        icon="close"
-      />
-    </q-toolbar>
-
-    <q-card-section
-      style="max-height: 50vh"
-      class="scroll q-gutter-y-md"
+    <q-inner-loading
+      dark
+      :showing="!channel.id"
     >
-      <model-name />
-      <model-tags />
-      <model-description />
-    </q-card-section>
+      <q-spinner
+        size="50px"
+        color="primary"
+      />
+    </q-inner-loading>
 
-    <q-card-actions
-      align="right"
-      class="q-mx-sm"
+    <transition
+      appear
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
     >
-      <q-btn
-        flat
-        label="Delete"
-        color="primary"
-        @click="deleteDialog = true"
-      />
-      <q-btn
-        flat
-        type="submit"
-        label="Save"
-        color="primary"
-        @click="onSubmit"
-      />
-    </q-card-actions>
+      <q-form
+        v-if="form"
+        @submit="onSubmit"
+      >
+        <q-card-section class="row items-center">
+          <div class="text-h6">
+            {{ channel.name }}
+          </div>
+          <q-space />
+          <q-btn
+            v-close-popup
+            icon="close"
+            round
+            unelevated
+            color="grey-9"
+            dense
+            size="12px"
+          />
+        </q-card-section>
+
+        <q-separator dark />
+
+        <q-card-section>
+          <q-input
+            v-model.trim="form.name"
+            dark
+            square
+            filled
+            label="Name"
+            clearable
+            :error-message="getError('name')"
+            :error="hasError('name')"
+          />
+
+          <q-select
+            v-model="form.tags"
+            dark
+            square
+            filled
+            :error-message="getError('tags')"
+            :error="hasError('tags')"
+            :input-debounce="300"
+            :options="tags"
+            :max-values="15"
+            clearable
+            hide-dropdown-icon
+            counter
+            use-chips
+            label="Tags"
+            options-dark
+            option-label="name"
+            option-value="id"
+            stack-label
+            multiple
+            use-input
+            @filter="filterTags"
+          />
+        </q-card-section>
+
+        <q-separator dark />
+
+        <q-card-actions
+          align="right"
+        >
+          <q-btn
+            flat
+            label="Delete"
+            color="primary"
+            @click="deleteDialog = true"
+          />
+          <q-btn
+            flat
+            type="submit"
+            label="Save"
+            color="primary"
+          />
+        </q-card-actions>
+      </q-form>
+    </transition>
   </q-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import formModule from 'src/store/form'
-import modelModule from 'src/store/model'
+import { formHandler } from 'src/mixins/form'
+import Channel from 'src/models/Channel'
+import Tag from 'src/models/Tag'
 
 export default {
-  components: {
-    ModelDelete: () => import('components/model/Delete'),
-    ModelDescription: () => import('components/model/Description'),
-    ModelName: () => import('components/model/Name'),
-    ModelTags: () => import('components/model/Tags')
-  },
+  mixins: [formHandler],
 
   props: {
-    props: {
+    data: {
       type: Object,
       required: true
     }
@@ -77,74 +149,81 @@ export default {
 
   data () {
     return {
-      deleteDialog: false
+      deleteDialog: false,
+      channel: {},
+      tags: []
     }
   },
 
-  computed: {
-    ...mapGetters('model_edit', {
-      ready: 'isReady',
-      data: 'getData'
-    }),
-
-    formData () {
-      return this.$store.getters['form_edit/getData']
-    },
-
-    isValid () {
-      return this.$store.getters['form_edit/isValid']
-    }
-  },
-
-  async created () {
-    if (!this.$store.hasModule('model_edit')) {
-      this.$store.registerModule('form_edit', formModule)
-      this.$store.registerModule('model_edit', modelModule)
-    }
-
-    await this.$store.dispatch('model_edit/fetch', {
-      path: 'channel/' + this.props.id
-    })
-
-    // Set data to be allowed overwritten
-    this.$store.dispatch('form_edit/create', {
-      data: {
-        name: this.data.name || '',
-        description: this.data.description || '',
-        tags: this.data.relationships.tags || []
-      }
-    })
-  },
-
-  beforeDestroy () {
-    this.$store.unregisterModule('form_edit')
-    this.$store.unregisterModule('model_edit')
+  created () {
+    this.setModel()
   },
 
   methods: {
-    async onSubmit () {
-      if (!this.isValid) {
-        return
-      }
+    async setModel () {
+      this.channel = await Channel.$find(this.data.id)
 
-      await this.$store.dispatch('model_edit/update', {
-        body: this.formData
-      })
-
-      await this.refreshStores()
-
-      this.$q.notify({
-        progress: true,
-        timeout: 1500,
-        position: 'top',
-        message: `${this.data.name} has been updated.`,
-        type: 'positive'
+      this.setForm({
+        id: this.channel.id,
+        name: this.channel.name,
+        description: this.channel.description,
+        tags: this.channel.relationships.tags
       })
     },
 
-    async refreshStores () {
-      if (this.$store.hasModule('channel')) {
-        await this.$store.dispatch('channel/refresh')
+    async filterTags (val, update, abort) {
+      this.tags = await Tag
+        .where('query', val || null)
+        .orderBy(val.length ? 'relevance' : 'items')
+        .page(1)
+        .limit(5)
+        .$get()
+
+      update()
+    },
+
+    async onSubmit () {
+      try {
+        const channel = new Channel(this.form)
+
+        // Save model changes
+        await channel.save()
+
+        // Refresh model
+        await this.setModel()
+
+        this.$q.notify({
+          progress: true,
+          timeout: 1500,
+          position: 'top',
+          message: `${this.channel.name} has been updated.`,
+          type: 'positive'
+        })
+      } catch (e) {
+        this.setMessage(e.response.data.message || '')
+        this.setErrors(e.response.data.errors || [])
+      }
+    },
+
+    async onDelete () {
+      try {
+        await this.channel.delete()
+
+        this.$q.notify({
+          progress: true,
+          position: 'top',
+          message: `${this.channel.name} has been deleted.`,
+          type: 'positive'
+        })
+
+        this.$store.dispatch('dialog/close')
+      } catch (e) {
+        this.$q.notify({
+          progress: true,
+          position: 'top',
+          message: e.response.data.message || 'Unable to delete channel',
+          type: 'negative'
+        })
       }
     }
   }

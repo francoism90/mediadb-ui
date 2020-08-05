@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// Vuex modules
 import dialog from './dialog'
 import player from './player'
-import search from './search'
 import session from './session'
 
 Vue.use(Vuex)
@@ -22,12 +22,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       dialog,
       player,
-      search,
       session
     },
-
-    // enable strict mode (adds overhead!)
-    // for dev mode only
     strict: process.env.DEV
   })
 

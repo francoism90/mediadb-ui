@@ -34,7 +34,6 @@
 
 <script>
 import { dom } from 'quasar'
-import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -126,21 +125,20 @@ export default {
   },
 
   methods: {
-    ...mapActions('player', [
-      'callback'
-    ]),
+    callback (value) {
+      this.$root.$emit('player_event', value)
+    },
 
     getTimeByPct (percent = 0) {
       return this.data.duration * (percent / 100)
     },
 
     setTrackCue (percent = 0) {
-      const tracks = this.tracks['metadata-sprite']
-
-      const cues = tracks.cues || null
+      const track = this.tracks.find(({ key }) => key === 'metadata-sprite')
+      const cues = track.value.cues || null
       const time = Math.floor(this.getTimeByPct(percent))
 
-      if (!tracks || !cues) {
+      if (!cues) {
         return
       }
 

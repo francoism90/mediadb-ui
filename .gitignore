@@ -3,6 +3,7 @@
 node_modules
 
 # Quasar core related directories
+.env
 .quasar
 /dist
 /public

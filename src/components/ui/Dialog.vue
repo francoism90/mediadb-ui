@@ -5,7 +5,7 @@
   >
     <component
       :is="getComponent"
-      :props="getData"
+      :data="getData"
     />
   </q-dialog>
 </template>
@@ -16,10 +16,9 @@ import { mapGetters } from 'vuex'
 export default {
   components: {
     ChannelEdit: () => import('components/channel/Edit'),
-    PlayerInfo: () => import('components/player/Info'),
-    PlaylistEdit: () => import('components/playlist/Edit'),
-    VideoEdit: () => import('components/video/Edit'),
-    VideoSave: () => import('components/video/Save')
+    CollectionEdit: () => import('components/collection/Edit'),
+    MediaEdit: () => import('components/media/Edit'),
+    MediaSave: () => import('components/media/Save')
   },
 
   computed: {

@@ -1,68 +1,95 @@
 <template>
-  <q-page class="container fluid">
-    <info
-      :ready="ready"
-      :items="items"
+  <q-page
+    :key="id"
+    class="container fluid"
+  >
+    <intro v-if="query === ''" />
+
+    <overview
+      v-else-if="query && !type"
       :query="query"
-      :store="store"
     />
 
-    <template v-if="ready && !store && query">
-      <div
-        v-for="storeModule in stores"
-        :key="storeModule.namespace"
-      >
-        <items
-          :namespace="storeModule.namespace"
-          :item-component="storeModule.itemComponent"
-          :items="storeItems(storeModule.namespace)"
-          :label="storeModule.label"
-          :query="query"
-          :summary="true"
-        />
-      </div>
-    </template>
-
-    <template v-else-if="ready && store && query">
-      <items
-        :namespace="store.namespace"
-        :item-component="store.itemComponent"
-        :items="storeItems(store.namespace)"
-        :label="store.label"
-        :query="query"
-      />
-    </template>
+    <component
+      :is="getComponentType"
+      v-else-if="query && type"
+      :query="query"
+    />
   </q-page>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import paginateModule from 'src/store/paginate'
 
 export default {
-  components: {
-    Info: () => import('components/search/Info'),
-    Items: () => import('components/search/Items')
+  preFetch ({ store }) {
+    const searchStores = [
+      'search_media',
+      'search_channels',
+      'search_collections',
+      'search_tags'
+    ]
+
+    for (const searchStore of searchStores) {
+      if (!store.hasModule(searchStore)) {
+        store.registerModule(searchStore, paginateModule)
+      }
+    }
   },
 
-  meta () {
+  components: {
+    Intro: () => import('components/search/Intro'),
+    Overview: () => import('components/search/Overview'),
+    Media: () => import('components/search/Media'),
+    Collections: () => import('components/search/Collections'),
+    Tags: () => import('components/search/Tags')
+  },
+
+  data () {
     return {
-      title: 'Search'
+      id: null,
+      query: '',
+      type: '',
+      componentTypes: {
+        media: 'Media',
+        collection: 'Collections',
+        channel: 'Channels',
+        tag: 'Tags'
+      }
     }
   },
 
   computed: {
-    ...mapGetters('search', {
-      items: 'getItemCount',
-      query: 'getQuery',
-      ready: 'isReady',
-      store: 'getStore',
-      stores: 'getStores'
-    })
+    getComponentType () {
+      const hasComponent = Object.prototype.hasOwnProperty.call(
+        this.componentTypes,
+        this.type
+      )
+
+      return !hasComponent ? this.componentTypes[0] : this.componentTypes[this.type]
+    }
+  },
+
+  created () {
+    this.setQuery(this.$route)
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    this.setQuery(to)
+    next()
+  },
+
+  meta () {
+    return {
+      title: this.query || 'Search'
+    }
   },
 
   methods: {
-    storeItems (namespace = null) {
-      return this.$store.getters[namespace + '/getItemCount']
+    setQuery (route = {}) {
+      this.id = this.$sanitize(route.query.id || +new Date())
+      this.query = this.$sanitize(route.query.q || '')
+      this.type = this.$sanitize(route.query.type || '')
     }
   }
 }

@@ -196,7 +196,7 @@ export default {
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Channels', name: 'channels', icon: 'live_tv', separator: false },
         { label: 'Tags', name: 'tags', icon: 'label', separator: false },
-        { label: 'Playlists', name: 'playlists', icon: 'layers', separator: true },
+        { label: 'Collections', name: 'collections', icon: 'layers', separator: true },
         { label: 'Subscriptions', name: 'history', icon: 'subscriptions', separator: false },
         { label: 'Watch Later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },

@@ -37,22 +37,22 @@ const routes = [
     props: true
   },
   {
-    name: 'playlists',
-    path: '/playlists',
-    component: () => import('pages/app/Playlists.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'playlist',
-    path: '/playlist/:id/:slug?',
-    component: () => import('pages/app/Playlist.vue'),
+    name: 'media',
+    path: '/media/:id/:slug?',
+    component: () => import('pages/app/Media.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },
   {
-    name: 'video',
-    path: '/video/:id/:slug?',
-    component: () => import('pages/app/Video.vue'),
+    name: 'collections',
+    path: '/collections',
+    component: () => import('pages/app/Collections.vue'),
+    meta: { auth: true, layout: 'Main' }
+  },
+  {
+    name: 'collection',
+    path: '/collection/:id/:slug?',
+    component: () => import('pages/app/Collection.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },

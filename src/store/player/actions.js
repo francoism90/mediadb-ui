@@ -1,17 +1,17 @@
-export function create ({ commit }, model = {}) {
-  // Reset current state
-  commit('setReady', false)
+export function initialize ({ commit }, payload = {}) {
+  const { model = {}, tracks = [] } = payload
+
+  // Reset state
   commit('resetState')
 
   // Set model
   commit('setModel', model)
+  commit('setTracks', tracks)
+
+  // Set ready
   commit('setReady', true)
 }
 
-export function update ({ commit }, params = {}) {
-  commit('setData', params)
-}
-
-export function callback ({ commit }, params = {}) {
-  commit('setCallback', params)
+export function reset ({ commit }) {
+  commit('resetState')
 }

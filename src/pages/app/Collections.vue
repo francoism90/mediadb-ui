@@ -1,0 +1,165 @@
+<template>
+  <q-page class="container fluid">
+    <q-btn-group
+      class="q-py-md"
+      unelevated
+    >
+      <q-select
+        v-model="sorter"
+        :options="sorters"
+        :loading="!ready"
+        dark
+        dense
+        dropdown-icon="keyboard_arrow_down"
+        options-dark
+        square
+        class="q-mr-lg"
+      />
+
+      <q-select
+        v-model="type"
+        :options="types"
+        :loading="!ready"
+        dark
+        dense
+        dropdown-icon="keyboard_arrow_down"
+        options-dark
+        square
+      />
+    </q-btn-group>
+
+    <q-pull-to-refresh
+      :key="id"
+      :disable="!ready"
+      @refresh="onRefresh"
+    >
+      <q-infinite-scroll
+        :debounce="300"
+        @load="onLoad"
+      >
+        <div class="row q-col-gutter-md items">
+          <div
+            v-for="(item, index) in data"
+            :key="index"
+            class="col-xs-12 col-sm-6 col-md-3 col-lg-2"
+          >
+            <collection-item :data="item" />
+          </div>
+        </div>
+
+        <template v-slot:loading>
+          <div class="row no-wrap justify-center q-my-md">
+            <q-spinner-dots
+              color="primary"
+              size="40px"
+            />
+          </div>
+        </template>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
+  </q-page>
+</template>
+
+<script>
+import { mapActions, mapGetters, mapState } from 'vuex'
+import Collection from 'src/models/Collection'
+import paginateModule from 'src/store/paginate'
+
+export default {
+  preFetch ({ store }) {
+    if (!store.hasModule('collections')) {
+      store.registerModule('collections', paginateModule)
+    }
+  },
+
+  components: {
+    CollectionItem: () => import('components/collection/Item')
+  },
+
+  data () {
+    return {
+      sorters: [
+        { label: 'Recommended', value: 'recommended' },
+        { label: 'Trending', value: 'trending' },
+        { label: 'Alphabetical', value: 'name' },
+        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Viewed', value: 'views' }
+      ],
+      types: [
+        { label: 'My Collections', value: 'user' },
+        { label: 'Community', value: 'community' }
+      ]
+    }
+  },
+
+  computed: {
+    ...mapState('collections', [
+      'id',
+      'data',
+      'options',
+      'page',
+      'ready'
+    ]),
+
+    ...mapGetters('collections', [
+      'getIsLoaded'
+    ]),
+
+    sorter: {
+      get () {
+        return this.options.sorter || this.sorters[0]
+      },
+
+      set (value) {
+        this.resetPages({ sorter: value })
+      }
+    },
+
+    type: {
+      get () {
+        return this.options.type || this.types[0]
+      },
+
+      set (value) {
+        this.resetPages({ type: value })
+      }
+    }
+  },
+
+  meta () {
+    return {
+      title: 'Collections'
+    }
+  },
+
+  methods: {
+    ...mapActions('collections', [
+      'resetPages',
+      'setPage'
+    ]),
+
+    async setModels () {
+      const response = await Collection
+        .where('type', this.type.value)
+        .include(['model', 'tags'])
+        .append(['items', 'thumbnail_url'])
+        .orderBy(this.sorter.value)
+        .page(this.page)
+        .limit(16)
+        .get()
+
+      this.setPage(response)
+    },
+
+    async onLoad (index, done) {
+      await this.setModels()
+      done(this.getIsLoaded)
+    },
+
+    async onRefresh (done) {
+      await this.resetPages()
+      done()
+    }
+  }
+}
+</script>

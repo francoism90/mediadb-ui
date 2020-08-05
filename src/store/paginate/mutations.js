@@ -4,22 +4,8 @@ export function resetState (state) {
   state = Object.assign(state, defaultState())
 }
 
-export function setRoute (state, payload = {}) {
-  const { path = null, params = {} } = payload
-
-  const currentParams = state.params || {}
-  const finalParams = { ...currentParams, ...params }
-
-  state.path = path || state.path
-  state.params = Object.assign({}, state.params, finalParams)
-}
-
-export function setLoading (state, payload = false) {
-  state.loading = payload
-}
-
-export function setReady (state, payload = false) {
-  state.ready = payload
+export function resetPage (state) {
+  state.page = 1
 }
 
 export function resetItems (state) {
@@ -27,28 +13,35 @@ export function resetItems (state) {
   state.meta = {}
 }
 
-export function setItems (state, payload = {}) {
-  const { data = [], meta = {} } = payload
-
-  if (meta) {
-    state.meta = meta
-
-    if (data.length && meta.current_page <= meta.last_page) {
-      const moduleData = state.data.concat(data)
-
-      state.data = moduleData
-    }
-  }
+export function resetOptions (state) {
+  state.options = {}
 }
 
-export function resetId (state) {
-  state.id = +new Date()
+export function setId (state, value = null) {
+  state.id = value || +new Date()
 }
 
-export function resetPage (state) {
-  state.params['page[number]'] = 1
+export function setData (state, data = []) {
+  const currentData = state.data.concat(data)
+
+  state.data = currentData
+}
+
+export function setMeta (state, meta = {}) {
+  state.meta = meta
+}
+
+export function setOption (state, payload = {}) {
+  const currentOptions = state.options || {}
+  const finalOptions = { ...currentOptions, ...payload }
+
+  state.options = Object.assign({}, state.options, finalOptions)
+}
+
+export function setReady (state, payload = false) {
+  state.ready = payload
 }
 
 export function increasePage (state) {
-  state.params['page[number]']++
+  state.page += 1
 }

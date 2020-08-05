@@ -1,32 +1,42 @@
-export const validateHandler = {
-  props: {
-    namespace: {
-      type: String,
-      default: 'form_edit'
-    }
-  },
+import { get, has } from 'lodash'
 
-  computed: {
-    data () {
-      return this.$store.getters[this.namespace + '/getData']
+export const formHandler = {
+  data () {
+    return {
+      form: null,
+      message: null,
+      errors: {}
     }
   },
 
   methods: {
-    validate (key) {
-      if (!key || !this.$v[key]) {
-        return
-      }
+    setForm (data = {}) {
+      this.form = data
+    },
 
-      this.$v[key].$touch()
+    resetErrors () {
+      this.message = null
+      this.errors = {}
+    },
 
-      this.$store.commit(this.namespace + '/setValidations', {
-        [key]: {
-          invalid: this.$v[key].$invalid,
-          dirty: this.$v[key].$dirty,
-          error: this.$v[key].$error
-        }
-      })
+    setMessage (message = '') {
+      this.message = message
+    },
+
+    setErrors (errors = {}) {
+      this.errors = errors
+    },
+
+    hasError (field) {
+      return has(this.errors, field)
+    },
+
+    getError (field) {
+      return get(this.errors, `${field}[0]`)
+    },
+
+    getErrors (field) {
+      return get(this.errors, field)
     }
   }
 }

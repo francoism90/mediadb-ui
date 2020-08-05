@@ -1,54 +1,36 @@
-import { axiosInstance } from 'boot/axios'
+export async function setPage ({ commit, getters }, payload = {}) {
+  const { data = [], meta = {} } = payload
 
-export async function create ({ commit, dispatch, state }, route = {}) {
-  const { path = null, preFetch = false } = route
-
+  // Set ready
   commit('setReady', false)
 
-  if (path && state.path === null) {
-    commit('resetState')
-    commit('setRoute', route)
+  // Set meta
+  commit('setMeta', meta)
 
-    // Fetch first page
-    if (preFetch) {
-      await dispatch('fetch')
-    }
+  // Set data
+  if (!getters.getIsDone && data.length) {
+    commit('setData', data)
+    commit('increasePage')
   }
-
-  // Set as ready
-  commit('setReady', true)
-}
-
-export async function fetch ({ commit, getters, state }) {
-  // We got all results
-  if (getters.isLastPage) {
-    return
-  }
-
-  commit('setLoading', true)
-
-  const response = await axiosInstance.get(state.path, {
-    params: state.params
-  })
-
-  commit('setItems', response.data)
-  commit('increasePage')
-  commit('setLoading', false)
-}
-
-export async function reset ({ commit, dispatch }, route = {}) {
-  // Update route (if needed)
-  commit('setReady', false)
-  commit('setRoute', route)
-
-  // Reset all items
-  commit('resetId')
-  commit('resetItems')
-  commit('resetPage')
-
-  // Fetch first page
-  await dispatch('fetch')
 
   // Set ready
   commit('setReady', true)
+}
+
+export function resetItems ({ commit }, payload = {}) {
+  // Reset state
+  commit('resetItems')
+  commit('resetOptions')
+  commit('resetPage')
+
+  // Set option
+  commit('setOption', payload)
+}
+
+export function resetPages ({ commit }, payload = {}) {
+  // Reset state
+  commit('resetState')
+
+  // Set option
+  commit('setOption', payload)
 }

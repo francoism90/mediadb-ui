@@ -15,9 +15,9 @@ module.exports = function (ctx) {
       'auth',
       'filters',
       'inter',
+      'sanitize',
       'shortkey',
-      'timers',
-      'validate'
+      'timers'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -60,8 +60,8 @@ module.exports = function (ctx) {
       host: 'mediadb.dom',
       open: true,
       https: {
-        key: fs.readFileSync('/etc/nginx/ssl/key.pem'),
-        cert: fs.readFileSync('/etc/nginx/ssl/cert.pem')
+        key: fs.readFileSync('/home/user/.cert/key.pem'),
+        cert: fs.readFileSync('/home/user/.cert/cert.pem')
       }
     },
 
@@ -79,8 +79,8 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'AppFullscreen',
-        'Notify',
-        'Meta'
+        'Meta',
+        'Notify'
       ]
     },
 

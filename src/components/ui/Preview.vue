@@ -9,7 +9,6 @@
         :alt="name"
         :src="poster"
         :ratio="1"
-        img-class="item-cover"
         placeholder-src="~assets/placeholders/320x480.png"
         width="100%"
         height="160px"
@@ -21,7 +20,9 @@
       <video
         ref="player"
         :src="src"
-        class="item-cover"
+        width="100%"
+        height="160px"
+        class="item-preview"
         autoplay
         playsinline
         muted

@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
 export default {
   props: {
     data: {
@@ -52,9 +50,9 @@ export default {
   },
 
   methods: {
-    ...mapActions('player', [
-      'callback'
-    ])
+    callback (value) {
+      this.$root.$emit('player_event', value)
+    }
   }
 }
 </script>

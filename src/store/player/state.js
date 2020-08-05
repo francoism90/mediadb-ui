@@ -2,10 +2,9 @@ export default function () {
   return {
     ready: false,
     model: {},
-    callback: {},
+    tracks: [],
     controls: true,
     fullscreen: false,
-    tracks: [],
     data: {
       buffered: null,
       currentTime: 0,

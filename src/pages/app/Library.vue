@@ -4,22 +4,53 @@
       class="q-py-md"
       unelevated
     >
-      <filters
-        :namespace="namespace"
-        field="sort"
+      <q-select
+        v-model="sorter"
         :options="sorters"
+        :loading="!ready"
+        dark
+        dense
+        dropdown-icon="keyboard_arrow_down"
+        options-dark
+        square
       />
     </q-btn-group>
 
-    <infinite
-      :namespace="namespace"
-      :refreshable="true"
-      item-component="Video"
-    />
+    <q-pull-to-refresh
+      :key="id"
+      :disable="!ready"
+      @refresh="onRefresh"
+    >
+      <q-infinite-scroll
+        :debounce="300"
+        @load="onLoad"
+      >
+        <div class="row q-col-gutter-md items">
+          <div
+            v-for="(item, index) in data"
+            :key="index"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
+          >
+            <media-item :data="item" />
+          </div>
+        </div>
+
+        <template v-slot:loading>
+          <div class="row no-wrap justify-center q-my-md">
+            <q-spinner-dots
+              color="primary"
+              size="40px"
+            />
+          </div>
+        </template>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
   </q-page>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex'
+import Media from 'src/models/Media'
 import paginateModule from 'src/store/paginate'
 
 export default {
@@ -30,28 +61,11 @@ export default {
   },
 
   components: {
-    Infinite: () => import('components/paginate/Infinite'),
-    Filters: () => import('components/paginate/Filters')
-  },
-
-  meta () {
-    return {
-      title: 'Library'
-    }
+    MediaItem: () => import('components/media/Item')
   },
 
   data () {
     return {
-      namespace: 'library',
-      apiRoute: {
-        preFetch: true,
-        path: 'media',
-        params: {
-          append: 'preview_url,thumbnail_url',
-          include: 'model,tags',
-          'page[size]': 12
-        }
-      },
       sorters: [
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
@@ -61,8 +75,63 @@ export default {
     }
   },
 
-  async created () {
-    await this.$store.dispatch('library/create', this.apiRoute)
+  computed: {
+    ...mapState('library', [
+      'id',
+      'data',
+      'options',
+      'page',
+      'ready'
+    ]),
+
+    ...mapGetters('library', [
+      'getIsLoaded'
+    ]),
+
+    sorter: {
+      get () {
+        return this.options.sorter || this.sorters[0]
+      },
+
+      set (value) {
+        this.resetPages({ sorter: value })
+      }
+    }
+  },
+
+  meta () {
+    return {
+      title: 'Library'
+    }
+  },
+
+  methods: {
+    ...mapActions('library', [
+      'resetPages',
+      'setPage'
+    ]),
+
+    async setModels () {
+      const response = await Media
+        .include(['model', 'tags'])
+        .append(['preview_url', 'thumbnail_url'])
+        .orderBy(this.sorter.value)
+        .page(this.page)
+        .limit(12)
+        .get()
+
+      this.setPage(response)
+    },
+
+    async onLoad (index, done) {
+      await this.setModels()
+      done(this.getIsLoaded)
+    },
+
+    async onRefresh (done) {
+      await this.resetPages()
+      done()
+    }
   }
 }
 </script>

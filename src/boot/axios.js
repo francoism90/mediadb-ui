@@ -1,7 +1,8 @@
+import { Model } from 'vue-api-query'
 import axios from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: location.protocol + '//' + location.hostname + '/api/v1/',
+  baseURL: process.env.API_URL,
   withCredentials: true,
   headers: {
     'X-Requested-With': 'XMLHttpRequest'
@@ -9,6 +10,10 @@ const axiosInstance = axios.create({
 })
 
 export default function ({ Vue, router }) {
+  // Inject axios as http client to Model
+  Model.$http = axiosInstance
+
+  // Allow reference as this.$axios
   Vue.prototype.$axios = axiosInstance
 
   axiosInstance.interceptors.response.use((response) => {

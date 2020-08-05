@@ -1,7 +1,10 @@
 <template>
-  <div class="toolbar-input">
+  <q-form
+    class="toolbar-input"
+    @submit="onSubmit"
+  >
     <q-input
-      v-model.trim="model"
+      v-model.trim="query"
       dark
       clearable
       dense
@@ -9,9 +12,8 @@
       filled
       input-class="text-grey-5 text-weight-light"
       :debounce="900"
-      :placeholder="placeholder"
+      :placeholder="$q.screen.lt.sm ? 'Search' : 'Search MediaDB'"
       type="search"
-      @focus="onFocus"
     >
       <template v-slot:prepend>
         <q-icon
@@ -20,42 +22,38 @@
         />
       </template>
     </q-input>
-  </div>
+  </q-form>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
-
 export default {
-  computed: {
-    ...mapGetters('search', {
-      query: 'getQuery'
-    }),
-
-    model: {
-      get () {
-        return this.query
-      },
-
-      async set (value) {
-        await this.setQuery({ type: null, query: value })
-      }
-    },
-
-    placeholder () {
-      return this.$q.screen.lt.sm ? 'Search MediaDB' : 'Search'
+  data () {
+    return {
+      query: '',
+      type: ''
     }
   },
 
-  methods: {
-    ...mapActions('search', {
-      setQuery: 'query'
-    }),
+  watch: {
+    '$route.query.q' (value = '') {
+      this.query = value
+    }
+  },
 
-    onFocus () {
-      if (this.$route.name !== 'search') {
-        this.$router.push({ name: 'search' })
-      }
+  created () {
+    this.query = this.$route.query.q || ''
+  },
+
+  methods: {
+    onSubmit () {
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.query,
+          type: this.type,
+          id: +new Date()
+        }
+      })
     }
   }
 }

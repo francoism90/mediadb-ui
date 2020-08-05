@@ -1,93 +1,106 @@
 <template>
-  <q-page>
-    <div class="container fluid">
-      <q-card
+  <q-page class="container fluid">
+    <q-card
+      dark
+      class="bg-grey-12 fixed-center"
+      style="width: 350px"
+    >
+      <q-inner-loading
         dark
-        square
-        flat
-        class="bg-grey-12 fixed-center"
-        style="min-width: 300px"
+        :showing="!form"
       >
-        <q-card-section>
-          <div class="text-h6">
-            Login to MediaDB
-          </div>
-        </q-card-section>
+        <q-spinner-dots
+          size="50px"
+          color="primary"
+        />
+      </q-inner-loading>
 
-        <q-card-section>
-          <q-form
-            spellcheck="false"
-            class="q-gutter-md"
-            @submit="onSubmit"
-          >
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <q-form
+          v-if="form"
+          @submit="onSubmit"
+        >
+          <q-card-section class="row items-center q-pb-none">
+            <div class="text-h6">
+              Login to MediaDB
+            </div>
+          </q-card-section>
+
+          <q-card-section class="q-pb-none">
             <q-input
-              v-model.trim="body.email"
+              v-model.trim="form.email"
               dark
               filled
               clearable
               type="email"
               label="Your email"
-              lazy-rules
-              :rules="[
-                val => val && val.length > 0 || 'Required',
-                val => val.length < 256 || 'Please use maximum 255 character',
-              ]"
+              :error-message="getError('email')"
+              :error="hasError('email')"
             />
 
             <q-input
-              v-model.trim="body.password"
+              v-model.trim="form.password"
               dark
               filled
               clearable
               type="password"
               label="Your password"
-              lazy-rules
-              :rules="[
-                val => val && val.length > 0 || 'Required',
-                val => val.length < 33 || 'Please use maximum 32 character',
-              ]"
+              :error-message="getError('password')"
+              :error="hasError('password')"
             />
+          </q-card-section>
 
-            <div>
-              <q-btn
-                type="submit"
-                label="Log In"
-                color="primary"
-              />
-            </div>
-          </q-form>
-        </q-card-section>
-      </q-card>
-    </div>
+          <q-separator />
+
+          <q-card-actions
+            align="right"
+          >
+            <q-btn
+              label="Login"
+              size="md"
+              color="primary"
+              flat
+              type="submit"
+            />
+          </q-card-actions>
+        </q-form>
+      </transition>
+    </q-card>
   </q-page>
 </template>
 
 <script>
+import { formHandler } from 'src/mixins/form'
+
 export default {
-  data () {
-    return {
-      body: {
-        email: null,
-        password: null,
-        remember: true
-      }
-    }
+  mixins: [formHandler],
+
+  created () {
+    this.setForm({
+      email: '',
+      password: '',
+      remember: false
+    })
   },
 
   methods: {
     async onSubmit () {
       try {
-        await this.$store.dispatch('session/login', this.body)
+        // Reset errors
+        this.resetErrors()
 
+        // Initialize session store
+        await this.$store.dispatch('session/login', this.form)
+
+        // Redirect to requested path
         this.$router.replace(this.$route.query.redirect || '/')
       } catch (e) {
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: e.response.data ? e.response.data.message : 'Unable to login.',
-          type: 'negative'
-        })
+        this.setMessage(e.response.data.message || '')
+        this.setErrors(e.response.data.errors || [])
       }
     }
   }

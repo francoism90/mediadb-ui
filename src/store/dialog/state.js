@@ -1,8 +1,8 @@
 export default function () {
   return {
     active: false,
-    options: {},
+    component: null,
     data: {},
-    component: null
+    options: {}
   }
 }
