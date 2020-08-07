@@ -18,7 +18,8 @@ export default {
     ChannelEdit: () => import('components/channel/Edit'),
     CollectionEdit: () => import('components/collection/Edit'),
     MediaEdit: () => import('components/media/Edit'),
-    MediaSave: () => import('components/media/Save')
+    MediaSave: () => import('components/media/Save'),
+    PlayerInfo: () => import('components/player/Info')
   },
 
   computed: {
