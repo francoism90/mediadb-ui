@@ -18,11 +18,11 @@ export function getItems (state) {
   return state.meta && state.meta.total ? state.meta.total : 0
 }
 
-export function getIsReady (state) {
+export function isReady (state) {
   return state.ready
 }
 
-export function getIsLoaded (state) {
+export function isLoaded (state) {
   // We don't have any reference
   if (!state.meta || !state.meta.last_page) {
     return true
@@ -30,7 +30,7 @@ export function getIsLoaded (state) {
 
   // We have no more pages
   if (
-    state.meta.last_page === 1 ||
+    state.meta.total === 0 ||
     state.meta.last_page < state.page
   ) {
     return true

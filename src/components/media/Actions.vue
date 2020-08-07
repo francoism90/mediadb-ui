@@ -37,14 +37,9 @@
 </template>
 
 <script>
-export default {
-  props: {
-    media: {
-      type: Object,
-      required: true
-    }
-  },
+import { mapState } from 'vuex'
 
+export default {
   data () {
     return {
       manage: [
@@ -59,6 +54,12 @@ export default {
         { label: 'Share', icon: 'share', action: false }
       ]
     }
+  },
+
+  computed: {
+    ...mapState('media', [
+      'data'
+    ])
   },
 
   methods: {

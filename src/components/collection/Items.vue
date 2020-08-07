@@ -1,76 +1,60 @@
 <template>
-  <div
-    v-if="collection"
-    class="container fluid"
-  >
-    <div class="scroll">
-      <q-btn-group
-        class="q-pb-md"
-        unelevated
-      >
-        <q-select
-          v-model="sorter"
-          :options="sorters"
-          :loading="!state.ready"
-          dark
-          dense
-          dropdown-icon="keyboard_arrow_down"
-          options-dark
-          square
-        />
-      </q-btn-group>
+  <div class="container fluid">
+    <q-btn-group
+      class="q-pb-md"
+      unelevated
+    >
+      <q-select
+        v-model="sorter"
+        :options="sorters"
+        :loading="!isReady"
+        dark
+        dense
+        dropdown-icon="keyboard_arrow_down"
+        options-dark
+        square
+      />
+    </q-btn-group>
 
-      <q-pull-to-refresh
+    <q-pull-to-refresh
+      :disable="!isReady"
+      @refresh="onRefresh"
+    >
+      <q-infinite-scroll
         :key="state.id"
-        :disable="!state.ready"
-        @refresh="onRefresh"
+        :debounce="300"
+        @load="onLoad"
       >
-        <q-infinite-scroll
-          :debounce="300"
-          @load="onLoad"
-        >
-          <div class="row q-col-gutter-md items">
-            <div
-              v-for="(item, index) in state.data"
-              :key="index"
-              class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
-            >
-              <media-item :data="item" />
-            </div>
+        <div class="row q-col-gutter-md items">
+          <div
+            v-for="(item, index) in state.data"
+            :key="index"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
+          >
+            <media-item :data="item" />
           </div>
+        </div>
 
-          <template v-slot:loading>
-            <div class="row no-wrap justify-center q-my-md">
-              <q-spinner-dots
-                color="primary"
-                size="40px"
-              />
-            </div>
-          </template>
-        </q-infinite-scroll>
-      </q-pull-to-refresh>
-    </div>
+        <template v-slot:loading>
+          <div class="row no-wrap justify-center q-my-md">
+            <q-spinner-dots
+              color="primary"
+              size="40px"
+            />
+          </div>
+        </template>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
   </div>
 </template>
 
 <script>
+import paginateModule from 'src/store/paginate'
 import Media from 'src/models/Media'
 
 export default {
   components: {
     MediaItem: () => import('components/media/Item')
-  },
-
-  props: {
-    collection: {
-      type: Object,
-      required: true
-    },
-
-    namespace: {
-      type: String,
-      required: true
-    }
   },
 
   data () {
@@ -87,12 +71,24 @@ export default {
   },
 
   computed: {
-    state () {
-      return this.$store.state[this.namespace]
+    modelState () {
+      return this.$store.state.collection
     },
 
-    getIsLoaded () {
-      return this.$store.getters[this.namespace + '/getIsLoaded']
+    moduleName () {
+      return `${this.modelState.data.id}/media`
+    },
+
+    state () {
+      return this.modelState[this.moduleName]
+    },
+
+    isLoaded () {
+      return this.$store.getters[`collection/${this.moduleName}/isLoaded`]
+    },
+
+    isReady () {
+      return this.$store.getters[`collection/${this.moduleName}/isReady`]
     },
 
     sorter: {
@@ -106,14 +102,24 @@ export default {
     }
   },
 
+  created () {
+    if (!this.$store.hasModule(['collection', this.moduleName])) {
+      this.$store.registerModule(['collection', this.moduleName], paginateModule)
+    }
+  },
+
   methods: {
-    async resetPages (options = {}) {
-      await this.$store.dispatch(this.namespace + '/resetPages', options)
+    resetPages (payload = {}) {
+      this.$store.dispatch(`collection/${this.moduleName}/resetPages`, payload)
+    },
+
+    setPage (payload = {}) {
+      this.$store.dispatch(`collection/${this.moduleName}/setPage`, payload)
     },
 
     async setModels () {
       const response = await Media
-        .where('collection', this.collection.id)
+        .where('collection', this.modelState.data.id)
         .include(['model', 'tags'])
         .append(['preview_url', 'thumbnail_url'])
         .orderBy(this.sorter.value)
@@ -121,12 +127,12 @@ export default {
         .limit(12)
         .get()
 
-      await this.$store.dispatch(this.namespace + '/setPage', response)
+      this.setPage(response)
     },
 
     async onLoad (index, done) {
       await this.setModels()
-      done(this.getIsLoaded)
+      done(this.isLoaded)
     },
 
     async onRefresh (done) {

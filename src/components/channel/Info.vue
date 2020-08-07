@@ -3,10 +3,10 @@
     <div class="fit row wrap justify-between items-start q-col-gutter-y-md">
       <div class="col-6 col-md-6 col-xs-12">
         <div class="text-h5 text-grey-5">
-          {{ channel.name }}
+          {{ data.name }}
         </div>
         <div class="text-subtitle2 text-grey-5">
-          {{ Number(channel.views) | approximate }} subscribers
+          {{ Number(data.views) | approximate }} subscribers
         </div>
       </div>
 
@@ -26,12 +26,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    channel: {
-      type: Object,
-      required: true
-    }
+  computed: {
+    ...mapState('channel', [
+      'data'
+    ])
   }
 }
 </script>

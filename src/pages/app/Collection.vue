@@ -1,28 +1,25 @@
 <template>
-  <q-page
-    v-if="collection"
-    :key="collection.id"
-  >
-    <info :collection="collection" />
-
-    <items
-      :collection="collection"
-      :namespace="collectionModule"
-    />
+  <q-page v-if="isReady">
+    <info />
+    <items />
   </q-page>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+import modelModule from 'src/store/model'
 import Collection from 'src/models/Collection'
-import paginateModule from 'src/store/paginate'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    const collectionModule = 'collection_' + currentRoute.params.id
-
-    if (!store.hasModule(collectionModule)) {
-      store.registerModule(collectionModule, paginateModule)
+  async preFetch ({ store, currentRoute }) {
+    if (!store.hasModule('collection')) {
+      store.registerModule('collection', modelModule)
     }
+
+    store.dispatch(
+      'collection/setModel',
+      await Collection.find(currentRoute.params.id)
+    )
   },
 
   components: {
@@ -30,38 +27,19 @@ export default {
     Items: () => import('components/collection/Items')
   },
 
-  data () {
-    return {
-      title: null,
-      collection: null
-    }
-  },
-
   computed: {
-    collectionModule () {
-      return 'collection_' + this.collection.id
-    }
+    ...mapState('collection', [
+      'data'
+    ]),
+
+    ...mapGetters('collection', [
+      'isReady'
+    ])
   },
 
   meta () {
     return {
-      title: this.title
-    }
-  },
-
-  created () {
-    this.getModel(this.$route.params.id)
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.getModel(to.params.id)
-    next()
-  },
-
-  methods: {
-    async getModel (id) {
-      this.collection = await Collection.$find(id)
-      this.title = this.collection.name || '404'
+      title: this.data.name || '404 - Not Found'
     }
   }
 }

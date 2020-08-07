@@ -1,7 +1,6 @@
 export default function () {
   return {
     ready: false,
-    model: {},
     tracks: [],
     controls: true,
     fullscreen: false,

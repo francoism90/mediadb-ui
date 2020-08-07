@@ -20,9 +20,9 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
+      session,
       dialog,
-      player,
-      session
+      player
     },
     strict: process.env.DEV
   })

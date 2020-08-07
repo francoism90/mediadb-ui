@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="data && model"
+    v-if="data"
     class="player-seeker"
     :style="cssVars"
   >
@@ -38,11 +38,6 @@ import { dom } from 'quasar'
 export default {
   props: {
     data: {
-      type: Object,
-      required: true
-    },
-
-    model: {
       type: Object,
       required: true
     },

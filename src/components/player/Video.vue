@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="media"
     ref="element"
     v-shortkey="getKeyBindings"
     class="relative-position window-height player"
@@ -12,9 +11,9 @@
       class="absolute fit"
       playsinline
       preload="auto"
-      :poster="media.thumbnail_url"
-      :height="media.metadata.height || 360"
-      :width="media.metadata.width || 480"
+      :poster="model.thumbnail_url"
+      :height="model.metadata.height || 360"
+      :width="model.metadata.width || 480"
     />
 
     <control-container v-if="ready" />
@@ -33,19 +32,11 @@ export default {
 
   mixins: [playerHandler],
 
-  props: {
-    media: {
-      type: Object,
-      required: true
-    }
-  },
-
   computed: {
     ...mapState('player', [
       'controls',
       'data',
       'fullscreen',
-      'model',
       'ready'
     ]),
 
@@ -101,11 +92,11 @@ export default {
 
         // Load player settings
         await this.instance.configure(this.getPlayerSettings)
-        await this.instance.load(this.media.stream_url)
+        await this.instance.load(this.model.stream_url)
 
         // Set sprite metadata track
         const spriteTrack = await this.instance.addTextTrack(
-          this.media.sprite_url,
+          this.model.sprite_url,
           'eng',
           'metadata',
           'text/vtt'
@@ -115,7 +106,6 @@ export default {
 
         // Initialize store
         await this.initialize({
-          model: this.media,
           tracks: [
             { key: 'metadata-sprite', value: this.player.textTracks[0] }
           ]

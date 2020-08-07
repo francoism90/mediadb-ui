@@ -1,28 +1,35 @@
 <template>
   <q-page
-    v-if="channel"
-    :key="channel.id"
+    v-if="isReady"
+    :key="data.id"
   >
-    <info :channel="channel" />
-
-    <items
-      :channel="channel"
-      :namespace="channelModule"
-    />
+    <info />
+    <items :namespace="itemsNamespace" />
   </q-page>
 </template>
 
 <script>
-import Channel from 'src/models/Channel'
+import { mapState, mapGetters } from 'vuex'
+import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
+import Channel from 'src/models/Channel'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    const channelModule = 'channel_' + currentRoute.params.id
+  async preFetch ({ store, currentRoute }) {
+    const routeId = currentRoute.params.id
 
-    if (!store.hasModule(channelModule)) {
-      store.registerModule(channelModule, paginateModule)
+    if (!store.hasModule('channel')) {
+      store.registerModule('channel', modelModule)
     }
+
+    if (!store.hasModule(['channel', `${routeId}/items`])) {
+      store.registerModule(['channel', `${routeId}/items`], paginateModule)
+    }
+
+    store.dispatch(
+      'channel/setModel',
+      await Channel.find(routeId)
+    )
   },
 
   components: {
@@ -30,38 +37,23 @@ export default {
     Items: () => import('components/channel/Items')
   },
 
-  data () {
-    return {
-      title: null,
-      channel: null
-    }
-  },
-
   computed: {
-    channelModule () {
-      return 'channel_' + this.channel.id
+    ...mapState('channel', [
+      'data'
+    ]),
+
+    ...mapGetters('channel', [
+      'isReady'
+    ]),
+
+    itemsNamespace () {
+      return `${this.data.id}/items`
     }
   },
 
   meta () {
     return {
-      title: this.title
-    }
-  },
-
-  created () {
-    this.getModel(this.$route.params.id)
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.getModel(to.params.id)
-    next()
-  },
-
-  methods: {
-    async getModel (id) {
-      this.channel = await Channel.$find(id)
-      this.title = this.channel.name || '404'
+      title: this.data.name || '404 - Not Found'
     }
   }
 }

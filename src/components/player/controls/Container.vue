@@ -20,7 +20,6 @@
     >
       <seeker
         :data="data"
-        :model="model"
         :tracks="tracks"
       />
 
@@ -60,7 +59,6 @@ export default {
 
     ...mapGetters('player', {
       data: 'getData',
-      model: 'getModel',
       tracks: 'getTracks'
     })
   },

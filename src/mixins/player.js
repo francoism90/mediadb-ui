@@ -1,4 +1,11 @@
 export const playerHandler = {
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
+  },
+
   data () {
     return {
       instance: null

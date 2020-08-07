@@ -1,112 +1,39 @@
 <template>
   <main>
-    <template v-if="media.length">
-      <div class="row items-center q-py-lg">
-        <div class="col">
-          <span class="text-body1">Media</span>
+    <div
+      v-for="type in types"
+      :key="type.id"
+    >
+      <div v-if="hasItems(type.key)">
+        <div class="row items-center q-py-lg">
+          <div class="col">
+            <span class="text-body1">{{ type.label }}</span>
+          </div>
+
+          <div class="col-auto">
+            <a
+              class="text-caption text-uppercase cursor-pointer"
+              @click="filterQuery(type.key, type.store)"
+            >
+              {{ type.labelFilter }}
+            </a>
+          </div>
         </div>
 
-        <div class="col-auto">
-          <a
-            class="text-caption text-uppercase cursor-pointer"
-            @click="filterQuery('media', 'search_media')"
+        <div class="row q-col-gutter-md items">
+          <div
+            v-for="(item, index) in getItems(type.key)"
+            :key="index"
+            :class="type.columnClass"
           >
-            All Media
-          </a>
+            <component
+              :is="type.component"
+              :data="item"
+            />
+          </div>
         </div>
       </div>
-
-      <div class="row q-col-gutter-md items">
-        <div
-          v-for="(item, index) in media"
-          :key="index"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
-        >
-          <media-item :data="item" />
-        </div>
-      </div>
-    </template>
-
-    <template v-if="channels.length">
-      <div class="row items-center q-py-lg">
-        <div class="col">
-          <span class="text-body1">Channels</span>
-        </div>
-
-        <div class="col-auto">
-          <a
-            class="text-caption text-uppercase cursor-pointer"
-            @click="filterQuery('channel', 'search_channels')"
-          >
-            All Channels
-          </a>
-        </div>
-      </div>
-
-      <div class="row q-col-gutter-md items">
-        <div
-          v-for="(item, index) in channels"
-          :key="index"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
-        >
-          <channel-item :data="item" />
-        </div>
-      </div>
-    </template>
-
-    <template v-if="collections.length">
-      <div class="row items-center q-py-lg">
-        <div class="col">
-          <span class="text-body1">Collections</span>
-        </div>
-
-        <div class="col-auto">
-          <a
-            class="text-caption text-uppercase cursor-pointer"
-            @click="filterQuery('collection', 'search_collections')"
-          >
-            All Collections
-          </a>
-        </div>
-      </div>
-
-      <div class="row q-col-gutter-md items">
-        <div
-          v-for="(item, index) in collections"
-          :key="index"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
-        >
-          <collection-item :data="item" />
-        </div>
-      </div>
-    </template>
-
-    <template v-if="tags.length">
-      <div class="row items-center q-py-lg">
-        <div class="col">
-          <span class="text-body1">Tags</span>
-        </div>
-
-        <div class="col-auto">
-          <a
-            class="text-caption text-uppercase cursor-pointer"
-            @click="filterQuery('tag', 'search_tags')"
-          >
-            All Tags
-          </a>
-        </div>
-      </div>
-
-      <div class="row q-col-gutter-md items">
-        <div
-          v-for="(item, index) in tags"
-          :key="index"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
-        >
-          <tag-item :data="item" />
-        </div>
-      </div>
-    </template>
+    </div>
   </main>
 </template>
 
@@ -133,6 +60,40 @@ export default {
 
   data () {
     return {
+      types: [
+        {
+          key: 'media',
+          label: 'Media',
+          labelFilter: 'All Media',
+          component: 'MediaItem',
+          store: 'search_media',
+          columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
+        },
+        {
+          key: 'channels',
+          label: 'Channels',
+          labelFilter: 'All Channels',
+          component: 'ChannelItem',
+          store: 'search_channels',
+          columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
+        },
+        {
+          key: 'collections',
+          label: 'Collections',
+          labelFilter: 'All Collections',
+          component: 'CollectionItem',
+          store: 'search_collections',
+          columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
+        },
+        {
+          key: 'tags',
+          label: 'Tags',
+          labelFilter: 'All Tags',
+          component: 'TagItem',
+          store: 'search_tags',
+          columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
+        }
+      ],
       channels: [],
       collections: [],
       media: [],
@@ -148,6 +109,14 @@ export default {
   },
 
   methods: {
+    getItems (key) {
+      return this[key]
+    },
+
+    hasItems (key) {
+      return this[key].length
+    },
+
     async setChannels () {
       this.channels = await Channel
         .where('query', this.query)
@@ -192,6 +161,7 @@ export default {
     },
 
     filterQuery (type = '', store = '') {
+      // Reset current store data
       this.$store.dispatch(store + '/resetPages')
 
       this.$router.push({

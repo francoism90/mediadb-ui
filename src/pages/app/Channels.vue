@@ -17,11 +17,11 @@
     </q-btn-group>
 
     <q-pull-to-refresh
-      :key="id"
       :disable="!ready"
       @refresh="onRefresh"
     >
       <q-infinite-scroll
+        :key="id"
         :debounce="300"
         @load="onLoad"
       >
@@ -86,7 +86,7 @@ export default {
     ]),
 
     ...mapGetters('channels', [
-      'getIsLoaded'
+      'isLoaded'
     ]),
 
     sorter: {
@@ -126,7 +126,7 @@ export default {
 
     async onLoad (index, done) {
       await this.setModels()
-      done(this.getIsLoaded)
+      done(this.isLoaded)
     },
 
     async onRefresh (done) {

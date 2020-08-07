@@ -1,4 +1,4 @@
-export async function setPage ({ commit, getters }, payload = {}) {
+export function setPage ({ commit, getters, rootState }, payload = {}) {
   const { data = [], meta = {} } = payload
 
   // Set ready
@@ -8,7 +8,7 @@ export async function setPage ({ commit, getters }, payload = {}) {
   commit('setMeta', meta)
 
   // Set data
-  if (!getters.getIsDone && data.length) {
+  if (!getters.isLoaded && data.length) {
     commit('setData', data)
     commit('increasePage')
   }

@@ -3,16 +3,16 @@
     <div class="col">
       <router-link
         class="text-subtitle1 text-grey-5 cursor-pointer"
-        :to="{ name: 'channel', params: { id: media.relationships.model.id }}"
+        :to="{ name: 'channel', params: { id: data.relationships.model.id }}"
       >
-        {{ media.relationships.model.name }}
+        {{ data.relationships.model.name }}
       </router-link>
       <div
         class="
         text-subtitle2
         text-grey-6"
       >
-        {{ Number(media.relationships.model.views) | approximate }} subscribers
+        {{ Number(data.relationships.model.views) | approximate }} subscribers
       </div>
     </div>
 
@@ -28,12 +28,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  props: {
-    media: {
-      type: Object,
-      required: true
-    }
+  computed: {
+    ...mapState('media', [
+      'data'
+    ])
   }
 }
 </script>

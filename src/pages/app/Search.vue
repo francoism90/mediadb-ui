@@ -40,8 +40,9 @@ export default {
   components: {
     Intro: () => import('components/search/Intro'),
     Overview: () => import('components/search/Overview'),
-    Media: () => import('components/search/Media'),
+    Channels: () => import('components/search/Channels'),
     Collections: () => import('components/search/Collections'),
+    Media: () => import('components/search/Media'),
     Tags: () => import('components/search/Tags')
   },
 
@@ -52,9 +53,9 @@ export default {
       type: '',
       componentTypes: {
         media: 'Media',
-        collection: 'Collections',
-        channel: 'Channels',
-        tag: 'Tags'
+        collections: 'Collections',
+        channels: 'Channels',
+        tags: 'Tags'
       }
     }
   },

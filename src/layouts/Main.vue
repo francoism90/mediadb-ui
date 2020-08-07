@@ -191,7 +191,7 @@ export default {
     return {
       drawer: true,
       miniDrawer: true,
-      hideDrawer: ['video'],
+      hideDrawer: ['media'],
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Channels', name: 'channels', icon: 'live_tv', separator: false },

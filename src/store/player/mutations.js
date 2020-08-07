@@ -11,20 +11,16 @@ export function setData (state, payload = {}) {
   state.data = Object.assign({}, state.data, finalState)
 }
 
+export function setReady (state, payload = false) {
+  state.ready = payload
+}
+
 export function setTrack (state, payload = {}) {
   state.tracks.push(payload)
 }
 
 export function setTracks (state, payload = []) {
   state.tracks = payload
-}
-
-export function setModel (state, payload = {}) {
-  state.model = Object.assign({}, state.model, payload)
-}
-
-export function setReady (state, payload = false) {
-  state.ready = payload
 }
 
 export function setControls (state, payload = false) {

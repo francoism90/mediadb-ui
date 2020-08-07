@@ -1,23 +1,38 @@
 <template>
   <q-page
-    v-if="media"
-    :key="media.id"
+    v-if="isReady"
+    :key="data.id"
   >
-    <player :media="media" />
-    <info :media="media" />
-    <next :media="media" />
+    <player
+      :model="data"
+    />
+    <info />
+    <next :namespace="nextNamespace" />
   </q-page>
 </template>
 
 <script>
-import Media from 'src/models/Media'
+import { mapState, mapGetters } from 'vuex'
+import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
+import Media from 'src/models/Media'
 
 export default {
-  preFetch ({ store, currentRoute }) {
-    if (!store.hasModule('next')) {
-      store.registerModule('next', paginateModule)
+  async preFetch ({ store, currentRoute }) {
+    const routeId = currentRoute.params.id
+
+    if (!store.hasModule('media')) {
+      store.registerModule('media', modelModule)
     }
+
+    if (!store.hasModule(['media', `${routeId}/next`])) {
+      store.registerModule(['media', `${routeId}/next`], paginateModule)
+    }
+
+    store.dispatch(
+      'media/setModel',
+      await Media.find(routeId)
+    )
   },
 
   components: {
@@ -26,32 +41,27 @@ export default {
     Next: () => import('components/media/Next')
   },
 
-  data () {
-    return {
-      title: null,
-      media: null
+  computed: {
+    ...mapState('media', [
+      'data'
+    ]),
+
+    ...mapGetters('media', [
+      'isReady'
+    ]),
+
+    nextNamespace () {
+      return `${this.data.id}/next`
     }
+  },
+
+  beforeDestroy () {
+    this.$store.unregisterModule('media')
   },
 
   meta () {
     return {
-      title: this.title
-    }
-  },
-
-  created () {
-    this.getModel(this.$route.params.id)
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.getModel(to.params.id)
-    next()
-  },
-
-  methods: {
-    async getModel (id) {
-      this.media = await Media.$find(id)
-      this.title = this.media.name || '404'
+      title: this.data.name || '404 - Not Found'
     }
   }
 }
