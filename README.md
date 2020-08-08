@@ -1,17 +1,17 @@
-# MediaDB (UI)
+# MediaDB Front-end
 
-## Build your own streaming service
+**MediaDB** is a web-based video streaming service written in Laravel and Vue ([Quasar](https://quasar.dev/)).
 
-### Intro
+The front-end requires a running [MediaDB API](https://github.com/francoism90/mediadb) instance.
 
-A Quasar Framework app for [MediaDB](https://github.com/francoism90/mediadb).
+- Video previews as seen on YouTube.
+- Display thumbnails from a sprite image when hovering over the progress bar.
+- Manage library using tags and collections.
+- Searching and filtering.
 
-### Requirements
+MediaDB is very much in development and is not yet suitable for production purposes.
 
-- Running [MediaDB](https://github.com/francoism90/mediadb) instance
-- `npm` or `yarn`
-
-## Install
+## Installation
 
 Note: it is recommend to clone/install MediaDB projects to `/srv/http/mediadb/api` (mediadb-api) and `/srv/http/mediadb/ui` (mediadb-ui).
 
@@ -19,6 +19,7 @@ Note: it is recommend to clone/install MediaDB projects to `/srv/http/mediadb/ap
 
 ```bash
 cd /srv/http/mediadb/ui
+cp .env.example .env
 npm install
 quasar build
 ```
@@ -33,6 +34,7 @@ See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
 ```bash
 cd /srv/http/mediadb/ui
+cp .env.example .env.local
 npm install
 quasar dev
 ```
