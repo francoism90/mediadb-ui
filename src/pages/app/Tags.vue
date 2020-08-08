@@ -49,7 +49,7 @@
 
         <template v-slot:loading>
           <div class="row no-wrap justify-center q-my-md">
-            <q-spinner-dots
+            <q-spinner
               color="primary"
               size="40px"
             />
@@ -133,6 +133,7 @@ export default {
 
   methods: {
     ...mapActions('tags', [
+      'resetItems',
       'resetPages',
       'setPage'
     ]),
@@ -155,7 +156,7 @@ export default {
     },
 
     async onRefresh (done) {
-      await this.resetPages()
+      await this.resetItems()
       done()
     }
   }

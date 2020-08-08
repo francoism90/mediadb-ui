@@ -17,14 +17,13 @@ export function setPage ({ commit, getters, rootState }, payload = {}) {
   commit('setReady', true)
 }
 
-export function resetItems ({ commit }, payload = {}) {
+export function resetItems ({ commit }) {
+  // Regenerate id
+  commit('setId')
+
   // Reset state
   commit('resetItems')
-  commit('resetOptions')
   commit('resetPage')
-
-  // Set option
-  commit('setOption', payload)
 }
 
 export function resetPages ({ commit }, payload = {}) {

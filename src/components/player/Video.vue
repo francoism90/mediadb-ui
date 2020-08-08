@@ -65,8 +65,10 @@ export default {
     }
 
     // Destroy instance
-    await this.instance.detach()
-    await this.instance.destroy()
+    if (this.instance) {
+      await this.instance.unload()
+      await this.instance.destroy()
+    }
 
     // Reset player state
     this.reset()
@@ -87,38 +89,36 @@ export default {
         alert('Browser is not supported')
       }
 
-      try {
-        this.instance = new Player(this.player)
+      this.instance = new Player(this.player)
 
-        // Load player settings
-        await this.instance.configure(this.getPlayerSettings)
-        await this.instance.load(this.model.stream_url)
+      // Load player settings
+      await this.instance.configure(this.getPlayerSettings)
+      await this.instance.load(this.model.stream_url)
 
-        // Set sprite metadata track
-        const spriteTrack = await this.instance.addTextTrack(
-          this.model.sprite_url,
-          'eng',
-          'metadata',
-          'text/vtt'
-        )
+      // Set sprite metadata track
+      const spriteTrack = await this.instance.addTextTrack(
+        this.model.sprite_url,
+        'eng',
+        'metadata',
+        'text/vtt'
+      )
 
-        await this.instance.selectTextTrack(spriteTrack)
+      await this.instance.selectTextTrack(spriteTrack)
 
-        // Initialize store
-        await this.initialize({
-          tracks: [
-            { key: 'metadata-sprite', value: this.player.textTracks[0] }
-          ]
-        })
+      // Initialize store
+      await this.initialize({
+        tracks: [
+          { key: 'metadata-sprite', value: this.player.textTracks[0] }
+        ]
+      })
 
-        // Add listeners
-        for (const listener of this.getEventListeners) {
-          this.player.addEventListener(listener, this.setPlayerData)
-        }
+      // Add listeners
+      for (const listener of this.getEventListeners) {
+        this.player.addEventListener(listener, this.setPlayerData)
+      }
 
-        // Autoplay video
-        this.player.play()
-      } catch (e) {}
+      // Autoplay video
+      await this.player.play()
     },
 
     async setPlayerData () {

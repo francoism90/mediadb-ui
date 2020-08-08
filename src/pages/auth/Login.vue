@@ -9,7 +9,7 @@
         dark
         :showing="!form"
       >
-        <q-spinner-dots
+        <q-spinner
           size="50px"
           color="primary"
         />

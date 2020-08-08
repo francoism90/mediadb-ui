@@ -6,7 +6,8 @@
           {{ data.name }}
         </div>
         <div class="text-subtitle2 text-grey-5">
-          {{ Number(data.views) | approximate }} subscribers
+          {{ Number(data.views) | approximate }} subscribers •
+          {{ Number(data.items || 0) | approximate }} items
         </div>
       </div>
 

@@ -124,7 +124,7 @@ export default {
         .append(['items', 'thumbnail_url'])
         .orderBy('relevance')
         .page(1)
-        .limit(4)
+        .limit(8)
         .$get()
     },
 
@@ -146,7 +146,7 @@ export default {
         .append(['preview_url', 'thumbnail_url'])
         .orderBy('relevance')
         .page(1)
-        .limit(8)
+        .limit(9)
         .$get()
     },
 
@@ -156,7 +156,7 @@ export default {
         .append(['items'])
         .orderBy('relevance')
         .page(1)
-        .limit(8)
+        .limit(9)
         .$get()
     },
 

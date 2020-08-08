@@ -41,12 +41,16 @@
     </q-menu>
 
     <q-card-section class="q-pa-none">
-      <router-link :to="{ name: 'channel', params: { id: data.id, slug: data.slug }}">
+      <router-link
+        class="item-placeholder"
+        :to="{ name: 'channel', params: { id: data.id, slug: data.slug }}"
+      >
         <q-img
           :alt="data.name"
           :src="data.thumbnail_url"
           :ratio="1"
           img-class="item-cover"
+          position="100% 100%"
           placeholder-src="~assets/placeholders/320x480.png"
           width="100%"
           height="160px"

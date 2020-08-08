@@ -74,6 +74,10 @@ export default {
       this.$store.dispatch(`media/${this.namespace}/resetPages`, payload)
     },
 
+    resetItems () {
+      this.$store.dispatch(`media/${this.namespace}/resetItems`)
+    },
+
     setPage (payload = {}) {
       this.$store.dispatch(`media/${this.namespace}/setPage`, payload)
     },
@@ -97,7 +101,7 @@ export default {
     },
 
     async onRefresh (done) {
-      await this.resetPages()
+      await this.resetItems()
       done()
     }
   }

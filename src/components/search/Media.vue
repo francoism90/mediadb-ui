@@ -41,7 +41,7 @@
 
         <template v-slot:loading>
           <div class="row no-wrap justify-center q-my-md">
-            <q-spinner-dots
+            <q-spinner
               color="primary"
               size="40px"
             />
@@ -115,6 +115,7 @@ export default {
   methods: {
     ...mapActions('search_media', [
       'resetPages',
+      'resetItems',
       'setPage'
     ]),
 
@@ -137,7 +138,7 @@ export default {
     },
 
     async onRefresh (done) {
-      await this.resetPages()
+      await this.resetItems()
       done()
     }
   }

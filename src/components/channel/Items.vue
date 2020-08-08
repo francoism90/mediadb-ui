@@ -37,7 +37,7 @@
 
         <template v-slot:loading>
           <div class="row no-wrap justify-center q-my-md">
-            <q-spinner-dots
+            <q-spinner
               color="primary"
               size="40px"
             />
@@ -109,6 +109,10 @@ export default {
       this.$store.dispatch(`channel/${this.namespace}/resetPages`, payload)
     },
 
+    resetItems () {
+      this.$store.dispatch(`channel/${this.namespace}/resetItems`)
+    },
+
     setPage (payload = {}) {
       this.$store.dispatch(`channel/${this.namespace}/setPage`, payload)
     },
@@ -132,7 +136,7 @@ export default {
     },
 
     async onRefresh (done) {
-      await this.resetPages()
+      await this.resetItems()
       done()
     }
   }

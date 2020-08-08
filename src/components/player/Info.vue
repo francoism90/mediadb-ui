@@ -141,7 +141,7 @@ export default {
   computed: {
     fileSize () {
       return format.humanStorageSize(
-        this.media.metadata.size || 0
+        this.media.size || 0
       )
     },
 

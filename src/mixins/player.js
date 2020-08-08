@@ -35,9 +35,9 @@ export const playerHandler = {
           if (
             this.player.readyState > 1 &&
             (this.player.paused === true || this.player.ended === true)) {
-            this.player.play()
+            await this.player.play()
           } else {
-            this.player.pause()
+            await this.player.pause()
           }
           break
 
@@ -58,7 +58,7 @@ export const playerHandler = {
           break
 
         case 'download':
-          this.player.pause()
+          await this.player.pause()
           window.location.href = this.model.download_url || ''
           break
 

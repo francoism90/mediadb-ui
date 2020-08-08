@@ -41,7 +41,10 @@
     </q-menu>
 
     <q-card-section class="q-pa-none">
-      <router-link :to="{ name: 'collection', params: { id: data.id, slug: data.slug }}">
+      <router-link
+        class="item-placeholder"
+        :to="{ name: 'collection', params: { id: data.id, slug: data.slug }}"
+      >
         <q-img
           :alt="data.name"
           :src="data.thumbnail_url"
