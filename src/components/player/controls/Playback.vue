@@ -92,6 +92,8 @@ export default {
 
   methods: {
     debugMedia () {
+      this.$root.$emit('playerExitFullscreen')
+
       this.$store.dispatch('dialog/open', {
         component: 'MediaDebug',
         data: {

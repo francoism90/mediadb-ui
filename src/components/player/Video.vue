@@ -5,6 +5,7 @@
     :class="$q.fullscreen.isActive ? 'fullscreen' : null"
     @mouseenter="showControls()"
     @mousemove="showControls()"
+    @touchmove="showControls()"
     @mouseleave="hideControls()"
   >
     <video
@@ -60,7 +61,14 @@ export default {
     return {
       instance: null,
       controlsActive: true,
-      playerSettings: {
+      events: [
+        { key: 'playerTogglePlay', listener: 'togglePlay' },
+        { key: 'playerSetTime', listener: 'overruleTime' },
+        { key: 'playerEnterFullscreen', listener: 'enterFullscreen' },
+        { key: 'playerExitFullscreen', listener: 'exitFullscreen' },
+        { key: 'playerToggleFullscreen', listener: 'toggleFullscreen' }
+      ],
+      settings: {
         streaming: {
           rebufferingGoal: 2,
           bufferingGoal: 10,
@@ -88,10 +96,10 @@ export default {
   },
 
   created () {
-    // Start event bus
-    this.$root.$on('playerSetTime', this.setPlayerTime)
-    this.$root.$on('playerToggleFullscreen', this.toggleFullscreen)
-    this.$root.$on('playerTogglePlay', this.togglePlay)
+    // Start listen for events
+    for (const event of this.events) {
+      this.$root.$on(event.key, this[event.listener])
+    }
   },
 
   async beforeDestroy () {
@@ -100,10 +108,10 @@ export default {
       await this.instance.destroy()
     }
 
-    // Stop event bus
-    this.$root.$off('playerSetTime', this.setPlayerTime)
-    this.$root.$off('playerToggleFullscreen', this.toggleFullscreen)
-    this.$root.$off('playerTogglePlay', this.togglePlay)
+    // Stop listen for events
+    for (const event of this.events) {
+      this.$root.$off(event.key, this[event.listener])
+    }
   },
 
   async mounted () {
@@ -134,7 +142,7 @@ export default {
       this.instance = new Player(this.player)
 
       // Load player settings
-      await this.instance.configure(this.playerSettings)
+      await this.instance.configure(this.settings)
       await this.instance.load(this.model.stream_url)
 
       // Add sprite track
@@ -165,7 +173,10 @@ export default {
       this.controlsActive = false
     },
 
-    setPlayerTime (value = 0) {
+    overruleTime (value = 0) {
+      // Restart control timer
+      this.showControls()
+
       if (!inRange(value, 0, this.player.duration)) {
         return
       }
@@ -174,11 +185,27 @@ export default {
       this.setCurrentTime(value)
     },
 
-    toggleFullscreen () {
-      this.$q.fullscreen.toggle(this.element)
+    async exitFullscreen () {
+      await this.$q.fullscreen.exit(this.element)
+    },
+
+    async enterFullscreen () {
+      await this.$q.fullscreen.request(this.element)
+    },
+
+    async toggleFullscreen () {
+      // Restart control timer
+      this.showControls()
+
+      // Toggle fullscreen
+      await this.$q.fullscreen.toggle(this.element)
     },
 
     async togglePlay () {
+      // Restart control timer
+      this.showControls()
+
+      // Resume/pause playback
       if (this.player.paused) {
         await this.player.play()
         return
