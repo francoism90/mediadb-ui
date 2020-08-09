@@ -1,11 +1,10 @@
 <template>
   <div
-    v-if="data"
     class="player-seeker"
     :style="cssVars"
   >
     <div
-      v-if="seekerHover"
+      v-show="seekerHover"
       class="player-tooltip"
       :style="tooltip"
     >
@@ -22,7 +21,7 @@
       <q-slider
         v-model="step"
         :min="0.0"
-        :max="data.duration"
+        :max="duration"
         :step="0"
         dark
         dense
@@ -37,9 +36,19 @@ import { dom } from 'quasar'
 
 export default {
   props: {
-    data: {
-      type: Object,
-      required: true
+    buffered: {
+      type: TimeRanges,
+      default: null
+    },
+
+    currentTime: {
+      type: Number,
+      default: 0
+    },
+
+    duration: {
+      type: Number,
+      default: 0
     },
 
     tracks: {
@@ -60,14 +69,14 @@ export default {
   computed: {
     cssVars () {
       return {
-        '--buffered': `${this.buffered}%`,
-        '--buffer': `${this.buffer}%`
+        '--buffered': `${this.bufferedPct}%`,
+        '--buffer': `${this.bufferPct}%`
       }
     },
 
-    buffered () {
-      const buffered = this.data.buffered
-      const duration = this.data.duration
+    bufferedPct () {
+      const buffered = this.buffered
+      const duration = this.duration
 
       if (!buffered || !buffered.length) {
         return 0
@@ -81,20 +90,17 @@ export default {
       return Math.round((end / duration) * 100)
     },
 
-    buffer () {
-      return Math.round(100 - this.buffered)
+    bufferPct () {
+      return Math.round(100 - this.bufferedPct)
     },
 
     step: {
       get () {
-        return this.data.currentTime
+        return this.currentTime
       },
 
       set (value) {
-        this.callback({
-          type: 'currentTime',
-          value: value
-        })
+        this.$root.$emit('playerSetTime', value)
       }
     },
 
@@ -120,12 +126,8 @@ export default {
   },
 
   methods: {
-    callback (value) {
-      this.$root.$emit('player_event', value)
-    },
-
     getTimeByPct (percent = 0) {
-      return this.data.duration * (percent / 100)
+      return this.duration * (percent / 100)
     },
 
     setTrackCue (percent = 0) {

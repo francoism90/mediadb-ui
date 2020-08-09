@@ -1,6 +1,6 @@
 <template>
   <q-card
-    v-if="media"
+    v-if="media && media.metadata"
     dark
     style="width: 520px"
   >
@@ -134,7 +134,7 @@ export default {
 
   data () {
     return {
-      media: {}
+      media: null
     }
   },
 
@@ -161,14 +161,8 @@ export default {
     }
   },
 
-  created () {
-    this.setModel()
-  },
-
-  methods: {
-    async setModel () {
-      this.media = await Media.$find(this.data.id)
-    }
+  async created () {
+    this.media = await Media.$find(this.data.id)
   }
 }
 </script>

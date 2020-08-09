@@ -1,70 +1,128 @@
 <template>
-  <div>
+  <nav>
     <q-btn-group
       class="q-mr-md"
       flat
     >
       <q-btn
-        v-for="(item, index) in manage"
-        :key="index"
         dense
         text-color="grey-5"
-        no-caps
-        :icon="item.icon"
-        @click="callback(item.action)"
+        icon="favorite_border"
       >
-        <q-tooltip>{{ item.label }}</q-tooltip>
+        <q-tooltip>Favorite</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        v-shortkey="['s']"
+        dense
+        text-color="grey-5"
+        icon="photo"
+        @click="createFrameshot"
+        @shortkey="createFrameshot"
+      >
+        <q-tooltip>Frameshot</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        v-shortkey="['a']"
+        dense
+        text-color="grey-5"
+        icon="playlist_add"
+        @click="saveMedia"
+        @shortkey="saveMedia"
+      >
+        <q-tooltip>Save</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        v-shortkey="['c']"
+        dense
+        text-color="grey-5"
+        icon="menu_open"
+        @click="editMedia"
+        @shortkey="editMedia"
+      >
+        <q-tooltip>Edit</q-tooltip>
       </q-btn>
     </q-btn-group>
 
     <q-btn-group
-      class="q-ml-md"
+      class="q-mr-md"
       flat
     >
       <q-btn
-        v-for="(item, index) in links"
-        :key="index"
         dense
         text-color="grey-5"
-        no-caps
-        :icon="item.icon"
-        @click="callback(item.action)"
+        icon="get_app"
+        @click="downloadMedia"
       >
-        <q-tooltip>{{ item.label }}</q-tooltip>
+        <q-tooltip>Download</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        dense
+        text-color="grey-5"
+        icon="flag"
+      >
+        <q-tooltip>Report</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        dense
+        text-color="grey-5"
+        icon="share"
+      >
+        <q-tooltip>Share</q-tooltip>
       </q-btn>
     </q-btn-group>
-  </div>
+  </nav>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import { openURL } from 'quasar'
 
 export default {
-  data () {
-    return {
-      manage: [
-        { label: 'Favorite', icon: 'favorite_border', action: false },
-        { label: 'Frameshot', icon: 'photo', action: { type: 'frameshot' } },
-        { label: 'Save', icon: 'playlist_add', action: { type: 'save' } },
-        { label: 'Edit', icon: 'menu_open', action: { type: 'edit' } }
-      ],
-      links: [
-        { label: 'Download', icon: 'get_app', action: { type: 'download' } },
-        { label: 'Report', icon: 'flag', action: false },
-        { label: 'Share', icon: 'share', action: false }
-      ]
-    }
-  },
-
   computed: {
-    ...mapState('media', [
-      'data'
+    ...mapState('player', [
+      'currentTime',
+      'model'
     ])
   },
 
   methods: {
-    callback (value) {
-      this.$root.$emit('player_event', value)
+    async createFrameshot () {
+      await this.$axios.patch(`api/v1/media/${this.model.id}/frameshot`, {
+        timecode: this.currentTime
+      })
+
+      this.$q.notify({
+        progress: true,
+        message: `${this.model.name} has been frameshot.`,
+        type: 'positive'
+      })
+    },
+
+    downloadMedia () {
+      openURL(this.model.download_url || '/')
+    },
+
+    editMedia () {
+      this.$store.dispatch('dialog/open', {
+        component: 'MediaEdit',
+        data: {
+          id: this.model.id
+        }
+      })
+    },
+
+    saveMedia () {
+      this.$store.dispatch('dialog/open', {
+        component: 'MediaSave',
+        data: {
+          id: this.model.id
+        }
+      })
     }
   }
 }

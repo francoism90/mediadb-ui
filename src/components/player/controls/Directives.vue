@@ -1,76 +1,49 @@
 <template>
   <div
-    v-touch-swipe.mouse.left.right="handleSwipe"
-    class="fit"
-    @wheel="handleWheel"
-    @click.prevent="callback({ type: 'togglePlay' })"
-    @dblclick.prevent="callback({ type: 'toggleFullscreen' })"
-  >
-    <q-menu
-      auto-close
-      touch-position
-      context-menu
-      dark
-      square
-    >
-      <q-list
-        bordered
-        padding
-        dark
-        style="width: 260px"
-      >
-        <q-item
-          v-for="(entity, index) in menu"
-          :key="`menu-${index}`"
-          clickable
-          dark
-          @click.prevent="callback({ type: entity.name })"
-        >
-          <q-item-section side>
-            <q-icon :name="entity.icon" />
-          </q-item-section>
-          <q-item-section>{{ entity.label }}</q-item-section>
-        </q-item>
-      </q-list>
-    </q-menu>
-  </div>
+    ref="container"
+    v-touch-repeat.mouse="handleRepeat"
+    class="absolute fit player-directives"
+  />
 </template>
 
 <script>
-export default {
-  props: {
-    data: {
-      type: Object,
-      required: true
-    }
-  },
+import { mapState } from 'vuex'
+import { dom } from 'quasar'
+import { inRange } from 'lodash'
 
-  data () {
-    return {
-      menu: [
-        { label: 'Debug Information', name: 'info', icon: 'info' }
-      ]
-    }
+export default {
+  computed: {
+    ...mapState('player', [
+      'currentTime',
+      'duration'
+    ])
   },
 
   methods: {
-    callback (value) {
-      this.$root.$emit('player_event', value)
+    handleRepeat ({ evt, ...info }) {
+      const containerWidth = dom.width(this.$refs.container)
+
+      this.togglePlayback(containerWidth, info.position.left)
+      this.toggleSeek(containerWidth, info.position.left)
     },
 
-    handleWheel (event) {
-      if (event.deltaX < 0) {
-        this.callback({ type: 'rewind' })
-      } else if (event.deltaX > 0) {
-        this.callback({ type: 'forward' })
+    togglePlayback (containerWidth = 0, offsetLeft = 0) {
+      const center = containerWidth / 2
+      const centerMargin = center / 2
+
+      if (inRange(offsetLeft, center - centerMargin, center + centerMargin)) {
+        this.$root.$emit('playerTogglePlay')
       }
     },
 
-    handleSwipe ({ evt, ...info }) {
-      if (info.direction === 'left') {
-        this.callback({ type: 'rewind' })
-      } else if (info.direction === 'right') {
-        this.callback({ type: 'forward' })
+    toggleSeek (containerWidth = 0, offsetLeft = 0) {
+      const seekMargin = containerWidth / 4
+
+      // Left/right side
+      if (inRange(offsetLeft, 0, seekMargin)) {
+        this.$root.$emit('playerSetTime', this.currentTime - 5)
+      } else if (inRange(offsetLeft, containerWidth - seekMargin, containerWidth)) {
+        this.$root.$emit('playerSetTime', this.currentTime + 5)
       }
     }
   }

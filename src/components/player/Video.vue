@@ -1,10 +1,11 @@
 <template>
   <div
     ref="element"
-    v-shortkey="getKeyBindings"
     class="relative-position window-height player"
-    :class="fullscreen ? 'fullscreen' : null"
-    @shortkey="playerListener"
+    :class="$q.fullscreen.isActive ? 'fullscreen' : null"
+    @mouseenter="showControls()"
+    @mousemove="showControls()"
+    @mouseleave="hideControls()"
   >
     <video
       ref="instance"
@@ -14,77 +15,118 @@
       :poster="model.thumbnail_url"
       :height="model.metadata.height || 360"
       :width="model.metadata.width || 480"
+      @canplay="setPlayable(true)"
+      @durationchange="setDuration(player.duration)"
+      @ended="setEnded(true)"
+      @error="setError(player.error)"
+      @loadedmetadata="setMetadata(true)"
+      @pause="setPlaying(false)"
+      @play="setPlaying(true)"
+      @playing="setPlaying(true)"
+      @progress="setBuffered(player.buffered)"
+      @seeking="setCurrentTime(player.currentTime)"
+      @stalled="setPlaying(false)"
+      @timeupdate="setCurrentTime(player.currentTime)"
     />
 
-    <control-container v-if="ready" />
+    <controls v-if="controlsActive" />
+    <directives />
   </div>
 </template>
 
 <script>
-import { playerHandler } from 'src/mixins/player'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import { Player } from 'shaka-player'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
+import { inRange } from 'lodash'
 
 export default {
-  components: {
-    ControlContainer: () => import('./controls/Container')
+  timers: {
+    hideControls: { time: 4500, autostart: true }
   },
 
-  mixins: [playerHandler],
+  components: {
+    Controls: () => import('./controls/Container'),
+    Directives: () => import('./controls/Directives')
+  },
+
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
+  },
+
+  data () {
+    return {
+      instance: null,
+      controlsActive: true,
+      playerSettings: {
+        streaming: {
+          rebufferingGoal: 2,
+          bufferingGoal: 10,
+          bufferBehind: 30,
+          jumpLargeGaps: true,
+          ignoreTextStreamFailures: true,
+          alwaysStreamText: true
+        }
+      }
+    }
+  },
 
   computed: {
     ...mapState('player', [
-      'controls',
-      'data',
-      'fullscreen',
       'ready'
     ]),
 
-    ...mapGetters('player', [
-      'getDataBindings',
-      'getEventListeners',
-      'getKeyBindings',
-      'getPlayerSettings'
-    ])
-  },
+    element () {
+      return this.$refs.element
+    },
 
-  watch: {
-    '$q.fullscreen.isActive' (value = false) {
-      this.setFullscreen(value)
+    player () {
+      return this.$refs.instance
     }
   },
 
-  mounted () {
-    this.setPlayer()
+  created () {
+    // Start event bus
+    this.$root.$on('playerSetTime', this.setPlayerTime)
+    this.$root.$on('playerToggleFullscreen', this.toggleFullscreen)
+    this.$root.$on('playerTogglePlay', this.togglePlay)
   },
 
   async beforeDestroy () {
-    // Remove listeners
-    for (const listener of this.getEventListeners) {
-      this.player.removeEventListener(listener, this.setPlayerData)
-    }
-
-    // Destroy instance
     if (this.instance) {
       await this.instance.unload()
       await this.instance.destroy()
     }
 
-    // Reset player state
-    this.reset()
+    // Stop event bus
+    this.$root.$off('playerSetTime', this.setPlayerTime)
+    this.$root.$off('playerToggleFullscreen', this.toggleFullscreen)
+    this.$root.$off('playerTogglePlay', this.togglePlay)
+  },
+
+  async mounted () {
+    await this.initPlayer()
   },
 
   methods: {
     ...mapActions('player', [
-      'initialize',
-      'reset'
+      'initialize'
     ]),
 
     ...mapMutations('player', [
-      'setData'
+      'setBuffered',
+      'setCurrentTime',
+      'setDuration',
+      'setEnded',
+      'setError',
+      'setMetadata',
+      'setPlayable',
+      'setPlaying'
     ]),
 
-    async setPlayer () {
+    async initPlayer () {
       if (!Player.isBrowserSupported()) {
         alert('Browser is not supported')
       }
@@ -92,10 +134,10 @@ export default {
       this.instance = new Player(this.player)
 
       // Load player settings
-      await this.instance.configure(this.getPlayerSettings)
+      await this.instance.configure(this.playerSettings)
       await this.instance.load(this.model.stream_url)
 
-      // Set sprite metadata track
+      // Add sprite track
       const spriteTrack = await this.instance.addTextTrack(
         this.model.sprite_url,
         'eng',
@@ -105,36 +147,45 @@ export default {
 
       await this.instance.selectTextTrack(spriteTrack)
 
-      // Initialize store
-      await this.initialize({
+      // Initialize player store
+      this.initialize({
+        model: this.model,
         tracks: [
           { key: 'metadata-sprite', value: this.player.textTracks[0] }
         ]
       })
-
-      // Add listeners
-      for (const listener of this.getEventListeners) {
-        this.player.addEventListener(listener, this.setPlayerData)
-      }
-
-      // Autoplay video
-      await this.player.play()
     },
 
-    async setPlayerData () {
-      if (!this.player) {
+    showControls () {
+      this.controlsActive = true
+      this.$timer.restart('hideControls')
+    },
+
+    hideControls () {
+      this.controlsActive = false
+    },
+
+    setPlayerTime (value = 0) {
+      if (!inRange(value, 0, this.player.duration)) {
         return
       }
 
-      const data = {}
+      this.player.currentTime = value
+      this.setCurrentTime(value)
+    },
 
-      for (const key of this.getDataBindings) {
-        data[key] = this.player[key] || null
+    toggleFullscreen () {
+      this.$q.fullscreen.toggle(this.element)
+    },
+
+    async togglePlay () {
+      if (this.player.paused) {
+        await this.player.play()
+        return
       }
 
-      await this.setData(data)
+      await this.player.pause()
     }
   }
-
 }
 </script>

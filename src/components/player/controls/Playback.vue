@@ -1,57 +1,119 @@
 <template>
-  <div class="playback">
-    <q-btn
-      flat
-      dense
-      color="white"
-      :icon="playPauseIcon"
-      @click="callback({ type: 'togglePlay' })"
-    />
+  <div class="row no-wrap justify-between items-center q-mb-sm">
+    <div class="col">
+      <q-btn
+        v-shortkey="['space']"
+        flat
+        dense
+        color="white"
+        :icon="playingIcon"
+        @click="togglePlay"
+        @shortkey="togglePlay"
+      />
 
-    <q-btn
-      flat
-      dense
-      color="white"
-      icon="replay_5"
-      @click="callback({ type: 'rewind' })"
-    />
+      <q-btn
+        v-shortkey="['arrowleft']"
+        flat
+        dense
+        color="white"
+        icon="replay_5"
+        @click="replay"
+        @shortkey="replay"
+      />
 
-    <q-btn
-      flat
-      dense
-      color="white"
-      icon="forward_5"
-      @click="callback({ type: 'forward' })"
-    />
+      <q-btn
+        v-shortkey="['arrowright']"
+        flat
+        dense
+        color="white"
+        icon="forward_5"
+        @click="forward"
+        @shortkey="forward"
+      />
 
-    <span class="q-px-sm text-white">
-      {{ Number(data.currentTime) | timestamp }} / {{ Number(data.duration) | timestamp }}
-    </span>
+      <span class="q-px-sm text-white">
+        {{ Number(currentTime) | timestamp }} / {{ Number(duration) | timestamp }}
+      </span>
+    </div>
+
+    <div class="col-auto">
+      <q-btn
+        v-shortkey="['d']"
+        flat
+        dense
+        color="white"
+        icon="video_settings"
+        @click="debugMedia"
+        @shortkey="debugMedia"
+      />
+
+      <q-btn
+        v-shortkey="['f']"
+        flat
+        dense
+        color="white"
+        :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+        @click="toggleFullscreen"
+        @shortkey="toggleFullscreen"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    data: {
+    currentTime: {
+      type: Number,
+      default: 0
+    },
+
+    duration: {
+      type: Number,
+      default: 0
+    },
+
+    model: {
       type: Object,
       required: true
+    },
+
+    playing: {
+      type: Boolean,
+      default: false
     }
   },
 
   computed: {
-    playPauseIcon () {
-      if (this.data.readyState === 0 || this.data.ended || this.data.paused) {
-        return 'play_arrow'
-      }
-
-      return 'pause'
+    playingIcon () {
+      return this.playing ? 'pause' : 'play_arrow'
     }
   },
 
   methods: {
-    callback (value) {
-      this.$root.$emit('player_event', value)
+    debugMedia () {
+      this.$store.dispatch('dialog/open', {
+        component: 'MediaDebug',
+        data: {
+          id: this.model.id
+        }
+      })
+    },
+
+    toggleFullscreen () {
+      this.$root.$emit('playerToggleFullscreen')
+    },
+
+    togglePlay () {
+      this.$root.$emit('playerTogglePlay')
+    },
+
+    replay () {
+      this.$root.$emit('playerSetTime', this.currentTime - 5)
+    },
+
+    forward () {
+      this.$root.$emit('playerSetTime', this.currentTime + 5)
     }
   }
 }
