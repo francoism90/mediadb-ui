@@ -49,7 +49,7 @@
           <q-item-section side>
             <q-icon name="add" />
           </q-item-section>
-          <q-item-section>New Collection</q-item-section>
+          <q-item-section>Create Collection</q-item-section>
         </q-item>
       </q-list>
     </q-menu>
@@ -118,7 +118,7 @@ export default {
     },
 
     async createCollection () {
-      await this.$axios.put(`videos/${this.data.id}/save`, {
+      await this.$axios.post(`videos/${this.data.id}/save`, {
         collections: [
           { id: this.data.id, name: this.data.name }
         ]

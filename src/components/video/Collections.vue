@@ -61,6 +61,7 @@ export default {
   methods: {
     resetItems () {
       this.$store.dispatch(`video/${this.namespace}/resetItems`)
+      this.setModels()
     },
 
     setPage (payload = {}) {
