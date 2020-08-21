@@ -4,7 +4,6 @@ import Vuex from 'vuex'
 // Vuex modules
 import dialog from './dialog'
 import player from './player'
-import session from './session'
 
 Vue.use(Vuex)
 
@@ -20,7 +19,6 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      session,
       dialog,
       player
     },

@@ -24,22 +24,9 @@ const routes = [
     meta: { auth: false, layout: 'Error' }
   },
   {
-    name: 'channels',
-    path: '/channels',
-    component: () => import('pages/app/Channels.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'channel',
-    path: '/channel/:id/:slug?',
-    component: () => import('pages/app/Channel.vue'),
-    meta: { auth: true, layout: 'Main' },
-    props: true
-  },
-  {
-    name: 'media',
-    path: '/media/:id/:slug?',
-    component: () => import('pages/app/Media.vue'),
+    name: 'video',
+    path: '/video/:id/:slug?',
+    component: () => import('pages/app/Video.vue'),
     meta: { auth: true, layout: 'Main' },
     props: true
   },

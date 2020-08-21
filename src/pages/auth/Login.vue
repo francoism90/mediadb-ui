@@ -83,7 +83,8 @@ export default {
     this.setForm({
       email: '',
       password: '',
-      remember: false
+      device_name: this.$q.platform.userAgent,
+      remember: true
     })
   },
 
@@ -93,11 +94,17 @@ export default {
         // Reset errors
         this.resetErrors()
 
-        // Initialize session store
-        await this.$store.dispatch('session/login', this.form)
+        if (!this.$q.platform.is.cordova) {
+          await this.$axios.get('sanctum/csrf-cookie')
+        }
 
-        // Redirect to requested path
-        this.$router.replace(this.$route.query.redirect || '/')
+        await this.$auth
+          .login({
+            data: this.form,
+            redirect: this.$route.query.redirect || '/',
+            staySignedIn: true,
+            fetchUser: true
+          })
       } catch (e) {
         this.setMessage(e.response.data.message || '')
         this.setErrors(e.response.data.errors || [])

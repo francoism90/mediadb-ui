@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <nav>
     <section class="bg-grey-10 q-py-lg">
       <div class="container row items-start">
         <div class="col">
@@ -16,7 +16,6 @@
           <tags
             v-if="data.relationships.tags.length"
             :items="data.relationships.tags"
-            class="q-pt-xs"
           />
         </div>
 
@@ -31,15 +30,11 @@
 
     <section
       v-if="$q.screen.lt.sm"
-      class="bg-grey-8 text-center"
+      class="row no-wrap justify-center items-center q-py-md bg-grey-8"
     >
-      <actions class="container q-py-md" />
+      <actions />
     </section>
-
-    <section class="bg-grey-9">
-      <subscribe class="container q-py-md" />
-    </section>
-  </div>
+  </nav>
 </template>
 
 <script>
@@ -47,13 +42,12 @@ import { mapState } from 'vuex'
 
 export default {
   components: {
-    Actions: () => import('components/media/Actions'),
-    Subscribe: () => import('components/media/Subscribe'),
+    Actions: () => import('components/video/Actions'),
     Tags: () => import('components/ui/Tags')
   },
 
   computed: {
-    ...mapState('media', [
+    ...mapState('video', [
       'data'
     ])
   }

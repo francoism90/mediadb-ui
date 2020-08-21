@@ -119,7 +119,7 @@ export default {
     async setModels () {
       const response = await Tag
         .where('query', this.query)
-        .append(['items'])
+        .append(['item_count'])
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

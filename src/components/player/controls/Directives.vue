@@ -41,9 +41,9 @@ export default {
 
       // Left/right side
       if (inRange(offsetLeft, 0, seekMargin)) {
-        this.$root.$emit('playerSetTime', this.currentTime - 5)
+        this.$root.$emit('playerSetTime', this.currentTime - 10)
       } else if (inRange(offsetLeft, containerWidth - seekMargin, containerWidth)) {
-        this.$root.$emit('playerSetTime', this.currentTime + 5)
+        this.$root.$emit('playerSetTime', this.currentTime + 10)
       }
     }
   }

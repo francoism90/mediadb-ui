@@ -1,12 +1,12 @@
 <template>
   <q-card
-    v-if="media"
+    v-if="video"
     dark
     style="width: 520px"
   >
     <q-inner-loading
       dark
-      :showing="!media.id"
+      :showing="!video.id"
     >
       <q-spinner
         size="50px"
@@ -25,7 +25,7 @@
       >
         <q-card-section class="row items-center">
           <div class="text-h6">
-            {{ media.name }}
+            {{ video.name }}
           </div>
           <q-space />
           <q-btn
@@ -87,7 +87,7 @@
 <script>
 import { formHandler } from 'src/mixins/form'
 import Collection from 'src/models/Collection'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 
 export default {
   mixins: [formHandler],
@@ -101,7 +101,7 @@ export default {
 
   data () {
     return {
-      media: {},
+      video: {},
       collections: [],
       userCollections: []
     }
@@ -114,13 +114,13 @@ export default {
 
   methods: {
     async setModel () {
-      this.media = await Media.$find(this.data.id)
+      this.video = await Video.$find(this.data.id)
     },
 
     async setCollections () {
       this.userCollections = await Collection
         .where('type', 'user')
-        .where('media', this.data.id)
+        .where('video', this.data.id)
         .orderBy('name')
         .page(1)
         .limit(30)
@@ -133,8 +133,9 @@ export default {
 
     async filterCollections (val, update, abort) {
       this.collections = await Collection
+        .where('type', 'user')
         .where('query', val || null)
-        .orderBy(val.length ? 'relevance' : 'updated')
+        .orderBy(val.length ? 'relevance' : 'updated_at')
         .page(1)
         .limit(5)
         .$get()
@@ -145,7 +146,7 @@ export default {
     async onSubmit () {
       try {
         // Save collection changes
-        await this.$axios.put(`api/v1/media/${this.data.id}/save`, {
+        await this.$axios.put(`videos/${this.data.id}/save`, {
           collections: this.form.collections
         })
 
@@ -156,7 +157,7 @@ export default {
           progress: true,
           timeout: 1500,
           position: 'top',
-          message: `${this.media.name} has been saved.`,
+          message: `${this.video.name} has been saved.`,
           type: 'positive'
         })
       } catch (e) {

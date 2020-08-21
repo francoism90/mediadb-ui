@@ -1,7 +1,7 @@
 <template>
-  <div class="container fluid scroll-y">
+  <div class="container scroll-y q-pb-md">
     <div class="q-py-lg text-caption text-uppercase">
-      Next
+      Related Videos
     </div>
 
     <q-pull-to-refresh
@@ -11,15 +11,16 @@
       <q-infinite-scroll
         :key="state.id"
         :debounce="300"
+        scroll-target="body"
         @load="onLoad"
       >
         <div class="row q-col-gutter-md items">
           <div
             v-for="(item, index) in state.data"
             :key="index"
-            class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
           >
-            <media-item :data="item" />
+            <video-item :data="item" />
           </div>
         </div>
 
@@ -37,11 +38,11 @@
 </template>
 
 <script>
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 
 export default {
   components: {
-    MediaItem: () => import('components/media/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   props: {
@@ -53,7 +54,7 @@ export default {
 
   computed: {
     model () {
-      return this.$store.state.media
+      return this.$store.state.video
     },
 
     state () {
@@ -61,32 +62,28 @@ export default {
     },
 
     isLoaded () {
-      return this.$store.getters[`media/${this.namespace}/isLoaded`]
+      return this.$store.getters[`video/${this.namespace}/isLoaded`]
     },
 
     isReady () {
-      return this.$store.getters[`media/${this.namespace}/isReady`]
+      return this.$store.getters[`video/${this.namespace}/isReady`]
     }
   },
 
   methods: {
-    resetPages (payload = {}) {
-      this.$store.dispatch(`media/${this.namespace}/resetPages`, payload)
-    },
-
     resetItems () {
-      this.$store.dispatch(`media/${this.namespace}/resetItems`)
+      this.$store.dispatch(`video/${this.namespace}/resetItems`)
     },
 
     setPage (payload = {}) {
-      this.$store.dispatch(`media/${this.namespace}/setPage`, payload)
+      this.$store.dispatch(`video/${this.namespace}/setPage`, payload)
     },
 
     async setModels () {
-      const response = await Media
+      const response = await Video
         .where('related', this.model.data.id)
-        .include(['model', 'tags'])
-        .append(['preview_url', 'thumbnail_url'])
+        .include('tags')
+        .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy('relevance')
         .page(this.state.page)
         .limit(12)

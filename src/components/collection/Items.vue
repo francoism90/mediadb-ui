@@ -31,7 +31,7 @@
             :key="index"
             class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
           >
-            <media-item :data="item" />
+            <video-item :data="item" />
           </div>
         </div>
 
@@ -50,22 +50,22 @@
 
 <script>
 import paginateModule from 'src/store/paginate'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 
 export default {
   components: {
-    MediaItem: () => import('components/media/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   data () {
     return {
       sorters: [
+        { label: 'Most Recent', value: '-created_at' },
+        { label: 'Most Viewed', value: 'views' },
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
-        { label: 'Most Recent', value: 'recent' },
-        { label: 'Most Viewed', value: 'views' },
-        { label: 'Shortest to Longest', value: 'shortest' },
-        { label: 'Longest to Shortest', value: 'longest' }
+        { label: 'Shortest to Longest', value: 'duration' },
+        { label: 'Longest to Shortest', value: '-duration' }
       ]
     }
   },
@@ -76,7 +76,7 @@ export default {
     },
 
     moduleName () {
-      return `${this.modelState.data.id}/media`
+      return `${this.modelState.data.id}/videos`
     },
 
     state () {
@@ -122,10 +122,10 @@ export default {
     },
 
     async setModels () {
-      const response = await Media
+      const response = await Video
         .where('collection', this.modelState.data.id)
-        .include(['model', 'tags'])
-        .append(['preview_url', 'thumbnail_url'])
+        .include('tags')
+        .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy(this.sorter.value)
         .page(this.state.page)
         .limit(12)

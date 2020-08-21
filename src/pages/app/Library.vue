@@ -31,7 +31,7 @@
             :key="index"
             class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
           >
-            <media-item :data="item" />
+            <video-item :data="item" />
           </div>
         </div>
 
@@ -50,7 +50,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 import paginateModule from 'src/store/paginate'
 
 export default {
@@ -61,7 +61,7 @@ export default {
   },
 
   components: {
-    MediaItem: () => import('components/media/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   data () {
@@ -69,7 +69,7 @@ export default {
       sorters: [
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
-        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Recent', value: '-created_at' },
         { label: 'Most Viewed', value: 'views' }
       ]
     }
@@ -113,9 +113,9 @@ export default {
     ]),
 
     async setModels () {
-      const response = await Media
-        .include(['model', 'tags'])
-        .append(['preview_url', 'thumbnail_url'])
+      const response = await Video
+        .include('tags')
+        .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

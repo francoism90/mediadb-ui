@@ -1,21 +1,19 @@
-export default ({ router, store, Vue }) => {
-  router.beforeEach(async (to, from, next) => {
-  // Rate limiting errors
-    if (['/429'].includes(to.path)) {
-      next()
-    }
+import { axiosInstance } from './axios'
+import auth from '@websanova/vue-auth'
+import authBearer from '@websanova/vue-auth/dist/drivers/auth/bearer.esm.js'
+import httpAxiosResource from '@websanova/vue-auth/dist/drivers/http/axios.1.x.esm.js'
+import routerVueRouter from '@websanova/vue-auth/dist/drivers/router/vue-router.2.x.esm.js'
 
-    // Handle user auth
-    await store.dispatch('session/fetch')
+export default function ({ Vue, router }) {
+  Vue.axios = axiosInstance
+  Vue.router = router
 
-    const isAuthenticated = store.getters['session/isAuthenticated']
-
-    if (to.name !== 'login' && to.meta.auth === true && !isAuthenticated) {
-      next({ name: 'login', query: { redirect: to.fullPath } })
-    } else if (['join', 'login'].includes(to.name) && isAuthenticated) {
-      next({ name: 'home' })
-    } else {
-      next()
-    }
+  Vue.use(auth, {
+    auth: authBearer,
+    http: httpAxiosResource,
+    router: routerVueRouter,
+    rolesKey: 'roles',
+    notFoundRedirect: { name: '404' },
+    forbiddenRedirect: { name: '403' }
   })
 }

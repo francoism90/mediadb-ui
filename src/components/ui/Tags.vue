@@ -40,7 +40,7 @@ export default {
         {
           value: 'genre',
           color: 'grey-9',
-          icon: 'star'
+          icon: 'local_offer'
         },
         {
           value: 'default',
@@ -53,9 +53,14 @@ export default {
           icon: 'language'
         },
         {
-          value: 'person',
+          value: 'actor',
           color: 'grey-9',
           icon: 'person'
+        },
+        {
+          value: 'studio',
+          color: 'grey-9',
+          icon: 'movie'
         }
       ]
     }

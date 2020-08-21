@@ -24,10 +24,9 @@ import paginateModule from 'src/store/paginate'
 export default {
   preFetch ({ store }) {
     const searchStores = [
-      'search_media',
-      'search_channels',
       'search_collections',
-      'search_tags'
+      'search_tags',
+      'search_videos'
     ]
 
     for (const searchStore of searchStores) {
@@ -40,10 +39,9 @@ export default {
   components: {
     Intro: () => import('components/search/Intro'),
     Overview: () => import('components/search/Overview'),
-    Channels: () => import('components/search/Channels'),
     Collections: () => import('components/search/Collections'),
-    Media: () => import('components/search/Media'),
-    Tags: () => import('components/search/Tags')
+    Tags: () => import('components/search/Tags'),
+    Videos: () => import('components/search/Videos')
   },
 
   data () {
@@ -52,22 +50,16 @@ export default {
       query: '',
       type: '',
       componentTypes: {
-        media: 'Media',
         collections: 'Collections',
-        channels: 'Channels',
-        tags: 'Tags'
+        tags: 'Tags',
+        videos: 'Videos'
       }
     }
   },
 
   computed: {
     getComponentType () {
-      const hasComponent = Object.prototype.hasOwnProperty.call(
-        this.componentTypes,
-        this.type
-      )
-
-      return !hasComponent ? this.componentTypes[0] : this.componentTypes[this.type]
+      return this.componentTypes[this.type] || this.componentTypes[0]
     }
   },
 

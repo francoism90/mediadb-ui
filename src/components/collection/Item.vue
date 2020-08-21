@@ -17,6 +17,7 @@
         dark
       >
         <q-item
+          v-if="$auth.check({'permissions': 'edit collections'})"
           v-close-popup
           clickable
           @click="editModel"
@@ -25,17 +26,6 @@
             <q-icon name="edit" />
           </q-item-section>
           <q-item-section>Edit Collection</q-item-section>
-        </q-item>
-
-        <q-item
-          v-close-popup
-          clickable
-          @click="shareModel"
-        >
-          <q-item-section side>
-            <q-icon name="share" />
-          </q-item-section>
-          <q-item-section>Share</q-item-section>
         </q-item>
       </q-list>
     </q-menu>
@@ -62,13 +52,18 @@
       <div class="text-subtitle1 text-grey-5">
         {{ data.name }}
       </div>
-      <div class="text-subtitle2 text-grey-6">
-        {{ Number(data.items || 0) | approximate }} items
+      <div
+        v-if="data.relationships.model"
+        class="text-subtitle2 text-grey-6"
+      >
+        <span v-if="!hideModel.includes(data.relationships.model.name)">
+          {{ data.relationships.model.name }} •
+        </span>
+        {{ Number(data.item_count || 0) | approximate }} items
       </div>
       <tags
         v-if="data.relationships.tags.length"
         :items="data.relationships.tags"
-        class="q-pt-xs"
       />
     </q-card-section>
   </q-card>
@@ -87,6 +82,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      hideModel: ['Administrator']
+    }
+  },
+
   methods: {
     editModel () {
       this.$store.dispatch('dialog/open', {
@@ -95,9 +96,7 @@ export default {
           id: this.data.id
         }
       })
-    },
-
-    shareModel () {}
+    }
   }
 }
 </script>

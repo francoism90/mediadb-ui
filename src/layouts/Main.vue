@@ -67,7 +67,7 @@
                 <q-item dark>
                   <q-item-section no-wrap>
                     <q-item-label caption>
-                      Signed in as <span class="text-weight-medium">{{ session.name }}</span>
+                      Signed in as <span class="text-weight-medium">{{ $auth.user().name }}</span>
                     </q-item-label>
                   </q-item-section>
                 </q-item>
@@ -179,8 +179,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   components: {
     Dialogs: () => import('components/ui/Dialog'),
@@ -191,24 +189,17 @@ export default {
     return {
       drawer: true,
       miniDrawer: true,
-      hideDrawer: ['media'],
+      hideDrawer: ['video'],
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
-        { label: 'Channels', name: 'channels', icon: 'live_tv', separator: false },
-        { label: 'Tags', name: 'tags', icon: 'label', separator: false },
-        { label: 'Collections', name: 'collections', icon: 'layers', separator: true },
-        { label: 'Subscriptions', name: 'history', icon: 'subscriptions', separator: false },
+        { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
+        { label: 'Tags', name: 'tags', icon: 'label', separator: true },
+        { label: 'My Subscriptions', name: 'history', icon: 'subscriptions', separator: false },
         { label: 'Watch Later', name: 'history', icon: 'watch_later', separator: false },
         { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
         { label: 'History', name: 'history', icon: 'history', separator: false }
       ]
     }
-  },
-
-  computed: {
-    ...mapGetters('session', {
-      session: 'getData'
-    })
   },
 
   watch: {
@@ -235,7 +226,11 @@ export default {
 
     async logout () {
       try {
-        await this.$store.dispatch('session/logout')
+        await this.$auth
+          .logout({
+            makeRequest: true,
+            redirect: { name: 'login' }
+          })
 
         // Reload app
         this.$router.go('/')

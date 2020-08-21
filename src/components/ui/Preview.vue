@@ -1,9 +1,9 @@
 <template>
   <div
     ref="element"
-    v-touch-swipe.mouse.right="handleSwipe"
-    @mouseover="startPreview"
-    @mouseout="stopPreview"
+    v-touch-swipe.left.right="handleSwipe"
+    @mouseover="showPreview"
+    @mouseleave="hidePreview"
   >
     <q-img
       :alt="name"
@@ -18,18 +18,18 @@
     />
 
     <video
-      v-show="previewShow"
+      v-show="previewActive"
       ref="instance"
-      playsinline
       preload="metadata"
+      muted
+      playsinline
+      disablePictureInPicture
+      disableRemotePlayback
       width="100%"
       height="160px"
       class="absolute-center item-cover"
-      muted
-      disablePictureInPicture
-      disableRemotePlayback
-      @abort="stopPreview"
-      @ended="stopPreview"
+      @abort="hidePreview"
+      @ended="hidePreview"
     />
   </div>
 </template>
@@ -58,8 +58,8 @@ export default {
   data () {
     return {
       instance: null,
-      previewShow: false,
-      previewReady: false,
+      previewActive: false,
+      playerReady: false,
       playerSettings: {
         streaming: {
           rebufferingGoal: 2,
@@ -83,56 +83,51 @@ export default {
   },
 
   async beforeDestroy () {
+    await this.hidePreview()
+
     if (this.instance) {
-      await this.instance.unload()
+      await this.instance.detach()
       await this.instance.destroy()
     }
   },
 
   methods: {
-    async handleSwipe ({ evt, ...info }) {
-      if (this.previewShow) {
-        await this.stopPreview()
-        return
-      }
-      await this.startPreview()
+    handleSwipe ({ evt, ...info }) {
+      this.showPreview()
     },
 
-    async startPreview () {
-      // show player element
-      this.previewShow = true
-
-      // Init player
+    async showPreview () {
       await this.setPlayer()
 
-      // Start playback
-      await this.player.play()
+      if (!this.previewActive) {
+        await this.player.play()
+
+        this.previewActive = true
+      }
     },
 
-    async stopPreview () {
-      // Pause playback
+    async hidePreview () {
       await this.player.pause()
 
-      // Hide player element
-      this.previewShow = false
+      this.previewActive = false
     },
 
-    async setPlayer () {
-      if (this.previewReady) {
+    async setPlayer (showPreview = false) {
+      if (!Player.isBrowserSupported()) {
+        alert('Browser is not supported.')
         return
       }
 
-      if (!Player.isBrowserSupported()) {
-        alert('Browser is not supported')
+      if (this.playerReady) {
+        return
       }
 
       this.instance = new Player(this.player)
 
-      // Load player settings
       await this.instance.configure(this.playerSettings)
       await this.instance.load(this.src)
 
-      this.previewReady = true
+      this.playerReady = true
     }
   }
 }

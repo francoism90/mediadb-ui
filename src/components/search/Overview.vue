@@ -15,7 +15,7 @@
               class="text-caption text-uppercase cursor-pointer"
               @click="filterQuery(type.key, type.store)"
             >
-              {{ type.labelFilter }}
+              {{ type.labelFilter }} ({{ getItemCount(type.key) }})
             </a>
           </div>
         </div>
@@ -38,16 +38,14 @@
 </template>
 
 <script>
-import Channel from 'src/models/Channel'
 import Collection from 'src/models/Collection'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 import Tag from 'src/models/Tag'
 
 export default {
   components: {
-    ChannelItem: () => import('components/channel/Item'),
     CollectionItem: () => import('components/collection/Item'),
-    MediaItem: () => import('components/media/Item'),
+    VideoItem: () => import('components/video/Item'),
     TagItem: () => import('components/tag/Item')
   },
 
@@ -62,19 +60,11 @@ export default {
     return {
       types: [
         {
-          key: 'media',
-          label: 'Media',
-          labelFilter: 'All Media',
-          component: 'MediaItem',
-          store: 'search_media',
-          columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
-        },
-        {
-          key: 'channels',
-          label: 'Channels',
-          labelFilter: 'All Channels',
-          component: 'ChannelItem',
-          store: 'search_channels',
+          key: 'videos',
+          label: 'Videos',
+          labelFilter: 'All Videos',
+          component: 'VideoItem',
+          store: 'search_videos',
           columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
         },
         {
@@ -94,70 +84,65 @@ export default {
           columnClass: 'col-xs-12 col-sm-6 col-md-4 col-lg-2'
         }
       ],
-      channels: [],
       collections: [],
-      media: [],
-      tags: []
+      tags: [],
+      videos: []
     }
   },
 
   created () {
-    this.setChannels()
     this.setCollections()
-    this.setMedia()
     this.setTags()
+    this.setVideos()
   },
 
   methods: {
     getItems (key) {
-      return this[key]
+      return this[key].data
+    },
+
+    getItemCount (key) {
+      return this[key].meta.total
     },
 
     hasItems (key) {
-      return this[key].length
-    },
+      if (!this[key].data || !this[key].meta) {
+        return false
+      }
 
-    async setChannels () {
-      this.channels = await Channel
-        .where('query', this.query)
-        .include(['model', 'tags'])
-        .append(['items', 'thumbnail_url'])
-        .orderBy('relevance')
-        .page(1)
-        .limit(8)
-        .$get()
+      return this[key].data.length
     },
 
     async setCollections () {
       this.collections = await Collection
         .where('query', this.query)
         .include(['model', 'tags'])
-        .append(['items', 'thumbnail_url'])
+        .append(['item_count', 'thumbnail_url'])
         .orderBy('relevance')
         .page(1)
         .limit(4)
-        .$get()
-    },
-
-    async setMedia () {
-      this.media = await Media
-        .where('query', this.query)
-        .include(['model', 'tags'])
-        .append(['preview_url', 'thumbnail_url'])
-        .orderBy('relevance')
-        .page(1)
-        .limit(9)
-        .$get()
+        .get()
     },
 
     async setTags () {
       this.tags = await Tag
         .where('query', this.query)
-        .append(['items'])
+        .append(['item_count'])
         .orderBy('relevance')
         .page(1)
         .limit(9)
-        .$get()
+        .get()
+    },
+
+    async setVideos () {
+      this.videos = await Video
+        .where('query', this.query)
+        .include('tags')
+        .append(['metadata', 'preview_url', 'thumbnail_url'])
+        .orderBy('relevance')
+        .page(1)
+        .limit(9)
+        .get()
     },
 
     filterQuery (type = '', store = '') {

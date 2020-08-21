@@ -15,11 +15,10 @@ import { mapGetters } from 'vuex'
 
 export default {
   components: {
-    ChannelEdit: () => import('components/channel/Edit'),
     CollectionEdit: () => import('components/collection/Edit'),
-    MediaDebug: () => import('components/media/Debug'),
-    MediaEdit: () => import('components/media/Edit'),
-    MediaSave: () => import('components/media/Save')
+    VideoDebug: () => import('components/video/Debug'),
+    VideoEdit: () => import('components/video/Edit'),
+    VideoSave: () => import('components/video/Save')
   },
 
   computed: {

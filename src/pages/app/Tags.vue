@@ -85,8 +85,9 @@ export default {
       types: [
         { label: 'All Types', value: '*' },
         { label: 'Genres', value: 'genre' },
-        { label: 'Languages', value: 'language' },
-        { label: 'People', value: 'person' }
+        { label: 'Actors', value: 'actor' },
+        { label: 'Studios', value: 'studio' },
+        { label: 'Languages', value: 'language' }
       ]
     }
   },
@@ -141,7 +142,7 @@ export default {
     async setModels () {
       const response = await Tag
         .where('type', this.type.value)
-        .append(['items'])
+        .append(['item_count'])
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(30)

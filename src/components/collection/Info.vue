@@ -9,7 +9,7 @@
         </div>
         <div class="text-subtitle2 text-grey-5">
           {{ data.relationships.model.name }} •
-          {{ Number(data.items || 0) | approximate }} items
+          {{ Number(data.item_count || 0) | approximate }} items
         </div>
       </div>
 

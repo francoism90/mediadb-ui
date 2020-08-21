@@ -1,12 +1,12 @@
 <template>
   <q-card
-    v-if="media && media.metadata"
+    v-if="video && video.metadata"
     dark
     style="width: 520px"
   >
     <q-inner-loading
       dark
-      :showing="!media.id"
+      :showing="!video.id"
     >
       <q-spinner
         size="50px"
@@ -22,7 +22,7 @@
       <q-form>
         <q-card-section class="row items-center">
           <div class="text-h6">
-            {{ media.name }}
+            {{ video.name }}
           </div>
           <q-space />
           <q-btn
@@ -40,7 +40,7 @@
 
         <q-card-section>
           <q-input
-            :value="media.original_name || 'N/A'"
+            :value="video.metadata.file_name || 'N/A'"
             dark
             square
             readonly
@@ -58,7 +58,7 @@
           />
 
           <q-input
-            :value="media.metadata.codec_name || 'N/A'"
+            :value="video.metadata.codec_name || 'N/A'"
             dark
             square
             readonly
@@ -85,7 +85,7 @@
           />
 
           <q-input
-            :value="media.metadata.display_aspect_ratio || 'N/A'"
+            :value="video.metadata.aspect_ratio || 'N/A'"
             dark
             square
             readonly
@@ -94,7 +94,7 @@
           />
 
           <q-input
-            :value="media.metadata.probe_score || 0"
+            :value="video.metadata.probe_score || 0"
             dark
             square
             readonly
@@ -122,7 +122,7 @@
 
 <script>
 import { format } from 'quasar'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 
 export default {
   props: {
@@ -134,19 +134,19 @@ export default {
 
   data () {
     return {
-      media: null
+      video: null
     }
   },
 
   computed: {
     fileSize () {
       return format.humanStorageSize(
-        this.media.size || 0
+        this.video.metadata.size || 0
       )
     },
 
     bitRate () {
-      const bitrate = this.media.metadata.bitrate || 1024
+      const bitrate = this.video.metadata.bitrate || 1024
 
       return Math.round(
         bitrate / 1024
@@ -154,15 +154,15 @@ export default {
     },
 
     videoResolution () {
-      const width = this.media.metadata.width || 0
-      const height = this.media.metadata.height || 0
+      const width = this.video.metadata.width || 0
+      const height = this.video.metadata.height || 0
 
       return `${width} x ${height}`
     }
   },
 
   async created () {
-    this.media = await Media.$find(this.data.id)
+    this.video = await Video.$find(this.data.id)
   }
 }
 </script>

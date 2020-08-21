@@ -1,6 +1,12 @@
 <template>
-  <div id="q-app">
-    <component :is="layout || 'Auth'">
+  <div
+    v-if="$auth.ready()"
+    id="q-app"
+  >
+    <component
+      :is="layout || 'Auth'"
+      v-if="$auth.ready()"
+    >
       <router-view />
     </component>
   </div>

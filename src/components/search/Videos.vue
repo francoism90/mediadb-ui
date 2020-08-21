@@ -1,7 +1,7 @@
 <template>
   <main>
     <div class="q-pt-lg text-caption">
-      About {{ meta.total || 0 | approximate }} channels for <i>{{ query }}</i>
+      About {{ meta.total || 0 | approximate }} videos for <i>{{ query }}</i>
     </div>
 
     <q-btn-group
@@ -33,9 +33,9 @@
           <div
             v-for="(item, index) in data"
             :key="index"
-            class="col-xs-12 col-sm-6 col-md-3 col-lg-2"
+            class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
           >
-            <media-item :data="item" />
+            <video-item :data="item" />
           </div>
         </div>
 
@@ -54,11 +54,11 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 
 export default {
   components: {
-    MediaItem: () => import('components/media/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   props: {
@@ -73,15 +73,16 @@ export default {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
         { label: 'Trending', value: 'trending' },
-        { label: 'Alphabetical', value: 'name' },
-        { label: 'Most Recent', value: 'recent' },
-        { label: 'Most Viewed', value: 'views' }
+        { label: 'Most Recent', value: '-created_at' },
+        { label: 'Most Viewed', value: 'views' },
+        { label: 'Shortest to Longest', value: 'duration' },
+        { label: 'Longest to Shortest', value: '-duration' }
       ]
     }
   },
 
   computed: {
-    ...mapState('search_media', [
+    ...mapState('search_videos', [
       'id',
       'data',
       'meta',
@@ -90,7 +91,7 @@ export default {
       'ready'
     ]),
 
-    ...mapGetters('search_media', [
+    ...mapGetters('search_videos', [
       'isLoaded'
     ]),
 
@@ -112,17 +113,17 @@ export default {
   },
 
   methods: {
-    ...mapActions('search_media', [
-      'resetItems',
+    ...mapActions('search_videos', [
       'resetPages',
+      'resetItems',
       'setPage'
     ]),
 
     async setModels () {
-      const response = await Media
+      const response = await Video
         .where('query', this.query)
-        .include(['model', 'tags'])
-        .append(['preview_url', 'thumbnail_url'])
+        .include('tags')
+        .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

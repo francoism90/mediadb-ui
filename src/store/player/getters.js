@@ -9,16 +9,3 @@ export function getData (state) {
 export function getTracks (state) {
   return state.tracks
 }
-
-export function getKeyBindings () {
-  return {
-    edit: ['c'],
-    rewind: ['arrowleft'],
-    forward: ['arrowright'],
-    info: ['d'],
-    save: ['a'],
-    frameshot: ['s'],
-    toggleFullscreen: ['f'],
-    togglePlay: ['space']
-  }
-}

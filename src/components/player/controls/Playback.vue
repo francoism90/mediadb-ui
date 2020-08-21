@@ -16,7 +16,7 @@
         flat
         dense
         color="white"
-        icon="replay_5"
+        icon="replay_10"
         @click="replay"
         @shortkey="replay"
       />
@@ -26,7 +26,7 @@
         flat
         dense
         color="white"
-        icon="forward_5"
+        icon="forward_10"
         @click="forward"
         @shortkey="forward"
       />
@@ -38,13 +38,27 @@
 
     <div class="col-auto">
       <q-btn
+        v-if="$auth.check({'permissions': 'edit videos'})"
+        v-shortkey="['s']"
+        flat
+        dense
+        color="white"
+        icon="movie_creation"
+        @click="createFrameshot"
+        @shortkey="createFrameshot"
+      >
+        <q-tooltip>Frameshot</q-tooltip>
+      </q-btn>
+
+      <q-btn
+        v-if="$auth.check({'roles': 'super-admin'})"
         v-shortkey="['d']"
         flat
         dense
         color="white"
         icon="video_settings"
-        @click="debugMedia"
-        @shortkey="debugMedia"
+        @click="debugVideo"
+        @shortkey="debugVideo"
       />
 
       <q-btn
@@ -91,11 +105,23 @@ export default {
   },
 
   methods: {
-    debugMedia () {
+    async createFrameshot () {
+      await this.$axios.patch(`videos/${this.model.id}/frameshot`, {
+        timecode: this.currentTime
+      })
+
+      this.$q.notify({
+        progress: true,
+        message: `${this.model.name} has been frameshot.`,
+        type: 'positive'
+      })
+    },
+
+    debugVideo () {
       this.$root.$emit('playerExitFullscreen')
 
       this.$store.dispatch('dialog/open', {
-        component: 'MediaDebug',
+        component: 'VideoDebug',
         data: {
           id: this.model.id
         }
@@ -111,11 +137,11 @@ export default {
     },
 
     replay () {
-      this.$root.$emit('playerSetTime', this.currentTime - 5)
+      this.$root.$emit('playerSetTime', this.currentTime - 10)
     },
 
     forward () {
-      this.$root.$emit('playerSetTime', this.currentTime + 5)
+      this.$root.$emit('playerSetTime', this.currentTime + 10)
     }
   }
 }

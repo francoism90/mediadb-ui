@@ -82,10 +82,11 @@ export default {
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
         { label: 'Alphabetical', value: 'name' },
-        { label: 'Most Recent', value: 'recent' },
+        { label: 'Most Recent', value: '-created_at' },
         { label: 'Most Viewed', value: 'views' }
       ],
       types: [
+        { label: 'All Collections', value: '*' },
         { label: 'My Collections', value: 'user' },
         { label: 'Community', value: 'community' }
       ]
@@ -143,7 +144,7 @@ export default {
       const response = await Collection
         .where('type', this.type.value)
         .include(['model', 'tags'])
-        .append(['items', 'thumbnail_url'])
+        .append(['item_count', 'thumbnail_url'])
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(16)

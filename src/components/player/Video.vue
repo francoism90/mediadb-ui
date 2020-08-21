@@ -3,20 +3,21 @@
     ref="element"
     class="relative-position window-height player"
     :class="$q.fullscreen.isActive ? 'fullscreen' : null"
-    @mouseenter="showControls()"
-    @mousemove="showControls()"
-    @touchmove="showControls()"
     @mouseleave="hideControls()"
+    @mousemove="showControls()"
+    @mouseover="showControls()"
+    @touchmove="showControls()"
   >
     <video
       ref="instance"
       class="absolute fit"
       playsinline
-      preload="auto"
+      preload="metadata"
       :poster="model.thumbnail_url"
       :height="model.metadata.height || 360"
       :width="model.metadata.width || 480"
-      @canplay="setPlayable(true)"
+      autoPictureInPicture
+      @canplay="autoPlay"
       @durationchange="setDuration(player.duration)"
       @ended="setEnded(true)"
       @error="setError(player.error)"
@@ -28,8 +29,8 @@
       @seeking="setCurrentTime(player.currentTime)"
       @stalled="setPlaying(false)"
       @timeupdate="setCurrentTime(player.currentTime)"
+      @waiting="setPlaying(false)"
     />
-
     <controls v-if="controlsActive" />
     <directives />
   </div>
@@ -103,15 +104,23 @@ export default {
   },
 
   async beforeDestroy () {
-    if (this.instance) {
-      await this.instance.unload()
-      await this.instance.destroy()
-    }
+    // Pause playback
+    await this.player.pause()
+
+    this.hideControls()
 
     // Stop listen for events
     for (const event of this.events) {
       this.$root.$off(event.key, this[event.listener])
     }
+
+    if (this.instance) {
+      await this.instance.detach()
+      await this.instance.destroy()
+    }
+
+    // Reset store
+    this.reset()
   },
 
   async mounted () {
@@ -120,7 +129,8 @@ export default {
 
   methods: {
     ...mapActions('player', [
-      'initialize'
+      'initialize',
+      'reset'
     ]),
 
     ...mapMutations('player', [
@@ -130,13 +140,13 @@ export default {
       'setEnded',
       'setError',
       'setMetadata',
-      'setPlayable',
       'setPlaying'
     ]),
 
     async initPlayer () {
       if (!Player.isBrowserSupported()) {
-        alert('Browser is not supported')
+        alert('Browser is not supported.')
+        return
       }
 
       this.instance = new Player(this.player)
@@ -185,12 +195,12 @@ export default {
       this.setCurrentTime(value)
     },
 
-    async exitFullscreen () {
-      await this.$q.fullscreen.exit(this.element)
-    },
-
     async enterFullscreen () {
       await this.$q.fullscreen.request(this.element)
+    },
+
+    async exitFullscreen () {
+      await this.$q.fullscreen.exit(this.element)
     },
 
     async toggleFullscreen () {
@@ -199,6 +209,17 @@ export default {
 
       // Toggle fullscreen
       await this.$q.fullscreen.toggle(this.element)
+    },
+
+    async autoPlay () {
+      if (!this.player.paused || this.player.currentTime > 0) {
+        return
+      }
+
+      // Restart control timer
+      this.showControls()
+
+      await this.player.play()
     },
 
     async togglePlay () {

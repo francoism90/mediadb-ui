@@ -10,7 +10,7 @@
       Search MediaDB
     </p>
     <p class="text-body2">
-      Find media, channels, collections and tags.
+      Find videos, collections and tags.
     </p>
   </div>
 </template>

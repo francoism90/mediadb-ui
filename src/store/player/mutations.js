@@ -44,10 +44,6 @@ export function setMetadata (state, payload = false) {
   state.metadata = payload
 }
 
-export function setPlayable (state, payload = false) {
-  state.playable = payload
-}
-
 export function setPlaying (state, payload = false) {
   state.playing = payload
 }

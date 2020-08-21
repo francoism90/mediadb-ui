@@ -8,10 +8,7 @@ export default function () {
     ended: false,
     error: null,
     metadata: false,
-    playable: false,
     playing: false,
-    readyState: 0,
-    stalled: false,
     tracks: []
   }
 }

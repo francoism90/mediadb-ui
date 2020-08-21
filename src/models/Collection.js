@@ -3,7 +3,7 @@ import Tag from './Tag'
 
 export default class Collection extends Model {
   resource () {
-    return 'collection'
+    return 'collections'
   }
 
   tags () {

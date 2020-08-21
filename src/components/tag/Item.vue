@@ -24,7 +24,7 @@
         class="text-grey-5"
         caption
       >
-        {{ Number(data.items || 0) | approximate }} items
+        {{ Number(data.item_count || 0) | approximate }} items
       </q-item-label>
     </q-item-section>
   </q-item>

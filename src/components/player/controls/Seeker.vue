@@ -5,7 +5,7 @@
   >
     <div
       v-show="seekerHover"
-      class="player-tooltip"
+      class="player-tooltip desktop-only"
       :style="tooltip"
     >
       <span class="q-py-xs q-px-sm text-caption bg-grey-11">

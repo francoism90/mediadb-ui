@@ -1,6 +1,6 @@
 <template>
   <q-card
-    v-if="media"
+    v-if="video"
     dark
     style="width: 520px"
   >
@@ -15,7 +15,7 @@
             color="primary"
             text-color="white"
           />
-          <span class="q-ml-sm">Are you sure you want to delete this media?</span>
+          <span class="q-ml-sm">Are you sure you want to delete this video?</span>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -37,7 +37,7 @@
 
     <q-inner-loading
       dark
-      :showing="!media.id"
+      :showing="!video.id"
     >
       <q-spinner
         size="50px"
@@ -56,7 +56,7 @@
       >
         <q-card-section class="row items-center">
           <div class="text-h6">
-            {{ media.name }}
+            {{ video.name }}
           </div>
           <q-space />
           <q-btn
@@ -82,26 +82,6 @@
             clearable
             :error-message="getError('name')"
             :error="hasError('name')"
-          />
-
-          <q-select
-            v-model="form.model"
-            dark
-            square
-            filled
-            :error-message="getError('model')"
-            :error="hasError('model')"
-            :input-debounce="300"
-            :options="channels"
-            clearable
-            hide-dropdown-icon
-            label="Channel"
-            options-dark
-            option-label="name"
-            option-value="id"
-            stack-label
-            use-input
-            @filter="filterChannels"
           />
 
           <q-select
@@ -154,8 +134,7 @@
 
 <script>
 import { formHandler } from 'src/mixins/form'
-import Channel from 'src/models/Channel'
-import Media from 'src/models/Media'
+import Video from 'src/models/Video'
 import Tag from 'src/models/Tag'
 
 export default {
@@ -171,8 +150,7 @@ export default {
   data () {
     return {
       deleteDialog: false,
-      media: {},
-      channels: [],
+      video: {},
       tags: []
     }
   },
@@ -183,26 +161,14 @@ export default {
 
   methods: {
     async setModel () {
-      this.media = await Media.$find(this.data.id)
+      this.video = await Video.$find(this.data.id)
 
       this.setForm({
-        id: this.media.id,
-        name: this.media.name,
-        description: this.media.description,
-        model: this.media.relationships.model,
-        tags: this.media.relationships.tags
+        id: this.video.id,
+        name: this.video.name,
+        description: this.video.description,
+        tags: this.video.relationships.tags
       })
-    },
-
-    async filterChannels (val, update, abort) {
-      this.channels = await Channel
-        .where('query', val || null)
-        .orderBy(val.length ? 'relevance' : 'updated')
-        .page(1)
-        .limit(5)
-        .$get()
-
-      update()
     },
 
     async filterTags (val, update, abort) {
@@ -218,10 +184,10 @@ export default {
 
     async onSubmit () {
       try {
-        const media = new Media(this.form)
-
         // Save model changes
-        await media.save()
+        const video = new Video(this.form)
+
+        await video.save()
 
         // Refresh model
         await this.setModel()
@@ -230,7 +196,7 @@ export default {
           progress: true,
           timeout: 1500,
           position: 'top',
-          message: `${this.media.name} has been updated.`,
+          message: `${this.video.name} has been updated.`,
           type: 'positive'
         })
       } catch (e) {
@@ -241,12 +207,12 @@ export default {
 
     async onDelete () {
       try {
-        await this.media.delete()
+        await this.video.delete()
 
         this.$q.notify({
           progress: true,
           position: 'top',
-          message: `${this.media.name} has been deleted.`,
+          message: `${this.video.name} has been deleted.`,
           type: 'positive'
         })
 
@@ -255,7 +221,7 @@ export default {
         this.$q.notify({
           progress: true,
           position: 'top',
-          message: e.response.data.message || 'Unable to delete media',
+          message: e.response.data.message || 'Unable to delete video',
           type: 'negative'
         })
       }
