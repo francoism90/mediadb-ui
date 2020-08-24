@@ -9,6 +9,6 @@ export default function () {
     error: null,
     metadata: false,
     playing: false,
-    tracks: []
+    tracks: {}
   }
 }

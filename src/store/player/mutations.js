@@ -12,14 +12,6 @@ export function setModel (state, payload = {}) {
   state.model = payload
 }
 
-export function setTracks (state, payload = []) {
-  state.tracks = payload
-}
-
-export function addTrack (state, payload = {}) {
-  state.tracks.push(payload)
-}
-
 export function setBuffered (state, payload = null) {
   state.buffered = payload
 }
@@ -46,4 +38,8 @@ export function setMetadata (state, payload = false) {
 
 export function setPlaying (state, payload = false) {
   state.playing = payload
+}
+
+export function setTracks (state, payload = {}) {
+  state.tracks = Object.assign({}, state.tracks, payload)
 }

@@ -1,8 +1,6 @@
 // Configuration for your app
 // https://quasar.dev/quasar-cli/quasar-conf-js
 
-const fs = require('fs')
-
 module.exports = function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/supporting-ts
@@ -57,12 +55,15 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      port: 8082,
-      host: 'mediadb.dom',
+      port: 8000,
+      host: 'localhost',
       open: true,
-      https: {
-        key: fs.readFileSync('/home/user/.cert/key.pem'),
-        cert: fs.readFileSync('/home/user/.cert/cert.pem')
+      https: false,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: false
+        }
       }
     },
 
@@ -70,7 +71,9 @@ module.exports = function (ctx) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
+      config: {
+        dark: true
+      },
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
@@ -140,7 +143,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
-    // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
+    // noIosLegacyBuildFlag: true,
     },
 
     // https://quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor

@@ -30,7 +30,25 @@
       @stalled="setPlaying(false)"
       @timeupdate="setCurrentTime(player.currentTime)"
       @waiting="setPlaying(false)"
-    />
+    >
+      <track
+        id="sprite"
+        default
+        kind="metadata"
+        srclang="en"
+        :src="model.sprite_url"
+      >
+
+      <track
+        v-for="(track, index) in model.tracks"
+        :id="track.uuid"
+        :key="index"
+        :kind="track.type || 'subtitles'"
+        :label="track.name"
+        :srclang="track.language || 'en'"
+        :src="track.download_url"
+      >
+    </video>
     <controls v-if="controlsActive" />
     <directives />
   </div>
@@ -64,9 +82,10 @@ export default {
       controlsActive: true,
       events: [
         { key: 'playerTogglePlay', listener: 'togglePlay' },
-        { key: 'playerSetTime', listener: 'overruleTime' },
         { key: 'playerEnterFullscreen', listener: 'enterFullscreen' },
         { key: 'playerExitFullscreen', listener: 'exitFullscreen' },
+        { key: 'playerSetTime', listener: 'overruleTime' },
+        { key: 'playerShowTracks', listener: 'showTracks' },
         { key: 'playerToggleFullscreen', listener: 'toggleFullscreen' }
       ],
       settings: {
@@ -97,6 +116,10 @@ export default {
   },
 
   created () {
+    this.initialize({
+      model: this.model
+    })
+
     // Start listen for events
     for (const event of this.events) {
       this.$root.$on(event.key, this[event.listener])
@@ -114,6 +137,7 @@ export default {
       this.$root.$off(event.key, this[event.listener])
     }
 
+    // Destroy player
     if (this.instance) {
       await this.instance.detach()
       await this.instance.destroy()
@@ -140,7 +164,8 @@ export default {
       'setEnded',
       'setError',
       'setMetadata',
-      'setPlaying'
+      'setPlaying',
+      'setTracks'
     ]),
 
     async initPlayer () {
@@ -155,23 +180,8 @@ export default {
       await this.instance.configure(this.settings)
       await this.instance.load(this.model.stream_url)
 
-      // Add sprite track
-      const spriteTrack = await this.instance.addTextTrack(
-        this.model.sprite_url,
-        'eng',
-        'metadata',
-        'text/vtt'
-      )
-
-      await this.instance.selectTextTrack(spriteTrack)
-
-      // Initialize player store
-      this.initialize({
-        model: this.model,
-        tracks: [
-          { key: 'metadata-sprite', value: this.player.textTracks[0] }
-        ]
-      })
+      // Set tracks
+      this.setTracks(this.player.textTracks)
     },
 
     showControls () {
@@ -233,6 +243,19 @@ export default {
       }
 
       await this.player.pause()
+    },
+
+    async showTracks (tracks = []) {
+      const textTracks = this.player.textTracks
+
+      for (const textTrack of textTracks) {
+        const showTrack = tracks.includes(textTrack.id)
+
+        textTrack.mode = showTrack ? 'showing' : 'hidden'
+      }
+
+      // Update tracks
+      this.setTracks(this.player.textTracks)
     }
   }
 }

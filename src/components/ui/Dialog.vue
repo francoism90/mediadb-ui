@@ -18,7 +18,8 @@ export default {
     CollectionEdit: () => import('components/collection/Edit'),
     VideoDebug: () => import('components/video/Debug'),
     VideoEdit: () => import('components/video/Edit'),
-    VideoSave: () => import('components/video/Save')
+    VideoSave: () => import('components/video/Save'),
+    VideoTracks: () => import('components/video/Tracks')
   },
 
   computed: {

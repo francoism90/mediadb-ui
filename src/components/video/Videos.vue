@@ -4,36 +4,31 @@
       Related Videos
     </div>
 
-    <q-pull-to-refresh
-      :disable="!isReady"
-      @refresh="onRefresh"
+    <q-infinite-scroll
+      :key="state.id"
+      :debounce="300"
+      scroll-target="body"
+      @load="onLoad"
     >
-      <q-infinite-scroll
-        :key="state.id"
-        :debounce="300"
-        scroll-target="body"
-        @load="onLoad"
-      >
-        <div class="row q-col-gutter-md items">
-          <div
-            v-for="(item, index) in state.data"
-            :key="index"
-            class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
-          >
-            <video-item :data="item" />
-          </div>
+      <div class="row q-col-gutter-md items">
+        <div
+          v-for="(item, index) in state.data"
+          :key="index"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
+        >
+          <video-item :data="item" />
         </div>
+      </div>
 
-        <template v-slot:loading>
-          <div class="row no-wrap justify-center q-my-md">
-            <q-spinner
-              color="primary"
-              size="40px"
-            />
-          </div>
-        </template>
-      </q-infinite-scroll>
-    </q-pull-to-refresh>
+      <template v-slot:loading>
+        <div class="row no-wrap justify-center q-my-md">
+          <q-spinner
+            color="primary"
+            size="40px"
+          />
+        </div>
+      </template>
+    </q-infinite-scroll>
   </div>
 </template>
 
@@ -71,10 +66,6 @@ export default {
   },
 
   methods: {
-    resetItems () {
-      this.$store.dispatch(`video/${this.namespace}/resetItems`)
-    },
-
     setPage (payload = {}) {
       this.$store.dispatch(`video/${this.namespace}/setPage`, payload)
     },
@@ -95,11 +86,6 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
-    },
-
-    async onRefresh (done) {
-      await this.resetItems()
-      done()
     }
   }
 }

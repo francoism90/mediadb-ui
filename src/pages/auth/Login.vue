@@ -91,10 +91,9 @@ export default {
   methods: {
     async onSubmit () {
       try {
-        // Reset errors
         this.resetErrors()
 
-        if (!this.$q.platform.is.cordova) {
+        if (!this.$q.platform.is.cordova && !this.$q.platform.is.capacitor) {
           await this.$axios.get('sanctum/csrf-cookie')
         }
 

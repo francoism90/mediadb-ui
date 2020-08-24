@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { find } from 'lodash'
 import { dom } from 'quasar'
 
 export default {
@@ -52,7 +53,7 @@ export default {
     },
 
     tracks: {
-      type: Array,
+      type: Object,
       default: null
     }
   },
@@ -131,11 +132,11 @@ export default {
     },
 
     setTrackCue (percent = 0) {
-      const track = this.tracks.find(({ key }) => key === 'metadata-sprite')
-      const cues = track.value.cues || null
+      const track = find(this.tracks, { id: 'sprite' })
+      const cues = track.cues || null
       const time = Math.floor(this.getTimeByPct(percent))
 
-      if (!cues) {
+      if (!track || !cues) {
         return
       }
 

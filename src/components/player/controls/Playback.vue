@@ -12,7 +12,9 @@
       />
 
       <q-btn
+        v-if="$q.platform.is.desktop"
         v-shortkey="['arrowleft']"
+        class="gt-sm"
         flat
         dense
         color="white"
@@ -22,7 +24,9 @@
       />
 
       <q-btn
+        v-if="$q.platform.is.desktop"
         v-shortkey="['arrowright']"
+        class="gt-sm"
         flat
         dense
         color="white"
@@ -37,6 +41,18 @@
     </div>
 
     <div class="col-auto">
+      <q-btn
+        v-shortkey="['t']"
+        flat
+        dense
+        color="white"
+        icon="subtitles"
+        @click="selectTracks"
+        @shortkey="selectTracks"
+      >
+        <q-tooltip>Subtitles</q-tooltip>
+      </q-btn>
+
       <q-btn
         v-if="$auth.check({'permissions': 'edit videos'})"
         v-shortkey="['s']"
@@ -122,6 +138,17 @@ export default {
 
       this.$store.dispatch('dialog/open', {
         component: 'VideoDebug',
+        data: {
+          id: this.model.id
+        }
+      })
+    },
+
+    selectTracks () {
+      this.$root.$emit('playerExitFullscreen')
+
+      this.$store.dispatch('dialog/open', {
+        component: 'VideoTracks',
         data: {
           id: this.model.id
         }

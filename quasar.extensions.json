@@ -1,6 +1,6 @@
 {
   "@quasar/dotenv": {
-    "env_development": ".env",
+    "env_development": ".env.local",
     "env_production": ".env",
     "common_root_object": "none",
     "create_env_files": false,

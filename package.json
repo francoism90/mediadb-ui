@@ -1,9 +1,9 @@
 {
   "name": "client",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
+  "description": "Build your own streaming service",
   "productName": "MediaDB",
-  "cordovaId": "org.cordova.quasar.app",
+  "cordovaId": "org.cordova.mediadb.app",
   "capacitorId": "",
   "author": "francoism90 <f.menning@pm.me>",
   "private": true,
@@ -20,7 +20,7 @@
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
-    "quasar": "^1.12.13",
+    "quasar": "^1.13.1",
     "sanitize-html": "^1.27.3",
     "shaka-player": "^3.0.3",
     "vue-api-query": "^1.5.2",
@@ -30,7 +30,7 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.6",
+    "@quasar/app": "^2.0.8",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.7.0",
