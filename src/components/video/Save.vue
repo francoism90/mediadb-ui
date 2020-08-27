@@ -161,8 +161,8 @@ export default {
           type: 'positive'
         })
       } catch (e) {
-        this.setMessage(e.response.data.message || '')
-        this.setErrors(e.response.data.errors || [])
+        this.setMessage(e.response)
+        this.setErrors(e.response)
       }
     }
   }

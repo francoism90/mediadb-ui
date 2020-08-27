@@ -49,8 +49,9 @@
         :src="track.download_url"
       >
     </video>
+
     <controls v-if="controlsActive" />
-    <directives />
+    <directives v-if="controlsActive" />
   </div>
 </template>
 
@@ -81,12 +82,10 @@ export default {
       instance: null,
       controlsActive: true,
       events: [
-        { key: 'playerTogglePlay', listener: 'togglePlay' },
-        { key: 'playerEnterFullscreen', listener: 'enterFullscreen' },
-        { key: 'playerExitFullscreen', listener: 'exitFullscreen' },
         { key: 'playerSetTime', listener: 'overruleTime' },
         { key: 'playerShowTracks', listener: 'showTracks' },
-        { key: 'playerToggleFullscreen', listener: 'toggleFullscreen' }
+        { key: 'playerToggleFullscreen', listener: 'toggleFullscreen' },
+        { key: 'playerTogglePlay', listener: 'togglePlay' }
       ],
       settings: {
         streaming: {
@@ -203,14 +202,6 @@ export default {
 
       this.player.currentTime = value
       this.setCurrentTime(value)
-    },
-
-    async enterFullscreen () {
-      await this.$q.fullscreen.request(this.element)
-    },
-
-    async exitFullscreen () {
-      await this.$q.fullscreen.exit(this.element)
     },
 
     async toggleFullscreen () {

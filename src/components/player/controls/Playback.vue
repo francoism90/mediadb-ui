@@ -42,6 +42,7 @@
 
     <div class="col-auto">
       <q-btn
+        v-if="model.tracks.length"
         v-shortkey="['t']"
         flat
         dense

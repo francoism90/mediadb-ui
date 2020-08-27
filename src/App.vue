@@ -29,6 +29,23 @@ export default {
     layout () {
       return this.$route.meta.layout
     }
+  },
+
+  watch: {
+    '$q.fullscreen.isActive' (val) {
+      if (!this.$q.platform.is.cordova) {
+        return
+      }
+
+      // Hide navigationsbars on fullscreen
+      if (val) {
+        window.NavigationBar.hide()
+        window.StatusBar.hide()
+      } else {
+        window.NavigationBar.show()
+        window.StatusBar.show()
+      }
+    }
   }
 }
 </script>

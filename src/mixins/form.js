@@ -19,12 +19,12 @@ export const formHandler = {
       this.errors = {}
     },
 
-    setMessage (message = '') {
-      this.message = message
+    setMessage (error = {}) {
+      this.message = get(error, 'data.message', null)
     },
 
-    setErrors (errors = {}) {
-      this.errors = errors
+    setErrors (error = {}) {
+      this.errors = get(error, 'data.errors', {})
     },
 
     hasError (field) {
