@@ -1,27 +1,62 @@
 <template>
-  <main>
-    <div class="q-pt-lg text-caption">
-      About {{ meta.total || 0 | approximate }} tags for <i>{{ query }}</i>
-    </div>
+  <section>
+    <template v-if="summary">
+      <div
+        v-if="meta.total"
+        class="row items-center q-py-lg"
+      >
+        <div class="col">
+          <span class="text-body1">Tags</span>
+        </div>
 
-    <q-btn-group
-      class="q-py-md"
-      unelevated
-    >
-      <q-select
-        v-model="sorter"
-        :options="sorters"
-        :loading="!ready"
-        dark
-        dense
-        dropdown-icon="keyboard_arrow_down"
-        options-dark
-        square
-      />
-    </q-btn-group>
+        <div class="col-auto">
+          <a
+            class="text-caption text-uppercase cursor-pointer"
+            @click="setFilter"
+          >
+            All Tags ({{ meta.total || 0 | approximate }})
+          </a>
+        </div>
+      </div>
+    </template>
+
+    <template v-else>
+      <div class="row items-center q-pt-lg">
+        <div class="col">
+          <span class="text-caption">
+            About {{ meta.total || 0 | approximate }} tags for <i>{{ query }}</i>
+          </span>
+        </div>
+
+        <div class="col-auto">
+          <a
+            class="text-caption text-uppercase cursor-pointer"
+            @click="removeFilter"
+          >
+            Remove Filter
+          </a>
+        </div>
+      </div>
+
+      <q-btn-group
+        class="q-py-md"
+        unelevated
+      >
+        <q-select
+          v-model="sorter"
+          :options="sorters"
+          :loading="!isReady"
+          dark
+          dense
+          dropdown-icon="keyboard_arrow_down"
+          options-dark
+          square
+        />
+      </q-btn-group>
+    </template>
 
     <q-pull-to-refresh
-      :disable="!ready"
+      :disable="!isReady || summary"
       @refresh="onRefresh"
     >
       <q-infinite-scroll
@@ -39,7 +74,10 @@
           </div>
         </div>
 
-        <template v-slot:loading>
+        <template
+          v-if="!summary"
+          v-slot:loading
+        >
           <div class="row no-wrap justify-center q-my-md">
             <q-spinner
               color="primary"
@@ -49,12 +87,14 @@
         </template>
       </q-infinite-scroll>
     </q-pull-to-refresh>
-  </main>
+  </section>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import Tag from 'src/models/Tag'
+
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('search/tags')
 
 export default {
   components: {
@@ -62,6 +102,11 @@ export default {
   },
 
   props: {
+    summary: {
+      type: Boolean,
+      default: false
+    },
+
     query: {
       type: String,
       required: true
@@ -79,17 +124,17 @@ export default {
   },
 
   computed: {
-    ...mapState('search_tags', [
+    ...mapState([
       'id',
       'data',
       'meta',
       'options',
-      'page',
-      'ready'
+      'page'
     ]),
 
-    ...mapGetters('search_tags', [
-      'isLoaded'
+    ...mapGetters([
+      'isLoaded',
+      'isReady'
     ]),
 
     sorter: {
@@ -98,21 +143,21 @@ export default {
       },
 
       set (value) {
-        this.resetPages({ sorter: value })
+        this.resetState({ sorter: value })
       }
     }
   },
 
-  meta () {
-    return {
-      title: this.query
+  beforeDestroy () {
+    if (this.summary) {
+      this.resetState()
     }
   },
 
   methods: {
-    ...mapActions('search_tags', [
+    ...mapActions([
       'resetItems',
-      'resetPages',
+      'resetState',
       'setPage'
     ]),
 
@@ -129,6 +174,11 @@ export default {
     },
 
     async onLoad (index, done) {
+      if (this.summary && this.page > 1) {
+        done(true)
+        return
+      }
+
       await this.setModels()
       done(this.isLoaded)
     },
@@ -136,6 +186,24 @@ export default {
     async onRefresh (done) {
       await this.resetItems()
       done()
+    },
+
+    removeFilter () {
+      this.resetState()
+
+      this.$store.dispatch('search/setQuery', {
+        filter: null,
+        query: this.query
+      })
+    },
+
+    setFilter () {
+      this.resetState()
+
+      this.$store.dispatch('search/setQuery', {
+        filter: 'tags',
+        query: this.query
+      })
     }
   }
 }

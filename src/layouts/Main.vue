@@ -39,7 +39,7 @@
             round
             icon="notifications"
           >
-            <q-tooltip>Add Items</q-tooltip>
+            <q-tooltip>Notifications</q-tooltip>
           </q-btn>
 
           <q-btn
@@ -85,6 +85,7 @@
                     Your profile
                   </q-item-section>
                 </q-item>
+
                 <q-item
                   clickable
                   dark
@@ -93,6 +94,7 @@
                     Settings
                   </q-item-section>
                 </q-item>
+
                 <q-item
                   clickable
                   dark

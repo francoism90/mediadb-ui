@@ -13,7 +13,6 @@ module.exports = function (ctx) {
       'auth',
       'sync',
       'filters',
-      'inter',
       'sanitize',
       'shortkey',
       'timers'

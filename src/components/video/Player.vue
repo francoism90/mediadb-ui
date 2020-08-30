@@ -3,10 +3,10 @@
     ref="element"
     class="relative-position window-height player"
     :class="$q.fullscreen.isActive ? 'fullscreen' : null"
-    @mouseleave="hideControls()"
-    @mousemove="showControls()"
-    @mouseover="showControls()"
-    @touchmove="showControls()"
+    @mouseleave="hideControls"
+    @mousemove="showControls"
+    @mouseover="showControls"
+    @touchmove="showControls"
   >
     <video
       ref="instance"
@@ -50,15 +50,21 @@
       >
     </video>
 
-    <controls v-if="controlsActive" />
-    <directives v-if="controlsActive" />
+    <transition name="fade">
+      <controls
+        v-if="controlsActive"
+        key="playerControls"
+      />
+    </transition>
   </div>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import { Player } from 'shaka-player'
 import { inRange } from 'lodash'
+
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers('video/player')
 
 export default {
   timers: {
@@ -66,8 +72,7 @@ export default {
   },
 
   components: {
-    Controls: () => import('./controls/Container'),
-    Directives: () => import('./controls/Directives')
+    Controls: () => import('components/player/Controls')
   },
 
   props: {
@@ -82,10 +87,10 @@ export default {
       instance: null,
       controlsActive: true,
       events: [
-        { key: 'playerSetTime', listener: 'overruleTime' },
-        { key: 'playerShowTracks', listener: 'showTracks' },
-        { key: 'playerToggleFullscreen', listener: 'toggleFullscreen' },
-        { key: 'playerTogglePlay', listener: 'togglePlay' }
+        { key: 'videoSetTime', listener: 'overruleTime' },
+        { key: 'videoShowTracks', listener: 'showTracks' },
+        { key: 'videoToggleFullscreen', listener: 'toggleFullscreen' },
+        { key: 'videoTogglePlay', listener: 'togglePlay' }
       ],
       settings: {
         streaming: {
@@ -101,7 +106,7 @@ export default {
   },
 
   computed: {
-    ...mapState('player', [
+    ...mapState([
       'ready'
     ]),
 
@@ -115,22 +120,12 @@ export default {
   },
 
   created () {
-    this.initialize({
-      model: this.model
-    })
-
-    // Start listen for events
     for (const event of this.events) {
       this.$root.$on(event.key, this[event.listener])
     }
   },
 
   async beforeDestroy () {
-    // Pause playback
-    await this.player.pause()
-
-    this.hideControls()
-
     // Stop listen for events
     for (const event of this.events) {
       this.$root.$off(event.key, this[event.listener])
@@ -142,21 +137,20 @@ export default {
       await this.instance.destroy()
     }
 
-    // Reset store
-    this.reset()
+    this.resetState()
   },
 
-  async mounted () {
-    await this.initPlayer()
+  mounted () {
+    this.createPlayer()
   },
 
   methods: {
-    ...mapActions('player', [
-      'initialize',
-      'reset'
+    ...mapActions([
+      'resetState',
+      'setPlayer'
     ]),
 
-    ...mapMutations('player', [
+    ...mapMutations([
       'setBuffered',
       'setCurrentTime',
       'setDuration',
@@ -167,7 +161,7 @@ export default {
       'setTracks'
     ]),
 
-    async initPlayer () {
+    async createPlayer () {
       if (!Player.isBrowserSupported()) {
         alert('Browser is not supported.')
         return
@@ -175,12 +169,10 @@ export default {
 
       this.instance = new Player(this.player)
 
-      // Load player settings
       await this.instance.configure(this.settings)
       await this.instance.load(this.model.stream_url)
 
-      // Set tracks
-      this.setTracks(this.player.textTracks)
+      this.setPlayer({ tracks: this.player.textTracks })
     },
 
     showControls () {
@@ -193,7 +185,6 @@ export default {
     },
 
     overruleTime (value = 0) {
-      // Restart control timer
       this.showControls()
 
       if (!inRange(value, 0, this.player.duration)) {
@@ -205,10 +196,8 @@ export default {
     },
 
     async toggleFullscreen () {
-      // Restart control timer
       this.showControls()
 
-      // Toggle fullscreen
       await this.$q.fullscreen.toggle(this.element)
     },
 
@@ -217,17 +206,14 @@ export default {
         return
       }
 
-      // Restart control timer
       this.showControls()
 
       await this.player.play()
     },
 
     async togglePlay () {
-      // Restart control timer
       this.showControls()
 
-      // Resume/pause playback
       if (this.player.paused) {
         await this.player.play()
         return
@@ -245,7 +231,6 @@ export default {
         textTrack.mode = showTrack ? 'showing' : 'hidden'
       }
 
-      // Update tracks
       this.setTracks(this.player.textTracks)
     }
   }

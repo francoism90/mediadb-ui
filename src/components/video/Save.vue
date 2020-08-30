@@ -93,8 +93,8 @@ export default {
   mixins: [formHandler],
 
   props: {
-    data: {
-      type: Object,
+    id: {
+      type: String,
       required: true
     }
   },
@@ -114,13 +114,13 @@ export default {
 
   methods: {
     async setModel () {
-      this.video = await Video.$find(this.data.id)
+      this.video = await Video.$find(this.id)
     },
 
     async setCollections () {
       this.userCollections = await Collection
         .where('type', 'user')
-        .where('video', this.data.id)
+        .where('video', this.id)
         .orderBy('name')
         .page(1)
         .limit(30)
@@ -146,7 +146,7 @@ export default {
     async onSubmit () {
       try {
         // Save collection changes
-        await this.$axios.put(`videos/${this.data.id}/save`, {
+        await this.$axios.put(`videos/${this.id}/save`, {
           collections: this.form.collections
         })
 

@@ -42,7 +42,7 @@
 
     <div class="col-auto">
       <q-btn
-        v-if="model.tracks.length"
+        v-if="video.data.tracks && video.data.tracks.length"
         v-shortkey="['t']"
         flat
         dense
@@ -104,11 +104,6 @@ export default {
       default: 0
     },
 
-    model: {
-      type: Object,
-      required: true
-    },
-
     playing: {
       type: Boolean,
       default: false
@@ -116,6 +111,10 @@ export default {
   },
 
   computed: {
+    video () {
+      return this.$store.state.video
+    },
+
     playingIcon () {
       return this.playing ? 'pause' : 'play_arrow'
     }
@@ -123,53 +122,49 @@ export default {
 
   methods: {
     async createFrameshot () {
-      await this.$axios.patch(`videos/${this.model.id}/frameshot`, {
+      await this.$axios.patch(`videos/${this.video.data.id}/frameshot`, {
         timecode: this.currentTime
       })
 
       this.$q.notify({
         progress: true,
-        message: `${this.model.name} has been frameshot.`,
+        message: `${this.video.data.name} has been frameshot.`,
         type: 'positive'
       })
     },
 
     debugVideo () {
-      this.$root.$emit('playerExitFullscreen')
-
       this.$store.dispatch('dialog/open', {
         component: 'VideoDebug',
-        data: {
-          id: this.model.id
+        props: {
+          id: this.video.data.id
         }
       })
     },
 
     selectTracks () {
-      this.$root.$emit('playerExitFullscreen')
-
       this.$store.dispatch('dialog/open', {
         component: 'VideoTracks',
-        data: {
-          id: this.model.id
+        props: {
+          id: this.video.data.id
         }
       })
     },
 
     toggleFullscreen () {
-      this.$root.$emit('playerToggleFullscreen')
+      this.$root.$emit('videoToggleFullscreen')
     },
 
     togglePlay () {
-      this.$root.$emit('playerTogglePlay')
+      this.$root.$emit('videoTogglePlay')
     },
 
     replay () {
-      this.$root.$emit('playerSetTime', this.currentTime - 10)
+      this.$root.$emit('videoSetTime', this.currentTime - 10)
     },
 
     forward () {
-      this.$root.$emit('playerSetTime', this.currentTime + 10)
+      this.$root.$emit('videoSetTime', this.currentTime + 10)
     }
   }
 }

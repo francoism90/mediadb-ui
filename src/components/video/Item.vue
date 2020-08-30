@@ -102,7 +102,7 @@ export default {
     editModel () {
       this.$store.dispatch('dialog/open', {
         component: 'VideoEdit',
-        data: {
+        props: {
           id: this.data.id
         }
       })
@@ -111,7 +111,7 @@ export default {
     saveModel () {
       this.$store.dispatch('dialog/open', {
         component: 'VideoSave',
-        data: {
+        props: {
           id: this.data.id
         }
       })

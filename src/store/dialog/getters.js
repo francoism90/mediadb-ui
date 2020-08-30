@@ -2,12 +2,12 @@ export function getComponent (state) {
   return state.component
 }
 
-export function getData (state) {
-  return state.data
-}
-
 export function getOptions (state) {
   return state.options
+}
+
+export function getProps (state) {
+  return state.props
 }
 
 export function isActive (state) {

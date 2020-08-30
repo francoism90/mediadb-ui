@@ -141,8 +141,8 @@ export default {
   mixins: [formHandler],
 
   props: {
-    data: {
-      type: Object,
+    id: {
+      type: String,
       required: true
     }
   },
@@ -161,7 +161,7 @@ export default {
 
   methods: {
     async setModel () {
-      this.collection = await Collection.$find(this.data.id)
+      this.collection = await Collection.$find(this.id)
 
       this.setForm({
         id: this.collection.id,

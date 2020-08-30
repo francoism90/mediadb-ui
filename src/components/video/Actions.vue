@@ -8,6 +8,7 @@
     />
 
     <q-btn
+      v-if="$auth.check({'permissions': 'create collections'})"
       v-shortkey="['a']"
       icon="layers"
       label="Save"
@@ -16,6 +17,7 @@
     />
 
     <q-btn
+      v-if="$auth.check({'permissions': 'edit videos'})"
       v-shortkey="['c']"
       icon="notes"
       label="Edit"
@@ -30,9 +32,8 @@ import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState('player', [
-      'currentTime',
-      'model'
+    ...mapState('video', [
+      'data'
     ])
   },
 
@@ -40,8 +41,8 @@ export default {
     editVideo () {
       this.$store.dispatch('dialog/open', {
         component: 'VideoEdit',
-        data: {
-          id: this.model.id
+        props: {
+          id: this.data.id
         }
       })
     },
@@ -49,8 +50,8 @@ export default {
     saveVideo () {
       this.$store.dispatch('dialog/open', {
         component: 'VideoSave',
-        data: {
-          id: this.model.id
+        props: {
+          id: this.data.id
         }
       })
     }

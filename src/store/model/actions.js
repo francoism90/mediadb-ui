@@ -9,7 +9,7 @@ export function setModel ({ commit }, payload = {}) {
   commit('setReady', true)
 }
 
-export function resetModel ({ commit, dispatch }, payload = {}) {
+export function resetState ({ commit, dispatch }, payload = {}) {
   const { data = {}, meta = {} } = payload
 
   commit('resetState')

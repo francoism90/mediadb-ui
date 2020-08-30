@@ -7,7 +7,7 @@
       <q-select
         v-model="sorter"
         :options="sorters"
-        :loading="!ready"
+        :loading="!isReady"
         dark
         dense
         dropdown-icon="keyboard_arrow_down"
@@ -19,7 +19,7 @@
       <q-select
         v-model="type"
         :options="types"
-        :loading="!ready"
+        :loading="!isReady"
         dark
         dense
         dropdown-icon="keyboard_arrow_down"
@@ -29,7 +29,7 @@
     </q-btn-group>
 
     <q-pull-to-refresh
-      :disable="!ready"
+      :disable="!isReady"
       @refresh="onRefresh"
     >
       <q-infinite-scroll
@@ -111,7 +111,7 @@ export default {
       },
 
       set (value) {
-        this.resetPages({ sorter: value })
+        this.resetState({ sorter: value })
       }
     },
 
@@ -121,7 +121,7 @@ export default {
       },
 
       set (value) {
-        this.resetPages({ type: value })
+        this.resetState({ type: value })
       }
     }
   },
@@ -135,7 +135,7 @@ export default {
   methods: {
     ...mapActions('tags', [
       'resetItems',
-      'resetPages',
+      'resetState',
       'setPage'
     ]),
 

@@ -1,88 +1,77 @@
 <template>
-  <q-page
-    :key="id"
-    class="container fluid"
-  >
-    <intro v-if="query === ''" />
+  <q-page class="container fluid">
+    <template v-if="query && !filter">
+      <component
+        :is="type.component"
+        v-for="(type, index) in types"
+        :key="index"
+        :query="query"
+        summary
+      />
+    </template>
 
-    <overview
-      v-else-if="query && !type"
-      :query="query"
-    />
+    <template v-else-if="query && filter">
+      <component
+        :is="getFilter.component"
+        :query="query"
+      />
+    </template>
 
-    <component
-      :is="getComponentType"
-      v-else-if="query && type"
-      :query="query"
-    />
+    <template v-else>
+      <div class="fixed-center text-center">
+        <p>
+          <q-icon
+            name="search"
+            style="font-size: 4rem;"
+          />
+        </p>
+        <p class="text-h5 q-mb-xs">
+          Search MediaDB
+        </p>
+        <p class="text-body2">
+          Find videos, collections and tags.
+        </p>
+      </div>
+    </template>
   </q-page>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import paginateModule from 'src/store/paginate'
 
 export default {
-  preFetch ({ store }) {
-    const searchStores = [
-      'search_collections',
-      'search_tags',
-      'search_videos'
-    ]
+  preFetch ({ store, currentRoute }) {
+    const searchStores = store.state.search.types
 
     for (const searchStore of searchStores) {
-      if (!store.hasModule(searchStore)) {
-        store.registerModule(searchStore, paginateModule)
+      if (!store.hasModule(['search', searchStore.key])) {
+        store.registerModule(['search', searchStore.key], paginateModule)
       }
     }
   },
 
   components: {
-    Intro: () => import('components/search/Intro'),
-    Overview: () => import('components/search/Overview'),
     Collections: () => import('components/search/Collections'),
     Tags: () => import('components/search/Tags'),
     Videos: () => import('components/search/Videos')
   },
 
-  data () {
-    return {
-      id: null,
-      query: '',
-      type: '',
-      componentTypes: {
-        collections: 'Collections',
-        tags: 'Tags',
-        videos: 'Videos'
-      }
-    }
-  },
-
   computed: {
-    getComponentType () {
-      return this.componentTypes[this.type] || this.componentTypes[0]
-    }
-  },
+    ...mapState('search', [
+      'filter',
+      'query',
+      'types'
+    ]),
 
-  created () {
-    this.setQuery(this.$route)
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.setQuery(to)
-    next()
+    ...mapGetters('search', [
+      'getFilter'
+    ])
   },
 
   meta () {
     return {
       title: this.query || 'Search'
-    }
-  },
-
-  methods: {
-    setQuery (route = {}) {
-      this.id = this.$sanitize(route.query.id || +new Date())
-      this.query = this.$sanitize(route.query.q || '')
-      this.type = this.$sanitize(route.query.type || '')
     }
   }
 }

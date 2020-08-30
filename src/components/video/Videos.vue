@@ -5,14 +5,14 @@
     </div>
 
     <q-infinite-scroll
-      :key="state.id"
+      :key="id"
       :debounce="300"
       scroll-target="body"
       @load="onLoad"
     >
       <div class="row q-col-gutter-md items">
         <div
-          v-for="(item, index) in state.data"
+          v-for="(item, index) in data"
           :key="index"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-3"
         >
@@ -33,7 +33,10 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import Video from 'src/models/Video'
+
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('video/related')
 
 export default {
   components: {
@@ -41,42 +44,42 @@ export default {
   },
 
   props: {
-    namespace: {
-      type: String,
+    model: {
+      type: Object,
       required: true
     }
   },
 
   computed: {
-    model () {
-      return this.$store.state.video
-    },
+    ...mapState([
+      'id',
+      'data',
+      'page'
+    ]),
 
-    state () {
-      return this.model[this.namespace]
-    },
+    ...mapGetters([
+      'isLoaded',
+      'isReady'
+    ])
+  },
 
-    isLoaded () {
-      return this.$store.getters[`video/${this.namespace}/isLoaded`]
-    },
-
-    isReady () {
-      return this.$store.getters[`video/${this.namespace}/isReady`]
-    }
+  beforeDestroy () {
+    this.resetState()
   },
 
   methods: {
-    setPage (payload = {}) {
-      this.$store.dispatch(`video/${this.namespace}/setPage`, payload)
-    },
+    ...mapActions([
+      'resetState',
+      'setPage'
+    ]),
 
     async setModels () {
       const response = await Video
-        .where('related', this.model.data.id)
+        .where('related', this.model.id)
         .include('tags')
         .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy('relevance')
-        .page(this.state.page)
+        .page(this.page)
         .limit(12)
         .get()
 

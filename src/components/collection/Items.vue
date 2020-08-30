@@ -21,13 +21,13 @@
       @refresh="onRefresh"
     >
       <q-infinite-scroll
-        :key="state.id"
+        :key="id"
         :debounce="300"
         @load="onLoad"
       >
         <div class="row q-col-gutter-md items">
           <div
-            v-for="(item, index) in state.data"
+            v-for="(item, index) in data"
             :key="index"
             class="col-xs-12 col-sm-6 col-md-4 col-lg-2"
           >
@@ -49,12 +49,21 @@
 </template>
 
 <script>
-import paginateModule from 'src/store/paginate'
+import { createNamespacedHelpers } from 'vuex'
 import Video from 'src/models/Video'
+
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('collection/videos')
 
 export default {
   components: {
     VideoItem: () => import('components/video/Item')
+  },
+
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
   },
 
   data () {
@@ -71,63 +80,43 @@ export default {
   },
 
   computed: {
-    modelState () {
-      return this.$store.state.collection
-    },
+    ...mapState([
+      'id',
+      'data',
+      'options',
+      'page'
+    ]),
 
-    moduleName () {
-      return `${this.modelState.data.id}/videos`
-    },
-
-    state () {
-      return this.modelState[this.moduleName]
-    },
-
-    isLoaded () {
-      return this.$store.getters[`collection/${this.moduleName}/isLoaded`]
-    },
-
-    isReady () {
-      return this.$store.getters[`collection/${this.moduleName}/isReady`]
-    },
+    ...mapGetters([
+      'isLoaded',
+      'isReady'
+    ]),
 
     sorter: {
       get () {
-        return this.state.options.sorter || this.sorters[0]
+        return this.options.sorter || this.sorters[0]
       },
 
       set (value) {
-        this.resetPages({ sorter: value })
+        this.resetState({ sorter: value })
       }
     }
   },
 
-  created () {
-    if (!this.$store.hasModule(['collection', this.moduleName])) {
-      this.$store.registerModule(['collection', this.moduleName], paginateModule)
-    }
-  },
-
   methods: {
-    resetPages (payload = {}) {
-      this.$store.dispatch(`collection/${this.moduleName}/resetPages`, payload)
-    },
-
-    resetItems () {
-      this.$store.dispatch(`collection/${this.namespace}/resetItems`)
-    },
-
-    setPage (payload = {}) {
-      this.$store.dispatch(`collection/${this.moduleName}/setPage`, payload)
-    },
+    ...mapActions([
+      'resetItems',
+      'resetState',
+      'setPage'
+    ]),
 
     async setModels () {
       const response = await Video
-        .where('collection', this.modelState.data.id)
+        .where('collection', this.model.id)
         .include('tags')
         .append(['metadata', 'preview_url', 'thumbnail_url'])
         .orderBy(this.sorter.value)
-        .page(this.state.page)
+        .page(this.page)
         .limit(12)
         .get()
 

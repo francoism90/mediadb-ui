@@ -1,12 +1,12 @@
 <template>
   <q-card
-    v-if="video && video.tracks"
+    v-if="subtitles"
     dark
     style="width: 520px"
   >
     <q-inner-loading
       dark
-      :showing="!video.id"
+      :showing="!subtitles.length"
     >
       <q-spinner
         size="50px"
@@ -22,7 +22,7 @@
       <q-form>
         <q-card-section class="row items-center">
           <div class="text-h6">
-            {{ video.name }}
+            Subtitles & Captions
           </div>
           <q-space />
           <q-btn
@@ -40,22 +40,22 @@
 
         <q-card-section>
           <q-list
-            v-for="(track, index) in tracks"
+            v-for="(subtitle, index) in subtitles"
             :key="index"
           >
             <q-item
-              v-if="track.id && track.label"
+              v-if="subtitle.id && subtitle.label"
               v-ripple
               tag="label"
             >
               <q-item-section>
-                <q-item-label>{{ track.label }}</q-item-label>
+                <q-item-label>{{ subtitle.label }}</q-item-label>
               </q-item-section>
               <q-item-section avatar>
                 <q-toggle
                   v-model="selection"
                   color="primary"
-                  :val="track.id"
+                  :val="subtitle.id"
                 />
               </q-item-section>
             </q-item>
@@ -80,45 +80,29 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import { filter, map } from 'lodash'
-import Video from 'src/models/Video'
+
+const { mapGetters } = createNamespacedHelpers('video/player')
 
 export default {
-  props: {
-    data: {
-      type: Object,
-      required: true
-    }
-  },
-
-  data () {
-    return {
-      video: null
-    }
-  },
-
   computed: {
-    ...mapGetters('player', {
-      tracks: 'getSubtitles'
+    ...mapGetters({
+      subtitles: 'getSubtitles'
     }),
 
     selection: {
       get () {
         return map(
-          filter(this.tracks, { mode: 'showing' }),
+          filter(this.subtitles, { mode: 'showing' }),
           'id'
         )
       },
 
       set (value) {
-        this.$root.$emit('playerShowTracks', value)
+        this.$root.$emit('videoShowTracks', value)
       }
     }
-  },
-
-  async created () {
-    this.video = await Video.$find(this.data.id)
   }
 }
 </script>

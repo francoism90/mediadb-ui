@@ -3,45 +3,36 @@
     v-if="isReady"
     :key="data.id"
   >
-    <player
-      :model="data"
-    />
-    <info />
-    <collections :namespace="collectionsNamespace" />
-    <videos :namespace="videosNamespace" />
+    <player :model="data" />
+    <info :model="data" />
+    <collections :model="data" />
+    <videos :model="data" />
   </q-page>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import modelModule from 'src/store/model'
 import paginateModule from 'src/store/paginate'
+import playerModule from 'src/store/player'
 import Video from 'src/models/Video'
 
 export default {
   async preFetch ({ store, currentRoute }) {
-    const routeId = currentRoute.params.id
-
     if (!store.hasModule('video')) {
       store.registerModule('video', modelModule)
+      store.registerModule(['video', 'collections'], paginateModule)
+      store.registerModule(['video', 'player'], playerModule)
+      store.registerModule(['video', 'related'], paginateModule)
     }
 
-    if (!store.hasModule(['video', `${routeId}/videos`])) {
-      store.registerModule(['video', `${routeId}/videos`], paginateModule)
-    }
+    const model = await Video.find(currentRoute.params.id)
 
-    if (!store.hasModule(['video', `${routeId}/collections`])) {
-      store.registerModule(['video', `${routeId}/collections`], paginateModule)
-    }
-
-    store.dispatch(
-      'video/setModel',
-      await Video.find(routeId)
-    )
+    store.dispatch('video/setModel', model)
   },
 
   components: {
-    Player: () => import('components/player/Video'),
+    Player: () => import('components/video/Player'),
     Info: () => import('components/video/Info'),
     Collections: () => import('components/video/Collections'),
     Videos: () => import('components/video/Videos')
@@ -54,19 +45,17 @@ export default {
 
     ...mapGetters('video', [
       'isReady'
-    ]),
-
-    collectionsNamespace () {
-      return `${this.data.id}/collections`
-    },
-
-    videosNamespace () {
-      return `${this.data.id}/videos`
-    }
+    ])
   },
 
   beforeDestroy () {
-    this.$store.unregisterModule('video')
+    this.resetState()
+  },
+
+  methods: {
+    ...mapActions('video', [
+      'resetState'
+    ])
   },
 
   meta () {

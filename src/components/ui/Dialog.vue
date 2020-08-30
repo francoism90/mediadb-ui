@@ -5,7 +5,7 @@
   >
     <component
       :is="getComponent"
-      :data="getData"
+      v-bind="getProps"
     />
   </q-dialog>
 </template>
@@ -26,8 +26,8 @@ export default {
     ...mapGetters('dialog', [
       'isActive',
       'getComponent',
-      'getData',
-      'getOptions'
+      'getOptions',
+      'getProps'
     ]),
 
     dialog: {

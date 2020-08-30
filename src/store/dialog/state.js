@@ -2,7 +2,7 @@ export default function () {
   return {
     active: false,
     component: null,
-    data: {},
+    props: {},
     options: {}
   }
 }

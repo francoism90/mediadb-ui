@@ -1,10 +1,10 @@
-export function initialize ({ commit }, payload = {}) {
-  const { model = {} } = payload
+export function setPlayer ({ commit }, payload = {}) {
+  const { tracks = {} } = payload
 
-  commit('setModel', model)
+  commit('setTracks', tracks)
   commit('setReady', true)
 }
 
-export function reset ({ commit }) {
+export function resetState ({ commit }) {
   commit('resetState')
 }

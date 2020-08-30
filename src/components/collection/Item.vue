@@ -92,7 +92,7 @@ export default {
     editModel () {
       this.$store.dispatch('dialog/open', {
         component: 'CollectionEdit',
-        data: {
+        props: {
           id: this.data.id
         }
       })

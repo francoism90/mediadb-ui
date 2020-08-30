@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 // Vuex modules
 import dialog from './dialog'
-import player from './player'
+import search from './search'
 
 Vue.use(Vuex)
 
@@ -20,7 +20,7 @@ export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
       dialog,
-      player
+      search
     },
     strict: process.env.DEV
   })

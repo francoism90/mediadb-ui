@@ -1,35 +1,29 @@
-export function setPage ({ commit, getters, rootState }, payload = {}) {
+export function setPage ({ commit, getters, state }, payload = {}) {
   const { data = [], meta = {} } = payload
 
-  // Set ready
   commit('setReady', false)
-
-  // Set meta
   commit('setMeta', meta)
 
-  // Set data
   if (!getters.isLoaded && data.length) {
     commit('setData', data)
     commit('increasePage')
   }
 
-  // Set ready
   commit('setReady', true)
 }
 
-export function resetItems ({ commit }) {
-  // Regenerate id
-  commit('setId')
+export function resetItems ({ commit }, payload = {}) {
+  const { id = null } = payload
 
-  // Reset state
   commit('resetItems')
   commit('resetPage')
+  commit('setId', id)
 }
 
-export function resetPages ({ commit }, payload = {}) {
-  // Reset state
-  commit('resetState')
+export function resetState ({ commit }, payload = {}) {
+  const { id = null } = payload
 
-  // Set option
+  commit('resetState')
+  commit('setId', id)
   commit('setOption', payload)
 }

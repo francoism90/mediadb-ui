@@ -5,11 +5,11 @@
     <div class="fit row wrap justify-between items-start q-col-gutter-y-md">
       <div class="col-6 col-md-6 col-xs-12">
         <div class="text-h5 text-grey-5">
-          {{ data.name }}
+          {{ model.name }}
         </div>
         <div class="text-subtitle2 text-grey-5">
-          {{ data.relationships.model.name }} •
-          {{ Number(data.item_count || 0) | approximate }} items
+          {{ model.relationships.model.name }} •
+          {{ Number(model.item_count || 0) | approximate }} items
         </div>
       </div>
 
@@ -29,13 +29,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
-  computed: {
-    ...mapState('collection', [
-      'data'
-    ])
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>

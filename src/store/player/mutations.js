@@ -8,10 +8,6 @@ export function setReady (state, payload = false) {
   state.ready = payload
 }
 
-export function setModel (state, payload = {}) {
-  state.model = payload
-}
-
 export function setBuffered (state, payload = null) {
   state.buffered = payload
 }

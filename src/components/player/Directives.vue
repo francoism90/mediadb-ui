@@ -1,26 +1,25 @@
 <template>
   <div
     ref="container"
-    v-touch-repeat.mouse="handleRepeat"
+    v-touch-repeat.mouse="onTouch"
     class="absolute fit player-directives"
   />
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { dom } from 'quasar'
 import { inRange } from 'lodash'
 
 export default {
-  computed: {
-    ...mapState('player', [
-      'currentTime',
-      'duration'
-    ])
+  props: {
+    currentTime: {
+      type: Number,
+      default: 0
+    }
   },
 
   methods: {
-    handleRepeat ({ evt, ...info }) {
+    onTouch ({ evt, ...info }) {
       const containerWidth = dom.width(this.$refs.container)
 
       this.togglePlayback(containerWidth, info.position.left)
@@ -32,7 +31,7 @@ export default {
       const centerMargin = center / 2
 
       if (inRange(offsetLeft, center - centerMargin, center + centerMargin)) {
-        this.$root.$emit('playerTogglePlay')
+        this.$root.$emit('videoTogglePlay')
       }
     },
 
@@ -41,9 +40,9 @@ export default {
 
       // Left/right side
       if (inRange(offsetLeft, 0, seekMargin)) {
-        this.$root.$emit('playerSetTime', this.currentTime - 10)
+        this.$root.$emit('videoSetTime', this.currentTime - 10)
       } else if (inRange(offsetLeft, containerWidth - seekMargin, containerWidth)) {
-        this.$root.$emit('playerSetTime', this.currentTime + 10)
+        this.$root.$emit('videoSetTime', this.currentTime + 10)
       }
     }
   }

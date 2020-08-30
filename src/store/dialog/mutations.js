@@ -8,10 +8,6 @@ export function setComponent (state, payload = null) {
   state.component = payload
 }
 
-export function setData (state, payload = {}) {
-  state.data = Object.assign({}, state.data, payload)
-}
-
 export function setActive (state, payload = false) {
   state.active = payload
 }
@@ -21,4 +17,8 @@ export function setOptions (state, payload = {}) {
   const finalOptions = { ...currentOptions, ...payload }
 
   state.options = Object.assign({}, state.options, finalOptions)
+}
+
+export function setProps (state, payload = {}) {
+  state.props = Object.assign({}, state.props, payload)
 }

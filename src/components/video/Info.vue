@@ -4,18 +4,18 @@
       <div class="container row items-start">
         <div class="col">
           <div class="text-subtitle1 text-grey-5">
-            {{ data.name }}
+            {{ model.name }}
           </div>
           <div
-            v-if="data.metadata"
+            v-if="model.metadata"
             class="text-subtitle2 text-grey-6"
           >
-            {{ Number(data.metadata.duration) | timestamp }} •
-            {{ Number(data.views) | approximate }} views
+            {{ Number(model.metadata.duration) | timestamp }} •
+            {{ Number(model.views) | approximate }} views
           </div>
           <tags
-            v-if="data.relationships.tags.length"
-            :items="data.relationships.tags"
+            v-if="model.relationships.tags.length"
+            :items="model.relationships.tags"
           />
         </div>
 
@@ -38,18 +38,17 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   components: {
     Actions: () => import('components/video/Actions'),
     Tags: () => import('components/ui/Tags')
   },
 
-  computed: {
-    ...mapState('video', [
-      'data'
-    ])
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
   }
 }
 </script>

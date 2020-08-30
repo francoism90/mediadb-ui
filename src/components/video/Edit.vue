@@ -141,8 +141,8 @@ export default {
   mixins: [formHandler],
 
   props: {
-    data: {
-      type: Object,
+    id: {
+      type: String,
       required: true
     }
   },
@@ -161,7 +161,7 @@ export default {
 
   methods: {
     async setModel () {
-      this.video = await Video.$find(this.data.id)
+      this.video = await Video.$find(this.id)
 
       this.setForm({
         id: this.video.id,

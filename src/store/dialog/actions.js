@@ -1,18 +1,18 @@
 export function open ({ commit }, params = {}) {
-  const { component = null, data = {}, props = {} } = params
+  const { component = null, options = {}, props = {} } = params
 
   commit('resetState')
 
   commit('setComponent', component)
-  commit('setData', data)
-  commit('setOptions', props)
+  commit('setOptions', options)
+  commit('setProps', props)
 
   commit('setActive', true)
 }
 
 export function close ({ commit }, params = {}) {
-  const { props = {} } = params
+  const { options = {} } = params
 
-  commit('setOptions', props)
+  commit('setOptions', options)
   commit('setActive', false)
 }

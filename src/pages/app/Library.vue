@@ -7,7 +7,7 @@
       <q-select
         v-model="sorter"
         :options="sorters"
-        :loading="!ready"
+        :loading="!isReady"
         dark
         dense
         dropdown-icon="keyboard_arrow_down"
@@ -17,7 +17,7 @@
     </q-btn-group>
 
     <q-pull-to-refresh
-      :disable="!ready"
+      :disable="!isReady"
       @refresh="onRefresh"
     >
       <q-infinite-scroll
@@ -80,12 +80,12 @@ export default {
       'id',
       'data',
       'options',
-      'page',
-      'ready'
+      'page'
     ]),
 
     ...mapGetters('library', [
-      'isLoaded'
+      'isLoaded',
+      'isReady'
     ]),
 
     sorter: {
@@ -94,7 +94,7 @@ export default {
       },
 
       set (value) {
-        this.resetPages({ sorter: value })
+        this.resetState({ sorter: value })
       }
     }
   },
@@ -108,7 +108,7 @@ export default {
   methods: {
     ...mapActions('library', [
       'resetItems',
-      'resetPages',
+      'resetState',
       'setPage'
     ]),
 

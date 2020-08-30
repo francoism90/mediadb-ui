@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { find } from 'lodash'
+import { get, find } from 'lodash'
 import { dom } from 'quasar'
 
 export default {
@@ -101,7 +101,7 @@ export default {
       },
 
       set (value) {
-        this.$root.$emit('playerSetTime', value)
+        this.$root.$emit('videoSetTime', value)
       }
     },
 
@@ -133,7 +133,7 @@ export default {
 
     setTrackCue (percent = 0) {
       const track = find(this.tracks, { id: 'sprite' })
-      const cues = track.cues || null
+      const cues = get(track, 'cues')
       const time = Math.floor(this.getTimeByPct(percent))
 
       if (!track || !cues) {

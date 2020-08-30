@@ -12,7 +12,6 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@francoism90/typeface-inter": "^3.13.0",
     "@quasar/extras": "^1.9.5",
     "@websanova/vue-auth": "^3.3.1",
     "approximate-number": "^2.0.0",

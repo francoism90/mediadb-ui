@@ -83,8 +83,6 @@ export default {
   },
 
   async beforeDestroy () {
-    await this.hidePreview()
-
     if (this.instance) {
       await this.instance.detach()
       await this.instance.destroy()
@@ -99,7 +97,7 @@ export default {
     async showPreview () {
       await this.setPlayer()
 
-      if (!this.previewActive) {
+      if (this.playerReady && !this.previewActive) {
         await this.player.play()
 
         this.previewActive = true
@@ -107,7 +105,10 @@ export default {
     },
 
     async hidePreview () {
-      await this.player.pause()
+      if (this.playerReady) {
+        await this.player.play()
+        await this.player.pause()
+      }
 
       this.previewActive = false
     },

@@ -126,8 +126,8 @@ import Video from 'src/models/Video'
 
 export default {
   props: {
-    data: {
-      type: Object,
+    id: {
+      type: String,
       required: true
     }
   },
@@ -162,7 +162,7 @@ export default {
   },
 
   async created () {
-    this.video = await Video.$find(this.data.id)
+    this.video = await Video.$find(this.id)
   }
 }
 </script>
