@@ -19,7 +19,7 @@
     "core-js": "^3.6.5",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
-    "quasar": "^1.13.1",
+    "quasar": "^1.13.2",
     "sanitize-html": "^1.27.4",
     "shaka-player": "^3.0.4",
     "vue-api-query": "^1.5.2",
@@ -29,10 +29,10 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.8",
+    "@quasar/app": "^2.0.9",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.7.0",
+    "eslint": "^7.8.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.0",
