@@ -2,7 +2,7 @@
   <q-card
     v-if="collection"
     dark
-    style="width: 520px"
+    :style="{ width: '520px' }"
   >
     <q-dialog
       v-model="deleteDialog"
@@ -55,7 +55,7 @@
         @submit="onSubmit"
       >
         <q-card-section class="row items-center">
-          <div class="text-h6">
+          <div class="text-h6 ellipsis">
             {{ collection.name }}
           </div>
           <q-space />

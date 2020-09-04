@@ -97,12 +97,12 @@ export default {
       'id',
       'data',
       'options',
-      'page',
-      'ready'
+      'page'
     ]),
 
     ...mapGetters('tags', [
-      'isLoaded'
+      'isLoaded',
+      'isReady'
     ]),
 
     sorter: {

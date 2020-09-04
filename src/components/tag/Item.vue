@@ -19,7 +19,9 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ data.name }}</q-item-label>
+      <q-item-label class="ellipsis-2-lines">
+        {{ data.name }}
+      </q-item-label>
       <q-item-label
         class="text-grey-5"
         caption

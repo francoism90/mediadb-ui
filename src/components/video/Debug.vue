@@ -2,7 +2,7 @@
   <q-card
     v-if="video && video.metadata"
     dark
-    style="width: 520px"
+    :style="{ width: '520px' }"
   >
     <q-inner-loading
       dark

@@ -33,17 +33,25 @@ export default {
 
   watch: {
     '$q.fullscreen.isActive' (val) {
+      // OS fullscreen handling
       if (!this.$q.platform.is.cordova) {
         return
       }
 
-      // Hide navigationsbars on fullscreen
       if (val) {
+        // Hide navigationsbars on fullscreen
         window.NavigationBar.hide()
         window.StatusBar.hide()
+
+        // Lock screen orientation
+        window.screen.orientation.lock('landscape')
       } else {
+        // Show navigationsbars on fullscreen
         window.NavigationBar.show()
         window.StatusBar.show()
+
+        // Allow screen orientation
+        window.screen.orientation.unlock()
       }
     }
   }

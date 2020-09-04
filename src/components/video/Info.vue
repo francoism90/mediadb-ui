@@ -3,7 +3,7 @@
     <section class="bg-grey-10 q-py-lg">
       <div class="container row items-start">
         <div class="col">
-          <div class="text-subtitle1 text-grey-5">
+          <div class="text-subtitle1 ellipsis-3-lines text-grey-5">
             {{ model.name }}
           </div>
           <div

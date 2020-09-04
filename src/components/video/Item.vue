@@ -66,12 +66,12 @@
     </q-card-section>
 
     <q-card-section class="q-py-md">
-      <div class="text-subtitle1 text-grey-5">
+      <div class="text-subtitle1 ellipsis-3-lines text-grey-5">
         {{ data.name }}
       </div>
       <div
         v-if="data.metadata"
-        class="text-subtitle2 text-grey-6"
+        class="text-subtitle2 ellipsis-2-lines text-grey-6"
       >
         {{ Number(data.metadata.duration || 0) | timestamp }} •
         {{ Number(data.views || 0) | approximate }} views
