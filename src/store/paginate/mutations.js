@@ -27,6 +27,10 @@ export function setId (state, payload = null) {
   state.id = payload
 }
 
+export function setName (state, payload = null) {
+  state.name = payload
+}
+
 export function setPage (state, payload = 1) {
   state.page = payload
 }

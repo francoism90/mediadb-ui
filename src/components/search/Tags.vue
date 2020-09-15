@@ -54,7 +54,7 @@ const { mapFields } = createHelpers({
 
 export default {
   components: {
-    TagItem: () => import('components/tag/Item')
+    TagItem: () => import('components/tags/Item')
   },
 
   props: {
@@ -93,6 +93,7 @@ export default {
 
   created () {
     this.initialize({
+      name: this.query,
       options: {
         sorter: this.sorters[0]
       }
@@ -102,14 +103,13 @@ export default {
   methods: {
     ...mapActions('sTags', [
       'initialize',
-      'resetItems',
       'setPage'
     ]),
 
     async setModels () {
       const response = await TagModel
         .where('query', this.query)
-        .append(['item_count'])
+        .append('item_count')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(30)

@@ -15,7 +15,7 @@ export default {
   },
 
   components: {
-    Items: () => import('components/tag/Items')
+    Items: () => import('components/tags/Items')
   },
 
   meta () {

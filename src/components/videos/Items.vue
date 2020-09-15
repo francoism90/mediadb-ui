@@ -104,8 +104,8 @@ export default {
 
     async setModels () {
       const response = await VideoModel
-        .include('tags')
-        .append(['duration', 'thumbnail_url'])
+        .include('model', 'tags')
+        .append('duration', 'thumbnail_url', 'titles')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

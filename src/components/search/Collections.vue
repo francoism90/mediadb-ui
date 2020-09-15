@@ -94,6 +94,7 @@ export default {
 
   created () {
     this.initialize({
+      name: this.query,
       options: {
         sorter: this.sorters[0]
       }
@@ -109,8 +110,8 @@ export default {
     async setModels () {
       const response = await CollectionModel
         .where('query', this.query)
-        .include(['model', 'tags'])
-        .append(['item_count', 'thumbnail_url'])
+        .include('model', 'tags')
+        .append('item_count', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

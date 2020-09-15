@@ -11,15 +11,28 @@
       loading="lazy"
       class="bg-grey-8"
       img-class="video-item"
-    />
+    >
+      <div class="absolute-bottom-right">
+        <q-badge class="transparent-dimmed text-caption q-ma-sm">
+          {{ Number(video.duration || 0) | timestamp }}
+        </q-badge>
+      </div>
+    </q-img>
 
     <q-card-section class="q-py-md">
       <div class="text-subtitle1 ellipsis-2-lines text-grey-5">
         {{ video.name }}
       </div>
 
-      <div class="text-subtitle1 text-grey-6">
-        {{ Number(video.duration || 0) | timestamp }} •
+      <div
+        v-if="video.titleNames.length"
+        class="text-subtitle1 ellipsis-2-lines text-grey-6"
+      >
+        {{ video.titleNames.join(', ') }}
+      </div>
+
+      <div class="text-subtitle1 ellipsis-2-lines text-grey-6">
+        {{ String(video.created_at) | datestamp }} •
         {{ Number(video.views || 0) | approximate }} views
       </div>
 

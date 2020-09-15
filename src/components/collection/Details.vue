@@ -1,5 +1,6 @@
 <template>
   <q-dialog
+    :key="id"
     ref="dialog"
     maximized
     @hide="onDialogHide"

@@ -1,30 +1,32 @@
 <template>
-  <q-pull-to-refresh @refresh="onRefresh">
-    <q-infinite-scroll
-      :debounce="300"
-      class="row wrap justify-start items-start content-start q-col-gutter-md"
-      @load="onLoad"
-    >
-      <q-intersection
-        v-for="(item, index) in data"
-        :key="index"
-        v-close-popup
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
-        @click="onClick(item)"
+  <div :key="id">
+    <q-pull-to-refresh @refresh="onRefresh">
+      <q-infinite-scroll
+        :debounce="300"
+        class="row wrap justify-start items-start content-start q-col-gutter-md"
+        @load="onLoad"
       >
-        <collection-item :collection="item" />
-      </q-intersection>
+        <q-intersection
+          v-for="(item, index) in data"
+          :key="index"
+          v-close-popup
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
+          @click="onClick(item)"
+        >
+          <collection-item :collection="item" />
+        </q-intersection>
 
-      <template v-slot:loading>
-        <div class="row no-wrap justify-center q-my-md">
-          <q-spinner
-            color="primary"
-            size="40px"
-          />
-        </div>
-      </template>
-    </q-infinite-scroll>
-  </q-pull-to-refresh>
+        <template v-slot:loading>
+          <div class="row no-wrap justify-center q-my-md">
+            <q-spinner
+              color="primary"
+              size="40px"
+            />
+          </div>
+        </template>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
+  </div>
 </template>
 
 <script>
@@ -46,24 +48,27 @@ export default {
   },
 
   computed: {
-    ...mapState('parents', [
+    ...mapState('models', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('parents', [
+    ...mapGetters('models', [
       'isLoaded',
       'isReady'
     ])
   },
 
-  beforeDestroy () {
-    this.resetItems()
+  created () {
+    this.initialize({
+      name: this.video.id
+    })
   },
 
   methods: {
-    ...mapActions('parents', [
+    ...mapActions('models', [
+      'initialize',
       'resetItems',
       'setPage'
     ]),
@@ -71,9 +76,9 @@ export default {
     async setModels () {
       const response = await CollectionModel
         .where('video', this.video.id)
-        .include(['model', 'tags'])
-        .append(['item_count', 'thumbnail_url'])
-        .orderBy('relevance')
+        .include('model', 'tags')
+        .append('item_count', 'thumbnail_url')
+        .orderBy('-type')
         .page(this.page)
         .limit(12)
         .get()

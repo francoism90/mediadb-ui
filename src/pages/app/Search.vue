@@ -74,13 +74,11 @@ export default {
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.resetItems()
       vm.setQuery(to)
     })
   },
 
   beforeRouteUpdate (to, from, next) {
-    this.resetItems()
     this.setQuery(to)
     next()
   },
@@ -92,20 +90,12 @@ export default {
   },
 
   methods: {
-    resetItems () {
-      for (const paginate of paginates) {
-        this.$store.dispatch(`${paginate}/resetItems`)
-      }
-    },
-
     setQuery (route) {
       const id = this.$sanitize(route.query.id) || +new Date()
       const query = this.$sanitize(route.query.q) || ''
 
-      this.$store.dispatch('session/setSession', {
-        data: {
-          search: { id: id, query: query }
-        }
+      this.$store.dispatch('session/setData', {
+        search: { id: id, query: query }
       })
     }
   }

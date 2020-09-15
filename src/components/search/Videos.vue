@@ -96,6 +96,7 @@ export default {
 
   created () {
     this.initialize({
+      name: this.query,
       options: {
         sorter: this.sorters[0]
       }
@@ -112,7 +113,7 @@ export default {
       const response = await VideoModel
         .where('query', this.query)
         .include('tags')
-        .append(['duration', 'thumbnail_url'])
+        .append('duration', 'thumbnail_url', 'titles')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

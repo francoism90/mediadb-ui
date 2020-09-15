@@ -28,7 +28,14 @@
             {{ video.name }}
           </div>
 
-          <div class="text-subtitle1 text-grey-1">
+          <div
+            v-if="video.titleNames.length"
+            class="text-subtitle1 text-grey-1 ellipsis-2-lines"
+          >
+            {{ video.titleNames.join(', ') }}
+          </div>
+
+          <div class="text-subtitle1 text-grey-1 ellipsis-2-lines">
             {{ String(video.created_at) | datestamp }} •
             {{ Number(video.duration) | timestamp }} •
             {{ Number(video.views) | approximate }} views

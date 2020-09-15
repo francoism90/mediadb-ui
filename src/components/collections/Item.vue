@@ -19,8 +19,8 @@
       </div>
 
       <div class="text-subtitle1 ellipsis-2-lines text-grey-6">
-        <span v-if="showModel">
-          {{ collection.relationships.model.name }} •
+        <span v-if="collection.modelName">
+          {{ collection.modelName }} •
         </span>
         {{ Number(collection.item_count || 0) | approximate }} items
       </div>
@@ -46,20 +46,6 @@ export default {
     collection: {
       type: CollectionModel,
       required: true
-    }
-  },
-
-  data () {
-    return {
-      hideTypes: ['title']
-    }
-  },
-
-  computed: {
-    showModel () {
-      return !this.hideTypes.includes(
-        this.collection.type
-      )
     }
   }
 }

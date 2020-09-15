@@ -20,7 +20,7 @@
             v-for="(item, index) in video.sprite"
             :key="index"
             class="frame-item cursor-pointer"
-            @click="pushWatch(item)"
+            @click="watchRoute(item)"
           >
             <q-card
               square
@@ -36,11 +36,8 @@
                 loading="lazy"
                 img-class="frame-item"
               >
-                <div class="absolute-bottom">
-                  <q-badge
-                    color="grey-8"
-                    class="text-caption q-ma-sm"
-                  >
+                <div class="absolute-bottom-right">
+                  <q-badge class="transparent-dimmed text-caption q-ma-sm">
                     {{ Number(item.timecode || 0) | timestamp }}
                   </q-badge>
                 </div>
@@ -65,7 +62,7 @@ export default {
   },
 
   methods: {
-    pushWatch (item) {
+    watchRoute (item) {
       this.$router.push({
         name: 'watch',
         params: {

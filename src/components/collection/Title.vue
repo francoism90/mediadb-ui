@@ -28,15 +28,17 @@
             {{ collection.name }}
           </div>
 
-          <div class="text-subtitle1 text-grey-1">
-            {{ String(collection.created_at) | datestamp }} •
+          <div class="text-subtitle1 text-grey-1 ellipsis-2-lines">
+            <span v-if="collection.modelName">
+              {{ collection.modelName }} •
+            </span>
             {{ Number(collection.item_count) | approximate }} items •
             {{ Number(collection.views) | approximate }} views
           </div>
 
           <div
             v-if="collection.description"
-            class="text-subtitle1 text-grey ellipsis-2-lines"
+            class="text-subtitle1 text-grey ellipsis-3-lines"
           >
             {{ collection.description }}
           </div>

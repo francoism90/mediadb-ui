@@ -108,8 +108,6 @@ export default {
       ],
       settings: {
         streaming: {
-          bufferingGoal: 30,
-          bufferBehind: 15,
           jumpLargeGaps: true,
           ignoreTextStreamFailures: true
         }

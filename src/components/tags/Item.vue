@@ -17,7 +17,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="ellipsis-2-lines">
+      <q-item-label class="ellipsis">
         {{ tag.name }}
       </q-item-label>
 

@@ -122,8 +122,8 @@ export default {
     async setModels () {
       const response = await CollectionModel
         .where('type', this.type.value)
-        .include(['model', 'tags'])
-        .append(['item_count', 'thumbnail_url'])
+        .include('model', 'tags')
+        .append('item_count', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

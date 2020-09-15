@@ -1,5 +1,6 @@
 <template>
   <q-dialog
+    :key="id"
     ref="dialog"
     maximized
     @hide="onDialogHide"
@@ -61,11 +62,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-
-    playable: {
-      type: Boolean,
-      default: true
     }
   },
 
@@ -75,10 +71,20 @@ export default {
     }
   },
 
+  computed: {
+    playable () {
+      if (this.$route.name === 'watch' && this.$route.params.id === this.id) {
+        return false
+      }
+
+      return true
+    }
+  },
+
   async created () {
     try {
-      if (!this.$store.hasModule('parents')) {
-        this.$store.registerModule('parents', PaginateModule)
+      if (!this.$store.hasModule('models')) {
+        this.$store.registerModule('models', PaginateModule)
       }
 
       if (!this.$store.hasModule('related')) {

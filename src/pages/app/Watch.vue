@@ -1,9 +1,7 @@
 <template>
-  <q-page
-    v-if="video"
-    :key="video.id"
-  >
+  <q-page :key="id">
     <player
+      v-if="video"
       :from-route="fromRoute"
       :to-route="toRoute"
       :video="video"
@@ -35,23 +33,29 @@ export default {
     return {
       fromRoute: {},
       toRoute: {},
-      title: '',
+      title: null,
       video: null
     }
   },
 
   beforeRouteEnter (to, from, next) {
     next(vm => {
-      vm.setModel()
       vm.fromRoute = from
       vm.toRoute = to
     })
   },
 
   beforeRouteUpdate (to, from, next) {
-    this.setModel()
     this.toRoute = to
     next()
+  },
+
+  watch: {
+    $route: 'setModel'
+  },
+
+  created () {
+    this.setModel()
   },
 
   meta () {
@@ -62,6 +66,9 @@ export default {
 
   methods: {
     async setModel () {
+      this.title = null
+      this.video = null
+
       try {
         this.$q.loading.show()
 
