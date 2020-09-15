@@ -1,3 +1,4 @@
+import { filter } from 'lodash'
 import Model from './Model'
 import Collection from './Collection'
 import Tag from './Tag'
@@ -13,5 +14,9 @@ export default class Video extends Model {
 
   tags () {
     return this.hasMany(Tag)
+  }
+
+  get subtitles () {
+    return filter(this.tracks, { type: 'subtitles' })
   }
 }

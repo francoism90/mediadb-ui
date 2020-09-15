@@ -1,0 +1,29 @@
+.details-header {
+  min-height: 400px;
+  height: 400px;
+}
+
+.details-elements {
+  z-index: 30;
+}
+
+.details-header-gradient-left {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(90deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  width: 50%;
+}
+
+.details-header-gradient-right {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(270deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  width: 50%;
+}
+
+.details-header-gradient-bottom {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(0deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  height: 50%;
+}

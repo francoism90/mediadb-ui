@@ -1,96 +1,96 @@
 <template>
-  <q-card
-    v-if="video"
-    dark
-    :style="{ width: '520px' }"
+  <q-dialog
+    ref="dialog"
+    @hide="onDialogHide"
   >
-    <q-inner-loading
-      dark
-      :showing="!video.id"
+    <q-card
+      class="q-dialog-plugin"
+      style="width: 500px; max-width: 100vw;"
     >
-      <q-spinner
-        size="50px"
-        color="primary"
-      />
-    </q-inner-loading>
+      <q-inner-loading :showing="!video">
+        <q-spinner
+          size="50px"
+          color="primary"
+        />
+      </q-inner-loading>
 
-    <transition
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <q-form
-        v-if="form"
-        @submit="onSubmit"
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
       >
-        <q-card-section class="row items-center">
-          <div class="text-h6">
-            {{ video.name }}
-          </div>
-          <q-space />
-          <q-btn
-            v-close-popup
-            icon="close"
-            round
-            unelevated
-            color="grey-9"
-            dense
-            size="12px"
-          />
-        </q-card-section>
-
-        <q-separator dark />
-
-        <q-card-section>
-          <q-select
-            v-model="form.collections"
-            dark
-            square
-            filled
-            :error-message="getError('collections')"
-            :error="hasError('collections')"
-            :input-debounce="300"
-            :options="collections"
-            :max-values="25"
-            clearable
-            hide-dropdown-icon
-            counter
-            use-chips
-            label="Collections"
-            options-dark
-            option-label="name"
-            option-value="id"
-            stack-label
-            multiple
-            use-input
-            @filter="filterCollections"
-          />
-        </q-card-section>
-
-        <q-separator dark />
-
-        <q-card-actions
-          align="right"
+        <q-form
+          v-if="form"
+          @submit="onSubmit"
         >
-          <q-btn
-            flat
-            type="submit"
-            label="Save"
-            color="primary"
-          />
-        </q-card-actions>
-      </q-form>
-    </transition>
-  </q-card>
+          <q-card-section class="row items-center">
+            <div class="text-h6 ellipsis">
+              {{ video.name }}
+            </div>
+            <q-space />
+            <q-btn
+              v-close-popup
+              icon="close"
+              color="grey-9"
+              size="12px"
+              dense
+              round
+              unelevated
+            />
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section class="q-gutter-md">
+            <q-select
+              v-model="form.collections"
+              square
+              filled
+              :error-message="getError('collections')"
+              :error="hasError('collections')"
+              :input-debounce="300"
+              :options="collections"
+              :max-values="25"
+              clearable
+              hide-dropdown-icon
+              counter
+              use-chips
+              label="Collections"
+              option-label="name"
+              option-value="id"
+              stack-label
+              multiple
+              use-input
+              @filter="filterCollections"
+            />
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-actions
+            align="right"
+          >
+            <q-btn
+              flat
+              type="submit"
+              label="Save"
+              color="primary"
+            />
+          </q-card-actions>
+        </q-form>
+      </transition>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
+import { dialogHandler } from 'src/mixins/dialog'
 import { formHandler } from 'src/mixins/form'
-import Collection from 'src/models/Collection'
-import Video from 'src/models/Video'
+import CollectionModel from 'src/models/Collection'
+import VideoModel from 'src/models/Video'
 
 export default {
-  mixins: [formHandler],
+  mixins: [dialogHandler, formHandler],
 
   props: {
     id: {
@@ -101,38 +101,39 @@ export default {
 
   data () {
     return {
-      video: {},
+      video: null,
       collections: [],
       userCollections: []
     }
   },
 
-  created () {
-    this.setModel()
-    this.setCollections()
+  async created () {
+    try {
+      this.video = await VideoModel.$find(this.id)
+
+      await this.setUserCollections()
+
+      this.setForm({
+        collections: this.userCollections
+      })
+    } catch {
+      //
+    }
   },
 
   methods: {
-    async setModel () {
-      this.video = await Video.$find(this.id)
-    },
-
-    async setCollections () {
-      this.userCollections = await Collection
+    async setUserCollections () {
+      this.userCollections = await CollectionModel
         .where('type', 'user')
         .where('video', this.id)
         .orderBy('name')
         .page(1)
         .limit(30)
         .$get()
-
-      this.setForm({
-        collections: this.userCollections
-      })
     },
 
     async filterCollections (val, update, abort) {
-      this.collections = await Collection
+      this.collections = await CollectionModel
         .where('type', 'user')
         .where('query', val || null)
         .orderBy(val.length ? 'relevance' : 'updated_at')
@@ -145,13 +146,9 @@ export default {
 
     async onSubmit () {
       try {
-        // Save collection changes
         await this.$axios.put(`videos/${this.id}/save`, {
           collections: this.form.collections
         })
-
-        // Refresh collection
-        await this.setCollections()
 
         this.$q.notify({
           progress: true,

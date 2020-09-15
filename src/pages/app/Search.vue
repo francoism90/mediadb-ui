@@ -1,77 +1,112 @@
 <template>
-  <q-page class="container fluid">
-    <template v-if="query && !filter">
-      <component
-        :is="type.component"
-        v-for="(type, index) in types"
-        :key="index"
-        :query="query"
-        summary
-      />
-    </template>
+  <q-page
+    :key="id"
+    class="container fluid q-py-md"
+  >
+    <div class="col no-wrap">
+      <q-chip
+        class="q-mb-md"
+        color="grey-8"
+        size="12px"
+        square
+      >
+        <q-avatar
+          icon="filter_alt"
+          color="grey-9"
+          text-color="white"
+        /> {{ query }}
+      </q-chip>
+    </div>
 
-    <template v-else-if="query && filter">
-      <component
-        :is="getFilter.component"
-        :query="query"
-      />
+    <template v-if="query">
+      <panels :query="query" />
     </template>
 
     <template v-else>
       <div class="fixed-center text-center">
-        <p>
+        <div>
           <q-icon
             name="search"
-            style="font-size: 4rem;"
+            size="4rem"
           />
-        </p>
-        <p class="text-h5 q-mb-xs">
+        </div>
+        <div class="text-h5 q-mb-xs">
           Search MediaDB
-        </p>
-        <p class="text-body2">
+        </div>
+        <div class="text-body2">
           Find videos, collections and tags.
-        </p>
+        </div>
       </div>
     </template>
   </q-page>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import paginateModule from 'src/store/paginate'
+import PaginateModule from 'src/store/paginate'
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'session/getDataField',
+  mutationType: 'session/updateDataField'
+})
+
+const paginates = ['sCollections', 'sTags', 'sVideos']
 
 export default {
   preFetch ({ store, currentRoute }) {
-    const searchStores = store.state.search.types
-
-    for (const searchStore of searchStores) {
-      if (!store.hasModule(['search', searchStore.key])) {
-        store.registerModule(['search', searchStore.key], paginateModule)
+    for (const paginate of paginates) {
+      if (!store.hasModule(paginate)) {
+        store.registerModule(paginate, PaginateModule)
       }
     }
   },
 
   components: {
-    Collections: () => import('components/search/Collections'),
-    Tags: () => import('components/search/Tags'),
-    Videos: () => import('components/search/Videos')
+    Panels: () => import('components/search/Panels')
   },
 
   computed: {
-    ...mapState('search', [
-      'filter',
-      'query',
-      'types'
-    ]),
+    ...mapFields({
+      id: 'search.id',
+      query: 'search.query'
+    })
+  },
 
-    ...mapGetters('search', [
-      'getFilter'
-    ])
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.resetItems()
+      vm.setQuery(to)
+    })
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    this.resetItems()
+    this.setQuery(to)
+    next()
   },
 
   meta () {
     return {
       title: this.query || 'Search'
+    }
+  },
+
+  methods: {
+    resetItems () {
+      for (const paginate of paginates) {
+        this.$store.dispatch(`${paginate}/resetItems`)
+      }
+    },
+
+    setQuery (route) {
+      const id = this.$sanitize(route.query.id) || +new Date()
+      const query = this.$sanitize(route.query.q) || ''
+
+      this.$store.dispatch('session/setSession', {
+        data: {
+          search: { id: id, query: query }
+        }
+      })
     }
   }
 }

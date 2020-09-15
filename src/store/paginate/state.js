@@ -2,10 +2,12 @@ export default function () {
   return {
     id: +new Date(),
     ready: false,
-    model: null,
     page: 1,
     options: {},
     data: [],
-    meta: {}
+    meta: {
+      last_page: 1,
+      total: 0
+    }
   }
 }

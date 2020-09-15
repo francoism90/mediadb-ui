@@ -1,11 +1,9 @@
 <template>
   <q-item
     v-ripple
-    draggable="false"
     clickable
-    dark
-    class="no-padding"
-    @click="onClick"
+    class="no-padding tag-item"
+    draggable="false"
   >
     <q-item-section side>
       <q-avatar
@@ -14,43 +12,33 @@
         color="grey-6"
         text-color="grey-3"
       >
-        {{ data.name.charAt(0) }}
+        {{ tag.name.charAt(0) }}
       </q-avatar>
     </q-item-section>
 
     <q-item-section>
       <q-item-label class="ellipsis-2-lines">
-        {{ data.name }}
+        {{ tag.name }}
       </q-item-label>
+
       <q-item-label
         class="text-grey-5"
         caption
       >
-        {{ Number(data.item_count || 0) | approximate }} items
+        {{ Number(tag.item_count || 0) | approximate }} items
       </q-item-label>
     </q-item-section>
   </q-item>
 </template>
 
 <script>
+import TagModel from 'src/models/Tag'
+
 export default {
   props: {
-    data: {
-      type: Object,
+    tag: {
+      type: TagModel,
       required: true
-    }
-  },
-
-  methods: {
-    onClick () {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: 'tag:' + this.data.slug,
-          type: '',
-          id: +new Date()
-        }
-      })
     }
   }
 }

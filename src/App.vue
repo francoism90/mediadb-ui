@@ -22,6 +22,7 @@ export default {
   components: {
     Auth: () => import('layouts/Auth'),
     Error: () => import('layouts/Error'),
+    Full: () => import('layouts/Full'),
     Main: () => import('layouts/Main')
   },
 
@@ -33,25 +34,24 @@ export default {
 
   watch: {
     '$q.fullscreen.isActive' (val) {
-      // OS fullscreen handling
-      if (!this.$q.platform.is.cordova) {
-        return
+      if (this.$q.platform.is.cordova) {
+        this.setAppFullscreen(val)
       }
+    }
+  },
 
-      if (val) {
-        // Hide navigationsbars on fullscreen
+  methods: {
+    setAppFullscreen (active = false) {
+      if (active) {
         window.NavigationBar.hide()
         window.StatusBar.hide()
 
-        // Lock screen orientation
         window.screen.orientation.lock('landscape')
       } else {
-        // Show navigationsbars on fullscreen
+        window.screen.orientation.unlock()
+
         window.NavigationBar.show()
         window.StatusBar.show()
-
-        // Allow screen orientation
-        window.screen.orientation.unlock()
       }
     }
   }

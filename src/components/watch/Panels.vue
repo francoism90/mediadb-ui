@@ -1,0 +1,76 @@
+<template>
+  <q-card-section>
+    <q-tabs
+      v-model="tab"
+      dense
+      class="text-grey"
+      active-color="primary"
+      indicator-color="primary"
+      align="left"
+      arrow-indicator
+    >
+      <q-tab
+        name="tracks"
+        label="Subtitles/CC"
+      />
+
+      <q-tab
+        name="debug"
+        label="Debugging"
+      />
+    </q-tabs>
+
+    <q-separator />
+
+    <q-tab-panels
+      v-model="tab"
+      animated
+    >
+      <q-tab-panel
+        name="tracks"
+        class="q-pa-none"
+      >
+        <item-tracks
+          :text-tracks="textTracks"
+          :video="video"
+        />
+      </q-tab-panel>
+
+      <q-tab-panel
+        name="debug"
+        class="q-pa-none"
+      >
+        <item-debug :video="video" />
+      </q-tab-panel>
+    </q-tab-panels>
+  </q-card-section>
+</template>
+
+<script>
+import VideoModel from 'src/models/Video'
+
+export default {
+  components: {
+    ItemDebug: () => import('components/watch/Debug'),
+    ItemTracks: () => import('components/watch/Tracks')
+  },
+
+  props: {
+    textTracks: {
+      type: TextTrackList,
+      default: null
+    },
+
+    video: {
+      type: VideoModel,
+      required: true
+    }
+  },
+
+  data () {
+    return {
+      tab: 'tracks'
+    }
+  }
+}
+</script>
