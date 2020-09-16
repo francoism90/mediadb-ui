@@ -22,3 +22,7 @@ a {
   color: $grey-5;
   text-decoration: none;
 }
+
+.transparent-dimmed {
+  background: rgba(255, 255, 255, 0.2);
+}

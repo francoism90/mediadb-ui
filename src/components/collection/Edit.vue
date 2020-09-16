@@ -1,144 +1,148 @@
 <template>
-  <q-card
-    v-if="collection"
-    dark
-    :style="{ width: '520px' }"
+  <q-dialog
+    :key="id"
+    ref="dialog"
+    @hide="onDialogHide"
   >
-    <q-dialog
-      v-model="deleteDialog"
-      persistent
+    <q-card
+      class="q-dialog-plugin"
+      style="width: 500px; max-width: 100vw;"
     >
-      <q-card dark>
-        <q-card-section class="row items-center">
-          <q-avatar
-            icon="delete_forever"
-            color="primary"
-            text-color="white"
-          />
-          <span class="q-ml-sm">Are you sure you want to delete this collection?</span>
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn
-            v-close-popup
-            flat
-            label="Cancel"
-            color="primary"
-          />
-          <q-btn
-            flat
-            label="Confirm"
-            color="primary"
-            @click.prevent="onDelete"
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <q-inner-loading
-      dark
-      :showing="!collection.id"
-    >
-      <q-spinner
-        size="50px"
-        color="primary"
-      />
-    </q-inner-loading>
-
-    <transition
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <q-form
-        v-if="form"
-        @submit="onSubmit"
+      <q-dialog
+        v-model="deleteDialog"
+        persistent
       >
-        <q-card-section class="row items-center">
-          <div class="text-h6 ellipsis">
-            {{ collection.name }}
-          </div>
-          <q-space />
-          <q-btn
-            v-close-popup
-            icon="close"
-            round
-            unelevated
-            color="grey-9"
-            dense
-            size="12px"
-          />
-        </q-card-section>
+        <q-card>
+          <q-card-section class="row items-center">
+            <q-avatar
+              icon="delete_forever"
+              color="primary"
+              text-color="white"
+            />
+            <span class="q-ml-sm">Are you sure you want to delete this collection?</span>
+          </q-card-section>
 
-        <q-separator dark />
+          <q-card-actions align="right">
+            <q-btn
+              v-close-popup
+              flat
+              label="Cancel"
+              color="primary"
+            />
 
-        <q-card-section class="q-gutter-md">
-          <q-input
-            v-model.trim="form.name"
-            dark
-            square
-            filled
-            label="Name"
-            clearable
-            :error-message="getError('name')"
-            :error="hasError('name')"
-          />
+            <q-btn
+              v-close-popup
+              flat
+              label="Confirm"
+              color="primary"
+              @click.prevent="onDelete"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
 
-          <q-select
-            v-model="form.tags"
-            dark
-            square
-            filled
-            :error-message="getError('tags')"
-            :error="hasError('tags')"
-            :input-debounce="300"
-            :options="tags"
-            :max-values="15"
-            clearable
-            hide-dropdown-icon
-            counter
-            use-chips
-            label="Tags"
-            options-dark
-            option-label="name"
-            option-value="id"
-            stack-label
-            multiple
-            use-input
-            @filter="filterTags"
-          />
-        </q-card-section>
+      <q-inner-loading :showing="!collection">
+        <q-spinner
+          size="50px"
+          color="primary"
+        />
+      </q-inner-loading>
 
-        <q-separator dark />
-
-        <q-card-actions
-          align="right"
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <q-form
+          v-if="form"
+          @submit="onSubmit"
         >
-          <q-btn
-            flat
-            label="Delete"
-            color="primary"
-            @click="deleteDialog = true"
-          />
-          <q-btn
-            flat
-            type="submit"
-            label="Save"
-            color="primary"
-          />
-        </q-card-actions>
-      </q-form>
-    </transition>
-  </q-card>
+          <q-card-section class="row items-center">
+            <div class="text-h6 ellipsis">
+              {{ collection.name }}
+            </div>
+
+            <q-space />
+
+            <q-btn
+              v-close-popup
+              icon="close"
+              color="grey-9"
+              size="12px"
+              dense
+              round
+              unelevated
+            />
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-section class="q-gutter-md">
+            <q-input
+              v-model.trim="form.name"
+              square
+              filled
+              label="Name"
+              clearable
+              :error-message="getError('name')"
+              :error="hasError('name')"
+            />
+
+            <q-select
+              v-model="form.tags"
+              square
+              filled
+              :error-message="getError('tags')"
+              :error="hasError('tags')"
+              :input-debounce="300"
+              :options="tags"
+              :max-values="15"
+              clearable
+              hide-dropdown-icon
+              counter
+              use-chips
+              label="Tags"
+              option-label="name"
+              option-value="id"
+              stack-label
+              multiple
+              use-input
+              @filter="filterTags"
+            />
+          </q-card-section>
+
+          <q-separator />
+
+          <q-card-actions
+            align="right"
+          >
+            <q-btn
+              flat
+              label="Delete"
+              color="primary"
+              @click="deleteDialog = true"
+            />
+            <q-btn
+              flat
+              type="submit"
+              label="Save"
+              color="primary"
+            />
+          </q-card-actions>
+        </q-form>
+      </transition>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
+import { dialogHandler } from 'src/mixins/dialog'
 import { formHandler } from 'src/mixins/form'
-import Collection from 'src/models/Collection'
-import Tag from 'src/models/Tag'
+import CollectionModel from 'src/models/Collection'
+import TagModel from 'src/models/Tag'
 
 export default {
-  mixins: [formHandler],
+  mixins: [dialogHandler, formHandler],
 
   props: {
     id: {
@@ -150,18 +154,14 @@ export default {
   data () {
     return {
       deleteDialog: false,
-      collection: {},
+      collection: null,
       tags: []
     }
   },
 
-  created () {
-    this.setModel()
-  },
-
-  methods: {
-    async setModel () {
-      this.collection = await Collection.$find(this.id)
+  async created () {
+    try {
+      this.collection = await CollectionModel.$find(this.id)
 
       this.setForm({
         id: this.collection.id,
@@ -169,10 +169,14 @@ export default {
         description: this.collection.description,
         tags: this.collection.relationships.tags
       })
-    },
+    } catch {
+      //
+    }
+  },
 
+  methods: {
     async filterTags (val, update, abort) {
-      this.tags = await Tag
+      this.tags = await TagModel
         .where('query', val || null)
         .orderBy(val.length ? 'relevance' : 'items')
         .page(1)
@@ -182,15 +186,34 @@ export default {
       update()
     },
 
+    async onDelete () {
+      try {
+        await this.collection.delete()
+
+        this.$q.notify({
+          progress: true,
+          timeout: 1500,
+          position: 'top',
+          message: `${this.collection.name} has been deleted.`,
+          type: 'positive'
+        })
+
+        this.$root.$emit('dialogOk')
+      } catch (e) {
+        this.$q.notify({
+          progress: true,
+          position: 'top',
+          message: e.response.data.message || 'Unable to delete collection',
+          type: 'negative'
+        })
+      }
+    },
+
     async onSubmit () {
       try {
-        const collection = new Collection(this.form)
+        const collection = new CollectionModel(this.form)
 
-        // Save model changes
-        await collection.save()
-
-        // Refresh model
-        await this.setModel()
+        this.collection = await collection.save()
 
         this.$q.notify({
           progress: true,
@@ -202,28 +225,6 @@ export default {
       } catch (e) {
         this.setMessage(e.response)
         this.setErrors(e.response)
-      }
-    },
-
-    async onDelete () {
-      try {
-        await this.collection.delete()
-
-        this.$q.notify({
-          progress: true,
-          position: 'top',
-          message: `${this.collection.name} has been deleted.`,
-          type: 'positive'
-        })
-
-        this.$store.dispatch('dialog/close')
-      } catch (e) {
-        this.$q.notify({
-          progress: true,
-          position: 'top',
-          message: e.response.data.message || 'Unable to delete collection',
-          type: 'negative'
-        })
       }
     }
   }

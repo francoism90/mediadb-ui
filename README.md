@@ -4,11 +4,9 @@
 
 The front-end requires a running [MediaDB API](https://github.com/francoism90/mediadb) instance.
 
-- Video previews as seen on YouTube.
-- Display thumbnails from a sprite image when hovering over the progress bar.
 - Manage library using tags and collections.
 - User roles and permissions.
-- Searching and filtering.
+- Android app build in Cordova.
 
 MediaDB is very much in development and is not yet suitable for production purposes.
 
@@ -21,7 +19,11 @@ Notes:
 
 ### Configuration
 
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+Check out the following links:
+
+- [https://quasar.dev/quasar-cli/quasar-conf-js]
+- [https://quasar.dev/quasar-cli/build-commands]
+- [https://quasar.dev/quasar-cli/developing-cordova-apps/introduction]
 
 ### Build project
 
@@ -31,8 +33,6 @@ cp .env.example .env
 npm install
 quasar build
 ```
-
-## Development
 
 ### Live project
 

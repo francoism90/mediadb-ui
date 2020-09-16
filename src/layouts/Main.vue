@@ -1,7 +1,5 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <dialogs />
-
     <q-header
       class="header bg-grey-14 q-py-xs"
       height-hint="58"
@@ -54,17 +52,15 @@
 
             <q-menu
               auto-close
-              dark
               square
               max-width="400px"
             >
               <q-list
                 bordered
                 padding
-                dark
                 dense
               >
-                <q-item dark>
+                <q-item>
                   <q-item-section no-wrap>
                     <q-item-label caption>
                       Signed in as <span class="text-weight-medium">{{ $auth.user().name }}</span>
@@ -72,46 +68,30 @@
                   </q-item-section>
                 </q-item>
 
-                <q-separator
-                  dark
-                  spaced
-                />
+                <q-separator spaced />
 
-                <q-item
-                  clickable
-                  dark
-                >
+                <q-item clickable>
                   <q-item-section no-wrap>
                     Your profile
                   </q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  dark
-                >
+                <q-item clickable>
                   <q-item-section no-wrap>
                     Settings
                   </q-item-section>
                 </q-item>
 
-                <q-item
-                  clickable
-                  dark
-                >
+                <q-item clickable>
                   <q-item-section no-wrap>
                     Help
                   </q-item-section>
                 </q-item>
 
-                <q-separator
-                  dark
-                  spaced
-                />
+                <q-separator spaced />
 
                 <q-item
                   clickable
-                  dark
                   @click="logout"
                 >
                   <q-item-section no-wrap>
@@ -127,12 +107,12 @@
 
     <q-drawer
       v-model="drawer"
-      dark
       bordered
       persistent
       :mini="miniDrawer"
       :width="240"
-      :breakpoint="500"
+      :breakpoint="breakpoint"
+      :overlay="overlay"
       content-class="bg-grey-12"
       @mouseover="miniDrawer = false"
       @mouseout="miniDrawer = true"
@@ -183,7 +163,6 @@
 <script>
 export default {
   components: {
-    Dialogs: () => import('components/ui/Dialog'),
     Search: () => import('components/ui/Search')
   },
 
@@ -191,54 +170,39 @@ export default {
     return {
       drawer: true,
       miniDrawer: true,
-      hideDrawer: ['video'],
+      overlay: false,
+      breakpoint: 600,
       links: [
         { label: 'Library', name: 'home', icon: 'video_library', separator: false },
         { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
         { label: 'Tags', name: 'tags', icon: 'label', separator: true },
-        { label: 'My Subscriptions', name: 'history', icon: 'subscriptions', separator: false },
-        { label: 'Watch Later', name: 'history', icon: 'watch_later', separator: false },
-        { label: 'Favorites', name: 'history', icon: 'favorite', separator: false },
-        { label: 'History', name: 'history', icon: 'history', separator: false }
+        { label: 'My Subscriptions', name: '404', icon: 'subscriptions', separator: false },
+        { label: 'Watch Later', name: '404', icon: 'watch_later', separator: false },
+        { label: 'Favorites', name: '404', icon: 'favorite', separator: false },
+        { label: 'History', name: '404', icon: 'history', separator: false }
       ]
     }
   },
 
-  watch: {
-    $route: function (route) {
-      this.showHideDrawer(route)
-    }
-  },
-
   created () {
-    this.showHideDrawer(this.$route)
+    this.showHideDrawer()
   },
 
   methods: {
-    showHideDrawer (route = null) {
-      if (
-        (route && route.name && this.hideDrawer.includes(route.name)) ||
-        this.$q.screen.lt.md
-      ) {
-        this.drawer = false
-      } else {
-        this.drawer = true
-      }
+    showHideDrawer () {
+      this.drawer = (this.$q.screen.width > this.breakpoint)
+      this.miniDrawer = (this.$q.screen.width > this.breakpoint)
+      this.overlay = (this.$q.screen.width < this.breakpoint)
     },
 
     async logout () {
-      try {
-        await this.$auth
-          .logout({
-            makeRequest: true,
-            redirect: { name: 'login' }
-          })
-
-        // Reload app
-        this.$router.go('/')
-      } catch (e) {
-        alert(e || 'Unable to logout.')
-      }
+      await this.$auth
+        .logout({
+          makeRequest: true,
+          redirect: {
+            name: 'login'
+          }
+        })
     }
   }
 }

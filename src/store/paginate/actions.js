@@ -1,29 +1,40 @@
-export function setPage ({ commit, getters, state }, payload = {}) {
+export function initialize ({ commit, state }, payload = {}) {
+  const { name = null, options = {} } = payload
+
+  // Reset state on name change
+  if (name && state.name !== name) {
+    commit('setReady', false)
+  }
+
+  if (state.ready) {
+    return
+  }
+
+  commit('resetState')
+
+  commit('setReady', true)
+  commit('setName', name)
+  commit('setOptions', options)
+}
+
+export function setPage ({ commit, getters }, payload = {}) {
   const { data = [], meta = {} } = payload
 
-  commit('setReady', false)
   commit('setMeta', meta)
 
   if (!getters.isLoaded && data.length) {
-    commit('setData', data)
+    commit('concatData', data)
     commit('increasePage')
   }
-
-  commit('setReady', true)
 }
 
 export function resetItems ({ commit }, payload = {}) {
-  const { id = null } = payload
+  const { options = {} } = payload
 
-  commit('resetItems')
-  commit('resetPage')
-  commit('setId', id)
-}
+  commit('setData')
+  commit('setMeta')
+  commit('setPage')
 
-export function resetState ({ commit }, payload = {}) {
-  const { id = null } = payload
-
-  commit('resetState')
-  commit('setId', id)
-  commit('setOption', payload)
+  commit('setOptions', options)
+  commit('setId', +new Date())
 }

@@ -1,19 +1,19 @@
 <template>
-  <div>
+  <div class="q-gutter-xs">
     <q-chip
       v-for="(item, index) in items"
       :key="index"
-      dark
-      square
-      clickable
-      color="grey-8"
-      class="q-ml-none q-mr-sm text-weight-light"
+      :color="labelColor"
       :size="size"
+      class="transparent-dimmed"
+      :clickable="clickable"
+      square
       @click="onClick(item)"
     >
       <q-avatar
         :icon="avatar(item).icon"
-        :color="avatar(item).color"
+        :color="avatarColor"
+        class="transparent-dimmed"
         text-color="white"
       /> {{ item.name }}
     </q-chip>
@@ -28,9 +28,24 @@ export default {
       default: null
     },
 
+    clickable: {
+      type: Boolean,
+      default: false
+    },
+
+    avatarColor: {
+      type: String,
+      default: 'grey-9'
+    },
+
+    labelColor: {
+      type: String,
+      default: 'grey-8'
+    },
+
     size: {
       type: String,
-      default: '0.75rem'
+      default: '12px'
     }
   },
 
@@ -39,27 +54,22 @@ export default {
       avatars: [
         {
           value: 'genre',
-          color: 'grey-9',
           icon: 'local_offer'
         },
         {
           value: 'default',
-          color: 'grey-9',
           icon: 'label'
         },
         {
           value: 'language',
-          color: 'grey-9',
           icon: 'language'
         },
         {
           value: 'actor',
-          color: 'grey-9',
           icon: 'person'
         },
         {
           value: 'studio',
-          color: 'grey-9',
           icon: 'movie'
         }
       ]
@@ -71,13 +81,12 @@ export default {
       return this.avatars.find(x => x.value === (item.type || 'default'))
     },
 
-    onClick (value) {
+    onClick (model) {
       this.$router.push({
         name: 'search',
         query: {
-          q: 'tag:' + value.slug,
-          type: '',
-          id: +new Date()
+          id: +new Date(),
+          q: 'tag:' + model.slug
         }
       })
     }

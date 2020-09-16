@@ -6,6 +6,8 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <allow-navigation href="*://*.mediadb.test/*" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -15,7 +17,6 @@
     <allow-intent href="geo:*" />
     <preference name="BackgroundColor" value="0xff1c1d1e" />
     <preference name="DefaultVolumeStream" value="media" />
-    <preference name="EnableViewportScale" value="true" />
     <preference name="NavigationBarBackgroundColor" value="#000000" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="StatusBarStyle" value="blacktranslucent" />

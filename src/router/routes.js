@@ -12,6 +12,12 @@ const routes = [
     meta: { auth: false, layout: 'Error' }
   },
   {
+    name: '404',
+    path: '/404',
+    component: () => import('pages/error/404.vue'),
+    meta: { auth: false, layout: 'Error' }
+  },
+  {
     name: '429',
     path: '/429',
     component: () => import('pages/error/429.vue'),
@@ -24,10 +30,16 @@ const routes = [
     meta: { auth: false, layout: 'Error' }
   },
   {
-    name: 'video',
-    path: '/video/:id/:slug?',
-    component: () => import('pages/app/Video.vue'),
-    meta: { auth: true, layout: 'Main' },
+    name: 'login',
+    path: '/login',
+    component: () => import('pages/auth/Login.vue'),
+    meta: { auth: false, layout: 'Auth' }
+  },
+  {
+    name: 'watch',
+    path: '/watch/:id/:slug?',
+    component: () => import('pages/app/Watch.vue'),
+    meta: { auth: true, layout: 'Full' },
     props: true
   },
   {
@@ -37,22 +49,9 @@ const routes = [
     meta: { auth: true, layout: 'Main' }
   },
   {
-    name: 'collection',
-    path: '/collection/:id/:slug?',
-    component: () => import('pages/app/Collection.vue'),
-    meta: { auth: true, layout: 'Main' },
-    props: true
-  },
-  {
     name: 'tags',
     path: '/tags',
     component: () => import('pages/app/Tags.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'history',
-    path: '/history',
-    component: () => import('pages/app/History.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
@@ -60,12 +59,6 @@ const routes = [
     path: '/search',
     component: () => import('pages/app/Search.vue'),
     meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'login',
-    path: '/login',
-    component: () => import('pages/auth/Login.vue'),
-    meta: { auth: false, layout: 'Auth' }
   },
   {
     path: '*',

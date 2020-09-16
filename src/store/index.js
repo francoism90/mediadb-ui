@@ -2,10 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // Vuex modules
-import dialog from './dialog'
-import search from './search'
+import session from './session'
 
-Vue.use(Vuex)
+// Vuex plugins
+import createPersistedState from 'vuex-persistedstate'
+
+// Register plugins
+const persistedState = createPersistedState({
+  paths: ['session']
+})
 
 /*
  * If not building with SSR mode, you can
@@ -16,12 +21,14 @@ Vue.use(Vuex)
  * with the Store instance.
  */
 
+Vue.use(Vuex)
+
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      dialog,
-      search
+      session
     },
+    plugins: [persistedState],
     strict: process.env.DEV
   })
 

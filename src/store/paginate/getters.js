@@ -1,3 +1,6 @@
+import { getField } from 'vuex-map-fields'
+import { get } from 'lodash'
+
 export function getId (state) {
   return state.id
 }
@@ -10,12 +13,16 @@ export function getMeta (state) {
   return state.meta
 }
 
+export function getOption (state) {
+  return getField(state.options)
+}
+
 export function getOptions (state) {
   return state.options
 }
 
-export function getItems (state) {
-  return state.meta && state.meta.total ? state.meta.total : 0
+export function getTotal (state) {
+  return get(state.meta, 'total', 0)
 }
 
 export function isReady (state) {
@@ -23,16 +30,10 @@ export function isReady (state) {
 }
 
 export function isLoaded (state) {
-  // We don't have any reference
-  if (!state.meta || !state.meta.last_page) {
-    return true
-  }
+  const lastPage = get(state.meta, 'last_page', 1)
+  const total = get(state.meta, 'total', 0)
 
-  // We have no more pages
-  if (
-    state.meta.total === 0 ||
-    state.meta.last_page < state.page
-  ) {
+  if ((!total || !lastPage) || (total === 0 || lastPage < state.page)) {
     return true
   }
 

@@ -1,14 +1,10 @@
 <template>
   <q-page class="container fluid">
     <q-card
-      dark
       class="bg-grey-12 fixed-center"
-      style="width: 350px"
+      style="width: 350px;"
     >
-      <q-inner-loading
-        dark
-        :showing="!form"
-      >
+      <q-inner-loading :showing="!form">
         <q-spinner
           size="50px"
           color="primary"
@@ -33,7 +29,6 @@
           <q-card-section class="q-gutter-md">
             <q-input
               v-model.trim="form.email"
-              dark
               filled
               clearable
               type="email"
@@ -44,7 +39,6 @@
 
             <q-input
               v-model.trim="form.password"
-              dark
               filled
               clearable
               type="password"
