@@ -5,11 +5,10 @@
     @hide="onDialogHide"
   >
     <q-card
-      v-if="video"
       class="q-dialog-plugin"
       style="width: 500px; max-width: 100vw;"
     >
-      <q-inner-loading :showing="!video.id">
+      <q-inner-loading :showing="!video">
         <q-spinner
           size="50px"
           color="primary"
@@ -21,23 +20,16 @@
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <item-title
-          v-if="video.id"
-          key="watch-title"
-          :video="video"
-        />
+        <q-card-section v-if="video">
+          <item-title :video="video" />
 
-        <q-separator
-          v-if="video.id"
-          key="watch-seperator"
-        />
+          <q-separator />
 
-        <item-panels
-          v-if="video.id"
-          key="watch-panels"
-          :text-tracks="textTracks"
-          :video="video"
-        />
+          <item-panels
+            :text-tracks="textTracks"
+            :video="video"
+          />
+        </q-card-section>
       </transition-group>
     </q-card>
   </q-dialog>
@@ -74,11 +66,11 @@ export default {
   },
 
   async created () {
+    this.video = null
+
     try {
       this.video = await VideoModel.$find(this.id)
     } catch {
-      //
-    } finally {
       //
     }
   }

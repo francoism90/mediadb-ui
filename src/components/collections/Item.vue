@@ -10,7 +10,7 @@
       height="160px"
       loading="lazy"
       class="bg-grey-8"
-      img-class="collection-item"
+      img-class="collection-placeholder"
     />
 
     <q-card-section class="q-py-md">

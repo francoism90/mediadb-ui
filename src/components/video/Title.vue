@@ -2,9 +2,10 @@
   <q-img
     :alt="video.name"
     :src="video.thumbnail_url"
-    :ratio="16/9"
-    class="details-header"
+    height="400px"
     loading="lazy"
+    class="details-header"
+    img-class="details-placeholder"
   >
     <div class="absolute-full details-elements">
       <div class="container absolute-top">
@@ -65,7 +66,7 @@
 
         <q-card-section class="q-px-none q-mt-sm">
           <q-btn
-            v-if="playable"
+            v-if="!currentVideo"
             v-shortkey="['p']"
             class="q-mr-sm"
             size="13px"
@@ -115,14 +116,18 @@ export default {
   },
 
   props: {
-    playable: {
-      type: Boolean,
-      default: true
-    },
-
     video: {
       type: VideoModel,
       required: true
+    }
+  },
+
+  computed: {
+    currentVideo () {
+      return (
+        this.$route.name === 'watch' &&
+        this.$route.params.id === this.video.id
+      )
     }
   },
 

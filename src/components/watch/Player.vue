@@ -67,7 +67,7 @@ import VideoModel from 'src/models/Video'
 
 export default {
   timers: {
-    hideControls: { time: 5000, autostart: true }
+    hideControls: { time: 2000, autostart: true }
   },
 
   components: {

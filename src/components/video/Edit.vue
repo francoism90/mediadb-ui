@@ -41,7 +41,7 @@
         </q-card>
       </q-dialog>
 
-      <q-inner-loading :showing="!video">
+      <q-inner-loading :showing="!form || !video">
         <q-spinner
           size="50px"
           color="primary"
@@ -160,6 +160,8 @@ export default {
   },
 
   async created () {
+    this.video = null
+
     try {
       this.video = await VideoModel.$find(this.id)
 

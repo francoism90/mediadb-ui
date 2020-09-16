@@ -5,41 +5,28 @@
     maximized
     @hide="onDialogHide"
   >
-    <q-card
-      v-if="video"
-      class="q-dialog-plugin"
-    >
-      <q-inner-loading :showing="!video.id">
+    <q-card class="q-dialog-plugin">
+      <q-inner-loading :showing="!video">
         <q-spinner
           size="50px"
           color="primary"
         />
       </q-inner-loading>
 
-      <transition-group
+      <transition
         appear
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <item-title
-          v-if="video.id"
-          key="video-title"
-          :playable="playable"
-          :video="video"
-        />
-
-        <item-frames
-          v-if="video.id"
-          key="video-frames"
-          :video="video"
-        />
-
-        <item-panels
-          v-if="video.id"
-          key="video-panels"
-          :video="video"
-        />
-      </transition-group>
+        <q-card-section
+          v-if="video"
+          class="q-pa-none"
+        >
+          <item-title :video="video" />
+          <item-frames :video="video" />
+          <item-panels :video="video" />
+        </q-card-section>
+      </transition>
     </q-card>
   </q-dialog>
 </template>
@@ -71,30 +58,20 @@ export default {
     }
   },
 
-  computed: {
-    playable () {
-      if (this.$route.name === 'watch' && this.$route.params.id === this.id) {
-        return false
-      }
-
-      return true
-    }
-  },
-
   async created () {
+    if (!this.$store.hasModule('models')) {
+      this.$store.registerModule('models', PaginateModule)
+    }
+
+    if (!this.$store.hasModule('related')) {
+      this.$store.registerModule('related', PaginateModule)
+    }
+
+    this.video = null
+
     try {
-      if (!this.$store.hasModule('models')) {
-        this.$store.registerModule('models', PaginateModule)
-      }
-
-      if (!this.$store.hasModule('related')) {
-        this.$store.registerModule('related', PaginateModule)
-      }
-
       this.video = await VideoModel.$find(this.id)
     } catch {
-      //
-    } finally {
       //
     }
   }

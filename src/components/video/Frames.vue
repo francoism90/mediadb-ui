@@ -34,7 +34,7 @@
                 width="220px"
                 height="160px"
                 loading="lazy"
-                img-class="frame-item"
+                img-class="frame-placeholder"
               >
                 <div class="absolute-bottom-right">
                   <q-badge class="transparent-dimmed text-caption q-ma-sm">

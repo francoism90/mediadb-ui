@@ -10,7 +10,7 @@
       height="180px"
       loading="lazy"
       class="bg-grey-8"
-      img-class="video-item"
+      img-class="video-placeholder"
     >
       <div class="absolute-bottom-right">
         <q-badge class="transparent-dimmed text-caption q-ma-sm">

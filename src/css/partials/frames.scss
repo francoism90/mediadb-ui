@@ -1,8 +1,10 @@
 .frame-container {
+  min-height: 180px;
   height: 180px;
 }
 
-.frame-item {
+.frame-item,
+.frame-placeholder {
   background-size: auto !important;
   min-height: 160px;
   min-width: 220px;

@@ -5,34 +5,27 @@
     maximized
     @hide="onDialogHide"
   >
-    <q-card
-      v-if="collection"
-      class="q-dialog-plugin"
-    >
-      <q-inner-loading :showing="!collection.id">
+    <q-card class="q-dialog-plugin">
+      <q-inner-loading :showing="!collection">
         <q-spinner
           size="50px"
           color="primary"
         />
       </q-inner-loading>
 
-      <transition-group
+      <transition
         appear
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <item-title
-          v-if="collection.id"
-          key="collection-title"
-          :collection="collection"
-        />
-
-        <item-panels
-          v-if="collection.id"
-          key="collection-panels"
-          :collection="collection"
-        />
-      </transition-group>
+        <q-card-section
+          v-if="collection"
+          class="q-pa-none"
+        >
+          <item-title :collection="collection" />
+          <item-panels :collection="collection" />
+        </q-card-section>
+      </transition>
     </q-card>
   </q-dialog>
 </template>
@@ -64,15 +57,15 @@ export default {
   },
 
   async created () {
-    try {
-      if (!this.$store.hasModule('videos')) {
-        this.$store.registerModule('videos', PaginateModule)
-      }
+    if (!this.$store.hasModule('videos')) {
+      this.$store.registerModule('videos', PaginateModule)
+    }
 
+    this.colection = null
+
+    try {
       this.collection = await CollectionModel.$find(this.id)
     } catch {
-      //
-    } finally {
       //
     }
   }

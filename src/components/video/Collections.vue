@@ -2,6 +2,8 @@
   <div :key="id">
     <q-pull-to-refresh @refresh="onRefresh">
       <q-infinite-scroll
+        ref="scroll"
+        scroll-target=".q-dialog-plugin"
         :debounce="300"
         class="row wrap justify-start items-start content-start q-col-gutter-md"
         @load="onLoad"
@@ -64,6 +66,11 @@ export default {
     this.initialize({
       name: this.video.id
     })
+  },
+
+  mounted () {
+    // TODO: fix workaround
+    this.$refs.scroll.poll()
   },
 
   methods: {
