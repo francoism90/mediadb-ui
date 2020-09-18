@@ -25,18 +25,18 @@
 
       <div class="container absolute-bottom">
         <q-card-section class="q-pa-none">
-          <div class="text-h4 text-white ellipsis">
+          <div class="text-h6 text-white ellipsis-2-lines">
             {{ video.name }}
           </div>
 
           <div
             v-if="video.titleNames.length"
-            class="text-subtitle1 text-grey-1 ellipsis-2-lines"
+            class="text-subtitle1 text-grey-1 ellipsis"
           >
             {{ video.titleNames.join(', ') }}
           </div>
 
-          <div class="text-subtitle1 text-grey-1 ellipsis-2-lines">
+          <div class="text-subtitle2 text-grey-1 ellipsis">
             {{ String(video.created_at) | datestamp }} •
             {{ Number(video.duration) | timestamp }} •
             {{ Number(video.views) | approximate }} views

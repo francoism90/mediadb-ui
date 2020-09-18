@@ -1,20 +1,20 @@
 <template>
-  <q-card-section class="row items-center">
-    <div class="text-h6 ellipsis">
+  <q-card-section class="row no-wrap justify-between items-center">
+    <div class="col text-h6 ellipsis">
       {{ video.name }}
     </div>
 
-    <q-space />
-
-    <q-btn
-      v-close-popup
-      icon="close"
-      color="grey-9"
-      size="12px"
-      dense
-      round
-      unelevated
-    />
+    <div class="col-auto">
+      <q-btn
+        v-close-popup
+        icon="close"
+        color="grey-9"
+        size="12px"
+        dense
+        round
+        unelevated
+      />
+    </div>
   </q-card-section>
 </template>
 

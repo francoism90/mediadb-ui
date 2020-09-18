@@ -11,7 +11,6 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'auth',
-      'sync',
       'filters',
       'sanitize',
       'shortkey',

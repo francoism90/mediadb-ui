@@ -24,14 +24,18 @@
 
       <div class="container absolute-bottom">
         <q-card-section class="q-pa-none">
-          <div class="text-h4 text-white ellipsis">
+          <div class="text-h6 text-white ellipsis-2-lines">
             {{ collection.name }}
           </div>
 
-          <div class="text-subtitle1 text-grey-1 ellipsis-2-lines">
-            <span v-if="collection.modelName">
-              {{ collection.modelName }} •
-            </span>
+          <div
+            v-if="collection.modelName"
+            class="text-subtitle1 text-grey-1 ellipsis"
+          >
+            {{ collection.modelName }}
+          </div>
+
+          <div class="text-subtitle2 text-grey-1 ellipsis">
             {{ Number(collection.item_count) | approximate }} items •
             {{ Number(collection.views) | approximate }} views
           </div>

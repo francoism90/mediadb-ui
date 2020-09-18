@@ -24,20 +24,22 @@
           v-if="form"
           @submit="onSubmit"
         >
-          <q-card-section class="row items-center">
-            <div class="text-h6 ellipsis">
+          <q-card-section class="row no-wrap justify-between items-center">
+            <div class="col text-h6 ellipsis">
               {{ video.name }}
             </div>
-            <q-space />
-            <q-btn
-              v-close-popup
-              icon="close"
-              color="grey-9"
-              size="12px"
-              dense
-              round
-              unelevated
-            />
+
+            <div class="col-auto">
+              <q-btn
+                v-close-popup
+                icon="close"
+                color="grey-9"
+                size="12px"
+                dense
+                round
+                unelevated
+              />
+            </div>
           </q-card-section>
 
           <q-separator />
@@ -71,6 +73,14 @@
           <q-card-actions
             align="right"
           >
+            <q-btn
+              v-close-popup
+              flat
+              label="New List"
+              color="primary"
+              @click="createUserCollections"
+            />
+
             <q-btn
               flat
               type="submit"
@@ -145,6 +155,26 @@ export default {
         .$get()
 
       update()
+    },
+
+    async createUserCollections () {
+      try {
+        await this.$axios.post(`videos/${this.id}/save`, {
+          collections: [
+            { id: this.video.id, name: this.video.name }
+          ]
+        })
+
+        this.$q.notify({
+          progress: true,
+          timeout: 1500,
+          position: 'top',
+          message: `${this.video.name} has been saved.`,
+          type: 'positive'
+        })
+      } catch (e) {
+        //
+      }
     },
 
     async onSubmit () {
