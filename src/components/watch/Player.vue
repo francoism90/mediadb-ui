@@ -61,9 +61,15 @@
 </template>
 
 <script>
+import { createHelpers } from 'vuex-map-fields'
 import { Player } from 'shaka-player'
 import { get, inRange } from 'lodash'
 import VideoModel from 'src/models/Video'
+
+const { mapFields } = createHelpers({
+  getterType: 'session/getDataField',
+  mutationType: 'session/updateDataField'
+})
 
 export default {
   timers: {
@@ -102,6 +108,7 @@ export default {
       events: [
         { name: 'setCurrentTime', listener: 'setCurrentTime' },
         { name: 'setFrameshot', listener: 'setFrameshot' },
+        { name: 'setPlaybackRate', listener: 'setPlaybackRate' },
         { name: 'setTextTracks', listener: 'setTextTracks' },
         { name: 'toggleFullscreen', listener: 'toggleFullscreen' },
         { name: 'togglePlayback', listener: 'togglePlayback' }
@@ -123,6 +130,10 @@ export default {
   },
 
   computed: {
+    ...mapFields({
+      playbackRate: 'video.playbackRate'
+    }),
+
     element () {
       return this.$refs.element
     },
@@ -158,6 +169,7 @@ export default {
     await this.instance.load(this.video.stream_url)
 
     this.setStartTime(this.toRoute)
+    this.setPlaybackRate(this.playbackRate)
 
     for (const event of this.events) {
       this.$root.$on(event.name, this[event.listener])
@@ -201,6 +213,16 @@ export default {
       }
 
       this.player.currentTime = value
+    },
+
+    setPlaybackRate (value = 0) {
+      this.showControls()
+
+      if (!inRange(value, 0.25, 2)) {
+        return
+      }
+
+      this.player.playbackRate = value
     },
 
     setTextTracks (tracks = []) {

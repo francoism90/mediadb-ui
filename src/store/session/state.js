@@ -4,6 +4,9 @@ export default function () {
       search: {
         id: 0,
         query: ''
+      },
+      video: {
+        playbackRate: 1.0
       }
     }
   }

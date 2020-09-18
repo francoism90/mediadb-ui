@@ -10,6 +10,11 @@
       arrow-indicator
     >
       <q-tab
+        name="general"
+        label="General"
+      />
+
+      <q-tab
         name="tracks"
         label="Subtitles/CC"
       />
@@ -26,6 +31,13 @@
       v-model="tab"
       animated
     >
+      <q-tab-panel
+        name="general"
+        class="q-pa-none"
+      >
+        <item-general :video="video" />
+      </q-tab-panel>
+
       <q-tab-panel
         name="tracks"
         class="q-pa-none"
@@ -52,6 +64,7 @@ import VideoModel from 'src/models/Video'
 export default {
   components: {
     ItemDebug: () => import('components/watch/Debug'),
+    ItemGeneral: () => import('components/watch/General'),
     ItemTracks: () => import('components/watch/Tracks')
   },
 
@@ -69,7 +82,7 @@ export default {
 
   data () {
     return {
-      tab: 'tracks'
+      tab: 'general'
     }
   }
 }

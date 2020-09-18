@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import PaginateModule from 'src/store/paginate'
 import { createHelpers } from 'vuex-map-fields'
+import PaginateModule from 'src/store/paginate'
 
 const { mapFields } = createHelpers({
   getterType: 'session/getDataField',

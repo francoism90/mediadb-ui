@@ -1,5 +1,5 @@
 <template>
-  <q-card-section>
+  <q-card-section class="q-px-none">
     <q-input
       :value="video.codec_name || 'N/A'"
       square

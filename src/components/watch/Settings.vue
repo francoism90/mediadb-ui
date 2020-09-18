@@ -15,12 +15,15 @@
         />
       </q-inner-loading>
 
-      <transition-group
+      <transition
         appear
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <q-card-section v-if="video">
+        <q-card-section
+          v-if="video"
+          class="q-pa-none"
+        >
           <item-title :video="video" />
 
           <q-separator />
@@ -30,7 +33,7 @@
             :video="video"
           />
         </q-card-section>
-      </transition-group>
+      </transition>
     </q-card>
   </q-dialog>
 </template>
