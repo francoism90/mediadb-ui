@@ -66,7 +66,14 @@ export default {
     try {
       this.collection = await CollectionModel.$find(this.id)
     } catch {
-      //
+      this.hide()
+
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load collection',
+        type: 'negative'
+      })
     }
   }
 }

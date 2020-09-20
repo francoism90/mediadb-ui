@@ -31,7 +31,7 @@
             />
 
             <q-btn
-              v-close-popup
+              v-close-popup="3"
               flat
               label="Confirm"
               color="primary"
@@ -199,13 +199,11 @@ export default {
           message: `${this.video.name} has been deleted.`,
           type: 'positive'
         })
-
-        this.$root.$emit('dialogOk')
-      } catch (e) {
+      } catch {
         this.$q.notify({
           progress: true,
           position: 'top',
-          message: e.response.data.message || 'Unable to delete video',
+          message: 'Unable to delete video',
           type: 'negative'
         })
       }

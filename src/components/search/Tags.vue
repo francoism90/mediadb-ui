@@ -16,6 +16,7 @@
     </q-btn-group>
 
     <q-infinite-scroll
+      :disable="!isReady"
       :debounce="300"
       class="row wrap justify-start items-start content-start q-col-gutter-md"
       @load="onLoad"
@@ -23,7 +24,7 @@
       <q-intersection
         v-for="(item, index) in data"
         :key="index"
-        v-close-popup
+        :disable="!isReady"
         class="col-xs-6 col-sm-4 col-md-3 col-lg-2 tag-item"
         @click="onClick(item)"
       >

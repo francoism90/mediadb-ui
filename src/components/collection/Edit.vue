@@ -31,7 +31,7 @@
             />
 
             <q-btn
-              v-close-popup
+              v-close-popup="3"
               flat
               label="Confirm"
               color="primary"
@@ -197,8 +197,6 @@ export default {
           message: `${this.collection.name} has been deleted.`,
           type: 'positive'
         })
-
-        this.$root.$emit('dialogOk')
       } catch (e) {
         this.$q.notify({
           progress: true,

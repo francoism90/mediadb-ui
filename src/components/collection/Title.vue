@@ -2,9 +2,10 @@
   <q-img
     :alt="collection.name"
     :src="collection.thumbnail_url"
-    :ratio="16/9"
-    class="details-header"
+    height="350px"
     loading="lazy"
+    class="details-header"
+    img-class="details-placeholder"
   >
     <div class="absolute-full details-elements">
       <div class="container absolute-top">
@@ -63,13 +64,6 @@
         </q-card-section>
 
         <q-card-section class="q-px-none q-mt-sm">
-          <q-btn
-            class="q-mr-sm"
-            size="13px"
-            label="Play All"
-            color="primary"
-          />
-
           <q-btn
             v-if="$auth.check({ permissions: 'edit collections'})"
             v-shortkey="['e']"

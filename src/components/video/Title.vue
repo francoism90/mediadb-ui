@@ -2,7 +2,7 @@
   <q-img
     :alt="video.name"
     :src="video.thumbnail_url"
-    height="400px"
+    height="350px"
     loading="lazy"
     class="details-header"
     img-class="details-placeholder"
@@ -66,14 +66,13 @@
 
         <q-card-section class="q-px-none q-mt-sm">
           <q-btn
-            v-if="!currentVideo"
             v-shortkey="['p']"
             class="q-mr-sm"
             size="13px"
             label="Watch Video"
             color="primary"
-            @click="pushWatch"
-            @shortkey="pushWatch"
+            @click="watchModal"
+            @shortkey="watchModal"
           />
 
           <q-btn
@@ -108,6 +107,7 @@
 <script>
 import EditComponent from 'components/video/Edit'
 import SaveComponent from 'components/video/Save'
+import WatchComponent from 'components/video/Watch'
 import VideoModel from 'src/models/Video'
 
 export default {
@@ -122,26 +122,7 @@ export default {
     }
   },
 
-  computed: {
-    currentVideo () {
-      return (
-        this.$route.name === 'watch' &&
-        this.$route.params.id === this.video.id
-      )
-    }
-  },
-
   methods: {
-    pushWatch () {
-      this.$router.push({
-        name: 'watch',
-        params: {
-          id: this.video.id,
-          slug: this.video.slug
-        }
-      })
-    },
-
     editModal () {
       this.$q.dialog({
         component: EditComponent,
@@ -153,6 +134,14 @@ export default {
     saveModal () {
       this.$q.dialog({
         component: SaveComponent,
+        parent: this,
+        id: this.video.id
+      })
+    },
+
+    watchModal () {
+      this.$q.dialog({
+        component: WatchComponent,
         parent: this,
         id: this.video.id
       })

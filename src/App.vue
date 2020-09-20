@@ -22,7 +22,6 @@ export default {
   components: {
     Auth: () => import('layouts/Auth'),
     Error: () => import('layouts/Error'),
-    Full: () => import('layouts/Full'),
     Main: () => import('layouts/Main')
   },
 

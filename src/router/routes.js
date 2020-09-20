@@ -36,13 +36,6 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
-    name: 'watch',
-    path: '/watch/:id/:slug?',
-    component: () => import('pages/app/Watch.vue'),
-    meta: { auth: true, layout: 'Full' },
-    props: true
-  },
-  {
     name: 'collections',
     path: '/collections',
     component: () => import('pages/app/Collections.vue'),

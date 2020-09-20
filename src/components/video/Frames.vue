@@ -20,7 +20,7 @@
             v-for="(item, index) in video.sprite"
             :key="index"
             class="frame-item cursor-pointer"
-            @click="watchRoute(item)"
+            @click="watchModal(item)"
           >
             <q-card
               square
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import WatchComponent from 'components/video/Watch'
 import VideoModel from 'src/models/Video'
 
 export default {
@@ -62,17 +63,12 @@ export default {
   },
 
   methods: {
-    watchRoute (item) {
-      this.$router.push({
-        name: 'watch',
-        params: {
-          id: this.video.id,
-          slug: this.video.slug
-        },
-        query: {
-          id: +new Date(),
-          time: item.timecode || 0
-        }
+    watchModal (item) {
+      this.$q.dialog({
+        component: WatchComponent,
+        parent: this,
+        id: this.video.id,
+        timecode: item.timecode || 0
       })
     }
   }

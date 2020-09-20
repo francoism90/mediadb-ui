@@ -2,14 +2,13 @@
   <div>
     <div class="q-px-xl q-pt-lg absolute-top-left">
       <q-btn
-        v-shortkey="['esc']"
+        v-close-popup
         dense
         round
         unelevated
         text-color="white"
         icon="arrow_back"
         size="28px"
-        :to="fromRoute"
       />
     </div>
 
@@ -94,22 +93,6 @@
 
         <div class="col-auto">
           <q-btn
-            v-shortkey="['d']"
-            flat
-            dense
-            round
-            size="18px"
-            color="white"
-            icon="expand_more"
-            @click="detailsModal"
-            @shortkey="detailsModal"
-          >
-            <q-tooltip>
-              Details
-            </q-tooltip>
-          </q-btn>
-
-          <q-btn
             v-shortkey="['s']"
             flat
             dense
@@ -147,17 +130,11 @@
 </template>
 
 <script>
-import DetailsComponent from 'components/video/Details'
 import SettingsComponent from 'components/watch/Settings'
 import VideoModel from 'src/models/Video'
 
 export default {
   props: {
-    fromRoute: {
-      type: Object,
-      required: true
-    },
-
     video: {
       type: VideoModel,
       required: true
@@ -257,15 +234,6 @@ export default {
 
     toggleFullscreen () {
       this.$root.$emit('toggleFullscreen')
-    },
-
-    detailsModal () {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: this.video.id,
-        playable: false
-      })
     },
 
     settingsModal () {

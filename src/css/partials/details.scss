@@ -1,12 +1,12 @@
 .details-header {
-  min-height: 400px;
-  height: 400px;
+  min-height: 350px;
+  height: 350px;
 }
 
 .details-placeholder {
   min-height: 400px;
   background-size: 100% 100% !important;
-  filter: blur(5px);
+  filter: blur(25px) brightness(80%);
 }
 
 .details-elements {

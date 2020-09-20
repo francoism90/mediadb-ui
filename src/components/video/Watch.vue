@@ -22,9 +22,10 @@
           v-if="video"
           class="q-pa-none"
         >
-          <item-title :video="video" />
-          <item-frames :video="video" />
-          <item-panels :video="video" />
+          <item-player
+            :timecode="timecode"
+            :video="video"
+          />
         </q-card-section>
       </transition>
     </q-card>
@@ -33,14 +34,11 @@
 
 <script>
 import { dialogHandler } from 'src/mixins/dialog'
-import PaginateModule from 'src/store/paginate'
 import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    itemFrames: () => import('components/video/Frames'),
-    itemPanels: () => import('components/video/Panels'),
-    ItemTitle: () => import('components/video/Title')
+    ItemPlayer: () => import('components/watch/Player')
   },
 
   mixins: [dialogHandler],
@@ -49,6 +47,11 @@ export default {
     id: {
       type: String,
       required: true
+    },
+
+    timecode: {
+      type: Number,
+      default: 0
     }
   },
 
@@ -59,27 +62,12 @@ export default {
   },
 
   async created () {
-    if (!this.$store.hasModule('models')) {
-      this.$store.registerModule('models', PaginateModule)
-    }
-
-    if (!this.$store.hasModule('related')) {
-      this.$store.registerModule('related', PaginateModule)
-    }
-
     this.video = null
 
     try {
       this.video = await VideoModel.$find(this.id)
     } catch {
-      this.hide()
-
-      this.$q.notify({
-        progress: true,
-        position: 'top',
-        message: 'Unable to load video',
-        type: 'negative'
-      })
+      //
     }
   }
 }

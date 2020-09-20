@@ -46,7 +46,6 @@
       <controls
         v-show="controls"
         class="absolute-full player-controls"
-        :from-route="fromRoute"
         :video="video"
         :buffered="buffered"
         :current-time="currentTime"
@@ -61,9 +60,9 @@
 </template>
 
 <script>
+import { inRange } from 'lodash'
 import { createHelpers } from 'vuex-map-fields'
 import { Player } from 'shaka-player'
-import { get, inRange } from 'lodash'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
@@ -81,18 +80,9 @@ export default {
   },
 
   props: {
-    fromRoute: {
-      type: Object,
-      default: () => {
-        return {
-          name: 'home'
-        }
-      }
-    },
-
-    toRoute: {
-      type: Object,
-      default: null
+    timecode: {
+      type: Number,
+      default: 0
     },
 
     video: {
@@ -151,12 +141,6 @@ export default {
     }
   },
 
-  watch: {
-    toRoute: function (value) {
-      this.setStartTime(value)
-    }
-  },
-
   async mounted () {
     if (!Player.isBrowserSupported()) {
       alert('Browser is not supported.')
@@ -168,7 +152,7 @@ export default {
     await this.instance.configure(this.settings)
     await this.instance.load(this.video.stream_url)
 
-    this.setStartTime(this.toRoute)
+    this.setCurrentTime(this.timecode)
     this.setPlaybackRate(this.playbackRate)
 
     for (const event of this.events) {
@@ -195,14 +179,6 @@ export default {
 
     hideControls () {
       this.controls = false
-    },
-
-    setStartTime (route = {}) {
-      const timecode = get(route, 'query.time')
-
-      if (timecode) {
-        this.player.currentTime = timecode
-      }
     },
 
     setCurrentTime (value = 0) {
