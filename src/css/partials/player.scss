@@ -12,6 +12,12 @@
   z-index: 20;
 }
 
+.player-close,
+.player-playback,
+.player-seeker {
+  z-index: 30;
+}
+
 .player-seeker {
   .q-slider__track-container {
     background: $grey-9;

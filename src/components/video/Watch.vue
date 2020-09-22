@@ -67,7 +67,14 @@ export default {
     try {
       this.video = await VideoModel.$find(this.id)
     } catch {
-      //
+      this.hide()
+
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load video',
+        type: 'negative'
+      })
     }
   }
 }

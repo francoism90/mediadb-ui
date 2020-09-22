@@ -6,7 +6,8 @@ export default function () {
         query: ''
       },
       video: {
-        playbackRate: 1.0
+        playbackRate: 1.0,
+        settings: {}
       }
     }
   }

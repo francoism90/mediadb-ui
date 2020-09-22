@@ -20,11 +20,11 @@ export const formHandler = {
     },
 
     setMessage (error = {}) {
-      this.message = get(error, 'data.message', null)
+      this.message = get(error, 'data.message') || error
     },
 
     setErrors (error = {}) {
-      this.errors = get(error, 'data.errors', {})
+      this.errors = get(error, 'data.errors') || error
     },
 
     hasError (field) {

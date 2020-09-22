@@ -14,18 +14,20 @@
       autoPictureInPicture
       :height="video.height || 360"
       :width="video.width || 480"
-      @canplay="playable = true"
+      @canplay="waiting = false"
       @durationchange="duration = player.duration"
-      @ended="ended = true"
+      @emptied="errored = true"
+      @ended="paused = true"
       @error="errored = true"
-      @pause="playing = false"
-      @play="playing = true"
-      @playing="playing = true"
+      @loadedmetadata="metadata = true"
+      @pause="paused = player.paused"
+      @play="paused = player.paused"
+      @playing="paused = player.paused"
       @progress="buffered = player.buffered"
       @seeking="currentTime = player.currentTime"
-      @stalled="playing = false"
+      @stalled="waiting = true"
       @timeupdate="currentTime = player.currentTime"
-      @waiting="playing = false"
+      @waiting="waiting = true"
     >
       <track
         v-for="(track, index) in video.tracks"
@@ -50,17 +52,18 @@
         :buffered="buffered"
         :current-time="currentTime"
         :duration="duration"
-        :ended="ended"
-        :playable="playable"
-        :playing="playing"
+        :errored="errored"
+        :metadata="metadata"
+        :paused="paused"
         :text-tracks="textTracks"
+        :waiting="waiting"
       />
     </transition>
   </div>
 </template>
 
 <script>
-import { inRange } from 'lodash'
+import { get, inRange } from 'lodash'
 import { createHelpers } from 'vuex-map-fields'
 import { Player } from 'shaka-player'
 import VideoModel from 'src/models/Video'
@@ -82,7 +85,7 @@ export default {
   props: {
     timecode: {
       type: Number,
-      default: 0
+      default: null
     },
 
     video: {
@@ -95,6 +98,14 @@ export default {
     return {
       instance: null,
       controls: true,
+      settingsInterval: null,
+      buffered: null,
+      currentTime: 0,
+      duration: 0,
+      errored: false,
+      metadata: false,
+      paused: true,
+      waiting: true,
       events: [
         { name: 'setCurrentTime', listener: 'setCurrentTime' },
         { name: 'setFrameshot', listener: 'setFrameshot' },
@@ -106,22 +117,17 @@ export default {
       settings: {
         streaming: {
           jumpLargeGaps: true,
-          ignoreTextStreamFailures: true
+          ignoreTextStreamFailures: true,
+          stallEnabled: true
         }
-      },
-      buffered: null,
-      currentTime: 0,
-      duration: 0,
-      ended: false,
-      errored: false,
-      playable: false,
-      playing: false
+      }
     }
   },
 
   computed: {
     ...mapFields({
-      playbackRate: 'video.playbackRate'
+      playbackRate: 'video.playbackRate',
+      videoSettings: 'video.settings'
     }),
 
     element () {
@@ -138,6 +144,14 @@ export default {
       }
 
       return this.player.textTracks
+    },
+
+    currentSettings () {
+      return this.videoSettings[this.video.id] || {}
+    },
+
+    startTime () {
+      return get(this.currentSettings, 'timecode', 0)
     }
   },
 
@@ -152,15 +166,19 @@ export default {
     await this.instance.configure(this.settings)
     await this.instance.load(this.video.stream_url)
 
-    this.setCurrentTime(this.timecode)
+    this.setCurrentTime(this.timecode || this.startTime)
     this.setPlaybackRate(this.playbackRate)
 
     for (const event of this.events) {
       this.$root.$on(event.name, this[event.listener])
     }
+
+    this.settingsInterval = setInterval(() => this.setSettings(), 1000)
   },
 
   async beforeDestroy () {
+    clearInterval(this.settingsInterval)
+
     for (const event of this.events) {
       this.$root.$off(event.name, this[event.listener])
     }
@@ -182,23 +200,36 @@ export default {
     },
 
     setCurrentTime (value = 0) {
-      this.showControls()
-
       if (!inRange(value, 0, this.player.duration)) {
         return
       }
 
+      this.showControls()
       this.player.currentTime = value
     },
 
     setPlaybackRate (value = 0) {
-      this.showControls()
-
       if (!inRange(value, 0.25, 2)) {
         return
       }
 
+      this.showControls()
       this.player.playbackRate = value
+    },
+
+    setSettings () {
+      if (this.errored || !this.metadata) {
+        return
+      }
+
+      const settings = {
+        [this.video.id]: {
+          timecode: this.currentTime
+          // tracks: this.tracks
+        }
+      }
+
+      this.videoSettings = { ...this.videoSettings, ...settings }
     },
 
     setTextTracks (tracks = []) {
@@ -234,7 +265,7 @@ export default {
     async togglePlayback () {
       this.showControls()
 
-      if (this.playable && !this.playing) {
+      if (!this.waiting && this.paused) {
         await this.player.play()
         return
       }

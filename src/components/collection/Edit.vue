@@ -170,7 +170,14 @@ export default {
         tags: this.collection.relationships.tags
       })
     } catch {
-      //
+      this.hide()
+
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load collection',
+        type: 'negative'
+      })
     }
   },
 
@@ -197,11 +204,13 @@ export default {
           message: `${this.collection.name} has been deleted.`,
           type: 'positive'
         })
-      } catch (e) {
+      } catch {
+        this.hide()
+
         this.$q.notify({
           progress: true,
           position: 'top',
-          message: e.response.data.message || 'Unable to delete collection',
+          message: 'Unable to delete collection',
           type: 'negative'
         })
       }

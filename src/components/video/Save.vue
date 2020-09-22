@@ -130,7 +130,14 @@ export default {
         collections: this.userCollections
       })
     } catch {
-      //
+      this.hide()
+
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load video',
+        type: 'negative'
+      })
     }
   },
 

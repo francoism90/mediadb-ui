@@ -172,7 +172,14 @@ export default {
         tags: this.video.relationships.tags
       })
     } catch {
-      //
+      this.hide()
+
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load video',
+        type: 'negative'
+      })
     }
   },
 
@@ -200,6 +207,8 @@ export default {
           type: 'positive'
         })
       } catch {
+        this.hide()
+
         this.$q.notify({
           progress: true,
           position: 'top',
