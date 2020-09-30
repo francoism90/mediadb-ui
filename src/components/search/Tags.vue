@@ -1,7 +1,6 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
-      v-if="data.length"
       class="q-pb-md"
       unelevated
     >
@@ -16,6 +15,7 @@
     </q-btn-group>
 
     <q-infinite-scroll
+      :key="id"
       :disable="!isReady"
       :debounce="300"
       class="row wrap justify-start items-start content-start q-col-gutter-md"
@@ -26,7 +26,6 @@
         :key="index"
         :disable="!isReady"
         class="col-xs-6 col-sm-4 col-md-3 col-lg-2 tag-item"
-        @click="onClick(item)"
       >
         <tag-item :tag="item" />
       </q-intersection>
@@ -122,16 +121,6 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
-    },
-
-    onClick (model = {}) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: 'tag:' + model.slug,
-          id: +new Date()
-        }
-      })
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <q-card
     square
-    class="bg-grey-12 cursor-pointer video-item"
+    class="bg-grey-12 video-item"
     draggable="false"
   >
     <q-img
@@ -9,8 +9,9 @@
       :src="video.thumbnail_url"
       height="180px"
       loading="lazy"
-      class="bg-grey-8"
+      class="bg-grey-8 cursor-pointer"
       img-class="video-placeholder"
+      @click="detailsModal"
     >
       <div class="absolute-bottom-right">
         <q-badge class="transparent-dimmed text-caption q-ma-sm">
@@ -24,12 +25,11 @@
         {{ video.name }}
       </div>
 
-      <div
-        v-if="video.titleNames.length"
+      <titles
+        v-if="video.titles.length"
+        :items="video.titles"
         class="text-subtitle1 ellipsis-2-lines text-grey-6"
-      >
-        {{ video.titleNames.join(', ') }}
-      </div>
+      />
 
       <div class="text-subtitle1 ellipsis-2-lines text-grey-6">
         {{ String(video.created_at) | datestamp }} •
@@ -46,17 +46,29 @@
 </template>
 
 <script>
+import DetailsComponent from 'components/video/Details'
 import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Tags: () => import('components/ui/Tags')
+    Tags: () => import('components/ui/Tags'),
+    Titles: () => import('components/ui/Titles')
   },
 
   props: {
     video: {
       type: VideoModel,
       required: true
+    }
+  },
+
+  methods: {
+    detailsModal () {
+      this.$q.dialog({
+        component: DetailsComponent,
+        parent: this,
+        id: this.video.id || null
+      })
     }
   }
 }

@@ -1,7 +1,6 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
-      v-if="data.length"
       class="q-pb-md"
       unelevated
     >
@@ -16,6 +15,7 @@
     </q-btn-group>
 
     <q-infinite-scroll
+      :key="id"
       :disable="!isReady"
       :debounce="300"
       class="row wrap justify-start items-start content-start q-col-gutter-md"
@@ -26,7 +26,6 @@
         :key="index"
         :disable="!isReady"
         class="col-xs-12 col-sm-6 col-md-4 col-lg-2 collection-item"
-        @click="onClick(item)"
       >
         <collection-item :collection="item" />
       </q-intersection>
@@ -46,7 +45,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import DetailsComponent from 'components/collection/Details'
 import CollectionModel from 'src/models/Collection'
 
 const { mapFields } = createHelpers({
@@ -124,14 +122,6 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
-    },
-
-    onClick (model = {}) {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: model.id || null
-      })
     }
   }
 }

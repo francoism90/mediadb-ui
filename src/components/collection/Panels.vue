@@ -23,7 +23,7 @@
     >
       <q-tab-panel
         name="videos"
-        class="q-pa-none"
+        class="q-pa-none no-scroll"
       >
         <item-videos :collection="collection" />
       </q-tab-panel>

@@ -1,7 +1,7 @@
 <template>
   <q-card
     square
-    class="bg-grey-12 cursor-pointer collection-item"
+    class="bg-grey-12 collection-item"
     draggable="false"
   >
     <q-img
@@ -9,8 +9,9 @@
       :src="collection.thumbnail_url"
       height="160px"
       loading="lazy"
-      class="bg-grey-8"
+      class="bg-grey-8 cursor-pointer"
       img-class="collection-placeholder"
+      @click="detailsModal"
     />
 
     <q-card-section class="q-py-md">
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+import DetailsComponent from 'components/collection/Details'
 import CollectionModel from 'src/models/Collection'
 
 export default {
@@ -46,6 +48,16 @@ export default {
     collection: {
       type: CollectionModel,
       required: true
+    }
+  },
+
+  methods: {
+    detailsModal () {
+      this.$q.dialog({
+        component: DetailsComponent,
+        parent: this,
+        id: this.collection.id || null
+      })
     }
   }
 }

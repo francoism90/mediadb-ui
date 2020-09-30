@@ -1,5 +1,5 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
       class="q-py-md"
       unelevated
@@ -25,6 +25,7 @@
     </q-btn-group>
 
     <q-pull-to-refresh
+      :key="id"
       :disable="!isReady"
       @refresh="onRefresh"
     >
@@ -37,10 +38,8 @@
         <q-intersection
           v-for="(item, index) in data"
           :key="index"
-          v-close-popup
           :disable="!isReady"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-2 collection-item"
-          @click="onClick(item)"
         >
           <collection-item :collection="item" />
         </q-intersection>
@@ -61,7 +60,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import DetailsComponent from 'components/collection/Details'
 import CollectionModel from 'src/models/Collection'
 
 const { mapFields } = createHelpers({
@@ -145,14 +143,6 @@ export default {
     async onRefresh (done) {
       await this.resetItems()
       done()
-    },
-
-    onClick (model = {}) {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: model.id || null
-      })
     }
   }
 }

@@ -33,21 +33,21 @@
     >
       <q-tab-panel
         name="videos"
-        class="q-px-none"
+        class="q-px-none no-scroll"
       >
         <item-videos :query="query" />
       </q-tab-panel>
 
       <q-tab-panel
         name="collections"
-        class="q-px-none"
+        class="q-px-none no-scroll"
       >
         <item-collections :query="query" />
       </q-tab-panel>
 
       <q-tab-panel
         name="tags"
-        class="q-px-none"
+        class="q-px-none no-scroll"
       >
         <item-tags :query="query" />
       </q-tab-panel>

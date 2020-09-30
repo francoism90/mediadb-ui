@@ -56,11 +56,11 @@ module.exports = function (ctx) {
       port: 8000,
       host: 'localhost',
       open: true,
-      https: false,
+      https: true,
       proxy: {
         '/api': {
-          target: 'http://localhost:3000',
-          changeOrigin: false
+          target: 'https://localhost:3000',
+          secure: false
         }
       }
     },

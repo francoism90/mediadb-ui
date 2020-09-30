@@ -1,64 +1,65 @@
 <template>
-  <div
-    ref="element"
-    class="fixed-full player"
-    @mousemove="showControls"
-    @touchmove="showControls"
-  >
-    <video
-      ref="player"
-      class="absolute-center fit player-video"
-      :class="{ 'fit': $q.fullscreen.isActive }"
-      playsinline
-      preload="metadata"
-      autoPictureInPicture
-      :height="video.height || 360"
-      :width="video.width || 480"
-      @canplay="waiting = false"
-      @durationchange="duration = player.duration"
-      @emptied="errored = true"
-      @ended="paused = true"
-      @error="errored = true"
-      @loadedmetadata="metadata = true"
-      @pause="paused = player.paused"
-      @play="paused = player.paused"
-      @playing="paused = player.paused"
-      @progress="buffered = player.buffered"
-      @seeking="currentTime = player.currentTime"
-      @stalled="waiting = true"
-      @timeupdate="currentTime = player.currentTime"
-      @waiting="waiting = true"
+  <div class="fixed-full player">
+    <div
+      ref="element"
+      @mousemove="showControls"
+      @touchmove="showControls"
     >
-      <track
-        v-for="(track, index) in video.tracks"
-        :id="track.id"
-        :key="index"
-        :kind="track.type || 'subtitles'"
-        :label="track.name"
-        :srclang="track.language || 'en'"
-        :src="track.download_url"
+      <video
+        ref="player"
+        class="absolute-center fit player-video"
+        playsinline
+        preload="metadata"
+        autoPictureInPicture
+        :height="video.height || 360"
+        :width="video.width || 480"
+        autoplay
+        @canplay="waiting = false"
+        @canplaythrough="waiting = false"
+        @durationchange="duration = player.duration"
+        @emptied="errored = true"
+        @ended="paused = true"
+        @error="errored = true"
+        @loadedmetadata="metadata = true"
+        @pause="paused = player.paused"
+        @play="paused = player.paused"
+        @playing="paused = player.paused"
+        @progress="buffered = player.buffered"
+        @seeking="currentTime = player.currentTime"
+        @stalled="waiting = true"
+        @timeupdate="currentTime = player.currentTime"
+        @waiting="waiting = true"
       >
-    </video>
+        <track
+          v-for="(track, index) in video.tracks"
+          :id="track.id"
+          :key="index"
+          :kind="track.type || 'subtitles'"
+          :label="track.name"
+          :srclang="track.language || 'en'"
+          :src="track.download_url"
+        >
+      </video>
 
-    <transition
-      appear
-      enter-active-class="animated fadeIn"
-      leave-active-class="animated fadeOut"
-    >
-      <controls
-        v-show="controls"
-        class="absolute-full player-controls"
-        :video="video"
-        :buffered="buffered"
-        :current-time="currentTime"
-        :duration="duration"
-        :errored="errored"
-        :metadata="metadata"
-        :paused="paused"
-        :text-tracks="textTracks"
-        :waiting="waiting"
-      />
-    </transition>
+      <transition
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+      >
+        <controls
+          v-if="controlsActive"
+          :video="video"
+          :buffered="buffered"
+          :current-time="currentTime"
+          :duration="duration"
+          :errored="errored"
+          :metadata="metadata"
+          :paused="paused"
+          :text-tracks="textTracks"
+          :waiting="waiting"
+        />
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -97,7 +98,7 @@ export default {
   data () {
     return {
       instance: null,
-      controls: true,
+      controlsActive: true,
       settingsInterval: null,
       buffered: null,
       currentTime: 0,
@@ -111,14 +112,16 @@ export default {
         { name: 'setFrameshot', listener: 'setFrameshot' },
         { name: 'setPlaybackRate', listener: 'setPlaybackRate' },
         { name: 'setTextTracks', listener: 'setTextTracks' },
+        { name: 'hideControls', listener: 'hideControls' },
+        { name: 'showControls', listener: 'showControls' },
         { name: 'toggleFullscreen', listener: 'toggleFullscreen' },
         { name: 'togglePlayback', listener: 'togglePlayback' }
       ],
       settings: {
         streaming: {
+          bufferingGoal: 30,
           jumpLargeGaps: true,
-          ignoreTextStreamFailures: true,
-          stallEnabled: true
+          ignoreTextStreamFailures: true
         }
       }
     }
@@ -156,27 +159,38 @@ export default {
   },
 
   async mounted () {
-    if (!Player.isBrowserSupported()) {
-      alert('Browser is not supported.')
-      return
+    try {
+      if (!Player.isBrowserSupported()) {
+        alert('Browser is not supported.')
+        return
+      }
+
+      this.instance = new Player(this.player)
+
+      await this.instance.configure(this.settings)
+      await this.instance.load(this.video.stream_url)
+
+      this.setCurrentTime(this.timecode || this.startTime)
+      this.setPlaybackRate(this.playbackRate)
+
+      for (const event of this.events) {
+        this.$root.$on(event.name, this[event.listener])
+      }
+
+      this.settingsInterval = setInterval(() => this.setSettings(), 1000)
+    } catch {
+      this.$q.notify({
+        progress: true,
+        position: 'top',
+        message: 'Unable to load video',
+        type: 'negative'
+      })
     }
-
-    this.instance = new Player(this.player)
-
-    await this.instance.configure(this.settings)
-    await this.instance.load(this.video.stream_url)
-
-    this.setCurrentTime(this.timecode || this.startTime)
-    this.setPlaybackRate(this.playbackRate)
-
-    for (const event of this.events) {
-      this.$root.$on(event.name, this[event.listener])
-    }
-
-    this.settingsInterval = setInterval(() => this.setSettings(), 1000)
   },
 
   async beforeDestroy () {
+    await this.$q.fullscreen.exit()
+
     clearInterval(this.settingsInterval)
 
     for (const event of this.events) {
@@ -191,20 +205,20 @@ export default {
 
   methods: {
     showControls () {
-      this.controls = true
+      this.controlsActive = true
       this.$timer.restart('hideControls')
     },
 
     hideControls () {
-      this.controls = false
-    },
-
-    setCurrentTime (value = 0) {
-      if (!inRange(value, 0, this.player.duration)) {
+      if (!this.metadata || this.waiting) {
+        this.showControls()
         return
       }
 
-      this.showControls()
+      this.controlsActive = false
+    },
+
+    setCurrentTime (value = 0) {
       this.player.currentTime = value
     },
 
@@ -241,10 +255,6 @@ export default {
     },
 
     async setFrameshot (value = 0) {
-      if (!inRange(value, 0, this.player.duration)) {
-        return
-      }
-
       await this.$axios.patch(`videos/${this.video.id}/frameshot`, {
         timecode: this.currentTime
       })
@@ -257,14 +267,10 @@ export default {
     },
 
     async toggleFullscreen () {
-      this.showControls()
-
-      await this.$q.fullscreen.toggle(this.element)
+      await this.$q.fullscreen.toggle()
     },
 
     async togglePlayback () {
-      this.showControls()
-
       if (!this.waiting && this.paused) {
         await this.player.play()
         return

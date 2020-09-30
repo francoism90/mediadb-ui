@@ -1,4 +1,4 @@
-import { filter, map } from 'lodash'
+import { filter } from 'lodash'
 import Model from './Model'
 import Collection from './Collection'
 import Tag from './Tag'
@@ -18,9 +18,5 @@ export default class Video extends Model {
 
   get subtitles () {
     return filter(this.tracks, { type: 'subtitles' })
-  }
-
-  get titleNames () {
-    return map(this.titles, 'name')
   }
 }

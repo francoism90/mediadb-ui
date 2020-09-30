@@ -1,5 +1,5 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
       class="q-py-md"
       unelevated
@@ -15,6 +15,7 @@
     </q-btn-group>
 
     <q-infinite-scroll
+      :key="id"
       ref="scroll"
       scroll-target=".q-dialog-plugin"
       :disable="!isReady"
@@ -26,8 +27,7 @@
         v-for="(item, index) in data"
         :key="index"
         :disable="!isReady"
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
-        @click="onClick(item)"
+        class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
       >
         <video-item :video="item" />
       </q-intersection>
@@ -47,7 +47,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import DetailsComponent from 'components/video/Details'
 import CollectionModel from 'src/models/Collection'
 import VideoModel from 'src/models/Video'
 
@@ -134,14 +133,6 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
-    },
-
-    onClick (model = {}) {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: model.id || null
-      })
     }
   }
 }

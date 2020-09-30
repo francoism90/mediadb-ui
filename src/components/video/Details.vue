@@ -23,7 +23,6 @@
           class="q-pa-none"
         >
           <item-title :video="video" />
-          <item-frames :video="video" />
           <item-panels :video="video" />
         </q-card-section>
       </transition>
@@ -38,7 +37,6 @@ import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    itemFrames: () => import('components/video/Frames'),
     itemPanels: () => import('components/video/Panels'),
     ItemTitle: () => import('components/video/Title')
   },

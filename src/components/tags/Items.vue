@@ -1,5 +1,5 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
       class="q-py-md"
       unelevated
@@ -25,6 +25,7 @@
     </q-btn-group>
 
     <q-pull-to-refresh
+      :key="id"
       :disable="!isReady"
       @refresh="onRefresh"
     >
@@ -39,7 +40,6 @@
           :key="index"
           :disable="!isReady"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-3 tag-item"
-          @click="onClick(item)"
         >
           <tag-item :tag="item" />
         </q-intersection>
@@ -142,16 +142,6 @@ export default {
     async onRefresh (done) {
       await this.resetItems()
       done()
-    },
-
-    onClick (model = {}) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: 'tag:' + model.slug,
-          id: +new Date()
-        }
-      })
     }
   }
 }

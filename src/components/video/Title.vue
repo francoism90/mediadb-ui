@@ -2,7 +2,8 @@
   <q-img
     :alt="video.name"
     :src="video.thumbnail_url"
-    height="350px"
+    height="100%"
+    width="100%"
     loading="lazy"
     class="details-header"
     img-class="details-placeholder"
@@ -15,7 +16,8 @@
           <q-btn
             v-close-popup
             icon="close"
-            size="20px"
+            size="16px"
+            class="q-mt-sm transparent-dimmed"
             dense
             round
             unelevated
@@ -29,12 +31,11 @@
             {{ video.name }}
           </div>
 
-          <div
-            v-if="video.titleNames.length"
-            class="text-subtitle1 text-grey-1 ellipsis"
-          >
-            {{ video.titleNames.join(', ') }}
-          </div>
+          <titles
+            v-if="video.titles.length"
+            :items="video.titles"
+            class="text-subtitle1 ellipsis-2-lines text-grey-1"
+          />
 
           <div class="text-subtitle2 text-grey-1 ellipsis">
             {{ String(video.created_at) | datestamp }} •
@@ -98,7 +99,7 @@
       </div>
     </div>
 
-    <div class="details-header-gradient-left" />
+    <div class="details-header-gradient-left absolute-left" />
     <div class="details-header-gradient-right absolute-right" />
     <div class="details-header-gradient-bottom absolute-bottom" />
   </q-img>
@@ -112,7 +113,8 @@ import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Tags: () => import('components/ui/Tags')
+    Tags: () => import('components/ui/Tags'),
+    Titles: () => import('components/ui/Titles')
   },
 
   props: {

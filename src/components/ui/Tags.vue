@@ -1,14 +1,17 @@
 <template>
-  <div class="q-gutter-xs">
+  <div
+    v-if="items"
+    class="q-gutter-xs"
+  >
     <q-chip
       v-for="(item, index) in items"
       :key="index"
       :color="labelColor"
       :size="size"
       class="transparent-dimmed"
-      :clickable="clickable"
       square
-      @click="onClick(item)"
+      clickable
+      @click.stop="onClick(item)"
     >
       <q-avatar
         :icon="avatar(item).icon"
@@ -26,11 +29,6 @@ export default {
     items: {
       type: Array,
       default: null
-    },
-
-    clickable: {
-      type: Boolean,
-      default: false
     },
 
     avatarColor: {

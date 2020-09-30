@@ -3,22 +3,22 @@
     :key="id"
     class="container fluid q-py-md"
   >
-    <div class="col no-wrap">
-      <q-chip
-        class="q-mb-md"
-        color="grey-8"
-        size="12px"
-        square
-      >
-        <q-avatar
-          icon="filter_alt"
-          color="grey-9"
-          text-color="white"
-        /> {{ query }}
-      </q-chip>
-    </div>
-
     <template v-if="query">
+      <div class="col no-wrap">
+        <q-chip
+          class="q-mb-md"
+          color="grey-8"
+          size="12px"
+          square
+        >
+          <q-avatar
+            icon="filter_alt"
+            color="grey-9"
+            text-color="white"
+          /> {{ query }}
+        </q-chip>
+      </div>
+
       <panels :query="query" />
     </template>
 

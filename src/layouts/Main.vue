@@ -136,6 +136,7 @@
 
         <q-separator
           v-if="link.separator"
+          :dark="false"
           spaced
         />
       </q-list>

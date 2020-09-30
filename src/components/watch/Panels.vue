@@ -33,14 +33,14 @@
     >
       <q-tab-panel
         name="general"
-        class="q-pa-none"
+        class="q-pa-none no-scroll"
       >
         <item-general :video="video" />
       </q-tab-panel>
 
       <q-tab-panel
         name="tracks"
-        class="q-pa-none"
+        class="q-pa-none no-scroll"
       >
         <item-tracks
           :text-tracks="textTracks"
@@ -50,7 +50,7 @@
 
       <q-tab-panel
         name="debug"
-        class="q-pa-none"
+        class="q-pa-none no-scroll"
       >
         <item-debug :video="video" />
       </q-tab-panel>

@@ -2,7 +2,8 @@
   <q-img
     :alt="collection.name"
     :src="collection.thumbnail_url"
-    height="350px"
+    height="100%"
+    width="100%"
     loading="lazy"
     class="details-header"
     img-class="details-placeholder"
@@ -15,7 +16,8 @@
           <q-btn
             v-close-popup
             icon="close"
-            size="20px"
+            size="16px"
+            class="q-mt-sm transparent-dimmed"
             dense
             round
             unelevated
@@ -77,7 +79,7 @@
       </div>
     </div>
 
-    <div class="details-header-gradient-left" />
+    <div class="details-header-gradient-left absolute-left" />
     <div class="details-header-gradient-right absolute-right" />
     <div class="details-header-gradient-bottom absolute-bottom" />
   </q-img>

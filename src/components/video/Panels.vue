@@ -10,6 +10,11 @@
       arrow-indicator
     >
       <q-tab
+        name="scenes"
+        label="Scenes"
+      />
+
+      <q-tab
         name="related"
         label="Related"
       />
@@ -27,15 +32,22 @@
       animated
     >
       <q-tab-panel
+        name="scenes"
+        class="q-px-none no-scroll"
+      >
+        <item-scenes :video="video" />
+      </q-tab-panel>
+
+      <q-tab-panel
         name="related"
-        class="q-px-none"
+        class="q-px-none no-scroll"
       >
         <item-related :video="video" />
       </q-tab-panel>
 
       <q-tab-panel
         name="collections"
-        class="q-px-none"
+        class="q-px-none no-scroll"
       >
         <item-collections :video="video" />
       </q-tab-panel>
@@ -49,7 +61,8 @@ import VideoModel from 'src/models/Video'
 export default {
   components: {
     ItemCollections: () => import('components/video/Collections'),
-    ItemRelated: () => import('components/video/Related')
+    ItemRelated: () => import('components/video/Related'),
+    ItemScenes: () => import('components/video/Scenes')
   },
 
   props: {
@@ -61,7 +74,7 @@ export default {
 
   data () {
     return {
-      tab: 'related'
+      tab: 'scenes'
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div :key="id">
+  <div>
     <q-btn-group
       class="q-py-md"
       unelevated
@@ -14,7 +14,10 @@
       />
     </q-btn-group>
 
-    <q-pull-to-refresh @refresh="onRefresh">
+    <q-pull-to-refresh
+      :key="id"
+      @refresh="onRefresh"
+    >
       <q-infinite-scroll
         :disable="!isReady"
         :debounce="300"
@@ -24,10 +27,8 @@
         <q-intersection
           v-for="(item, index) in data"
           :key="index"
-          v-close-popup
           :disable="!isReady"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
-          @click="onClick(item)"
         >
           <video-item :video="item" />
         </q-intersection>
@@ -48,7 +49,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import DetailsComponent from 'components/video/Details'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
@@ -124,14 +124,6 @@ export default {
     async onRefresh (done) {
       await this.resetItems()
       done()
-    },
-
-    onClick (model = {}) {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: model.id || null
-      })
     }
   }
 }

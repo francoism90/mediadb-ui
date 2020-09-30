@@ -4,6 +4,7 @@
     clickable
     class="no-padding tag-item"
     draggable="false"
+    @click="onClick"
   >
     <q-item-section side>
       <q-avatar
@@ -39,6 +40,18 @@ export default {
     tag: {
       type: TagModel,
       required: true
+    }
+  },
+
+  methods: {
+    onClick () {
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: 'tag:' + this.tag.slug,
+          id: +new Date()
+        }
+      })
     }
   }
 }
