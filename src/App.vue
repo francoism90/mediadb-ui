@@ -33,22 +33,22 @@ export default {
 
   watch: {
     '$q.fullscreen.isActive' (val) {
-      if (this.$q.platform.is.cordova) {
-        this.setAppFullscreen(val)
-      }
+      this.setFullscreen(val)
     }
   },
 
   methods: {
-    setAppFullscreen (active = false) {
+    setFullscreen (active = false) {
+      if (!this.$q.platform.is.cordova) {
+        return
+      }
+
       if (active) {
         window.NavigationBar.hide()
         window.StatusBar.hide()
-
         window.screen.orientation.lock('landscape')
       } else {
         window.screen.orientation.unlock()
-
         window.NavigationBar.show()
         window.StatusBar.show()
       }

@@ -41,7 +41,7 @@
         </q-card>
       </q-dialog>
 
-      <q-inner-loading :showing="!collection">
+      <q-inner-loading :showing="!form || !collection">
         <q-spinner
           size="50px"
           color="primary"
@@ -59,7 +59,7 @@
         >
           <q-card-section class="row no-wrap justify-between items-center">
             <div class="col text-h6 ellipsis">
-              {{ collection.name }}
+              Collection Details
             </div>
 
             <div class="col-auto">
@@ -109,6 +109,18 @@
               use-input
               @filter="filterTags"
             />
+
+            <q-input
+              v-model.trim="form.overview"
+              type="textarea"
+              square
+              filled
+              autogrow
+              label="Overview"
+              clearable
+              :error-message="getError('name')"
+              :error="hasError('name')"
+            />
           </q-card-section>
 
           <q-separator />
@@ -122,6 +134,7 @@
               color="primary"
               @click="deleteDialog = true"
             />
+
             <q-btn
               flat
               type="submit"
@@ -160,13 +173,15 @@ export default {
   },
 
   async created () {
+    this.collection = null
+
     try {
       this.collection = await CollectionModel.$find(this.id)
 
       this.setForm({
         id: this.collection.id,
         name: this.collection.name,
-        description: this.collection.description,
+        overview: this.collection.overview,
         tags: this.collection.relationships.tags
       })
     } catch {
@@ -196,23 +211,8 @@ export default {
     async onDelete () {
       try {
         await this.collection.delete()
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.collection.name} has been deleted.`,
-          type: 'positive'
-        })
       } catch {
-        this.hide()
-
-        this.$q.notify({
-          progress: true,
-          position: 'top',
-          message: 'Unable to delete collection',
-          type: 'negative'
-        })
+        //
       }
     },
 
@@ -220,15 +220,7 @@ export default {
       try {
         const collection = new CollectionModel(this.form)
 
-        this.collection = await collection.save()
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.collection.name} has been updated.`,
-          type: 'positive'
-        })
+        await collection.save()
       } catch (e) {
         this.setMessage(e.response)
         this.setErrors(e.response)

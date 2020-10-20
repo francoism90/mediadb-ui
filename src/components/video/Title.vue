@@ -2,106 +2,87 @@
   <q-img
     :alt="video.name"
     :src="video.thumbnail_url"
-    height="100%"
-    width="100%"
     loading="lazy"
-    class="details-header"
-    img-class="details-placeholder"
+    class="video-title"
+    img-class="video-title-placeholder"
   >
-    <div class="absolute-full details-elements">
+    <div class="absolute-full video-title-elements">
       <div class="container absolute-top">
-        <q-card-section class="q-px-none row items-center">
-          <q-space />
-
-          <q-btn
-            v-close-popup
-            icon="close"
-            size="16px"
-            class="q-mt-sm transparent-dimmed"
-            dense
-            round
-            unelevated
-          />
-        </q-card-section>
-      </div>
-
-      <div class="container absolute-bottom">
-        <q-card-section class="q-pa-none">
-          <div class="text-h6 text-white ellipsis-2-lines">
+        <div class="video-title-details">
+          <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
             {{ video.name }}
           </div>
 
-          <titles
-            v-if="video.titles.length"
-            :items="video.titles"
-            class="text-subtitle1 ellipsis-2-lines text-grey-1"
-          />
-
-          <div class="text-subtitle2 text-grey-1 ellipsis">
+          <div class="text-subtitle1 text-grey-3 ellipsis-2-lines">
             {{ String(video.created_at) | datestamp }} •
             {{ Number(video.duration) | timestamp }} •
             {{ Number(video.views) | approximate }} views
           </div>
 
+          <titles
+            v-if="video.titles.length"
+            :items="video.titles"
+            class="q-pt-xs text-body2 text-weight-medium text-grey-4 ellipsis-2-lines"
+          />
+
           <div
-            v-if="video.description"
-            class="text-subtitle1 text-grey ellipsis-3-lines"
+            v-if="video.overview"
+            class="q-pt-md text-subtitle1 text-grey ellipsis-3-lines"
           >
-            {{ video.description }}
+            {{ video.overview }}
           </div>
-        </q-card-section>
+        </div>
 
-        <q-card-section
+        <tags
           v-if="video.relationships.tags.length"
-          class="q-px-none q-mt-sm"
-        >
-          <tags
-            style="max-width: 500px;"
-            :items="video.relationships.tags"
-            :avatar-color="null"
-            :label-color="null"
-            clickable
-            size="13px"
-          />
-        </q-card-section>
+          :items="video.relationships.tags"
+          class="q-pt-lg"
+          size="13px"
+        />
 
-        <q-card-section class="q-px-none q-mt-sm">
-          <q-btn
-            v-shortkey="['p']"
-            class="q-mr-sm"
-            size="13px"
-            label="Watch Video"
-            color="primary"
-            @click="watchModal"
-            @shortkey="watchModal"
-          />
+        <div class="q-pt-lg">
+          <div class="q-gutter-sm">
+            <q-btn
+              stack
+              unelevated
+              class="transparent-1"
+              text-color="primary"
+              size="13px"
+              icon="o_play_arrow"
+              label="Watch"
+              @click="watchModal"
+            />
 
-          <q-btn
-            v-shortkey="['a']"
-            class="q-mr-sm"
-            size="13px"
-            label="Save To"
-            color="grey-8"
-            @click="saveModal"
-            @shortkey="saveModal"
-          />
+            <q-btn
+              stack
+              unelevated
+              class="transparent-1"
+              text-color="grey-1"
+              size="13px"
+              icon="o_add"
+              label="Save To"
+              @click="saveModal"
+            />
 
-          <q-btn
-            v-if="$auth.check({ permissions: 'edit videos'})"
-            v-shortkey="['e']"
-            size="13px"
-            label="Edit Item"
-            color="grey-8"
-            @click="editModal"
-            @shortkey="editModal"
-          />
-        </q-card-section>
+            <q-btn
+              v-if="$auth.check({ permissions: 'edit videos'})"
+              stack
+              unelevated
+              class="transparent-1"
+              text-color="grey-1"
+              size="13px"
+              icon="o_wysiwyg"
+              label="Edit Item"
+              @click="editModal"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="details-header-gradient-left absolute-left" />
-    <div class="details-header-gradient-right absolute-right" />
-    <div class="details-header-gradient-bottom absolute-bottom" />
+    <div class="absolute-left video-gradient-left" />
+    <div class="absolute-right video-gradient-right" />
+    <div class="absolute-bottom video-gradient-bottom" />
   </q-img>
 </template>
 
@@ -129,7 +110,7 @@ export default {
       this.$q.dialog({
         component: EditComponent,
         parent: this,
-        id: this.video.id
+        id: this.video.id || null
       })
     },
 
@@ -137,7 +118,7 @@ export default {
       this.$q.dialog({
         component: SaveComponent,
         parent: this,
-        id: this.video.id
+        id: this.video.id || null
       })
     },
 
@@ -145,7 +126,7 @@ export default {
       this.$q.dialog({
         component: WatchComponent,
         parent: this,
-        id: this.video.id
+        id: this.video.id || null
       })
     }
   }

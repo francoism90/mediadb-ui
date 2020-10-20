@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="text-caption text-uppercase text-grey">
+      Videos
+    </div>
+
+    <q-separator spaced />
+
     <q-btn-group
-      class="q-py-md"
+      class="q-pb-md"
       unelevated
     >
       <q-select
@@ -14,33 +20,26 @@
       />
     </q-btn-group>
 
-    <q-infinite-scroll
+    <q-pull-to-refresh
       :key="id"
-      ref="scroll"
-      scroll-target=".q-dialog-plugin"
       :disable="!isReady"
-      :debounce="300"
-      class="row wrap justify-start items-start content-start q-col-gutter-md"
-      @load="onLoad"
+      @refresh="onRefresh"
     >
-      <q-intersection
-        v-for="(item, index) in data"
-        :key="index"
+      <q-infinite-scroll
         :disable="!isReady"
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+        class="row wrap justify-start items-start content-start q-col-gutter-md"
+        @load="onLoad"
       >
-        <video-item :video="item" />
-      </q-intersection>
-
-      <template v-slot:loading>
-        <div class="row no-wrap justify-center q-my-md">
-          <q-spinner
-            color="primary"
-            size="40px"
-          />
-        </div>
-      </template>
-    </q-infinite-scroll>
+        <q-intersection
+          v-for="(item, index) in data"
+          :key="index"
+          :disable="!isReady"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+        >
+          <video-item :video="item" />
+        </q-intersection>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
   </div>
 </template>
 
@@ -51,13 +50,13 @@ import CollectionModel from 'src/models/Collection'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'videos/getOption',
-  mutationType: 'videos/setOption'
+  getterType: 'collection-videos/getOption',
+  mutationType: 'collection-videos/setOption'
 })
 
 export default {
   components: {
-    VideoItem: () => import('components/videos/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   props: {
@@ -81,13 +80,13 @@ export default {
   },
 
   computed: {
-    ...mapState('videos', [
+    ...mapState('collection-videos', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('videos', [
+    ...mapGetters('collection-videos', [
       'isLoaded',
       'isReady'
     ]),
@@ -106,21 +105,17 @@ export default {
     })
   },
 
-  mounted () {
-    // TODO: fix workaround
-    this.$refs.scroll.poll()
-  },
-
   methods: {
-    ...mapActions('videos', [
+    ...mapActions('collection-videos', [
       'initialize',
+      'resetItems',
       'setPage'
     ]),
 
     async setModels () {
       const response = await VideoModel
         .where('collection', this.collection.id)
-        .include('tags')
+        .include('model', 'tags')
         .append('duration', 'thumbnail_url', 'titles')
         .orderBy(this.sorter.value)
         .page(this.page)
@@ -133,6 +128,11 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
+    },
+
+    async onRefresh (done) {
+      await this.resetItems()
+      done()
     }
   }
 }

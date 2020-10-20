@@ -13,8 +13,8 @@ export default function ({ Vue, router }) {
   // Inject axios as http client to Model
   Model.$http = axiosInstance
 
-  // Allow reference as this.$axios
-  Vue.prototype.$axios = axiosInstance
+  // Allow reference as this.$http
+  Vue.prototype.$http = axiosInstance
 
   axiosInstance.interceptors.response.use((response) => {
     return response

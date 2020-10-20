@@ -2,6 +2,7 @@ export default function () {
   return {
     id: +new Date(),
     ready: false,
+    name: null,
     page: 1,
     options: {},
     data: [],

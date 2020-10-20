@@ -1,7 +1,7 @@
 html,
 body {
   font-feature-settings: "liga", "tnum", "case", "calt", "zero", "ss01", "ss03", "locl";
-  font-weight: 500;
+  font-weight: map-get($text-weights, 'regular');
   background: $grey-11;
   color: $grey-5;
 }
@@ -19,10 +19,26 @@ body.body--dark {
 }
 
 a {
-  color: $grey-5;
+  color: inherit;
   text-decoration: none;
 }
 
-.transparent-dimmed {
-  background: rgba(255, 255, 255, 0.2);
+.transparent-1 {
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.transparent-2 {
+  background: rgba(255, 255, 255, 0.125);
+}
+
+.transparent-3 {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.transparent-4 {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.transparent-5 {
+  background: rgba(0, 0, 0, 0.75);
 }

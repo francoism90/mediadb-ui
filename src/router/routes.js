@@ -2,7 +2,7 @@ const routes = [
   {
     name: 'home',
     path: '/',
-    component: () => import('pages/app/Library.vue'),
+    component: () => import('pages/Home.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
@@ -36,22 +36,76 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
-    name: 'collections',
-    path: '/collections',
-    component: () => import('pages/app/Collections.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    name: 'tags',
-    path: '/tags',
-    component: () => import('pages/app/Tags.vue'),
+    name: 'notifications',
+    path: '/notifications',
+    component: () => import('pages/Notifications.vue'),
     meta: { auth: true, layout: 'Main' }
   },
   {
     name: 'search',
     path: '/search',
-    component: () => import('pages/app/Search.vue'),
+    component: () => import('pages/Search.vue'),
     meta: { auth: true, layout: 'Main' }
+  },
+  {
+    path: '/collections',
+    component: () => import('pages/Collection.vue'),
+    meta: { auth: true, layout: 'Main' },
+    children: [
+      {
+        name: 'collection',
+        path: '',
+        component: () => import('pages/collection/Items.vue'),
+        meta: { auth: true, layout: 'Main' }
+      },
+      {
+        name: 'collection-details',
+        path: 'details/:id/:slug?',
+        component: () => import('pages/collection/Details.vue'),
+        meta: { auth: true, layout: 'Main' },
+        props: true
+      }
+    ]
+  },
+  {
+    path: '/tags',
+    component: () => import('pages/Tag.vue'),
+    meta: { auth: true, layout: 'Main' },
+    children: [
+      {
+        name: 'tag',
+        path: '',
+        component: () => import('pages/tag/Items.vue'),
+        meta: { auth: true, layout: 'Main' }
+      },
+      {
+        name: 'tag-details',
+        path: 'details/:id/:slug?',
+        component: () => import('pages/tag/Details.vue'),
+        meta: { auth: true, layout: 'Main' },
+        props: true
+      }
+    ]
+  },
+  {
+    path: '/videos',
+    component: () => import('pages/Video.vue'),
+    meta: { auth: true, layout: 'Main' },
+    children: [
+      {
+        name: 'video',
+        path: '',
+        component: () => import('pages/video/Items.vue'),
+        meta: { auth: true, layout: 'Main' }
+      },
+      {
+        name: 'video-details',
+        path: 'details/:id/:slug?',
+        component: () => import('pages/video/Details.vue'),
+        meta: { auth: true, layout: 'Main' },
+        props: true
+      }
+    ]
   },
   {
     path: '*',

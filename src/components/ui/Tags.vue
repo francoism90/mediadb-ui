@@ -1,14 +1,11 @@
 <template>
-  <div
-    v-if="items"
-    class="q-gutter-xs"
-  >
+  <div class="q-gutter-xs">
     <q-chip
       v-for="(item, index) in items"
       :key="index"
       :color="labelColor"
       :size="size"
-      class="transparent-dimmed"
+      :class="labelClass"
       square
       clickable
       @click.stop="onClick(item)"
@@ -16,8 +13,7 @@
       <q-avatar
         :icon="avatar(item).icon"
         :color="avatarColor"
-        class="transparent-dimmed"
-        text-color="white"
+        :class="avatarClass"
       /> {{ item.name }}
     </q-chip>
   </div>
@@ -36,9 +32,19 @@ export default {
       default: 'grey-9'
     },
 
+    avatarClass: {
+      type: String,
+      default: 'transparent-2'
+    },
+
     labelColor: {
       type: String,
       default: 'grey-8'
+    },
+
+    labelClass: {
+      type: String,
+      default: 'transparent-2'
     },
 
     size: {
@@ -52,23 +58,23 @@ export default {
       avatars: [
         {
           value: 'genre',
-          icon: 'local_offer'
+          icon: 'o_local_offer'
         },
         {
           value: 'default',
-          icon: 'label'
+          icon: 'o_label'
         },
         {
           value: 'language',
-          icon: 'language'
+          icon: 'o_language'
         },
         {
           value: 'actor',
-          icon: 'person'
+          icon: 'o_person'
         },
         {
           value: 'studio',
-          icon: 'movie'
+          icon: 'o_movie'
         }
       ]
     }

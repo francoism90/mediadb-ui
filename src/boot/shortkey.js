@@ -1,6 +1,7 @@
-import Vue from 'vue'
 import Shortkey from 'vue-shortkey'
 
-Vue.use(Shortkey, {
-  prevent: ['input', 'textarea']
-})
+export default ({ Vue }) => {
+  Vue.use(Shortkey, {
+    prevent: ['input', 'textarea']
+  })
+}

@@ -1,36 +1,27 @@
 <template>
   <div>
-    <span
+    <router-link
       v-for="(item, index) in items"
       :key="index"
+      :to="{ name: 'collection-details', params: { id: item.id, slug: item.slug } }"
     >
-      <span v-if="index != 0"> • </span><span
-        v-close-popup
-        class="cursor-pointer"
-        @click.stop="onClick(item)"
-      >{{ item.name }}</span>
-    </span>
+      <span v-if="index != 0">{{ separator }}</span>
+      <span>{{ item.name }}</span>
+    </router-link>
   </div>
 </template>
 
 <script>
-import DetailsComponent from 'components/collection/Details'
-
 export default {
   props: {
     items: {
       type: Array,
       default: null
-    }
-  },
+    },
 
-  methods: {
-    onClick (model = {}) {
-      this.$q.dialog({
-        component: DetailsComponent,
-        parent: this,
-        id: model.id || null
-      })
+    separator: {
+      type: String,
+      default: ' • '
     }
   }
 }

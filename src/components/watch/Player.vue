@@ -8,6 +8,7 @@
       <video
         ref="player"
         class="absolute-center fit player-video"
+        crossorigin="use-credentials"
         playsinline
         preload="metadata"
         autoPictureInPicture
@@ -19,7 +20,7 @@
         @durationchange="duration = player.duration"
         @emptied="errored = true"
         @ended="paused = true"
-        @error="errored = true"
+        @error="error = true"
         @loadedmetadata="metadata = true"
         @pause="paused = player.paused"
         @play="paused = player.paused"
@@ -34,7 +35,7 @@
           v-for="(track, index) in video.tracks"
           :id="track.id"
           :key="index"
-          :kind="track.type || 'subtitles'"
+          :kind="track.collection || 'subtitles'"
           :label="track.name"
           :srclang="track.language || 'en'"
           :src="track.download_url"
@@ -46,41 +47,31 @@
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <controls
-          v-if="controlsActive"
-          :video="video"
-          :buffered="buffered"
-          :current-time="currentTime"
-          :duration="duration"
-          :errored="errored"
-          :metadata="metadata"
-          :paused="paused"
-          :text-tracks="textTracks"
-          :waiting="waiting"
-        />
+        <controls v-show="controls" />
       </transition>
     </div>
   </div>
 </template>
 
 <script>
-import { get, inRange } from 'lodash'
 import { createHelpers } from 'vuex-map-fields'
+import { get, inRange } from 'lodash'
 import { Player } from 'shaka-player'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'session/getDataField',
-  mutationType: 'session/updateDataField'
+  getterType: 'player/getState',
+  mutationType: 'player/setState'
 })
 
 export default {
   timers: {
-    hideControls: { time: 2000, autostart: true }
+    hideControls: { time: 2000, autostart: true },
+    setSettings: { time: 1500, autostart: true, repeat: true }
   },
 
   components: {
-    Controls: () => import('components/watch/Controls')
+    Controls: () => import('components/controls/Layout')
   },
 
   props: {
@@ -98,26 +89,7 @@ export default {
   data () {
     return {
       instance: null,
-      controlsActive: true,
-      settingsInterval: null,
-      buffered: null,
-      currentTime: 0,
-      duration: 0,
-      errored: false,
-      metadata: false,
-      paused: true,
-      waiting: true,
-      events: [
-        { name: 'setCurrentTime', listener: 'setCurrentTime' },
-        { name: 'setFrameshot', listener: 'setFrameshot' },
-        { name: 'setPlaybackRate', listener: 'setPlaybackRate' },
-        { name: 'setTextTracks', listener: 'setTextTracks' },
-        { name: 'hideControls', listener: 'hideControls' },
-        { name: 'showControls', listener: 'showControls' },
-        { name: 'toggleFullscreen', listener: 'toggleFullscreen' },
-        { name: 'togglePlayback', listener: 'togglePlayback' }
-      ],
-      settings: {
+      shakaSettings: {
         streaming: {
           bufferingGoal: 30,
           jumpLargeGaps: true,
@@ -129,8 +101,23 @@ export default {
 
   computed: {
     ...mapFields({
-      playbackRate: 'video.playbackRate',
-      videoSettings: 'video.settings'
+      // captionLocale: 'captionLocale',
+      // subtitleLocale: 'subtitleLocale',
+      controls: 'controls',
+      fullscreen: 'fullscreen',
+      playbackRate: 'playbackRate',
+      settings: 'settings',
+      buffered: 'data.buffered',
+      currentTime: 'data.currentTime',
+      duration: 'data.duration',
+      error: 'data.error',
+      metadata: 'data.metadata',
+      model: 'data.model',
+      paused: 'data.paused',
+      play: 'data.play',
+      seekTime: 'data.seekTime',
+      tracks: 'data.tracks',
+      waiting: 'data.waiting'
     }),
 
     element () {
@@ -141,61 +128,65 @@ export default {
       return this.$refs.player
     },
 
+    startTimecode () {
+      return this.timecode || get(this.videoSettings, 'timecode', 0)
+    },
+
     textTracks () {
-      if ((!this.instance || !this.player) || !this.player.textTracks) {
-        return null
-      }
-
-      return this.player.textTracks
+      return get(this.videoSettings, 'textTracks', [])
     },
 
-    currentSettings () {
-      return this.videoSettings[this.video.id] || {}
-    },
-
-    startTime () {
-      return get(this.currentSettings, 'timecode', 0)
+    videoSettings () {
+      return this.settings[this.video.id] || {}
     }
   },
 
-  async mounted () {
-    try {
-      if (!Player.isBrowserSupported()) {
-        alert('Browser is not supported.')
-        return
-      }
+  watch: {
+    fullscreen (value) {
+      this.setFullscreen(value)
+    },
 
-      this.instance = new Player(this.player)
+    play (value) {
+      this.setPlay(value)
+    },
 
-      await this.instance.configure(this.settings)
-      await this.instance.load(this.video.stream_url)
+    playbackRate (value) {
+      this.setPlaybackRate(value)
+    },
 
-      this.setCurrentTime(this.timecode || this.startTime)
-      this.setPlaybackRate(this.playbackRate)
+    seekTime (value) {
+      this.setCurrentTime(value)
+    },
 
-      for (const event of this.events) {
-        this.$root.$on(event.name, this[event.listener])
-      }
-
-      this.settingsInterval = setInterval(() => this.setSettings(), 1000)
-    } catch {
-      this.$q.notify({
-        progress: true,
-        position: 'top',
-        message: 'Unable to load video',
-        type: 'negative'
-      })
+    tracks (value) {
+      this.setTextTracks(value)
     }
+  },
+
+  created () {
+    this.$store.dispatch('player/initialize', {
+      model: this.video
+    })
+  },
+
+  async mounted () {
+    if (!Player.isBrowserSupported()) {
+      alert('Browser is not supported.')
+      return
+    }
+
+    this.instance = new Player(this.player)
+
+    await this.instance.configure(this.shakaSettings)
+    await this.instance.load(this.video.stream_url)
+
+    this.setCurrentTime(this.startTimecode)
+    this.setPlaybackRate(this.playbackRate)
+    this.setTextTracks(this.textTracks)
   },
 
   async beforeDestroy () {
     await this.$q.fullscreen.exit()
-
-    clearInterval(this.settingsInterval)
-
-    for (const event of this.events) {
-      this.$root.$off(event.name, this[event.listener])
-    }
 
     if (this.instance) {
       await this.instance.detach()
@@ -205,20 +196,16 @@ export default {
 
   methods: {
     showControls () {
-      this.controlsActive = true
+      this.controls = true
       this.$timer.restart('hideControls')
     },
 
     hideControls () {
-      if (!this.metadata || this.waiting) {
-        this.showControls()
-        return
-      }
-
-      this.controlsActive = false
+      this.controls = false
     },
 
     setCurrentTime (value = 0) {
+      this.showControls()
       this.player.currentTime = value
     },
 
@@ -232,51 +219,49 @@ export default {
     },
 
     setSettings () {
-      if (this.errored || !this.metadata) {
-        return
-      }
-
-      const settings = {
+      const videoSettings = {
         [this.video.id]: {
-          timecode: this.currentTime
-          // tracks: this.tracks
+          timecode: this.currentTime,
+          textTracks: this.tracks
         }
       }
 
-      this.videoSettings = { ...this.videoSettings, ...settings }
+      this.settings = { ...this.settings, ...videoSettings }
     },
 
-    setTextTracks (tracks = []) {
-      for (const textTrack of this.textTracks) {
-        const showTrack = tracks.includes(textTrack.id)
+    setTextTracks () {
+      const playerTextTracks = this.player.textTracks || null
+
+      for (const textTrack of playerTextTracks) {
+        const showTrack = this.tracks.includes(textTrack.id)
 
         textTrack.mode = showTrack ? 'showing' : 'hidden'
       }
     },
 
-    async setFrameshot (value = 0) {
-      await this.$axios.patch(`videos/${this.video.id}/frameshot`, {
-        timecode: this.currentTime
-      })
+    async setFullscreen (payload = false) {
+      try {
+        if (payload) {
+          await this.$q.fullscreen.request()
+          return
+        }
 
-      this.$q.notify({
-        progress: true,
-        message: `${this.video.name} has been frameshot.`,
-        type: 'positive'
-      })
-    },
-
-    async toggleFullscreen () {
-      await this.$q.fullscreen.toggle()
-    },
-
-    async togglePlayback () {
-      if (!this.waiting && this.paused) {
-        await this.player.play()
-        return
+        await this.$q.fullscreen.exit()
+      } catch {
+        //
       }
+    },
 
-      await this.player.pause()
+    async setPlay (payload = false) {
+      try {
+        if (payload === true) {
+          await this.player.play()
+        } else if (payload === false) {
+          await this.player.pause()
+        }
+      } catch {
+        //
+      }
     }
   }
 }

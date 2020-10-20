@@ -59,7 +59,7 @@
         >
           <q-card-section class="row no-wrap justify-between items-center">
             <div class="col text-h6 ellipsis">
-              {{ video.name }}
+              Video Details
             </div>
 
             <div class="col-auto">
@@ -109,6 +109,18 @@
               use-input
               @filter="filterTags"
             />
+
+            <q-input
+              v-model.trim="form.overview"
+              type="textarea"
+              square
+              filled
+              autogrow
+              label="Overview"
+              clearable
+              :error-message="getError('name')"
+              :error="hasError('name')"
+            />
           </q-card-section>
 
           <q-separator />
@@ -122,6 +134,7 @@
               color="primary"
               @click="deleteDialog = true"
             />
+
             <q-btn
               flat
               type="submit"
@@ -168,7 +181,7 @@ export default {
       this.setForm({
         id: this.video.id,
         name: this.video.name,
-        description: this.video.description,
+        overview: this.video.overview,
         tags: this.video.relationships.tags
       })
     } catch {
@@ -198,23 +211,8 @@ export default {
     async onDelete () {
       try {
         await this.video.delete()
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.video.name} has been deleted.`,
-          type: 'positive'
-        })
       } catch {
-        this.hide()
-
-        this.$q.notify({
-          progress: true,
-          position: 'top',
-          message: 'Unable to delete video',
-          type: 'negative'
-        })
+        //
       }
     },
 
@@ -222,15 +220,7 @@ export default {
       try {
         const video = new VideoModel(this.form)
 
-        this.video = await video.save()
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.video.name} has been updated.`,
-          type: 'positive'
-        })
+        await video.save()
       } catch (e) {
         this.setMessage(e.response)
         this.setErrors(e.response)

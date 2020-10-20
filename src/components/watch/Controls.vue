@@ -7,7 +7,7 @@
         round
         unelevated
         text-color="white"
-        icon="arrow_back"
+        icon="o_arrow_back"
         size="28px"
       />
     </div>
@@ -20,10 +20,10 @@
         unelevated
         size="36px"
         text-color="white"
-        :loading="!metadata && waiting"
-        :icon="paused ? 'play_arrow' : 'pause'"
-        @click="togglePlayback"
-        @shortkey="togglePlayback"
+        :loading="!metadata || waiting"
+        :icon="paused ? 'o_play_arrow' : 'o_pause'"
+        @click="togglePlay"
+        @shortkey="togglePlay"
       />
     </div>
 
@@ -39,6 +39,14 @@
         <div class="col-auto">
           {{ duration | timestamp }}
         </div>
+      </div>
+
+      <div
+        class="player-tooltip"
+      >
+        <span class="q-py-xs q-px-sm text-caption bg-grey-11">
+          hover
+        </span>
       </div>
 
       <q-slider
@@ -60,7 +68,7 @@
             rounded
             size="18px"
             color="white"
-            icon="replay_10"
+            icon="o_replay_10"
             @click="replay"
             @shortkey="replay"
           />
@@ -72,7 +80,7 @@
             round
             size="18px"
             color="white"
-            icon="forward_10"
+            icon="o_forward_10"
             @click="forward"
             @shortkey="forward"
           />
@@ -86,7 +94,7 @@
             round
             size="18px"
             color="white"
-            icon="movie_creation"
+            icon="o_movie_creation"
             @click="frameshot"
             @shortkey="frameshot"
           />
@@ -100,7 +108,7 @@
             round
             size="18px"
             color="white"
-            icon="settings"
+            icon="o_settings"
             @click="settingsModal"
             @shortkey="settingsModal"
           >
@@ -116,7 +124,7 @@
             round
             size="18px"
             color="white"
-            :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+            :icon="fullscreen ? 'o_fullscreen_exit' : 'o_fullscreen'"
             @click="toggleFullscreen"
             @shortkey="toggleFullscreen"
           >
@@ -131,60 +139,47 @@
 </template>
 
 <script>
+import { createHelpers } from 'vuex-map-fields'
 import SettingsComponent from 'components/watch/Settings'
 import VideoModel from 'src/models/Video'
+
+const { mapFields } = createHelpers({
+  getterType: 'player/getState',
+  mutationType: 'player/setState'
+})
 
 export default {
   props: {
     video: {
       type: VideoModel,
       required: true
-    },
-
-    buffered: {
-      type: TimeRanges,
-      default: null
-    },
-
-    currentTime: {
-      type: Number,
-      default: 0
-    },
-
-    duration: {
-      type: Number,
-      default: 0
-    },
-
-    metadata: {
-      type: Boolean,
-      default: false
-    },
-
-    paused: {
-      type: Boolean,
-      default: true
-    },
-
-    textTracks: {
-      type: TextTrackList,
-      default: null
-    },
-
-    waiting: {
-      type: Boolean,
-      default: true
     }
   },
 
   computed: {
+    ...mapFields({
+      controls: 'controls',
+      fullscreen: 'fullscreen',
+      playbackRate: 'playbackRate',
+      settings: 'settings',
+      buffered: 'data.buffered',
+      currentTime: 'data.currentTime',
+      duration: 'data.duration',
+      error: 'data.error',
+      metadata: 'data.metadata',
+      paused: 'data.paused',
+      play: 'data.play',
+      seekTime: 'data.seekTime',
+      waiting: 'data.waiting'
+    }),
+
     seeker: {
       get () {
         return this.currentTime
       },
 
-      set (value) {
-        this.$root.$emit('setCurrentTime', value)
+      set (value = 0) {
+        this.seekTime = value
       }
     },
 
@@ -217,29 +212,26 @@ export default {
   },
 
   methods: {
-    frameshot () {
-      this.$root.$emit('setFrameshot', this.currentTime)
-      this.$root.$emit('showControls')
+    async frameshot () {
+      await this.$http.patch(`videos/${this.video.id}/frameshot`, {
+        timecode: this.currentTime
+      })
     },
 
     replay () {
-      this.$root.$emit('setCurrentTime', this.currentTime - 10)
-      this.$root.$emit('showControls')
+      this.seekTime = this.currentTime - 10
     },
 
     forward () {
-      this.$root.$emit('setCurrentTime', this.currentTime + 10)
-      this.$root.$emit('showControls')
-    },
-
-    togglePlayback () {
-      this.$root.$emit('togglePlayback')
-      this.$root.$emit('showControls')
+      this.seekTime = this.currentTime + 10
     },
 
     toggleFullscreen () {
-      this.$root.$emit('toggleFullscreen')
-      this.$root.$emit('showControls')
+      this.fullscreen = !this.fullscreen
+    },
+
+    togglePlay () {
+      this.play = !this.play
     },
 
     settingsModal () {
@@ -247,10 +239,9 @@ export default {
         component: SettingsComponent,
         parent: this,
         id: this.video.id,
+        playbackRate: this.playbackRate,
         textTracks: this.textTracks
       })
-
-      this.$root.$emit('showControls')
     }
   }
 }

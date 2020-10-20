@@ -1,11 +1,12 @@
 <template>
   <q-layout view="hHh Lpr lff">
     <q-header
-      class="header bg-grey-14 q-py-xs"
+      class="header bg-grey-14 row items-center no-wrap"
       height-hint="58"
     >
-      <q-toolbar class="toolbar">
+      <q-toolbar class="container horizontal fluid">
         <q-btn
+          class="lt-md q-mr-sm"
           flat
           dense
           round
@@ -14,13 +15,10 @@
         />
 
         <router-link
-          v-if="$q.screen.gt.xs"
-          to="/"
-          class="q-ml-md text-body2 text-grey-5"
+          :to="{ name: 'home' }"
+          class="gt-sm text-body2 text-grey-5"
         >
-          <q-toolbar-title shrink>
-            MediaDB
-          </q-toolbar-title>
+          MediaDB
         </router-link>
 
         <q-space />
@@ -29,134 +27,41 @@
 
         <q-space />
 
-        <div class="row no-wrap items-center">
-          <q-btn
-            class="q-mr-sm"
-            dense
-            flat
-            round
-            icon="notifications"
-          >
-            <q-tooltip>Notifications</q-tooltip>
-          </q-btn>
-
-          <q-btn
-            dense
-            flat
-            round
-          >
-            <q-avatar
-              size="28px"
-              icon="account_circle"
-            />
-
-            <q-menu
-              auto-close
-              square
-              max-width="400px"
-            >
-              <q-list
-                bordered
-                padding
-                dense
-              >
-                <q-item>
-                  <q-item-section no-wrap>
-                    <q-item-label caption>
-                      Signed in as <span class="text-weight-medium">{{ $auth.user().name }}</span>
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-
-                <q-separator spaced />
-
-                <q-item clickable>
-                  <q-item-section no-wrap>
-                    Your profile
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section no-wrap>
-                    Settings
-                  </q-item-section>
-                </q-item>
-
-                <q-item clickable>
-                  <q-item-section no-wrap>
-                    Help
-                  </q-item-section>
-                </q-item>
-
-                <q-separator spaced />
-
-                <q-item
-                  clickable
-                  @click="logout"
-                >
-                  <q-item-section no-wrap>
-                    Sign out
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
-        </div>
+        <notifications />
+        <account />
       </q-toolbar>
     </q-header>
 
     <q-drawer
       v-model="drawer"
       bordered
-      persistent
-      :mini="miniDrawer"
-      :width="240"
-      :breakpoint="breakpoint"
-      :overlay="overlay"
       content-class="bg-grey-12"
-      @mouseover="miniDrawer = false"
-      @mouseout="miniDrawer = true"
+      :breakpoint="breakpoint"
+      :width="100"
     >
-      <q-list
-        v-for="(link, index) in links"
-        :key="index"
-      >
-        <q-item
-          v-ripple
-          :to="{ name: link.name }"
-          exact
+      <q-scroll-area class="fit">
+        <q-tabs
+          vertical
+          no-caps
+          active-color="primary bg-grey-10"
+          class="drawer-tabs"
+          indicator-color="transparent"
         >
-          <q-item-section avatar>
-            <q-icon :name="link.icon" />
-          </q-item-section>
-          <q-item-section>
-            {{ link.label }}
-          </q-item-section>
-        </q-item>
-
-        <q-separator
-          v-if="link.separator"
-          :dark="false"
-          spaced
-        />
-      </q-list>
+          <q-route-tab
+            v-for="(link, index) in links"
+            :key="index"
+            content-class="drawer-tab-item"
+            :icon="link.icon"
+            :label="link.label"
+            :to="{ name: link.name }"
+            :exact="link.name === 'home'"
+          />
+        </q-tabs>
+      </q-scroll-area>
     </q-drawer>
 
-    <q-page-container class="q-pb-lg">
+    <q-page-container>
       <router-view />
-
-      <q-page-scroller
-        position="bottom-right"
-        :scroll-offset="175"
-        :offset="[32, 32]"
-      >
-        <q-btn
-          icon="expand_less"
-          dense
-          unelevated
-          color="black"
-        />
-      </q-page-scroller>
     </q-page-container>
   </q-layout>
 </template>
@@ -164,46 +69,69 @@
 <script>
 export default {
   components: {
-    Search: () => import('components/ui/Search')
+    Account: () => import('components/toolbar/Account'),
+    Notifications: () => import('components/toolbar/Notifications'),
+    Search: () => import('components/toolbar/Search')
   },
 
   data () {
     return {
-      drawer: true,
-      miniDrawer: true,
-      overlay: false,
-      breakpoint: 600,
+      drawer: false,
+      breakpoint: 1023,
       links: [
-        { label: 'Library', name: 'home', icon: 'video_library', separator: false },
-        { label: 'Collections', name: 'collections', icon: 'collections', separator: false },
-        { label: 'Tags', name: 'tags', icon: 'label', separator: true },
-        { label: 'My Subscriptions', name: '404', icon: 'subscriptions', separator: false },
-        { label: 'Watch Later', name: '404', icon: 'watch_later', separator: false },
-        { label: 'Favorites', name: '404', icon: 'favorite', separator: false },
-        { label: 'History', name: '404', icon: 'history', separator: false }
+        { label: 'Home', name: 'home', icon: 'o_home' },
+        { label: 'Video', name: 'video', icon: 'o_theaters' },
+        { label: 'Browse', name: 'collection', icon: 'o_folder' },
+        { label: 'Tags', name: 'tag', icon: 'o_label' },
+        { label: 'Settings', name: '404', icon: 'o_settings' }
       ]
     }
   },
 
+  computed: {
+    userId () {
+      return this.$auth.user().id
+    }
+  },
+
+  watch: {
+    '$q.screen.width' () {
+      this.setVisibility()
+    }
+  },
+
   created () {
-    this.showHideDrawer()
+    this.setPusher()
+  },
+
+  mounted () {
+    this.setListener()
+    this.setVisibility()
   },
 
   methods: {
-    showHideDrawer () {
-      this.drawer = (this.$q.screen.width > this.breakpoint)
-      this.miniDrawer = (this.$q.screen.width > this.breakpoint)
-      this.overlay = (this.$q.screen.width < this.breakpoint)
+    setPusher () {
+      const userToken = this.$auth.token() || null
+      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
     },
 
-    async logout () {
-      await this.$auth
-        .logout({
-          makeRequest: true,
-          redirect: {
-            name: 'login'
-          }
+    setListener () {
+      this.$echo.private(`user.${this.userId}`)
+        .notification((notification = {}) => {
+          this.$q.notify({
+            type: notification.type || 'primary',
+            message: notification.message || null,
+            avatar: notification.avatar || null,
+            progress: notification.progress || true,
+            timeout: notification.timeout || 1500,
+            position: 'top'
+          })
         })
+    },
+
+    setVisibility () {
+      const screenWidth = this.$q.screen.width
+      this.drawer = (screenWidth > this.breakpoint)
     }
   }
 }

@@ -88,7 +88,7 @@ export default {
         this.resetErrors()
 
         if (!this.$q.platform.is.cordova && !this.$q.platform.is.capacitor) {
-          await this.$axios.get('sanctum/csrf-cookie')
+          await this.$http.get('sanctum/csrf-cookie')
         }
 
         await this.$auth

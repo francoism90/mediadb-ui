@@ -14,47 +14,43 @@
       />
     </q-btn-group>
 
-    <q-infinite-scroll
+    <q-pull-to-refresh
       :key="id"
       :disable="!isReady"
-      :debounce="300"
-      class="row wrap justify-start items-start content-start q-col-gutter-md"
-      @load="onLoad"
+      @refresh="onRefresh"
     >
-      <q-intersection
-        v-for="(item, index) in data"
-        :key="index"
+      <q-infinite-scroll
         :disable="!isReady"
-        class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
+        class="row wrap justify-start items-start content-start q-col-gutter-md"
+        @load="onLoad"
       >
-        <video-item :video="item" />
-      </q-intersection>
-
-      <template v-slot:loading>
-        <div class="row no-wrap justify-center q-my-md">
-          <q-spinner
-            color="primary"
-            size="40px"
-          />
-        </div>
-      </template>
-    </q-infinite-scroll>
+        <q-intersection
+          v-for="(item, index) in data"
+          :key="index"
+          :disable="!isReady"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+        >
+          <video-item :video="item" />
+        </q-intersection>
+      </q-infinite-scroll>
+    </q-pull-to-refresh>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
+import PaginateModule from 'src/store/paginate'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'sVideos/getOption',
-  mutationType: 'sVideos/setOption'
+  getterType: 'video-search/getOption',
+  mutationType: 'video-search/setOption'
 })
 
 export default {
   components: {
-    VideoItem: () => import('components/videos/Item')
+    VideoItem: () => import('components/video/Item')
   },
 
   props: {
@@ -69,21 +65,28 @@ export default {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
         { label: 'Recommended', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
         { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' }
+        { label: 'Most Viewed', value: 'views' },
+        { label: 'Shortest to Longest', value: 'duration' },
+        { label: 'Longest to Shortest', value: '-duration' }
       ]
     }
   },
 
+  meta () {
+    return {
+      title: this.query || 'Videos'
+    }
+  },
+
   computed: {
-    ...mapState('sVideos', [
+    ...mapState('video-search', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('sVideos', [
+    ...mapGetters('video-search', [
       'isLoaded',
       'isReady'
     ]),
@@ -94,8 +97,12 @@ export default {
   },
 
   created () {
+    if (!this.$store.hasModule('video-search')) {
+      this.$store.registerModule('video-search', PaginateModule)
+    }
+
     this.initialize({
-      name: this.query,
+      name: this.$route.params.id || null,
       options: {
         sorter: this.sorters[0]
       }
@@ -103,15 +110,16 @@ export default {
   },
 
   methods: {
-    ...mapActions('sVideos', [
+    ...mapActions('video-search', [
       'initialize',
+      'resetItems',
       'setPage'
     ]),
 
     async setModels () {
       const response = await VideoModel
         .where('query', this.query)
-        .include('tags')
+        .include('model', 'tags')
         .append('duration', 'thumbnail_url', 'titles')
         .orderBy(this.sorter.value)
         .page(this.page)
@@ -124,6 +132,11 @@ export default {
     async onLoad (index, done) {
       await this.setModels()
       done(this.isLoaded)
+    },
+
+    async onRefresh (done) {
+      await this.resetItems()
+      done()
     }
   }
 }

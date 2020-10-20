@@ -19,7 +19,6 @@
             markers
             snap
             label
-            @input="setPlaybackRate"
           />
         </q-item-section>
       </q-item>
@@ -32,8 +31,8 @@ import { createHelpers } from 'vuex-map-fields'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'session/getDataField',
-  mutationType: 'session/updateDataField'
+  getterType: 'player/getState',
+  mutationType: 'player/setState'
 })
 
 export default {
@@ -45,15 +44,9 @@ export default {
   },
 
   computed: {
-    ...mapFields({
-      playbackRate: 'video.playbackRate'
-    })
-  },
-
-  methods: {
-    setPlaybackRate () {
-      this.$root.$emit('setPlaybackRate', this.playbackRate)
-    }
+    ...mapFields([
+      'playbackRate'
+    ])
   }
 }
 </script>

@@ -17,10 +17,9 @@
 
         <q-item-section avatar>
           <q-toggle
-            v-model="form.textTracks"
+            v-model="tracks"
             color="primary"
             :val="subtitle.id"
-            @input="setTextTracks"
           />
         </q-item-section>
       </q-item>
@@ -29,19 +28,16 @@
 </template>
 
 <script>
-import { formHandler } from 'src/mixins/form'
-import { filter, map } from 'lodash'
+import { createHelpers } from 'vuex-map-fields'
 import VideoModel from 'src/models/Video'
 
+const { mapFields } = createHelpers({
+  getterType: 'player/getState',
+  mutationType: 'player/setState'
+})
+
 export default {
-  mixins: [formHandler],
-
   props: {
-    textTracks: {
-      type: TextTrackList,
-      default: null
-    },
-
     video: {
       type: VideoModel,
       required: true
@@ -49,24 +45,9 @@ export default {
   },
 
   computed: {
-    showingTextTracks () {
-      return map(
-        filter(this.textTracks, { mode: 'showing' }),
-        'id'
-      )
-    }
-  },
-
-  created () {
-    this.setForm({
-      textTracks: this.showingTextTracks
+    ...mapFields({
+      tracks: 'data.tracks'
     })
-  },
-
-  methods: {
-    setTextTracks (value) {
-      this.$root.$emit('setTextTracks', value)
-    }
   }
 }
 </script>

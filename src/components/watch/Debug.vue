@@ -41,9 +41,7 @@ export default {
     bitRate () {
       const bitrate = this.video.bitrate || 1024
 
-      return Math.round(
-        bitrate / 1024
-      )
+      return Math.round(bitrate / 1024)
     },
 
     videoResolution () {

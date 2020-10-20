@@ -9,14 +9,4 @@ export default class Collection extends Model {
   tags () {
     return this.hasMany(Tag)
   }
-
-  get modelName () {
-    const hideTypes = ['title']
-
-    if (hideTypes.includes(this.type)) {
-      return null
-    }
-
-    return this.relationships.model.name
-  }
 }

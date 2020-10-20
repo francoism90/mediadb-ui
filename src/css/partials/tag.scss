@@ -1,0 +1,45 @@
+.tag-item {
+  min-height: 48px;
+  min-width: 200px;
+}
+
+/* Tag Title */
+.tag-title {
+  height: 300px;
+  max-height: 300px;
+}
+
+.tag-title-placeholder {
+  background-color: $grey-11;
+  background-size: cover;
+  filter: blur(1px) brightness(80%);
+}
+
+.tag-title-elements {
+  z-index: 30;
+}
+
+.tag-title-details {
+  max-width: 500px;
+}
+
+.tag-gradient-left {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(90deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  width: 50%;
+}
+
+.tag-gradient-right {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(270deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  width: 50%;
+}
+
+.tag-gradient-bottom {
+  z-index: 10;
+  background: $grey-11 !important;
+  background: linear-gradient(0deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
+  height: 75%;
+}

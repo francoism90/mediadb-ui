@@ -1,7 +1,6 @@
 export function initialize ({ commit, state }, payload = {}) {
   const { name = null, options = {} } = payload
 
-  // Reset state on name change
   if (name && state.name !== name) {
     commit('setReady', false)
   }

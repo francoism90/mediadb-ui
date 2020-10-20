@@ -14,7 +14,8 @@
 
 .player-close,
 .player-playback,
-.player-seeker {
+.player-seeker,
+.player-tooltip {
   z-index: 30;
 }
 
@@ -44,4 +45,17 @@
       z-index: -1;
     }
   }
+}
+
+.player-tooltip {
+  min-height: 90px;
+  min-width: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.player-frame {
+  background-size: auto !important;
+  background-repeat: no-repeat !important;
 }

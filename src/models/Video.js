@@ -8,15 +8,17 @@ export default class Video extends Model {
     return 'videos'
   }
 
+  relations () {
+    return {
+      tags: Tag
+    }
+  }
+
   collections () {
     return this.hasMany(Collection)
   }
 
-  tags () {
-    return this.hasMany(Tag)
-  }
-
   get subtitles () {
-    return filter(this.tracks, { type: 'subtitles' })
+    return filter(this.tracks, { collection: 'subtitles' })
   }
 }

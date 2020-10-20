@@ -11,7 +11,6 @@ const i18n = new VueI18n({
 })
 
 export default ({ app }) => {
-  // Set i18n instance on app
   app.i18n = i18n
 }
 

@@ -78,7 +78,7 @@
               flat
               label="New List"
               color="primary"
-              @click="createUserCollections"
+              @click="createCollection"
             />
 
             <q-btn
@@ -124,7 +124,7 @@ export default {
     try {
       this.video = await VideoModel.$find(this.id)
 
-      await this.setUserCollections()
+      await this.setCollections()
 
       this.setForm({
         collections: this.userCollections
@@ -142,14 +142,8 @@ export default {
   },
 
   methods: {
-    async setUserCollections () {
-      this.userCollections = await CollectionModel
-        .where('type', 'user')
-        .where('video', this.id)
-        .orderBy('name')
-        .page(1)
-        .limit(30)
-        .$get()
+    async setCollections () {
+      this.userCollections = await this.video.collections().$get()
     },
 
     async filterCollections (val, update, abort) {
@@ -164,20 +158,15 @@ export default {
       update()
     },
 
-    async createUserCollections () {
+    async createCollection () {
       try {
-        await this.$axios.post(`videos/${this.id}/save`, {
+        await this.$http.post(`videos/${this.id}/collections`, {
           collections: [
-            { id: this.video.id, name: this.video.name }
+            {
+              id: this.video.id,
+              name: this.video.name
+            }
           ]
-        })
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.video.name} has been saved.`,
-          type: 'positive'
         })
       } catch (e) {
         //
@@ -186,16 +175,8 @@ export default {
 
     async onSubmit () {
       try {
-        await this.$axios.put(`videos/${this.id}/save`, {
+        await this.$http.put(`videos/${this.id}/collections`, {
           collections: this.form.collections
-        })
-
-        this.$q.notify({
-          progress: true,
-          timeout: 1500,
-          position: 'top',
-          message: `${this.video.name} has been saved.`,
-          type: 'positive'
         })
       } catch (e) {
         this.setMessage(e.response)

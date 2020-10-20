@@ -11,6 +11,7 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'auth',
+      'echo',
       'filters',
       'sanitize',
       'shortkey',
@@ -27,7 +28,8 @@ module.exports = function (ctx) {
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
-      'material-icons'
+      'material-icons',
+      'material-icons-outlined'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
@@ -83,6 +85,7 @@ module.exports = function (ctx) {
         'AppFullscreen',
         'Dialog',
         'Loading',
+        'LoadingBar',
         'Meta',
         'Notify'
       ]

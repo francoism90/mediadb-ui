@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // Vuex modules
+import player from './player'
 import session from './session'
 
 // Vuex plugins
@@ -9,7 +10,13 @@ import createPersistedState from 'vuex-persistedstate'
 
 // Register plugins
 const persistedState = createPersistedState({
-  paths: ['session']
+  paths: [
+    'player.captionLocale',
+    'player.subtitleLocale',
+    'player.playbackRate',
+    'player.settings',
+    'session'
+  ]
 })
 
 /*
@@ -26,6 +33,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
+      player,
       session
     },
     plugins: [persistedState],
