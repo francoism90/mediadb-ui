@@ -48,7 +48,7 @@ export default {
   },
 
   watch: {
-    $route: 'fetchModel'
+    $route: 'setModel'
   },
 
   meta () {
@@ -58,21 +58,56 @@ export default {
   },
 
   created () {
-    this.fetchModel()
+    this.setModel()
+  },
+
+  beforeDestroy () {
+    this.unsubscribe()
   },
 
   methods: {
-    async fetchModel () {
-      try {
-        if (this.collection && this.collection.id !== this.id) {
-          this.collection = this.error = this.title = null
-          this.$store.dispatch('collection-videos/resetState')
-        }
+    async setModel () {
+      // Reset on navigation changes
+      if (this.collection && this.collection.id !== this.id) {
+        this.unsubscribe()
+        this.collection = this.error = this.title = null
 
+        // Reset related store
+        this.$store.dispatch('collection-videos/resetState')
+      }
+
+      try {
+        // Set model
         this.collection = await CollectionModel.$find(this.id)
         this.title = this.collection.name
+
+        // Subscribe to events
+        this.subscribe()
       } catch {
         this.error = 'Unable to load collection'
+      }
+    },
+
+    subscribe () {
+      this.$echo.private(`collection.${this.id}`)
+        .listen('.collection.updated', (e) => {
+          this.setModel()
+
+          this.$q.notify({
+            type: 'info',
+            message: 'Collection has been updated.',
+            progress: true,
+            timeout: 5000,
+            position: 'top'
+          })
+        })
+    },
+
+    unsubscribe () {
+      try {
+        this.$echo.leave(`collection.${this.collection.id || this.id}`)
+      } catch {
+        //
       }
     }
   }

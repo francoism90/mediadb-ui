@@ -15,7 +15,7 @@
         padding
         dense
       >
-        <q-item>
+        <q-item v-if="$auth.user() && $auth.user().name">
           <q-item-section no-wrap>
             <q-item-label caption>
               Signed in as <span class="text-weight-medium">{{ $auth.user().name }}</span>

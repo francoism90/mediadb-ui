@@ -48,7 +48,7 @@ export default {
   },
 
   watch: {
-    $route: 'fetchModel'
+    $route: 'setModel'
   },
 
   meta () {
@@ -58,20 +58,64 @@ export default {
   },
 
   created () {
-    this.fetchModel()
+    this.setModel()
+  },
+
+  beforeDestroy () {
+    this.unsubscribe()
   },
 
   methods: {
-    async fetchModel () {
-      try {
-        if (this.video && this.video.id !== this.id) {
-          this.error = this.title = this.video = null
-        }
+    async setModel () {
+      // Reset on navigation changes
+      if (this.video && this.video.id !== this.id) {
+        this.unsubscribe()
+        this.error = this.title = this.video = null
+      }
 
+      try {
+        // Set model
         this.video = await VideoModel.$find(this.id)
         this.title = this.video.name
+
+        // Subscribe to events
+        this.subscribe()
       } catch {
         this.error = 'Unable to load video'
+      }
+    },
+
+    subscribe () {
+      this.$echo.private(`video.${this.video.id}`)
+        .listen('.video.saved', (e) => {
+          this.setModel()
+
+          this.$q.notify({
+            type: 'info',
+            message: 'Video has been saved.',
+            progress: true,
+            timeout: 5000,
+            position: 'top'
+          })
+        })
+        .listen('.video.updated', (e) => {
+          this.setModel()
+
+          this.$q.notify({
+            type: 'info',
+            message: 'Video has been updated.',
+            progress: true,
+            timeout: 5000,
+            position: 'top'
+          })
+        })
+    },
+
+    unsubscribe () {
+      try {
+        this.$echo.leave(`video.${this.video.id || this.id}`)
+      } catch {
+        //
       }
     }
   }

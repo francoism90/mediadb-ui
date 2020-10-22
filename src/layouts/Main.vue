@@ -109,6 +109,14 @@ export default {
     this.setVisibility()
   },
 
+  beforeDestroy () {
+    try {
+      this.$echo.leave(`user.${this.id}`)
+    } catch {
+      //
+    }
+  },
+
   methods: {
     setPusher () {
       const userToken = this.$auth.token() || null

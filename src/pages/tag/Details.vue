@@ -33,13 +33,13 @@ export default {
   data () {
     return {
       error: null,
-      title: null,
-      tag: null
+      tag: null,
+      title: null
     }
   },
 
   watch: {
-    $route: 'fetchModel'
+    $route: 'setModel'
   },
 
   meta () {
@@ -49,16 +49,18 @@ export default {
   },
 
   created () {
-    this.fetchModel()
+    this.setModel()
   },
 
   methods: {
-    async fetchModel () {
-      try {
-        if (this.tag && this.tag.id !== this.id) {
-          this.error = this.title = this.tag = null
-        }
+    async setModel () {
+      // Reset on navigation changes
+      if (this.tag && this.tag.id !== this.id) {
+        this.error = this.title = this.tag = null
+      }
 
+      try {
+        // Set model
         this.tag = await TagModel.$find(this.id)
         this.title = this.tag.name
       } catch {
