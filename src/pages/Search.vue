@@ -1,8 +1,5 @@
 <template>
-  <q-page
-    :key="id"
-    class="container horizontal fluid"
-  >
+  <q-page class="container horizontal fluid">
     <template v-if="query">
       <component
         :is="typeComponent"
@@ -42,6 +39,7 @@ export default {
   components: {
     Overview: () => import('components/search/Overview'),
     Collections: () => import('components/search/Collections'),
+    Tags: () => import('components/search/Tags'),
     Videos: () => import('components/search/Videos')
   },
 
@@ -68,7 +66,6 @@ export default {
 
   computed: {
     ...mapFields({
-      id: 'search.id',
       type: 'search.type',
       query: 'search.query'
     }),
@@ -86,7 +83,6 @@ export default {
 
   methods: {
     setQuery (route) {
-      this.id = this.$sanitize(route.query.id || +new Date())
       this.type = this.$sanitize(route.query.t || '')
       this.query = this.$sanitize(route.query.q || '')
     }

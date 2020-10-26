@@ -87,17 +87,17 @@ export default {
 
     subscribe () {
       this.$echo.private(`video.${this.video.id}`)
-        .listen('.video.saved', (e) => {
-          this.setModel()
+      // .listen('.video.saved', (e) => {
+      //   this.setModel()
 
-          this.$q.notify({
-            type: 'info',
-            message: 'Video has been saved.',
-            progress: true,
-            timeout: 5000,
-            position: 'top'
-          })
-        })
+        //   this.$q.notify({
+        //     type: 'info',
+        //     message: 'Video has been saved.',
+        //     progress: true,
+        //     timeout: 5000,
+        //     position: 'top'
+        //   })
+        // })
         .listen('.video.updated', (e) => {
           this.setModel()
 

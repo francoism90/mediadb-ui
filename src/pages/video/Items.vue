@@ -28,7 +28,7 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
         >
           <video-item :video="item" />
         </q-intersection>
@@ -110,8 +110,8 @@ export default {
 
     async setModels () {
       const response = await VideoModel
-        .include('model', 'tags')
-        .append('duration', 'thumbnail_url', 'titles')
+        .include('model', 'collections', 'tags')
+        .append('duration', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

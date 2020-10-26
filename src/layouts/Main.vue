@@ -16,7 +16,7 @@
 
         <router-link
           :to="{ name: 'home' }"
-          class="gt-sm text-body2 text-grey-5"
+          class="gt-sm text-weight-medium text-grey-5"
         >
           MediaDB
         </router-link>
@@ -63,6 +63,10 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer class="footer transparent">
+      <div class="container fluid horizontal" />
+    </q-footer>
   </q-layout>
 </template>
 

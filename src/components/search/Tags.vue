@@ -28,9 +28,9 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 collection-item"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 tag-item"
         >
-          <collection-item :collection="item" />
+          <tag-item :tag="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -40,17 +40,17 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import CollectionModel from 'src/models/Collection'
+import TagModel from 'src/models/Tag'
 import PaginateModule from 'src/store/paginate'
 
 const { mapFields } = createHelpers({
-  getterType: 'collection-search/getOption',
-  mutationType: 'collection-search/setOption'
+  getterType: 'tag-search/getOption',
+  mutationType: 'tag-search/setOption'
 })
 
 export default {
   components: {
-    CollectionItem: () => import('components/collection/Item')
+    TagItem: () => import('components/tag/Item')
   },
 
   props: {
@@ -64,27 +64,26 @@ export default {
     return {
       sorters: [
         { label: 'Relevance', value: 'relevance' },
-        { label: 'Recommended', value: 'recommended' },
-        { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' }
+        { label: 'A-Z', value: 'name' },
+        { label: 'Number of Items', value: 'items' }
       ]
     }
   },
 
   meta () {
     return {
-      title: this.query || 'Collections'
+      title: this.query || 'Tags'
     }
   },
 
   computed: {
-    ...mapState('collection-search', [
+    ...mapState('tag-search', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('collection-search', [
+    ...mapGetters('tag-search', [
       'isLoaded',
       'isReady'
     ]),
@@ -95,12 +94,12 @@ export default {
   },
 
   created () {
-    if (!this.$store.hasModule('collection-search')) {
-      this.$store.registerModule('collection-search', PaginateModule)
+    if (!this.$store.hasModule('tag-search')) {
+      this.$store.registerModule('tag-search', PaginateModule)
     }
 
     this.initialize({
-      name: this.$route.params.id || null,
+      name: this.$route.query.q || null,
       options: {
         sorter: this.sorters[0]
       }
@@ -108,20 +107,19 @@ export default {
   },
 
   methods: {
-    ...mapActions('collection-search', [
+    ...mapActions('tag-search', [
       'initialize',
       'resetItems',
       'setPage'
     ]),
 
     async setModels () {
-      const response = await CollectionModel
+      const response = await TagModel
         .where('query', this.query)
-        .include('model', 'tags')
-        .append('item_count', 'thumbnail_url')
+        .append('item_count')
         .orderBy(this.sorter.value)
         .page(this.page)
-        .limit(12)
+        .limit(30)
         .get()
 
       this.setPage(response)

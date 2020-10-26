@@ -19,10 +19,10 @@
             {{ Number(video.views) | approximate }} views
           </div>
 
-          <titles
-            v-if="video.titles.length"
-            :items="video.titles"
-            class="q-pt-xs text-body2 text-weight-medium text-grey-4 ellipsis-2-lines"
+          <collections
+            v-if="video.relationships.collections.length"
+            :items="video.relationships.collections"
+            class="text-subtitle1 ellipsis-2-lines text-grey-5"
           />
 
           <div
@@ -37,12 +37,12 @@
           v-if="video.relationships.tags.length"
           :items="video.relationships.tags"
           class="q-pt-lg"
-          size="13px"
         />
 
         <div class="q-pt-lg">
           <div class="q-gutter-sm">
             <q-btn
+              v-if="video.stream_url"
               stack
               unelevated
               class="transparent-1"
@@ -59,9 +59,8 @@
               class="transparent-1"
               text-color="grey-1"
               size="13px"
-              icon="o_add"
-              label="Save To"
-              @click="saveModal"
+              icon="o_favorite_outline"
+              label="Favorite"
             />
 
             <q-btn
@@ -88,14 +87,13 @@
 
 <script>
 import EditComponent from 'components/video/Edit'
-import SaveComponent from 'components/video/Save'
 import WatchComponent from 'components/video/Watch'
 import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Tags: () => import('components/ui/Tags'),
-    Titles: () => import('components/ui/Titles')
+    Collections: () => import('components/ui/Collections'),
+    Tags: () => import('components/ui/Tags')
   },
 
   props: {
@@ -109,14 +107,6 @@ export default {
     editModal () {
       this.$q.dialog({
         component: EditComponent,
-        parent: this,
-        id: this.video.id || null
-      })
-    },
-
-    saveModal () {
-      this.$q.dialog({
-        component: SaveComponent,
         parent: this,
         id: this.video.id || null
       })

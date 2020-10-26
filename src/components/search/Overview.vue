@@ -118,7 +118,7 @@ export default {
     async setCollections () {
       const response = await CollectionModel
         .where('query', this.query)
-        .include('model')
+        .include('tags')
         .append('item_count', 'thumbnail_url')
         .orderBy('relevance')
         .page(1)

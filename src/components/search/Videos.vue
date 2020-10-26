@@ -102,7 +102,7 @@ export default {
     }
 
     this.initialize({
-      name: this.$route.params.id || null,
+      name: this.$route.query.q || null,
       options: {
         sorter: this.sorters[0]
       }
@@ -119,8 +119,8 @@ export default {
     async setModels () {
       const response = await VideoModel
         .where('query', this.query)
-        .include('model', 'tags')
-        .append('duration', 'thumbnail_url', 'titles')
+        .include('model', 'collections', 'tags')
+        .append('duration', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)
         .limit(12)

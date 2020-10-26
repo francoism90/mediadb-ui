@@ -10,12 +10,9 @@ export default class Video extends Model {
 
   relations () {
     return {
+      collections: Collection,
       tags: Tag
     }
-  }
-
-  collections () {
-    return this.hasMany(Collection)
   }
 
   get subtitles () {

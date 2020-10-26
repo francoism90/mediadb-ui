@@ -30,7 +30,6 @@
           v-if="collection.relationships.tags.length"
           :items="collection.relationships.tags"
           class="q-pt-lg"
-          size="13px"
         />
 
         <div class="q-pt-lg">

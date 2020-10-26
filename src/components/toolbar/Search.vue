@@ -52,8 +52,7 @@ export default {
       this.$router.push({
         name: 'search',
         query: {
-          q: this.query,
-          id: +new Date()
+          q: this.query
         }
       })
     }

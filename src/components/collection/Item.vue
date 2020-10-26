@@ -1,7 +1,7 @@
 <template>
   <q-card
-    square
-    class="bg-grey-12 collection-item"
+    flat
+    class="transparent collection-item"
     draggable="false"
   >
     <router-link :to="{ name: 'collection-details', params: { id: collection.id, slug: collection.slug }}">
@@ -10,17 +10,17 @@
         :src="collection.thumbnail_url"
         height="160px"
         loading="lazy"
-        class="bg-grey-8 cursor-pointer"
+        class="bg-grey-8 cursor-pointer rounded-borders"
         img-class="collection-placeholder"
       />
     </router-link>
 
-    <q-card-section class="q-py-md">
-      <div class="text-subtitle1 ellipsis-2-lines text-grey-5">
+    <q-card-section class="q-px-none collection-item-description">
+      <div class="text-subtitle1 ellipsis-2-lines">
         {{ collection.name }}
       </div>
 
-      <div class="text-subtitle1 ellipsis-2-lines text-grey-6">
+      <div class="text-subtitle2 ellipsis-2-lines text-grey-5">
         <span v-if="collection.type !== 'title'">
           {{ collection.relationships.model.name }} •
         </span>
@@ -30,7 +30,6 @@
       <tags
         v-if="collection.relationships.tags.length"
         :items="collection.relationships.tags"
-        class="q-pt-xs"
       />
     </q-card-section>
   </q-card>

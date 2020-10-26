@@ -36,12 +36,6 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
-    name: 'notifications',
-    path: '/notifications',
-    component: () => import('pages/Notifications.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
     name: 'search',
     path: '/search',
     component: () => import('pages/Search.vue'),
@@ -77,13 +71,6 @@ const routes = [
         path: '',
         component: () => import('pages/tag/Items.vue'),
         meta: { auth: true, layout: 'Main' }
-      },
-      {
-        name: 'tag-details',
-        path: 'details/:id/:slug?',
-        component: () => import('pages/tag/Details.vue'),
-        meta: { auth: true, layout: 'Main' },
-        props: true
       }
     ]
   },

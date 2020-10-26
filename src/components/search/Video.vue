@@ -1,7 +1,7 @@
 <template>
   <q-item
-    v-ripple
     clickable
+    manual-focus
     class="no-padding search-item"
     draggable="false"
     :to="{ name: 'video-details', params: { id: data.id, slug: data.slug } }"
@@ -9,12 +9,12 @@
     <q-item-section side>
       <q-avatar
         square
-        size="64px"
+        size="48px"
         color="grey-6"
         text-color="grey-3"
       >
         <q-img
-          :alt="data.name"
+          :alt="data.name.charAt(0)"
           :src="data.thumbnail_url"
           height="100%"
           width="100%"

@@ -89,6 +89,28 @@
             />
 
             <q-select
+              v-model="form.collections"
+              square
+              filled
+              :error-message="getError('collections')"
+              :error="hasError('collections')"
+              :input-debounce="300"
+              :options="collections"
+              :max-values="25"
+              clearable
+              hide-dropdown-icon
+              counter
+              use-chips
+              label="Collections"
+              option-label="name"
+              option-value="id"
+              stack-label
+              multiple
+              use-input
+              @filter="filterCollections"
+            />
+
+            <q-select
               v-model="form.tags"
               square
               filled
@@ -151,8 +173,9 @@
 <script>
 import { dialogHandler } from 'src/mixins/dialog'
 import { formHandler } from 'src/mixins/form'
-import VideoModel from 'src/models/Video'
+import CollectionModel from 'src/models/Collection'
 import TagModel from 'src/models/Tag'
+import VideoModel from 'src/models/Video'
 
 export default {
   mixins: [dialogHandler, formHandler],
@@ -168,6 +191,7 @@ export default {
     return {
       deleteDialog: false,
       video: null,
+      collections: [],
       tags: []
     }
   },
@@ -182,6 +206,7 @@ export default {
         id: this.video.id,
         name: this.video.name,
         overview: this.video.overview,
+        collections: this.video.relationships.collections,
         tags: this.video.relationships.tags
       })
     } catch {
@@ -197,6 +222,17 @@ export default {
   },
 
   methods: {
+    async filterCollections (val, update, abort) {
+      this.collections = await CollectionModel
+        .where('query', val || null)
+        .orderBy(val.length ? 'relevance' : 'updated_at')
+        .page(1)
+        .limit(5)
+        .$get()
+
+      update()
+    },
+
     async filterTags (val, update, abort) {
       this.tags = await TagModel
         .where('query', val || null)

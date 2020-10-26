@@ -1,15 +1,16 @@
 <template>
   <q-item
-    v-ripple
     clickable
+    manual-focus
     class="no-padding search-item"
+    active-class="text-body"
     draggable="false"
-    :to="{ name: 'tag-details', params: { id: data.id, slug: data.slug } }"
+    :to="{ name: 'search', query: { q: 'tag:' + data.slug } }"
   >
     <q-item-section side>
       <q-avatar
         square
-        size="64px"
+        size="48px"
         color="grey-6"
         text-color="grey-3"
       >

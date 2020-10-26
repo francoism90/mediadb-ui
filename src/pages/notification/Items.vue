@@ -1,20 +1,5 @@
 <template>
-  <div>
-    <q-btn-group
-      class="q-py-md"
-      unelevated
-    >
-      <q-select
-        v-model="type"
-        :options="types"
-        :loading="!isReady"
-        class="q-ml-lg"
-        dropdown-icon="keyboard_arrow_down"
-        dense
-        square
-      />
-    </q-btn-group>
-
+  <q-page class="container horizontal fluid">
     <q-pull-to-refresh
       :key="id"
       :disable="!isReady"
@@ -29,36 +14,35 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2 collection-item"
+          class="col-12 notification-item"
         >
-          {{ item }}
+          <notification-item :notification="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
-  </div>
+  </q-page>
 </template>
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import { createHelpers } from 'vuex-map-fields'
+import PaginateModule from 'src/store/paginate'
 import NotificationModel from 'src/models/Notification'
 
-const { mapFields } = createHelpers({
-  getterType: 'notifications/getOption',
-  mutationType: 'notifications/setOption'
-})
-
 export default {
-  components: {
-    // NotificationItem: () => import('components/notifications/Item')
+  preFetch ({ store }) {
+    if (!store.hasModule('notifications')) {
+      store.registerModule('notifications', PaginateModule)
+      store.dispatch('notifications/initialize')
+    }
   },
 
-  data () {
+  components: {
+    NotificationItem: () => import('components/notification/Item')
+  },
+
+  meta () {
     return {
-      types: [
-        { label: 'All Types', value: '*' },
-        { label: 'Unread', value: 'unread' }
-      ]
+      title: 'Notifications'
     }
   },
 
@@ -72,19 +56,7 @@ export default {
     ...mapGetters('notifications', [
       'isLoaded',
       'isReady'
-    ]),
-
-    ...mapFields([
-      'type'
     ])
-  },
-
-  created () {
-    this.initialize({
-      options: {
-        type: this.types[0]
-      }
-    })
   },
 
   methods: {
@@ -96,9 +68,9 @@ export default {
 
     async setModels () {
       const response = await NotificationModel
-        .where('type', this.type.value)
+        .orderBy('-created_at')
         .page(this.page)
-        .limit(12)
+        .limit(30)
         .get()
 
       this.setPage(response)

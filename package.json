@@ -12,10 +12,10 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.9",
+    "@quasar/extras": "^1.9.10",
     "@websanova/vue-auth": "^3.3.8",
     "approximate-number": "^2.0.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "laravel-echo": "^1.9.0",
     "lodash": "^4.17.20",
@@ -35,7 +35,7 @@
     "@quasar/app": "^2.1.5",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.11.0",
+    "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-config-standard": "^15.0.0",
     "eslint-loader": "^4.0.2",

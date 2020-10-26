@@ -2,9 +2,11 @@
   <q-item
     v-ripple
     clickable
+    manual-focus
     class="no-padding tag-item"
+    active-class="text-body"
     draggable="false"
-    :to="{ name: 'tag-details', params: { id: tag.id, slug: tag.slug }}"
+    :to="{ name: 'search', query: { q: 'tag:' + tag.slug }}"
   >
     <q-item-section side>
       <q-avatar
@@ -23,7 +25,7 @@
       </q-item-label>
 
       <q-item-label
-        class="text-grey-5"
+        class="text-grey-5 ellipsis-2-lines"
         caption
       >
         {{ Number(tag.item_count || 0) | approximate }} items
@@ -40,18 +42,6 @@ export default {
     tag: {
       type: TagModel,
       required: true
-    }
-  },
-
-  methods: {
-    onClick () {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: 'tag:' + this.tag.slug,
-          id: +new Date()
-        }
-      })
     }
   }
 }

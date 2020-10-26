@@ -12,16 +12,6 @@
         dense
         square
       />
-
-      <q-select
-        v-model="type"
-        :options="types"
-        :loading="!isReady"
-        class="q-ml-lg"
-        dropdown-icon="keyboard_arrow_down"
-        dense
-        square
-      />
     </q-btn-group>
 
     <q-pull-to-refresh
@@ -76,11 +66,6 @@ export default {
         { label: 'Trending', value: 'trending' },
         { label: 'Most Recent', value: '-created_at' },
         { label: 'Most Viewed', value: 'views' }
-      ],
-      types: [
-        { label: 'All Lists', value: '*' },
-        { label: 'My Lists', value: 'user' },
-        { label: 'Titles', value: 'title' }
       ]
     }
   },
@@ -112,8 +97,7 @@ export default {
   created () {
     this.initialize({
       options: {
-        sorter: this.sorters[0],
-        type: this.types[0]
+        sorter: this.sorters[0]
       }
     })
   },
@@ -127,8 +111,7 @@ export default {
 
     async setModels () {
       const response = await CollectionModel
-        .where('type', this.type.value)
-        .include('model', 'tags')
+        .include('tags')
         .append('item_count', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)

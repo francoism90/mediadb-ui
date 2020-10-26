@@ -1,20 +1,12 @@
 <template>
   <div
     v-if="items.length"
-    class="q-pb-xl"
+    class="q-pb-lg"
   >
-    <q-toolbar class="no-padding">
-      <q-toolbar-title class="text-caption text-uppercase text-grey">
+    <q-toolbar class="q-mb-xs">
+      <q-toolbar-title class="text-grey-1">
         {{ label }}
       </q-toolbar-title>
-
-      <router-link
-        v-close-popup
-        class="text-subtitle2 text-uppercase text-primary"
-        :to="{ name: 'search', query: { q: query, t: type, id: +new Date() } }"
-      >
-        View All
-      </router-link>
     </q-toolbar>
 
     <div class="row wrap justify-start items-start content-start q-col-gutter-md">
@@ -29,6 +21,15 @@
         />
       </q-intersection>
     </div>
+
+    <q-toolbar class="q-pt-sm">
+      <router-link
+        class="text-caption text-uppercase text-grey-5"
+        :to="{ name: 'search', query: { q: query, t: type } }"
+      >
+        Show All
+      </router-link>
+    </q-toolbar>
   </div>
 </template>
 

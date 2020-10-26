@@ -100,7 +100,7 @@ export default {
     }
 
     this.initialize({
-      name: this.$route.params.id || null,
+      name: this.$route.query.q || null,
       options: {
         sorter: this.sorters[0]
       }
@@ -117,7 +117,7 @@ export default {
     async setModels () {
       const response = await CollectionModel
         .where('query', this.query)
-        .include('model', 'tags')
+        .include('tags')
         .append('item_count', 'thumbnail_url')
         .orderBy(this.sorter.value)
         .page(this.page)
