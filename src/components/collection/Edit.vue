@@ -200,7 +200,7 @@ export default {
     async filterTags (val, update, abort) {
       this.tags = await TagModel
         .where('query', val || null)
-        .orderBy(val.length ? 'relevance' : 'items')
+        .orderBy(val.length ? 'recommended' : 'items')
         .page(1)
         .limit(5)
         .$get()

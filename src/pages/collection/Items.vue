@@ -1,18 +1,10 @@
 <template>
-  <q-page class="container horizontal fluid">
-    <q-btn-group
-      class="q-pb-md"
-      unelevated
-    >
-      <q-select
-        v-model="sorter"
-        :options="sorters"
-        :loading="!isReady"
-        dropdown-icon="keyboard_arrow_down"
-        dense
-        square
-      />
-    </q-btn-group>
+  <q-page class="container fluid">
+    <q-toolbar class="q-py-lg">
+      <sorters />
+      <q-space />
+      <filters />
+    </q-toolbar>
 
     <q-pull-to-refresh
       :key="id"
@@ -28,9 +20,9 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-2 collection-item"
+          class="col-xs-12 col-sm-6 col-md-3 col-lg-2 collection-item"
         >
-          <collection-item :collection="item" />
+          <item :collection="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -40,7 +32,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import PaginateModule from 'src/store/paginate'
 import CollectionModel from 'src/models/Collection'
 
 const { mapFields } = createHelpers({
@@ -49,25 +40,10 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('collections')) {
-      store.registerModule('collections', PaginateModule)
-    }
-  },
-
   components: {
-    CollectionItem: () => import('components/collection/Item')
-  },
-
-  data () {
-    return {
-      sorters: [
-        { label: 'Recommended', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
-        { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' }
-      ]
-    }
+    Item: () => import('components/collection/Item'),
+    Filters: () => import('components/collection/Filters'),
+    Sorters: () => import('components/collection/Sorters')
   },
 
   meta () {
@@ -90,14 +66,17 @@ export default {
 
     ...mapFields([
       'sorter',
-      'type'
+      'subscribed',
+      'query'
     ])
   },
 
   created () {
     this.initialize({
       options: {
-        sorter: this.sorters[0]
+        sorter: this.sorter || 'recommended',
+        subscribed: this.subscribed || null,
+        query: this.query || null
       }
     })
   },
@@ -111,9 +90,11 @@ export default {
 
     async setModels () {
       const response = await CollectionModel
+        .where('subscribed', this.subscribed)
+        .where('query', this.query)
         .include('tags')
         .append('item_count', 'thumbnail_url')
-        .orderBy(this.sorter.value)
+        .orderBy(this.sorter)
         .page(this.page)
         .limit(12)
         .get()

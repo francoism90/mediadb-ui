@@ -248,7 +248,7 @@ export default {
 
         await this.$q.fullscreen.exit()
       } catch {
-        //
+        console.error('Unable to enter fullscreen')
       }
     },
 
@@ -260,7 +260,7 @@ export default {
           await this.player.pause()
         }
       } catch {
-        //
+        console.error('Unable to set playing state')
       }
     }
   }

@@ -29,45 +29,44 @@
         <tags
           v-if="collection.relationships.tags.length"
           :items="collection.relationships.tags"
+          item-component="Collection"
           class="q-pt-lg"
         />
 
-        <div class="q-pt-lg">
-          <div class="q-gutter-sm">
-            <q-btn
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="primary"
-              size="13px"
-              icon="o_play_arrow"
-              label="Play All"
-              @click="queueModal"
-            />
+        <div class="q-pt-lg q-gutter-sm">
+          <q-btn
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="primary"
+            size="13px"
+            icon="o_play_arrow"
+            label="Play All"
+            @click="queueModal"
+          />
 
-            <q-btn
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="grey-1"
-              size="13px"
-              icon="o_add"
-              label="Subscribe"
-              @click="subscribeModal"
-            />
+          <q-btn
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="grey-1"
+            size="13px"
+            :icon="collection.is_subscribed ? 'o_check' : 'o_add'"
+            label="Subscribe"
+            @click="subscribeModal"
+          />
 
-            <q-btn
-              v-if="$auth.check({ permissions: 'edit collections'})"
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="grey-1"
-              size="13px"
-              icon="o_wysiwyg"
-              label="Edit Item"
-              @click="editModal"
-            />
-          </div>
+          <q-btn
+            v-if="$auth.check({ permissions: 'edit collections'})"
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="grey-1"
+            size="13px"
+            icon="o_wysiwyg"
+            label="Edit Item"
+            @click="editModal"
+          />
         </div>
       </div>
     </div>
@@ -84,7 +83,7 @@ import CollectionModel from 'src/models/Collection'
 
 export default {
   components: {
-    Tags: () => import('components/ui/Tags')
+    Tags: () => import('components/tag/List')
   },
 
   props: {
@@ -104,7 +103,12 @@ export default {
     },
 
     subscribeModal () {
-      //
+      if (this.collection.is_subscribed) {
+        this.collection.unsubscribe()
+        return
+      }
+
+      this.collection.subscribe()
     },
 
     queueModal () {

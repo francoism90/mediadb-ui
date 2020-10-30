@@ -4,7 +4,7 @@
       class="header bg-grey-14 row items-center no-wrap"
       height-hint="58"
     >
-      <q-toolbar class="container horizontal fluid">
+      <q-toolbar class="container fluid">
         <q-btn
           class="lt-md q-mr-sm"
           flat
@@ -71,6 +71,8 @@
 </template>
 
 <script>
+import PaginateModule from 'src/store/paginate'
+
 export default {
   components: {
     Account: () => import('components/toolbar/Account'),
@@ -80,14 +82,18 @@ export default {
 
   data () {
     return {
-      drawer: false,
+      drawer: true,
       breakpoint: 1023,
       links: [
         { label: 'Home', name: 'home', icon: 'o_home' },
         { label: 'Video', name: 'video', icon: 'o_theaters' },
         { label: 'Browse', name: 'collection', icon: 'o_folder' },
-        { label: 'Tags', name: 'tag', icon: 'o_label' },
-        { label: 'Settings', name: '404', icon: 'o_settings' }
+        { label: 'Tags', name: 'tag', icon: 'o_label' }
+      ],
+      stores: [
+        { name: 'collections', module: PaginateModule },
+        { name: 'tags', module: PaginateModule },
+        { name: 'videos', module: PaginateModule }
       ]
     }
   },
@@ -100,34 +106,35 @@ export default {
 
   watch: {
     '$q.screen.width' () {
-      this.setVisibility()
+      this.setDrawer()
     }
   },
 
   created () {
-    this.setPusher()
+    this.initialize()
   },
 
   mounted () {
-    this.setListener()
-    this.setVisibility()
+    this.setDrawer()
   },
 
   beforeDestroy () {
     try {
       this.$echo.leave(`user.${this.id}`)
+      this.unregisterStores()
     } catch {
       //
     }
   },
 
   methods: {
-    setPusher () {
+    initialize () {
+      // Set pusher user token
       const userToken = this.$auth.token() || null
-      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
-    },
 
-    setListener () {
+      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
+
+      // Listen for user notifications
       this.$echo.private(`user.${this.userId}`)
         .notification((notification = {}) => {
           this.$q.notify({
@@ -139,11 +146,29 @@ export default {
             position: 'top'
           })
         })
+
+      // Register stores
+      this.registerStores()
     },
 
-    setVisibility () {
-      const screenWidth = this.$q.screen.width
-      this.drawer = (screenWidth > this.breakpoint)
+    registerStores () {
+      for (const store of this.stores) {
+        if (!this.$store.hasModule(store.name)) {
+          this.$store.registerModule(store.name, store.module)
+        }
+      }
+    },
+
+    unregisterStores () {
+      for (const store of this.stores) {
+        if (this.$store.hasModule(store.name)) {
+          this.$store.unregisterModule(store.name, store.module)
+        }
+      }
+    },
+
+    setDrawer () {
+      this.drawer = (this.$q.screen.width > this.breakpoint)
     }
   }
 }

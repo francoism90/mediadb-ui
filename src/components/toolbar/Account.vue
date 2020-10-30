@@ -33,6 +33,12 @@
 
         <q-item clickable>
           <q-item-section no-wrap>
+            Settings
+          </q-item-section>
+        </q-item>
+
+        <q-item clickable>
+          <q-item-section no-wrap>
             Help
           </q-item-section>
         </q-item>

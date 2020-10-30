@@ -1,18 +1,10 @@
 <template>
-  <q-page class="container horizontal fluid">
-    <q-btn-group
-      class="q-pb-md"
-      unelevated
-    >
-      <q-select
-        v-model="sorter"
-        :options="sorters"
-        :loading="!isReady"
-        dropdown-icon="keyboard_arrow_down"
-        dense
-        square
-      />
-    </q-btn-group>
+  <q-page class="container fluid">
+    <q-toolbar class="q-py-lg">
+      <sorters />
+      <q-space />
+      <filters />
+    </q-toolbar>
 
     <q-pull-to-refresh
       :key="id"
@@ -30,7 +22,7 @@
           :disable="!isReady"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
         >
-          <video-item :video="item" />
+          <item :video="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -40,34 +32,18 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import PaginateModule from 'src/store/paginate'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'video/getOption',
-  mutationType: 'video/setOption'
+  getterType: 'videos/getOption',
+  mutationType: 'videos/setOption'
 })
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('video')) {
-      store.registerModule('video', PaginateModule)
-    }
-  },
-
   components: {
-    VideoItem: () => import('components/video/Item')
-  },
-
-  data () {
-    return {
-      sorters: [
-        { label: 'Recommended', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
-        { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' }
-      ]
-    }
+    Item: () => import('components/video/Item'),
+    Filters: () => import('components/video/Filters'),
+    Sorters: () => import('components/video/Sorters')
   },
 
   meta () {
@@ -77,32 +53,36 @@ export default {
   },
 
   computed: {
-    ...mapState('video', [
+    ...mapState('videos', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('video', [
+    ...mapGetters('videos', [
       'isLoaded',
       'isReady'
     ]),
 
     ...mapFields([
-      'sorter'
+      'favorited',
+      'sorter',
+      'query'
     ])
   },
 
   created () {
     this.initialize({
       options: {
-        sorter: this.sorters[0]
+        sorter: this.sorter || 'recommended',
+        favorited: this.favorited || null,
+        query: this.query || null
       }
     })
   },
 
   methods: {
-    ...mapActions('video', [
+    ...mapActions('videos', [
       'initialize',
       'resetItems',
       'setPage'
@@ -110,9 +90,11 @@ export default {
 
     async setModels () {
       const response = await VideoModel
+        .where('favorited', this.favorited)
+        .where('query', this.query)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
-        .orderBy(this.sorter.value)
+        .orderBy(this.sorter)
         .page(this.page)
         .limit(12)
         .get()

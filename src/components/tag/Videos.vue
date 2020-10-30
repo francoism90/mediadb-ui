@@ -1,7 +1,24 @@
 <template>
-  <div class="container">
-    <div class="text-caption text-uppercase text-grey">
-      Related
+  <div
+    v-if="getTotal > 0"
+    class="container q-pt-lg"
+  >
+    <div class="row no-wrap justify-between items-center content-start">
+      <div class="col">
+        <div class="text-h6 text-grey-5">
+          Videos
+        </div>
+      </div>
+
+      <div class="col-auto">
+        <q-btn
+          flat
+          color="grey"
+          @click="onClick"
+        >
+          See All
+        </q-btn>
+      </div>
     </div>
 
     <q-separator spaced />
@@ -11,11 +28,7 @@
       :disable="!isReady"
       @refresh="onRefresh"
     >
-      <q-infinite-scroll
-        :disable="!isReady"
-        class="row wrap justify-start items-start content-start q-col-gutter-md q-pt-sm"
-        @load="onLoad"
-      >
+      <div class="row wrap justify-start items-start content-start q-col-gutter-md q-pt-sm">
         <q-intersection
           v-for="(item, index) in data"
           :key="index"
@@ -24,14 +37,21 @@
         >
           <video-item :video="item" />
         </q-intersection>
-      </q-infinite-scroll>
+      </div>
     </q-pull-to-refresh>
   </div>
 </template>
 
 <script>
+import { createHelpers } from 'vuex-map-fields'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import TagModel from 'src/models/Tag'
 import VideoModel from 'src/models/Video'
+
+const { mapFields } = createHelpers({
+  getterType: 'videos/getOption',
+  mutationType: 'videos/setOption'
+})
 
 export default {
   components: {
@@ -39,33 +59,40 @@ export default {
   },
 
   props: {
-    video: {
-      type: VideoModel,
+    tag: {
+      type: TagModel,
       required: true
     }
   },
 
   computed: {
-    ...mapState('video-related', [
+    ...mapState('tag-videos', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('video-related', [
+    ...mapGetters('tag-videos', [
       'isLoaded',
-      'isReady'
+      'isReady',
+      'getTotal'
+    ]),
+
+    ...mapFields([
+      'query'
     ])
   },
 
   created () {
     this.initialize({
-      name: this.video.id
+      name: this.tag.id
     })
+
+    this.setModels()
   },
 
   methods: {
-    ...mapActions('video-related', [
+    ...mapActions('tag-videos', [
       'initialize',
       'resetItems',
       'setPage'
@@ -73,25 +100,25 @@ export default {
 
     async setModels () {
       const response = await VideoModel
-        .where('related', this.video.id)
+        .where('query', `tag:${this.tag.slug}`)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
         .orderBy('recommended')
-        .page(this.page)
+        .page(1)
         .limit(12)
         .get()
 
       this.setPage(response)
     },
 
-    async onLoad (index, done) {
+    async onRefresh (done) {
       await this.setModels()
-      done(this.isLoaded)
+      done()
     },
 
-    async onRefresh (done) {
-      await this.resetItems()
-      done()
+    onClick () {
+      this.query = 'tag:' + this.tag.slug
+      this.$router.push({ name: 'video' })
     }
   }
 }

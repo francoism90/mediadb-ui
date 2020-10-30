@@ -1,0 +1,95 @@
+<template>
+  <q-btn
+    dense
+    color="grey-12"
+    text-color="white"
+    unelevated
+    icon-right="o_filter_alt"
+    :ripple="false"
+  >
+    <q-menu
+      cover
+      anchor="top right"
+      :dark="false"
+      :transition-show="null"
+      :transition-hide="null"
+    >
+      <q-toolbar
+        class="q-pa-md"
+        style="width: 250px; max-width: 100vw;"
+      >
+        <q-toolbar-title class="text-black text-weight-light">
+          Filters
+        </q-toolbar-title>
+
+        <q-btn
+          v-close-popup
+          flat
+          dense
+          color="black"
+          icon="o_close"
+          size="xs"
+        />
+      </q-toolbar>
+
+      <q-separator color="grey-2" />
+
+      <q-list
+        :dark="false"
+        class="text-black text-weight-light"
+      >
+        <q-item
+          v-for="(item, index) in types"
+          :key="index"
+          v-ripple
+          tag="label"
+          :dark="false"
+        >
+          <q-item-section side>
+            <q-checkbox
+              v-model="type"
+              dense
+              size="xs"
+              :val="item.value"
+              :dark="false"
+            />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>
+              {{ item.label }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-menu>
+  </q-btn>
+</template>
+
+<script>
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'tags/getOption',
+  mutationType: 'tags/setOption'
+})
+
+export default {
+  data () {
+    return {
+      types: [
+        { label: 'Actors', value: 'actor' },
+        { label: 'Genres', value: 'genre' },
+        { label: 'Languages', value: 'language' },
+        { label: 'Studios', value: 'studio' }
+      ]
+    }
+  },
+
+  computed: {
+    ...mapFields([
+      'type'
+    ])
+  }
+}
+</script>

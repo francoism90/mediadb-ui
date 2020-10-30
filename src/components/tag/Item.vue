@@ -6,7 +6,7 @@
     class="no-padding tag-item"
     active-class="text-body"
     draggable="false"
-    :to="{ name: 'search', query: { q: 'tag:' + tag.slug }}"
+    :to="{ name: 'tag-details', params: { id: tag.id, slug: tag.slug }}"
   >
     <q-item-section side>
       <q-avatar
@@ -28,7 +28,7 @@
         class="text-grey-5 ellipsis-2-lines"
         caption
       >
-        {{ Number(tag.item_count || 0) | approximate }} items
+        {{ Number(tag.items || 0) | approximate }} items
       </q-item-label>
     </q-item-section>
   </q-item>

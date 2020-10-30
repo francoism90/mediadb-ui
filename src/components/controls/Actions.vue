@@ -5,30 +5,6 @@
   >
     <div class="col">
       <q-btn
-        v-shortkey="['arrowleft']"
-        flat
-        dense
-        rounded
-        size="18px"
-        color="white"
-        icon="o_replay_10"
-        @click="replay"
-        @shortkey="replay"
-      />
-
-      <q-btn
-        v-shortkey="['arrowright']"
-        flat
-        dense
-        round
-        size="18px"
-        color="white"
-        icon="o_forward_10"
-        @click="forward"
-        @shortkey="forward"
-      />
-
-      <q-btn
         v-if="$auth.check({ permissions: 'edit videos' })"
         v-shortkey="['r']"
         class="hidden"
@@ -109,18 +85,6 @@ export default {
       })
     },
 
-    replay () {
-      this.seekTime = this.currentTime - 10
-    },
-
-    forward () {
-      this.seekTime = this.currentTime + 10
-    },
-
-    toggleFullscreen () {
-      this.fullscreen = !this.fullscreen
-    },
-
     settingsModal () {
       this.$q.dialog({
         component: SettingsComponent,
@@ -129,6 +93,10 @@ export default {
         playbackRate: this.playbackRate,
         textTracks: this.textTracks
       })
+    },
+
+    toggleFullscreen () {
+      this.fullscreen = !this.fullscreen
     }
   }
 }

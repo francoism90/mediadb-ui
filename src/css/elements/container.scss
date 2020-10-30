@@ -13,14 +13,4 @@
   &.fluid {
     max-width: 100%;
   }
-
-  &.horizontal {
-    padding-top: $space-base / 1.5 !important;
-    padding-bottom: $space-base / 1.5 !important;
-
-    @media (max-width: $breakpoint-sm-max) {
-      padding-top: $space-base / 2.5 !important;
-      padding-bottom: $space-base / 2.5 !important;
-    }
-  }
 }

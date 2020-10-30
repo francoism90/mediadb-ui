@@ -76,14 +76,17 @@ $dark: $grey-11;
 $separator-color: $grey-11;
 $separator-dark-color: $grey-12;
 
-$generic-border-radius: 2px;
+$generic-border-radius: 4px;
 $typography-font-family: 'Inter', -apple-system, 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
 $min-line-height: 1.2;
 
-$button-border-radius: 2px;
-$button-padding: 4px 12px;
+$button-border-radius: 4px;
+$button-padding: 6px 14px;
+$button-dense-padding: 6px 8px;
 $button-font-size: 0.875rem;
 $button-font-weight: map-get($text-weights, 'regular');
+$button-rounded-border-radius: 12px;
+$button-push-border-radius: 4px;
 
 $toolbar-min-height: 40px;
 $toolbar-padding : 0;
@@ -95,7 +98,9 @@ $toolbar-title-padding: 0;
 
 $layout-border: $grey-5;
 
-$menu-background: $grey-11;
+$menu-background: white;
+$menu-box-shadow: none;
+$menu-max-width: 95vw;
 
 $tooltip-color: $grey-1;
 $tooltip-background: $grey-6;

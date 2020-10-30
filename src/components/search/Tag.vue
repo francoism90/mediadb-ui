@@ -1,45 +1,39 @@
 <template>
-  <q-item
-    clickable
-    manual-focus
-    class="no-padding search-item"
-    active-class="text-body"
-    draggable="false"
-    :to="{ name: 'search', query: { q: 'tag:' + data.slug } }"
-  >
-    <q-item-section side>
-      <q-avatar
-        square
-        size="48px"
-        color="grey-6"
-        text-color="grey-3"
-      >
-        {{ data.name.charAt(0) }}
-      </q-avatar>
-    </q-item-section>
-
-    <q-item-section>
-      <q-item-label class="ellipsis">
-        {{ data.name }}
-      </q-item-label>
-
-      <q-item-label
-        class="text-grey-5 ellipsis-2-lines"
-        caption
-      >
-        {{ Number(data.item_count || 0) | approximate }} items
-      </q-item-label>
-    </q-item-section>
-  </q-item>
+  <q-form class="toolbar-input">
+    <q-input
+      v-model="query"
+      debounce="750"
+      type="search"
+      placeholder="Search tags"
+      clearable
+      dense
+      square
+      filled
+      input-class="text-grey-5"
+    >
+      <template #prepend>
+        <q-icon
+          name="search"
+          color="grey-5"
+        />
+      </template>
+    </q-input>
+  </q-form>
 </template>
 
 <script>
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'tags/getOption',
+  mutationType: 'tags/setOption'
+})
+
 export default {
-  props: {
-    data: {
-      type: Object,
-      required: true
-    }
+  computed: {
+    ...mapFields([
+      'query'
+    ])
   }
 }
 </script>

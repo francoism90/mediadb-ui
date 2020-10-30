@@ -10,9 +10,7 @@ export function setReady (state, payload = false) {
 }
 
 export function concatData (state, payload = []) {
-  const currentData = state.data.concat(payload)
-
-  state.data = currentData
+  state.data = state.data.concat(payload)
 }
 
 export function setData (state, payload = []) {
@@ -41,6 +39,7 @@ export function setOption (state, payload) {
   state.data = []
   state.meta = {}
   state.page = 1
+
   state.id = +new Date()
 }
 

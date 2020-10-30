@@ -14,6 +14,13 @@
 </template>
 
 <script>
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'collections/getOption',
+  mutationType: 'collections/setOption'
+})
+
 export default {
   props: {
     items: {
@@ -22,14 +29,19 @@ export default {
     }
   },
 
+  computed: {
+    ...mapFields([
+      'query'
+    ])
+  },
+
   methods: {
     onClick (model) {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: 'tag:' + model.slug
-        }
-      })
+      this.query = 'tag:' + model.slug
+
+      if (this.$route.name !== 'collection') {
+        this.$router.push({ name: 'collection' })
+      }
     }
   }
 }

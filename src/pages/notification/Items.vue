@@ -1,5 +1,5 @@
 <template>
-  <q-page class="container horizontal fluid">
+  <q-page class="container fluid">
     <q-pull-to-refresh
       :key="id"
       :disable="!isReady"

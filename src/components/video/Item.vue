@@ -10,7 +10,7 @@
         :src="video.thumbnail_url"
         height="180px"
         loading="lazy"
-        class="bg-grey-8 cursor-pointer rounded-borders"
+        class="bg-grey-8 cursor-pointer"
         img-class="video-placeholder"
       >
         <div class="absolute-bottom-right">
@@ -40,6 +40,7 @@
       <tags
         v-if="video.relationships.tags.length"
         :items="video.relationships.tags"
+        item-component="Video"
       />
     </q-card-section>
   </q-card>
@@ -50,8 +51,8 @@ import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Collections: () => import('components/ui/Collections'),
-    Tags: () => import('components/ui/Tags')
+    Collections: () => import('components/collection/List'),
+    Tags: () => import('components/tag/List')
   },
 
   props: {

@@ -36,45 +36,45 @@
         <tags
           v-if="video.relationships.tags.length"
           :items="video.relationships.tags"
+          item-component="Video"
           class="q-pt-lg"
         />
 
-        <div class="q-pt-lg">
-          <div class="q-gutter-sm">
-            <q-btn
-              v-if="video.stream_url"
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="primary"
-              size="13px"
-              icon="o_play_arrow"
-              label="Watch"
-              @click="watchModal"
-            />
+        <div class="q-pt-lg q-gutter-sm">
+          <q-btn
+            v-if="video.stream_url"
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="primary"
+            size="13px"
+            icon="o_play_arrow"
+            label="Watch"
+            @click="watchModel"
+          />
 
-            <q-btn
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="grey-1"
-              size="13px"
-              icon="o_favorite_outline"
-              label="Favorite"
-            />
+          <q-btn
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="grey-1"
+            size="13px"
+            :icon="video.is_favorited ? 'o_favorite' : 'o_favorite_outline'"
+            label="Favorite"
+            @click="favoriteModel"
+          />
 
-            <q-btn
-              v-if="$auth.check({ permissions: 'edit videos'})"
-              stack
-              unelevated
-              class="transparent-1"
-              text-color="grey-1"
-              size="13px"
-              icon="o_wysiwyg"
-              label="Edit Item"
-              @click="editModal"
-            />
-          </div>
+          <q-btn
+            v-if="$auth.check({ permissions: 'edit videos'})"
+            stack
+            unelevated
+            class="transparent-1"
+            text-color="grey-1"
+            size="13px"
+            icon="o_wysiwyg"
+            label="Edit Item"
+            @click="editModel"
+          />
         </div>
       </div>
     </div>
@@ -92,8 +92,8 @@ import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Collections: () => import('components/ui/Collections'),
-    Tags: () => import('components/ui/Tags')
+    Collections: () => import('components/collection/List'),
+    Tags: () => import('components/tag/List')
   },
 
   props: {
@@ -104,7 +104,7 @@ export default {
   },
 
   methods: {
-    editModal () {
+    editModel () {
       this.$q.dialog({
         component: EditComponent,
         parent: this,
@@ -112,7 +112,16 @@ export default {
       })
     },
 
-    watchModal () {
+    favoriteModel () {
+      if (this.video.is_favorited) {
+        this.video.unfavorite()
+        return
+      }
+
+      this.video.favorite()
+    },
+
+    watchModel () {
       this.$q.dialog({
         component: WatchComponent,
         parent: this,

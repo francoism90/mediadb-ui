@@ -6,7 +6,27 @@ export default class Collection extends Model {
     return 'collections'
   }
 
-  tags () {
-    return this.hasMany(Tag)
+  relations () {
+    return {
+      tags: Tag
+    }
+  }
+
+  subscribe () {
+    return this.request({
+      method: 'POST',
+      url: `${this.endpoint()}/subscribe`
+    }).then((response) => {
+      return Object.assign(this, response.data)
+    })
+  }
+
+  unsubscribe () {
+    return this.request({
+      method: 'DELETE',
+      url: `${this.endpoint()}/subscribe`
+    }).then((response) => {
+      return Object.assign(this, response.data)
+    })
   }
 }

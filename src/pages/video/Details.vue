@@ -16,7 +16,7 @@ import PaginateModule from 'src/store/paginate'
 import VideoModel from 'src/models/Video'
 
 export default {
-  preFetch ({ store, currentRoute }) {
+  preFetch ({ store }) {
     if (!store.hasModule('video-related')) {
       store.registerModule('video-related', PaginateModule)
     }
@@ -48,7 +48,7 @@ export default {
   },
 
   watch: {
-    $route: 'setModel'
+    $route: 'initialize'
   },
 
   meta () {
@@ -58,7 +58,7 @@ export default {
   },
 
   created () {
-    this.setModel()
+    this.initialize()
   },
 
   beforeDestroy () {
@@ -66,17 +66,15 @@ export default {
   },
 
   methods: {
-    async setModel () {
-      // Reset on navigation changes
+    async initialize () {
+      this.unsubscribe()
+
       if (this.video && this.video.id !== this.id) {
-        this.unsubscribe()
         this.error = this.title = this.video = null
       }
 
       try {
-        // Set model
-        this.video = await VideoModel.$find(this.id)
-        this.title = this.video.name
+        await this.setModel()
 
         // Subscribe to events
         this.subscribe()
@@ -85,21 +83,18 @@ export default {
       }
     },
 
+    async setModel () {
+      this.video = await VideoModel.$find(this.id)
+      this.title = this.video.name
+    },
+
     subscribe () {
       this.$echo.private(`video.${this.video.id}`)
-      // .listen('.video.saved', (e) => {
-      //   this.setModel()
-
-        //   this.$q.notify({
-        //     type: 'info',
-        //     message: 'Video has been saved.',
-        //     progress: true,
-        //     timeout: 5000,
-        //     position: 'top'
-        //   })
-        // })
-        .listen('.video.updated', (e) => {
-          this.setModel()
+        .listen('.video.favorited', async (e) => {
+          await this.setModel()
+        })
+        .listen('.video.updated', async (e) => {
+          await this.setModel()
 
           this.$q.notify({
             type: 'info',

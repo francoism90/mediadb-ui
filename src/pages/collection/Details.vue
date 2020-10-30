@@ -48,7 +48,7 @@ export default {
   },
 
   watch: {
-    $route: 'setModel'
+    $route: 'initialize'
   },
 
   meta () {
@@ -58,7 +58,7 @@ export default {
   },
 
   created () {
-    this.setModel()
+    this.initialize()
   },
 
   beforeDestroy () {
@@ -66,20 +66,15 @@ export default {
   },
 
   methods: {
-    async setModel () {
-      // Reset on navigation changes
-      if (this.collection && this.collection.id !== this.id) {
-        this.unsubscribe()
-        this.collection = this.error = this.title = null
+    async initialize () {
+      this.unsubscribe()
 
-        // Reset related store
-        this.$store.dispatch('collection-videos/resetState')
+      if (this.collection && this.collection.id !== this.id) {
+        this.collection = this.error = this.title = null
       }
 
       try {
-        // Set model
-        this.collection = await CollectionModel.$find(this.id)
-        this.title = this.collection.name
+        await this.setModel()
 
         // Subscribe to events
         this.subscribe()
@@ -88,10 +83,18 @@ export default {
       }
     },
 
+    async setModel () {
+      this.collection = await CollectionModel.$find(this.id)
+      this.title = this.collection.name
+    },
+
     subscribe () {
       this.$echo.private(`collection.${this.id}`)
-        .listen('.collection.updated', (e) => {
-          this.setModel()
+        .listen('.collection.subscribed', async (e) => {
+          await this.setModel()
+        })
+        .listen('.collection.updated', async (e) => {
+          await this.setModel()
 
           this.$q.notify({
             type: 'info',

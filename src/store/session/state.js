@@ -1,8 +1,8 @@
 export default function () {
   return {
     search: {
-      type: '',
-      query: ''
+      query: '',
+      id: null
     }
   }
 }

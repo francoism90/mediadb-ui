@@ -1,5 +1,5 @@
 <template>
-  <div v-if="metadata && model">
+  <div class="player-element">
     <q-img
       v-if="seekerHover"
       :position="tooltipPosition"

@@ -16,7 +16,7 @@ export default function () {
       error: false,
       metadata: false,
       paused: true,
-      play: false,
+      play: null,
       seekTime: 0,
       tracks: [],
       waiting: true

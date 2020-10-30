@@ -36,12 +36,6 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
-    name: 'search',
-    path: '/search',
-    component: () => import('pages/Search.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
     path: '/collections',
     component: () => import('pages/Collection.vue'),
     meta: { auth: true, layout: 'Main' },
@@ -71,6 +65,13 @@ const routes = [
         path: '',
         component: () => import('pages/tag/Items.vue'),
         meta: { auth: true, layout: 'Main' }
+      },
+      {
+        name: 'tag-details',
+        path: 'details/:id/:slug?',
+        component: () => import('pages/tag/Details.vue'),
+        meta: { auth: true, layout: 'Main' },
+        props: true
       }
     ]
   },

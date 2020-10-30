@@ -213,9 +213,7 @@ export default {
 
   methods: {
     async frameshot () {
-      await this.$http.patch(`videos/${this.video.id}/frameshot`, {
-        timecode: this.currentTime
-      })
+      await this.video.frameshot()
     },
 
     replay () {

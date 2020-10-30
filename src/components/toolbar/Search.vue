@@ -1,60 +1,46 @@
 <template>
-  <q-form
-    class="toolbar-input"
-    @submit="onSubmit"
-  >
-    <q-input
-      v-model="query"
-      type="search"
-      placeholder="Search"
-      clearable
-      dense
-      square
-      filled
-      input-class="text-grey-5"
-    >
-      <template #prepend>
-        <q-icon
-          name="search"
-          color="grey-5"
-        />
-      </template>
-    </q-input>
-  </q-form>
+  <component
+    :is="type.component"
+    v-if="type"
+  />
 </template>
 
 <script>
+import { find } from 'lodash'
+
 export default {
+  components: {
+    Collection: () => import('components/search/Collection'),
+    Tag: () => import('components/search/Tag'),
+    Video: () => import('components/search/Video')
+  },
+
   data () {
     return {
-      query: ''
+      type: null,
+      types: [
+        { name: 'collection', component: 'Collection' },
+        { name: 'tag', component: 'Tag' },
+        { name: 'video', component: 'Video' }
+      ]
     }
   },
 
   watch: {
     '$route' () {
-      this.setQuery()
+      this.initialize()
     }
   },
 
   created () {
-    this.setQuery()
+    this.initialize()
   },
 
   methods: {
-    setQuery () {
-      if (this.$route.name === 'search') {
-        this.query = this.$route.query.q || this.query
-      }
-    },
+    initialize () {
+      const routeName = this.$route.name || 'home'
 
-    onSubmit () {
-      this.$router.push({
-        name: 'search',
-        query: {
-          q: this.query
-        }
-      })
+      this.type = find(this.types, { name: routeName }) || null
     }
   }
 }
