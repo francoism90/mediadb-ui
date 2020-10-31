@@ -72,6 +72,10 @@ export default {
     ]),
 
     async setModels () {
+      if (this.page >= 3) {
+        return
+      }
+
       const response = await VideoModel
         .where('related', this.video.id)
         .include('model', 'collections', 'tags')

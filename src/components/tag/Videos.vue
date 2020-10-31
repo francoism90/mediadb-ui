@@ -12,12 +12,12 @@
 
       <div class="col-auto">
         <q-btn
+          dense
           flat
           color="grey"
+          label="See All"
           @click="onClick"
-        >
-          See All
-        </q-btn>
+        />
       </div>
     </div>
 

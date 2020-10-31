@@ -5,6 +5,28 @@
   >
     <div class="col">
       <q-btn
+        :icon="paused ? 'o_play_arrow' : 'o_pause'"
+        flat
+        dense
+        round
+        size="18px"
+        color="white"
+        :disable="isLoading"
+        @click="togglePlay"
+      />
+
+      <q-btn
+        icon="o_forward_10"
+        flat
+        dense
+        round
+        size="18px"
+        color="white"
+        :disable="isLoading"
+        @click="forward"
+      />
+
+      <q-btn
         v-if="$auth.check({ permissions: 'edit videos' })"
         v-shortkey="['r']"
         class="hidden"
@@ -14,6 +36,7 @@
         size="18px"
         color="white"
         icon="o_movie_creation"
+        :disable="isLoading"
         @click="frameshot"
         @shortkey="frameshot"
       />
@@ -67,15 +90,23 @@ const { mapFields } = createHelpers({
 export default {
   computed: {
     ...mapFields({
+      buffered: 'data.buffered',
       currentTime: 'data.currentTime',
       duration: 'data.duration',
       fullscreen: 'fullscreen',
-      metadata: 'data.model',
+      metadata: 'data.metadata',
       model: 'data.model',
+      paused: 'data.paused',
+      play: 'data.play',
       playbackRate: 'playbackRate',
       seekTime: 'data.seekTime',
-      settings: 'settings'
-    })
+      settings: 'settings',
+      waiting: 'data.waiting'
+    }),
+
+    isLoading () {
+      return !this.buffered || !this.metadata || this.waiting
+    }
   },
 
   methods: {
@@ -83,6 +114,10 @@ export default {
       await this.$http.patch(`videos/${this.model.id}/frameshot`, {
         timecode: this.currentTime
       })
+    },
+
+    forward () {
+      this.seekTime = this.currentTime + 10
     },
 
     settingsModal () {
@@ -97,6 +132,10 @@ export default {
 
     toggleFullscreen () {
       this.fullscreen = !this.fullscreen
+    },
+
+    togglePlay () {
+      this.play = !!this.paused
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="text-caption text-uppercase text-grey">
+    <div class="text-h6 text-grey-5">
       Videos
     </div>
 

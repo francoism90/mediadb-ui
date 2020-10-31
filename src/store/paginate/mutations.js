@@ -9,6 +9,14 @@ export function setReady (state, payload = false) {
   state.ready = payload
 }
 
+export function setId (state, payload = null) {
+  state.id = payload
+}
+
+export function setName (state, payload = null) {
+  state.name = payload
+}
+
 export function concatData (state, payload = []) {
   state.data = state.data.concat(payload)
 }
@@ -21,14 +29,6 @@ export function setMeta (state, payload = {}) {
   state.meta = payload
 }
 
-export function setId (state, payload = null) {
-  state.id = payload
-}
-
-export function setName (state, payload = null) {
-  state.name = payload
-}
-
 export function setPage (state, payload = 1) {
   state.page = payload
 }
@@ -36,10 +36,12 @@ export function setPage (state, payload = 1) {
 export function setOption (state, payload) {
   updateField(state.options, payload)
 
+  // Reset data
   state.data = []
   state.meta = {}
   state.page = 1
 
+  // Increase id
   state.id = +new Date()
 }
 

@@ -11,7 +11,7 @@
       width="160px"
     >
       <div class="absolute-bottom text-center">
-        <span class="q-py-xs q-px-sm text-caption transparent-4">
+        <span class="q-py-xs q-px-sm text-caption text-white transparent-4">
           {{ seekerFrameTime | timestamp }}
         </span>
       </div>

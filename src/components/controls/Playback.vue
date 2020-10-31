@@ -18,6 +18,7 @@
 
       <q-btn
         v-shortkey="['space']"
+        flat
         dense
         size="36px"
         text-color="white"

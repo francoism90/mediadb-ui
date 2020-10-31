@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="getTotal > 0"
-    class="container q-pt-lg"
+    class="container fluid q-pt-lg"
   >
     <div class="row no-wrap justify-between items-center content-start">
       <div class="col">
@@ -12,12 +12,12 @@
 
       <div class="col-auto">
         <q-btn
+          dense
           flat
           color="grey"
+          label="See All"
           @click="onClick"
-        >
-          See All
-        </q-btn>
+        />
       </div>
     </div>
 
