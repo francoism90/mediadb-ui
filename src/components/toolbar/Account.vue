@@ -2,51 +2,54 @@
   <q-btn
     dense
     flat
-    round
+    unelevated
     icon="o_person"
+    :ripple="false"
   >
     <q-menu
       auto-close
-      square
-      max-width="300px"
+      cover
+      anchor="top right"
+      :dark="false"
+      :transition-show="null"
+      :transition-hide="null"
     >
+      <q-toolbar class="dropdown q-pa-md">
+        <q-toolbar-title
+          v-if="$auth.user() && $auth.user().name"
+          class="text-black text-weight-light"
+        >
+          {{ $auth.user().name }}
+        </q-toolbar-title>
+
+        <q-btn
+          v-close-popup
+          flat
+          dense
+          color="black"
+          icon="o_close"
+          size="xs"
+        />
+      </q-toolbar>
+
+      <q-separator color="grey-2" />
+
       <q-list
-        bordered
-        padding
-        dense
+        :dark="false"
+        class="text-black text-weight-light"
       >
-        <q-item v-if="$auth.user() && $auth.user().name">
-          <q-item-section no-wrap>
-            <q-item-label caption>
-              Signed in as <span class="text-weight-medium">{{ $auth.user().name }}</span>
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced />
-
-        <q-item clickable>
-          <q-item-section no-wrap>
-            Your profile
-          </q-item-section>
-        </q-item>
-
-        <q-item clickable>
+        <q-item
+          clickable
+          :dark="false"
+        >
           <q-item-section no-wrap>
             Settings
           </q-item-section>
         </q-item>
 
-        <q-item clickable>
-          <q-item-section no-wrap>
-            Help
-          </q-item-section>
-        </q-item>
-
-        <q-separator spaced />
-
         <q-item
           clickable
+          :dark="false"
           @click="logout"
         >
           <q-item-section no-wrap>

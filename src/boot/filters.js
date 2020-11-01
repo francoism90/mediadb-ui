@@ -16,4 +16,8 @@ export default function ({ Vue }) {
   Vue.filter('datestamp', function (value) {
     return moment(value).format('D MMMM Y')
   })
+
+  Vue.filter('datestamp_ago', function (value) {
+    return moment(value).fromNow()
+  })
 }

@@ -2,27 +2,31 @@
   <q-item
     v-ripple
     clickable
+    class="notification-item"
+    draggable="false"
+    :dark="false"
   >
-    <q-item-section
-      side
-      top
-    >
-      <q-icon
-        name="o_message"
-        color="grey-5"
-      />
-    </q-item-section>
-
     <q-item-section>
-      <q-item-label>{{ notification.data.message }}</q-item-label>
-      <q-item-label overline>
-        {{ notification.data.message }}
-      </q-item-label>
       <q-item-label
-        caption
-        lines="1"
+        v-if="notification.title"
+        lines="2"
       >
-        some@email.com
+        {{ notification.title }}
+      </q-item-label>
+
+      <q-item-label
+        v-if="notification.body"
+        caption
+        lines="3"
+      >
+        {{ notification.body }}
+      </q-item-label>
+
+      <q-item-label
+        class="q-pt-xs"
+        overline
+      >
+        {{ String(notification.created_at) | datestamp_ago }}
       </q-item-label>
     </q-item-section>
   </q-item>

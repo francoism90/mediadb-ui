@@ -4,7 +4,7 @@
     color="grey-12"
     text-color="white"
     unelevated
-    icon-right="o_filter_alt"
+    icon="o_filter_alt"
     :ripple="false"
   >
     <q-menu
@@ -14,7 +14,7 @@
       :transition-show="null"
       :transition-hide="null"
     >
-      <q-toolbar class="filters q-pa-md">
+      <q-toolbar class="dropdown q-pa-md">
         <q-toolbar-title class="text-black text-weight-light">
           Filters
         </q-toolbar-title>

@@ -15,7 +15,7 @@
       :transition-show="null"
       :transition-hide="null"
     >
-      <q-toolbar class="sorters q-pa-md">
+      <q-toolbar class="dropdown q-pa-md">
         <q-toolbar-title class="text-black text-weight-light">
           Sort By
         </q-toolbar-title>

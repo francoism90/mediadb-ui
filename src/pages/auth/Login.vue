@@ -2,7 +2,7 @@
   <q-page class="container fluid">
     <q-card
       class="bg-grey-12 fixed-center"
-      style="width: 350px;"
+      style="width: 350px; max-width: 100vw;"
     >
       <q-inner-loading :showing="!form">
         <q-spinner

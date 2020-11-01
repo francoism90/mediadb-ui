@@ -91,16 +91,11 @@ export default {
         { label: 'Tags', name: 'tag', icon: 'o_label' }
       ],
       stores: [
+        { name: 'notifications', module: PaginateModule },
         { name: 'collections', module: PaginateModule },
         { name: 'tags', module: PaginateModule },
         { name: 'videos', module: PaginateModule }
       ]
-    }
-  },
-
-  computed: {
-    userId () {
-      return this.$auth.user().id
     }
   },
 
@@ -129,23 +124,10 @@ export default {
 
   methods: {
     initialize () {
-      // Set pusher user token
+      // Register pusher
       const userToken = this.$auth.token() || null
 
       this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
-
-      // Listen for user notifications
-      this.$echo.private(`user.${this.userId}`)
-        .notification((notification = {}) => {
-          this.$q.notify({
-            type: notification.type || 'primary',
-            message: notification.message || null,
-            avatar: notification.avatar || null,
-            progress: notification.progress || true,
-            timeout: notification.timeout || 1500,
-            position: 'top'
-          })
-        })
 
       // Register stores
       this.registerStores()
