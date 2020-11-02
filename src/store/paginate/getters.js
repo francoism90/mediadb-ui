@@ -5,6 +5,10 @@ export function getId (state) {
   return state.id
 }
 
+export function getName (state) {
+  return state.name
+}
+
 export function getData (state) {
   return state.data
 }

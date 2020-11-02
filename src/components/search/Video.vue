@@ -2,7 +2,7 @@
   <div class="toolbar-input">
     <q-input
       v-model="query"
-      debounce="750"
+      debounce="800"
       type="search"
       placeholder="Search videos"
       clearable

@@ -5,7 +5,7 @@
       :key="index"
       :label="item.name"
       size="0.75rem"
-      color="grey-9"
+      color="grey-8"
       clickable
       square
       @click="onClick(item)"

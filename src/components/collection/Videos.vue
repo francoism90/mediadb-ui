@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="text-h6 text-grey-5">
+    <div class="text-caption text-uppercase text-grey">
       Videos
     </div>
 
@@ -44,26 +44,20 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import CollectionModel from 'src/models/Collection'
 import VideoModel from 'src/models/Video'
 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('collection/videos')
+
 const { mapFields } = createHelpers({
-  getterType: 'collection-videos/getOption',
-  mutationType: 'collection-videos/setOption'
+  getterType: 'collection/videos/getOption',
+  mutationType: 'collection/videos/setOption'
 })
 
 export default {
   components: {
     VideoItem: () => import('components/video/Item')
-  },
-
-  props: {
-    collection: {
-      type: CollectionModel,
-      required: true
-    }
   },
 
   data () {
@@ -80,25 +74,29 @@ export default {
   },
 
   computed: {
-    ...mapState('collection-videos', [
+    ...mapState([
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('collection-videos', [
+    ...mapGetters([
       'isLoaded',
       'isReady'
     ]),
 
     ...mapFields([
       'sorter'
-    ])
+    ]),
+
+    model () {
+      return this.$store.getters['collection/getModel']
+    }
   },
 
   created () {
     this.initialize({
-      name: this.collection.id,
+      name: this.model.id,
       options: {
         sorter: this.sorters[0]
       }
@@ -106,7 +104,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('collection-videos', [
+    ...mapActions([
       'initialize',
       'resetItems',
       'setPage'
@@ -114,7 +112,7 @@ export default {
 
     async setModels () {
       const response = await VideoModel
-        .where('collection', this.collection.id)
+        .where('collection', this.model.id)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
         .orderBy(this.sorter.value)

@@ -71,8 +71,6 @@
 </template>
 
 <script>
-import PaginateModule from 'src/store/paginate'
-
 export default {
   components: {
     Account: () => import('components/toolbar/Account'),
@@ -89,12 +87,6 @@ export default {
         { label: 'Video', name: 'video', icon: 'o_theaters' },
         { label: 'Browse', name: 'collection', icon: 'o_folder' },
         { label: 'Tags', name: 'tag', icon: 'o_label' }
-      ],
-      stores: [
-        { name: 'notifications', module: PaginateModule },
-        { name: 'collections', module: PaginateModule },
-        { name: 'tags', module: PaginateModule },
-        { name: 'videos', module: PaginateModule }
       ]
     }
   },
@@ -113,40 +105,11 @@ export default {
     this.setDrawer()
   },
 
-  beforeDestroy () {
-    try {
-      this.$echo.leave(`user.${this.id}`)
-      this.unregisterStores()
-    } catch {
-      //
-    }
-  },
-
   methods: {
     initialize () {
-      // Register pusher
       const userToken = this.$auth.token() || null
 
       this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
-
-      // Register stores
-      this.registerStores()
-    },
-
-    registerStores () {
-      for (const store of this.stores) {
-        if (!this.$store.hasModule(store.name)) {
-          this.$store.registerModule(store.name, store.module)
-        }
-      }
-    },
-
-    unregisterStores () {
-      for (const store of this.stores) {
-        if (this.$store.hasModule(store.name)) {
-          this.$store.unregisterModule(store.name, store.module)
-        }
-      }
     },
 
     setDrawer () {

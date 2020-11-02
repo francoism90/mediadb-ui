@@ -1,8 +1,8 @@
 export default function () {
   return {
     id: +new Date(),
-    ready: false,
     name: null,
+    ready: false,
     page: 1,
     options: {},
     data: [],

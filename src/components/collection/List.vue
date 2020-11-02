@@ -3,7 +3,7 @@
     <router-link
       v-for="(item, index) in items"
       :key="index"
-      :to="{ name: 'collection-details', params: { id: item.id, slug: item.slug } }"
+      :to="{ name: 'collection-model', params: { id: item.id, slug: item.slug } }"
     >
       <span v-if="index != 0">{{ separator }}</span>
       <span>{{ item.name }}</span>

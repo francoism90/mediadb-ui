@@ -5,19 +5,18 @@
   >
     <div class="row no-wrap justify-between items-center content-start">
       <div class="col">
-        <div class="text-h6 text-grey-5">
+        <div class="text-caption text-uppercase text-grey">
           Videos
         </div>
       </div>
 
       <div class="col-auto">
-        <q-btn
-          dense
-          flat
-          color="grey"
-          label="See All"
+        <a
+          class="text-caption text-uppercase text-grey cursor-pointer"
           @click="onClick"
-        />
+        >
+          See All
+        </a>
       </div>
     </div>
 
@@ -43,14 +42,15 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import { mapActions, mapState, mapGetters } from 'vuex'
-import TagModel from 'src/models/Tag'
 import VideoModel from 'src/models/Video'
 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('tag/videos')
+
 const { mapFields } = createHelpers({
-  getterType: 'videos/getOption',
-  mutationType: 'videos/setOption'
+  getterType: 'tag/videos/getOption',
+  mutationType: 'tag/videos/setOption'
 })
 
 export default {
@@ -58,21 +58,14 @@ export default {
     VideoItem: () => import('components/video/Item')
   },
 
-  props: {
-    tag: {
-      type: TagModel,
-      required: true
-    }
-  },
-
   computed: {
-    ...mapState('tag-videos', [
+    ...mapState([
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('tag-videos', [
+    ...mapGetters([
       'isLoaded',
       'isReady',
       'getTotal'
@@ -80,19 +73,23 @@ export default {
 
     ...mapFields([
       'query'
-    ])
+    ]),
+
+    model () {
+      return this.$store.getters['tag/getModel']
+    }
   },
 
   created () {
     this.initialize({
-      name: this.tag.id
+      name: this.model.id
     })
 
     this.setModels()
   },
 
   methods: {
-    ...mapActions('tag-videos', [
+    ...mapActions([
       'initialize',
       'resetItems',
       'setPage'
@@ -100,7 +97,7 @@ export default {
 
     async setModels () {
       const response = await VideoModel
-        .where('query', `tag:${this.tag.slug}`)
+        .where('query', `tag:${this.model.slug}`)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
         .orderBy('recommended')
@@ -117,7 +114,7 @@ export default {
     },
 
     onClick () {
-      this.query = 'tag:' + this.tag.slug
+      this.query = 'tag:' + this.model.slug
       this.$router.push({ name: 'video' })
     }
   }

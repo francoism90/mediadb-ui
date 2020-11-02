@@ -20,9 +20,9 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-3 col-lg-2 collection-item"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-2 video-item"
         >
-          <item :collection="item" />
+          <item :video="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -32,68 +32,76 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import CollectionModel from 'src/models/Collection'
+import PaginateModule from 'src/store/paginate'
+import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
-  getterType: 'collections/getOption',
-  mutationType: 'collections/setOption'
+  getterType: 'videos/getOption',
+  mutationType: 'videos/setOption'
 })
 
 export default {
+  preFetch ({ store }) {
+    if (!store.hasModule('videos')) {
+      store.registerModule('videos', PaginateModule)
+    }
+  },
+
   components: {
-    Item: () => import('components/collection/Item'),
-    Filters: () => import('components/collection/Filters'),
-    Sorters: () => import('components/collection/Sorters')
+    Item: () => import('components/video/Item'),
+    Filters: () => import('components/video/Filters'),
+    Sorters: () => import('components/video/Sorters')
   },
 
   meta () {
     return {
-      title: 'Browse'
+      title: 'Videos'
     }
   },
 
   computed: {
-    ...mapState('collections', [
+    ...mapState('videos', [
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('collections', [
+    ...mapGetters('videos', [
       'isLoaded',
       'isReady'
     ]),
 
     ...mapFields([
+      'favorited',
       'sorter',
-      'subscribed',
       'query'
     ])
   },
 
   created () {
     this.initialize({
+      name: 'videos',
       options: {
         sorter: this.sorter || 'recommended',
-        subscribed: this.subscribed || null,
+        favorited: this.favorited || null,
         query: this.query || null
       }
     })
   },
 
   methods: {
-    ...mapActions('collections', [
+    ...mapActions('videos', [
       'initialize',
       'resetItems',
       'setPage'
     ]),
 
     async setModels () {
-      const response = await CollectionModel
-        .where('subscribed', this.subscribed)
+      const response = await VideoModel
+        .where('favorited', this.favorited)
         .where('query', this.query)
-        .include('tags')
-        .append('item_count', 'thumbnail_url')
+        .include('model', 'collections', 'tags')
+        .append('duration', 'thumbnail_url')
         .orderBy(this.sorter)
         .page(this.page)
         .limit(12)

@@ -30,42 +30,41 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import VideoModel from 'src/models/Video'
+
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('video/related')
 
 export default {
   components: {
     VideoItem: () => import('components/video/Item')
   },
 
-  props: {
-    video: {
-      type: VideoModel,
-      required: true
-    }
-  },
-
   computed: {
-    ...mapState('video-related', [
+    ...mapState([
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('video-related', [
+    ...mapGetters([
       'isLoaded',
       'isReady'
-    ])
+    ]),
+
+    model () {
+      return this.$store.getters['video/getModel']
+    }
   },
 
   created () {
     this.initialize({
-      name: this.video.id
+      name: this.model.id
     })
   },
 
   methods: {
-    ...mapActions('video-related', [
+    ...mapActions([
       'initialize',
       'resetItems',
       'setPage'
@@ -77,7 +76,7 @@ export default {
       }
 
       const response = await VideoModel
-        .where('related', this.video.id)
+        .where('related', this.model.id)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
         .orderBy('recommended')

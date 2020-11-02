@@ -9,25 +9,25 @@ const routes = [
     name: '403',
     path: '/403',
     component: () => import('pages/error/403.vue'),
-    meta: { auth: false, layout: 'Error' }
+    meta: { layout: 'Error' }
   },
   {
     name: '404',
     path: '/404',
     component: () => import('pages/error/404.vue'),
-    meta: { auth: false, layout: 'Error' }
+    meta: { layout: 'Error' }
   },
   {
     name: '429',
     path: '/429',
     component: () => import('pages/error/429.vue'),
-    meta: { auth: false, layout: 'Error' }
+    meta: { layout: 'Error' }
   },
   {
     name: '500',
     path: '/500',
     component: () => import('pages/error/500.vue'),
-    meta: { auth: false, layout: 'Error' }
+    meta: { layout: 'Error' }
   },
   {
     name: 'login',
@@ -43,15 +43,14 @@ const routes = [
       {
         name: 'collection',
         path: '',
-        component: () => import('pages/collection/Items.vue'),
+        component: () => import('pages/collection/Models.vue'),
         meta: { auth: true, layout: 'Main' }
       },
       {
-        name: 'collection-details',
-        path: 'details/:id/:slug?',
-        component: () => import('pages/collection/Details.vue'),
-        meta: { auth: true, layout: 'Main' },
-        props: true
+        name: 'collection-model',
+        path: ':id/:slug?',
+        component: () => import('pages/collection/Model.vue'),
+        meta: { auth: true, layout: 'Main' }
       }
     ]
   },
@@ -63,13 +62,13 @@ const routes = [
       {
         name: 'tag',
         path: '',
-        component: () => import('pages/tag/Items.vue'),
+        component: () => import('pages/tag/Models.vue'),
         meta: { auth: true, layout: 'Main' }
       },
       {
-        name: 'tag-details',
-        path: 'details/:id/:slug?',
-        component: () => import('pages/tag/Details.vue'),
+        name: 'tag-model',
+        path: ':id/:slug?',
+        component: () => import('pages/tag/Model.vue'),
         meta: { auth: true, layout: 'Main' },
         props: true
       }
@@ -83,15 +82,14 @@ const routes = [
       {
         name: 'video',
         path: '',
-        component: () => import('pages/video/Items.vue'),
+        component: () => import('pages/video/Models.vue'),
         meta: { auth: true, layout: 'Main' }
       },
       {
-        name: 'video-details',
-        path: 'details/:id/:slug?',
-        component: () => import('pages/video/Details.vue'),
-        meta: { auth: true, layout: 'Main' },
-        props: true
+        name: 'video-model',
+        path: ':id/:slug?',
+        component: () => import('pages/video/Model.vue'),
+        meta: { auth: true, layout: 'Main' }
       }
     ]
   },

@@ -4,7 +4,7 @@
     class="transparent collection-item"
     draggable="false"
   >
-    <router-link :to="{ name: 'collection-details', params: { id: collection.id, slug: collection.slug }}">
+    <router-link :to="{ name: 'collection-model', params: { id: collection.id, slug: collection.slug }}">
       <q-img
         :alt="collection.name"
         :src="collection.thumbnail_url"

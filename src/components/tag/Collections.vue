@@ -5,19 +5,18 @@
   >
     <div class="row no-wrap justify-between items-center content-start">
       <div class="col">
-        <div class="text-h6 text-grey-5">
+        <div class="text-caption text-uppercase text-grey">
           Collections
         </div>
       </div>
 
       <div class="col-auto">
-        <q-btn
-          dense
-          flat
-          color="grey"
-          label="See All"
+        <a
+          class="text-caption text-uppercase text-grey cursor-pointer"
           @click="onClick"
-        />
+        >
+          See All
+        </a>
       </div>
     </div>
 
@@ -43,14 +42,15 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import { mapActions, mapState, mapGetters } from 'vuex'
-import TagModel from 'src/models/Tag'
 import CollectionModel from 'src/models/Collection'
 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('tag/collections')
+
 const { mapFields } = createHelpers({
-  getterType: 'collections/getOption',
-  mutationType: 'collections/setOption'
+  getterType: 'tag/collections/getOption',
+  mutationType: 'tag/collections/setOption'
 })
 
 export default {
@@ -58,21 +58,14 @@ export default {
     CollectionItem: () => import('components/collection/Item')
   },
 
-  props: {
-    tag: {
-      type: TagModel,
-      required: true
-    }
-  },
-
   computed: {
-    ...mapState('tag-collections', [
+    ...mapState([
       'id',
       'data',
       'page'
     ]),
 
-    ...mapGetters('tag-collections', [
+    ...mapGetters([
       'isLoaded',
       'isReady',
       'getTotal'
@@ -80,19 +73,23 @@ export default {
 
     ...mapFields([
       'query'
-    ])
+    ]),
+
+    model () {
+      return this.$store.getters['tag/getModel']
+    }
   },
 
   created () {
     this.initialize({
-      name: this.tag.id
+      name: this.model.id
     })
 
     this.setModels()
   },
 
   methods: {
-    ...mapActions('tag-collections', [
+    ...mapActions([
       'initialize',
       'resetItems',
       'setPage'
@@ -100,7 +97,7 @@ export default {
 
     async setModels () {
       const response = await CollectionModel
-        .where('query', `tag:${this.tag.slug}`)
+        .where('query', `tag:${this.model.slug}`)
         .include('tags')
         .append('item_count', 'thumbnail_url')
         .orderBy('recommended')
@@ -117,7 +114,7 @@ export default {
     },
 
     onClick () {
-      this.query = 'tag:' + this.tag.slug
+      this.query = 'tag:' + this.model.slug
       this.$router.push({ name: 'collection' })
     }
   }

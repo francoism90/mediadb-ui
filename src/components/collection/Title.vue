@@ -1,7 +1,7 @@
 <template>
   <q-img
-    :alt="collection.name"
-    :src="collection.thumbnail_url"
+    :alt="model.name"
+    :src="model.thumbnail_url"
     loading="lazy"
     class="collection-title"
     img-class="collection-title-placeholder"
@@ -10,34 +10,34 @@
       <div class="container absolute-top">
         <div class="collection-title-details">
           <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
-            {{ collection.name }}
+            {{ model.name }}
           </div>
 
           <div class="text-subtitle1 text-grey-3 ellipsis-2-lines">
-            {{ Number(collection.item_count) | approximate }} items •
-            {{ Number(collection.views) | approximate }} views
+            {{ Number(model.item_count) | approximate }} items •
+            {{ Number(model.views) | approximate }} views
           </div>
 
           <div
-            v-if="collection.overview"
-            class="q-pt-sm text-subtitle1 text-grey ellipsis-3-lines"
+            v-if="model.overview"
+            class="q-pt-sm text-subtitle1 text-grey-3 ellipsis-3-lines"
           >
-            {{ collection.overview }}
+            {{ model.overview }}
           </div>
         </div>
 
         <tags
-          v-if="collection.relationships.tags.length"
-          :items="collection.relationships.tags"
+          v-if="model.relationships.tags.length"
+          :items="model.relationships.tags"
           item-component="Collection"
           class="q-pt-lg"
         />
 
         <div class="q-pt-lg q-gutter-sm">
           <q-btn
-            stack
-            unelevated
-            class="transparent-1"
+            flat
+            dense
+            class="transparent-1 q-pr-sm"
             text-color="primary"
             size="13px"
             icon="o_play_arrow"
@@ -46,25 +46,23 @@
           />
 
           <q-btn
-            stack
-            unelevated
+            flat
+            round
             class="transparent-1"
             text-color="grey-1"
             size="13px"
-            :icon="collection.is_subscribed ? 'o_check' : 'o_add'"
-            label="Subscribe"
+            :icon="model.is_subscribed ? 'o_check' : 'o_add'"
             @click="subscribeModal"
           />
 
           <q-btn
             v-if="$auth.check({ permissions: 'edit collections'})"
-            stack
-            unelevated
+            flat
+            round
             class="transparent-1"
             text-color="grey-1"
             size="13px"
-            icon="o_wysiwyg"
-            label="Edit Item"
+            icon="o_article"
             @click="editModal"
           />
         </div>
@@ -79,17 +77,15 @@
 
 <script>
 import EditComponent from 'components/collection/Edit'
-import CollectionModel from 'src/models/Collection'
 
 export default {
   components: {
     Tags: () => import('components/tag/List')
   },
 
-  props: {
-    collection: {
-      type: CollectionModel,
-      required: true
+  computed: {
+    model () {
+      return this.$store.getters['collection/getModel']
     }
   },
 
@@ -98,17 +94,17 @@ export default {
       this.$q.dialog({
         component: EditComponent,
         parent: this,
-        id: this.collection.id || null
+        id: this.model.id
       })
     },
 
     subscribeModal () {
-      if (this.collection.is_subscribed) {
-        this.collection.unsubscribe()
+      if (this.model.is_subscribed) {
+        this.model.unsubscribe()
         return
       }
 
-      this.collection.subscribe()
+      this.model.subscribe()
     },
 
     queueModal () {

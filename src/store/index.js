@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 // Vuex modules
+import notifications from './paginate'
 import player from './player'
 import session from './session'
 
@@ -33,6 +34,7 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
+      notifications,
       player,
       session
     },

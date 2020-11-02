@@ -4,7 +4,7 @@
     class="transparent video-item"
     draggable="false"
   >
-    <router-link :to="{ name: 'video-details', params: { id: video.id, slug: video.slug }}">
+    <router-link :to="{ name: 'video-model', params: { id: video.id, slug: video.slug }}">
       <q-img
         :alt="video.name"
         :src="video.thumbnail_url"

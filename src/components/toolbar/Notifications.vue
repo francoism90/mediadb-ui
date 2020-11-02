@@ -107,8 +107,6 @@ export default {
     } catch {
       //
     }
-
-    console.log('destroy')
   },
 
   methods: {

@@ -6,7 +6,7 @@
     class="no-padding tag-item"
     active-class="text-body"
     draggable="false"
-    :to="{ name: 'tag-details', params: { id: tag.id, slug: tag.slug }}"
+    :to="{ name: 'tag-model', params: { id: tag.id, slug: tag.slug }}"
   >
     <q-item-section side>
       <q-avatar
