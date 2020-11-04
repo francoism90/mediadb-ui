@@ -44,10 +44,13 @@ npm install
 quasar dev
 ```
 
-### Android project
+### Build Android project
 
 Note: Android Studio is required.
 
 ```bash
+cd /srv/http/mediadb/ui
+cp .env.example .env
+npm install
 quasar build -m cordova -T android --ide
 ```
