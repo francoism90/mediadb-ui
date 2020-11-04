@@ -4,7 +4,9 @@
 
 - Manage library using tags and collections.
 - User roles and permissions.
-- Android app build in Cordova.
+- Android app build in Cordova (optional).
+
+Full size [screenshots](https://github.com/francoism90/.github/tree/master/screens/mediadb) are available on my Github repo.
 
 MediaDB is very much in development and may not be suitable for production purposes.
 
@@ -18,11 +20,11 @@ Notes:
 
 ### Configuration
 
-Please consult to following links:
+Please consult to following links to learn more about Quasar:
 
-- [https://quasar.dev/quasar-cli/quasar-conf-js]
-- [https://quasar.dev/quasar-cli/build-commands]
-- [https://quasar.dev/quasar-cli/developing-cordova-apps/introduction]
+- <https://quasar.dev/quasar-cli/quasar-conf-js>
+- <https://quasar.dev/quasar-cli/build-commands>
+- <https://quasar.dev/quasar-cli/developing-cordova-apps/introduction>
 
 ### Build project
 
@@ -37,7 +39,15 @@ quasar build
 
 ```bash
 cd /srv/http/mediadb/ui
-cp .env.example .env
+cp .env.local.example .env.local
 npm install
 quasar dev
+```
+
+### Android project
+
+Note: Android Studio is required.
+
+```bash
+quasar build -m cordova -T android --ide
 ```
