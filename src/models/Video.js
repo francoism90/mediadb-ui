@@ -45,4 +45,22 @@ export default class Video extends Model {
       return Object.assign(this, response.data)
     })
   }
+
+  like () {
+    return this.request({
+      method: 'POST',
+      url: `${this.endpoint()}/like`
+    }).then((response) => {
+      return Object.assign(this, response.data)
+    })
+  }
+
+  unlike () {
+    return this.request({
+      method: 'DELETE',
+      url: `${this.endpoint()}/like`
+    }).then((response) => {
+      return Object.assign(this, response.data)
+    })
+  }
 }

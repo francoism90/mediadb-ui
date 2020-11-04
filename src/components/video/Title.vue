@@ -64,6 +64,16 @@
           />
 
           <q-btn
+            flat
+            round
+            class="transparent-1"
+            text-color="grey-1"
+            size="13px"
+            :icon="model.is_liked ? 'o_turned_in' : 'o_turned_in_not'"
+            @click="likeModel"
+          />
+
+          <q-btn
             v-if="$auth.check({ permissions: 'edit videos'})"
             flat
             round
@@ -115,6 +125,15 @@ export default {
       }
 
       this.model.favorite()
+    },
+
+    likeModel () {
+      if (this.model.is_liked) {
+        this.model.unlike()
+        return
+      }
+
+      this.model.like()
     },
 
     watchModel () {

@@ -73,7 +73,23 @@ export default {
 
     subscribe (id = null) {
       this.$echo.private(`video.${id}`)
+        .listen('.video.deleted', async (e) => {
+          this.$q.notify({
+            type: 'info',
+            message: 'Video has been deleted.',
+            progress: true,
+            timeout: 5000,
+            position: 'top'
+          })
+
+          if (this.$store.hasModule('videos')) {
+            this.$store.commit('videos/removeData', { id: id })
+          }
+        })
         .listen('.video.favorited', async (e) => {
+          await this.setModel(id)
+        })
+        .listen('.video.liked', async (e) => {
           await this.setModel(id)
         })
         .listen('.video.updated', async (e) => {
@@ -86,6 +102,13 @@ export default {
             timeout: 5000,
             position: 'top'
           })
+
+          if (this.$store.hasModule('videos')) {
+            this.$store.commit('videos/updateData', {
+              attributes: { id: id },
+              values: this.model
+            })
+          }
         })
     },
 

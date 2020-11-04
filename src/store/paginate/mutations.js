@@ -1,4 +1,5 @@
 import { updateField } from 'vuex-map-fields'
+import { findIndex, remove } from 'lodash'
 import defaultState from './state'
 
 export function resetState (state) {
@@ -21,8 +22,22 @@ export function concatData (state, payload = []) {
   state.data = state.data.concat(payload)
 }
 
+export function removeData (state, payload = {}) {
+  remove(state.data, payload)
+}
+
 export function setData (state, payload = []) {
   state.data = payload
+}
+
+export function updateData (state, payload = {}) {
+  const { attributes = {}, values = null } = payload
+
+  const index = findIndex(state.data, attributes)
+
+  if (index >= 0) {
+    state.data.splice(index, 1, values)
+  }
 }
 
 export function setMeta (state, payload = {}) {

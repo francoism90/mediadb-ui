@@ -73,6 +73,7 @@ export default {
 
     ...mapFields([
       'favorited',
+      'liked',
       'sorter',
       'query'
     ])
@@ -84,6 +85,7 @@ export default {
       options: {
         sorter: this.sorter || 'recommended',
         favorited: this.favorited || null,
+        liked: this.liked || null,
         query: this.query || null
       }
     })
@@ -99,6 +101,7 @@ export default {
     async setModels () {
       const response = await VideoModel
         .where('favorited', this.favorited)
+        .where('liked', this.liked)
         .where('query', this.query)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')

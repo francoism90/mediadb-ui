@@ -57,6 +57,29 @@
             </q-item-label>
           </q-item-section>
         </q-item>
+
+        <q-item
+          v-ripple
+          tag="label"
+          :dark="false"
+        >
+          <q-item-section side>
+            <q-checkbox
+              v-model="liked"
+              dense
+              size="xs"
+              true-value="1"
+              :false-value="null"
+              :dark="false"
+            />
+          </q-item-section>
+
+          <q-item-section>
+            <q-item-label>
+              Watchlist
+            </q-item-label>
+          </q-item-section>
+        </q-item>
       </q-list>
     </q-menu>
   </q-btn>
@@ -73,7 +96,8 @@ const { mapFields } = createHelpers({
 export default {
   computed: {
     ...mapFields([
-      'favorited'
+      'favorited',
+      'liked'
     ])
   }
 }

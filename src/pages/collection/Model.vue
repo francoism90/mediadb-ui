@@ -73,6 +73,19 @@ export default {
 
     subscribe (id = null) {
       this.$echo.private(`collection.${id}`)
+        .listen('.collection.deleted', async (e) => {
+          this.$q.notify({
+            type: 'info',
+            message: 'Collection has been deleted.',
+            progress: true,
+            timeout: 5000,
+            position: 'top'
+          })
+
+          if (this.$store.hasModule('collections')) {
+            this.$store.commit('collections/removeData', { id: id })
+          }
+        })
         .listen('.collection.subscribed', async (e) => {
           await this.setModel(id)
         })
@@ -86,6 +99,13 @@ export default {
             timeout: 5000,
             position: 'top'
           })
+
+          if (this.$store.hasModule('collections')) {
+            this.$store.commit('collections/updateData', {
+              attributes: { id: id },
+              values: this.model
+            })
+          }
         })
     },
 

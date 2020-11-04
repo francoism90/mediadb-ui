@@ -20,7 +20,7 @@
     "laravel-echo": "^1.9.0",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
-    "pusher-js": "^7.0.0",
+    "pusher-js": "^7.0.1",
     "quasar": "^1.14.3",
     "sanitize-html": "^2.1.1",
     "shaka-player": "^3.0.5",
