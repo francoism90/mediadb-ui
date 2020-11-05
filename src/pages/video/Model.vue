@@ -103,6 +103,8 @@ export default {
             position: 'top'
           })
 
+          this.$store.dispatch('video/related/resetItems')
+
           if (this.$store.hasModule('videos')) {
             this.$store.commit('videos/updateData', {
               attributes: { id: id },
