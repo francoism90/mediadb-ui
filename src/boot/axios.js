@@ -20,8 +20,8 @@ export default function ({ Vue, router }) {
     return response
   }, (error) => {
     // Upstream rate limiting
-    if (error.response.status === 429 && router.currentRoute.path !== '/429') {
-      router.push({ path: '/429', query: { redirect: router.currentRoute.fullPath } })
+    if (error.response.status === 429 && router.currentRoute.name !== '429') {
+      router.push({ name: '429' })
     }
 
     return Promise.reject(error)

@@ -49,8 +49,8 @@ export default {
 
   components: {
     Item: () => import('components/video/Item'),
-    Filters: () => import('components/video/Filters'),
-    Sorters: () => import('components/video/Sorters')
+    Filters: () => import('components/video/Filter'),
+    Sorters: () => import('components/video/Sorter')
   },
 
   meta () {

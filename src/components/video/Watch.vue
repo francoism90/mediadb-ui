@@ -22,10 +22,7 @@
           v-if="video"
           class="q-pa-none"
         >
-          <item-player
-            :timecode="timecode"
-            :video="video"
-          />
+          <item-player :video="video" />
         </q-card-section>
       </transition>
     </q-card>
@@ -47,11 +44,6 @@ export default {
     id: {
       type: String,
       required: true
-    },
-
-    timecode: {
-      type: Number,
-      default: 0
     }
   },
 

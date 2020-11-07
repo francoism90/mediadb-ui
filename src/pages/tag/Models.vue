@@ -48,8 +48,8 @@ export default {
 
   components: {
     Item: () => import('components/tag/Item'),
-    Filters: () => import('components/tag/Filters'),
-    Sorters: () => import('components/tag/Sorters')
+    Filters: () => import('components/tag/Filter'),
+    Sorters: () => import('components/tag/Sorter')
   },
 
   meta () {

@@ -6,19 +6,9 @@
 
     <q-separator spaced />
 
-    <q-btn-group
-      class="q-pb-md"
-      unelevated
-    >
-      <q-select
-        v-model="sorter"
-        :options="sorters"
-        :loading="!isReady"
-        dropdown-icon="keyboard_arrow_down"
-        dense
-        square
-      />
-    </q-btn-group>
+    <q-toolbar class="q-pt-md q-pb-lg">
+      <sorters />
+    </q-toolbar>
 
     <q-pull-to-refresh
       :key="id"
@@ -36,7 +26,7 @@
           :disable="!isReady"
           class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
         >
-          <video-item :video="item" />
+          <item :video="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -57,20 +47,8 @@ const { mapFields } = createHelpers({
 
 export default {
   components: {
-    VideoItem: () => import('components/video/Item')
-  },
-
-  data () {
-    return {
-      sorters: [
-        { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' },
-        { label: 'Recommended', value: 'recommended' },
-        { label: 'Trending', value: 'trending' },
-        { label: 'Shortest to Longest', value: 'duration' },
-        { label: 'Longest to Shortest', value: '-duration' }
-      ]
-    }
+    Item: () => import('components/video/Item'),
+    Sorters: () => import('components/collection/video/Sorter')
   },
 
   computed: {
@@ -98,7 +76,7 @@ export default {
     this.initialize({
       name: this.model.id,
       options: {
-        sorter: this.sorters[0]
+        sorter: this.sorter || '-created_at'
       }
     })
   },
@@ -115,7 +93,7 @@ export default {
         .where('collection', this.model.id)
         .include('model', 'collections', 'tags')
         .append('duration', 'thumbnail_url')
-        .orderBy(this.sorter.value)
+        .orderBy(this.sorter)
         .page(this.page)
         .limit(12)
         .get()

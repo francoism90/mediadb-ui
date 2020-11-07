@@ -71,7 +71,7 @@ export default {
     ]),
 
     async setModels () {
-      if (this.page >= 3) {
+      if (this.page >= 4) {
         return
       }
 

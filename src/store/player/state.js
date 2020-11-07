@@ -1,6 +1,5 @@
 export default function () {
   return {
-    name: null,
     ready: false,
     captionLocale: null,
     subtitleLocale: null,
@@ -12,12 +11,12 @@ export default function () {
       model: null,
       buffered: null,
       currentTime: 0,
-      duration: 0,
+      duration: Infinity,
       error: false,
       metadata: false,
       paused: true,
       play: null,
-      seekTime: 0,
+      seekTime: null,
       tracks: [],
       waiting: true
     }

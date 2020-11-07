@@ -32,7 +32,7 @@ export default {
 
   components: {
     CollectionTitle: () => import('components/collection/Title'),
-    CollectionVideos: () => import('components/collection/Videos')
+    CollectionVideos: () => import('components/collection/video/Models')
   },
 
   beforeRouteEnter (to, from, next) {

@@ -55,7 +55,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
-import { get, inRange } from 'lodash'
+import { clamp, get } from 'lodash'
 import { Player } from 'shaka-player'
 import VideoModel from 'src/models/Video'
 
@@ -71,15 +71,10 @@ export default {
   },
 
   components: {
-    Controls: () => import('components/controls/Layout')
+    Controls: () => import('components/watch/Layout')
   },
 
   props: {
-    timecode: {
-      type: Number,
-      default: null
-    },
-
     video: {
       type: VideoModel,
       required: true
@@ -91,7 +86,6 @@ export default {
       instance: null,
       shakaSettings: {
         streaming: {
-          bufferingGoal: 30,
           jumpLargeGaps: true,
           ignoreTextStreamFailures: true
         }
@@ -129,7 +123,7 @@ export default {
     },
 
     startTimecode () {
-      return this.timecode || get(this.videoSettings, 'timecode', 0)
+      return get(this.videoSettings, 'timecode', 0)
     },
 
     textTracks () {
@@ -144,18 +138,22 @@ export default {
   watch: {
     fullscreen (value) {
       this.setFullscreen(value)
+      this.showControls()
     },
 
     play (value) {
       this.setPlay(value)
+      this.showControls()
     },
 
     playbackRate (value) {
       this.setPlaybackRate(value)
+      this.showControls()
     },
 
     seekTime (value) {
       this.setCurrentTime(value)
+      this.showControls()
     },
 
     tracks (value) {
@@ -175,14 +173,18 @@ export default {
       return
     }
 
-    this.instance = new Player(this.player)
+    try {
+      this.instance = new Player(this.player)
 
-    await this.instance.configure(this.shakaSettings)
-    await this.instance.load(this.video.stream_url)
+      await this.instance.configure(this.shakaSettings)
+      await this.instance.load(this.video.stream_url)
 
-    this.setCurrentTime(this.startTimecode)
-    this.setPlaybackRate(this.playbackRate)
-    this.setTextTracks(this.textTracks)
+      this.setCurrentTime(this.startTimecode)
+      this.setPlaybackRate(this.playbackRate)
+      this.setTextTracks(this.textTracks)
+    } catch (e) {
+      console.error('Error code', e.code, 'object', e)
+    }
   },
 
   async beforeDestroy () {
@@ -205,17 +207,11 @@ export default {
     },
 
     setCurrentTime (value = 0) {
-      this.showControls()
-      this.player.currentTime = value
+      this.player.currentTime = clamp(value, 0, this.duration)
     },
 
     setPlaybackRate (value = 0) {
-      if (!inRange(value, 0.25, 2)) {
-        return
-      }
-
-      this.showControls()
-      this.player.playbackRate = value
+      this.player.playbackRate = clamp(value, 0.25, 2)
     },
 
     setSettings () {
@@ -241,12 +237,12 @@ export default {
 
     async setFullscreen (payload = false) {
       try {
-        if (payload) {
-          await this.$q.fullscreen.request()
+        if (!payload) {
+          await this.$q.fullscreen.exit()
           return
         }
 
-        await this.$q.fullscreen.exit()
+        await this.$q.fullscreen.request()
       } catch {
         console.error('Unable to enter fullscreen')
       }
@@ -254,11 +250,12 @@ export default {
 
     async setPlay (payload = false) {
       try {
-        if (payload === true) {
-          await this.player.play()
-        } else if (payload === false) {
+        if (!payload) {
           await this.player.pause()
+          return
         }
+
+        await this.player.play()
       } catch {
         console.error('Unable to set playing state')
       }

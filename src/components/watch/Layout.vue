@@ -13,10 +13,10 @@
 <script>
 export default {
   components: {
-    Actions: () => import('components/controls/Actions'),
-    Navigation: () => import('components/controls/Navigation'),
-    Playback: () => import('components/controls/Playback'),
-    Seeker: () => import('components/controls/Seeker')
+    Actions: () => import('components/watch/Actions'),
+    Navigation: () => import('components/watch/Navigation'),
+    Playback: () => import('components/watch/Playback'),
+    Seeker: () => import('components/watch/Seeker')
   }
 }
 </script>

@@ -49,8 +49,8 @@ export default {
 
   components: {
     Item: () => import('components/collection/Item'),
-    Filters: () => import('components/collection/Filters'),
-    Sorters: () => import('components/collection/Sorters')
+    Filters: () => import('components/collection/Filter'),
+    Sorters: () => import('components/collection/Sorter')
   },
 
   meta () {
