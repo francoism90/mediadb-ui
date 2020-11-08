@@ -36,47 +36,25 @@
         class="text-black text-weight-light"
       >
         <q-item
+          v-for="(item, index) in types"
+          :key="index"
           v-ripple
           tag="label"
           :dark="false"
         >
           <q-item-section side>
             <q-checkbox
-              v-model="favorited"
+              v-model="typeModel"
               dense
               size="xs"
-              true-value="1"
-              :false-value="null"
+              :val="item.value"
               :dark="false"
             />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>
-              Favorited
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item
-          v-ripple
-          tag="label"
-          :dark="false"
-        >
-          <q-item-section side>
-            <q-checkbox
-              v-model="liked"
-              dense
-              size="xs"
-              true-value="1"
-              :false-value="null"
-              :dark="false"
-            />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>
-              Watchlist
+              {{ item.label }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -87,6 +65,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
+import { debounce } from 'quasar'
 
 const { mapFields } = createHelpers({
   getterType: 'videos/getOption',
@@ -94,11 +73,29 @@ const { mapFields } = createHelpers({
 })
 
 export default {
+  data () {
+    return {
+      types: [
+        { label: 'Favorites', value: 'favorited' },
+        { label: 'Watchlist', value: 'liked' }
+      ]
+    }
+  },
+
   computed: {
     ...mapFields([
-      'favorited',
-      'liked'
-    ])
+      'type'
+    ]),
+
+    typeModel: {
+      get () {
+        return this.type
+      },
+
+      set: debounce(function (value) {
+        this.type = value
+      }, 300)
+    }
   }
 }
 </script>

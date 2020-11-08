@@ -73,7 +73,7 @@ export default {
 
     ...mapFields([
       'sorter',
-      'subscribed',
+      'type',
       'query'
     ])
   },
@@ -83,7 +83,7 @@ export default {
       name: 'collections',
       options: {
         sorter: this.sorter || 'recommended',
-        subscribed: this.subscribed || null,
+        type: this.type || [],
         query: this.query || null
       }
     })
@@ -98,7 +98,7 @@ export default {
 
     async setModels () {
       const response = await CollectionModel
-        .where('subscribed', this.subscribed)
+        .whereIn('type', this.type)
         .where('query', this.query)
         .include('tags')
         .append('item_count', 'thumbnail_url')

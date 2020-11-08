@@ -44,7 +44,7 @@
         >
           <q-item-section side>
             <q-checkbox
-              v-model="type"
+              v-model="typeModel"
               dense
               size="xs"
               :val="item.value"
@@ -65,6 +65,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
+import { debounce } from 'quasar'
 
 const { mapFields } = createHelpers({
   getterType: 'tags/getOption',
@@ -86,7 +87,17 @@ export default {
   computed: {
     ...mapFields([
       'type'
-    ])
+    ]),
+
+    typeModel: {
+      get () {
+        return this.type
+      },
+
+      set: debounce(function (value) {
+        this.type = value
+      }, 300)
+    }
   }
 }
 </script>

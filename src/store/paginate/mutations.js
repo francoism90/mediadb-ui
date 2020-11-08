@@ -11,7 +11,7 @@ export function setReady (state, payload = false) {
 }
 
 export function setId (state, payload = null) {
-  state.id = payload
+  state.id = payload || +new Date()
 }
 
 export function setName (state, payload = null) {

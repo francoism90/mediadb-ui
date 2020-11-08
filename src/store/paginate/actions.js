@@ -1,15 +1,13 @@
 export function initialize ({ commit, state }, payload = {}) {
   const { name = null, options = {} } = payload
 
-  if (name && state.name === name) {
-    return
+  if (name && state.name !== name) {
+    commit('resetState')
   }
 
-  commit('resetState')
-
-  commit('setReady', true)
   commit('setName', name)
   commit('setOptions', options)
+  commit('setReady', true)
 }
 
 export function setPage ({ commit, getters }, payload = {}) {
@@ -24,12 +22,12 @@ export function setPage ({ commit, getters }, payload = {}) {
 }
 
 export function resetItems ({ commit }, payload = {}) {
-  const { options = {} } = payload
+  const { id = null, options = {} } = payload
 
   commit('setData')
   commit('setMeta')
   commit('setPage')
 
   commit('setOptions', options)
-  commit('setId', +new Date())
+  commit('setId', id)
 }

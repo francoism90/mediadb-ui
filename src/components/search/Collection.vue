@@ -2,7 +2,7 @@
   <q-form class="toolbar-input">
     <q-input
       v-model="query"
-      debounce="800"
+      debounce="900"
       type="search"
       placeholder="Search collections"
       clearable

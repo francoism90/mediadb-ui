@@ -45,7 +45,7 @@
         >
           <q-item-section side>
             <q-radio
-              v-model="sorter"
+              v-model="sortModel"
               dense
               size="xs"
               :val="item.value"
@@ -66,6 +66,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
+import { debounce } from 'quasar'
 import { find } from 'lodash'
 
 const { mapFields } = createHelpers({
@@ -88,6 +89,16 @@ export default {
     ...mapFields([
       'sorter'
     ]),
+
+    sortModel: {
+      get () {
+        return this.sorter
+      },
+
+      set: debounce(function (value) {
+        this.sorter = value
+      }, 100)
+    },
 
     activeSorter () {
       return find(this.sorters, { value: this.sorter })

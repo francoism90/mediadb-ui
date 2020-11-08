@@ -1,6 +1,6 @@
 export default function () {
   return {
-    id: +new Date(),
+    id: null,
     name: null,
     ready: false,
     page: 1,

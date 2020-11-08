@@ -36,24 +36,25 @@
         class="text-black text-weight-light"
       >
         <q-item
+          v-for="(item, index) in types"
+          :key="index"
           v-ripple
           tag="label"
           :dark="false"
         >
           <q-item-section side>
             <q-checkbox
-              v-model="subscribed"
+              v-model="typeModel"
               dense
               size="xs"
-              true-value="1"
-              :false-value="null"
+              :val="item.value"
               :dark="false"
             />
           </q-item-section>
 
           <q-item-section>
             <q-item-label>
-              Subscribed
+              {{ item.label }}
             </q-item-label>
           </q-item-section>
         </q-item>
@@ -64,6 +65,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
+import { debounce } from 'quasar'
 
 const { mapFields } = createHelpers({
   getterType: 'collections/getOption',
@@ -71,10 +73,28 @@ const { mapFields } = createHelpers({
 })
 
 export default {
+  data () {
+    return {
+      types: [
+        { label: 'Subscribed', value: 'subscribed' }
+      ]
+    }
+  },
+
   computed: {
     ...mapFields([
-      'subscribed'
-    ])
+      'type'
+    ]),
+
+    typeModel: {
+      get () {
+        return this.type
+      },
+
+      set: debounce(function (value) {
+        this.type = value
+      }, 300)
+    }
   }
 }
 </script>
