@@ -32,7 +32,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import PaginateModule from 'src/store/paginate'
 import CollectionModel from 'src/models/Collection'
 
 const { mapFields } = createHelpers({
@@ -41,12 +40,6 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('collections')) {
-      store.registerModule('collections', PaginateModule)
-    }
-  },
-
   components: {
     Item: () => import('components/collection/Item'),
     Filters: () => import('components/collection/Filter'),

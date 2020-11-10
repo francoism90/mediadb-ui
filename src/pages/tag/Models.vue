@@ -31,7 +31,6 @@
 
 <script>import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import PaginateModule from 'src/store/paginate'
 import TagModel from 'src/models/Tag'
 
 const { mapFields } = createHelpers({
@@ -40,12 +39,6 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('tags')) {
-      store.registerModule('tags', PaginateModule)
-    }
-  },
-
   components: {
     Item: () => import('components/tag/Item'),
     Filters: () => import('components/tag/Filter'),

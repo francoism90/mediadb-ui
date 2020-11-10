@@ -114,7 +114,12 @@ export default {
     },
 
     onClick () {
-      this.query = 'tag:' + this.model.slug
+      this.$store.dispatch('videos/resetItems', {
+        options: {
+          query: 'tag:' + this.model.slug
+        }
+      })
+
       this.$router.push({ name: 'video' })
     }
   }

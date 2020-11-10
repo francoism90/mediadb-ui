@@ -11,13 +11,15 @@ module.exports = {
   },
 
   env: {
-    browser: true
+    browser: true,
+    es6: true
   },
 
   // Rules order is important, please avoid shuffling them
   extends: [
     'plugin:vue/recommended',
-    'standard'
+    'eslint:recommended',
+    'standard',
   ],
 
   plugins: [

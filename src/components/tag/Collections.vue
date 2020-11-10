@@ -114,7 +114,12 @@ export default {
     },
 
     onClick () {
-      this.query = 'tag:' + this.model.slug
+      this.$store.dispatch('collections/resetItems', {
+        options: {
+          query: 'tag:' + this.model.slug
+        }
+      })
+
       this.$router.push({ name: 'collection' })
     }
   }

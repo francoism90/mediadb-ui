@@ -4,7 +4,10 @@ export default function () {
     name: null,
     ready: false,
     page: 1,
-    options: {},
+    options: {
+      sorter: null,
+      query: null
+    },
     data: [],
     meta: {
       last_page: 1,

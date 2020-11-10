@@ -32,7 +32,6 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
-import PaginateModule from 'src/store/paginate'
 import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
@@ -41,12 +40,6 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('videos')) {
-      store.registerModule('videos', PaginateModule)
-    }
-  },
-
   components: {
     Item: () => import('components/video/Item'),
     Filters: () => import('components/video/Filter'),

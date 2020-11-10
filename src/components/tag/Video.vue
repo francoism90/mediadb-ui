@@ -14,13 +14,6 @@
 </template>
 
 <script>
-import { createHelpers } from 'vuex-map-fields'
-
-const { mapFields } = createHelpers({
-  getterType: 'videos/getOption',
-  mutationType: 'videos/setOption'
-})
-
 export default {
   props: {
     items: {
@@ -29,15 +22,13 @@ export default {
     }
   },
 
-  computed: {
-    ...mapFields([
-      'query'
-    ])
-  },
-
   methods: {
     onClick (model) {
-      this.query = 'tag:' + model.slug
+      this.$store.dispatch('videos/resetItems', {
+        options: {
+          query: 'tag:' + model.slug
+        }
+      })
 
       if (this.$route.name !== 'video') {
         this.$router.push({ name: 'video' })

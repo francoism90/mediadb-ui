@@ -1,23 +1,25 @@
 import approx from 'approximate-number'
-import moment from 'moment'
+import dayjs from 'dayjs'
 
 export default function ({ Vue }) {
+  Vue.prototype.$dayjs = dayjs
+
   Vue.filter('approximate', function (value) {
     return approx(value)
   })
 
   Vue.filter('timestamp', function (value) {
-    return moment
-      .utc(value * 1000)
-      .format('HH:mm:ss')
+    return new Date(value * 1000)
+      .toISOString()
+      .substr(11, 8)
       .replace(/^0(?:0:0?)?/, '')
   })
 
   Vue.filter('datestamp', function (value) {
-    return moment(value).format('D MMMM Y')
+    return dayjs(value).format('D MMM YYYY')
   })
 
   Vue.filter('datestamp_ago', function (value) {
-    return moment(value).fromNow()
+    return dayjs(value).fromNow()
   })
 }
