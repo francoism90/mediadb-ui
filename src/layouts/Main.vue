@@ -109,6 +109,10 @@ export default {
     this.registerStores()
   },
 
+  beforeDestroy () {
+    this.unregisterStores()
+  },
+
   mounted () {
     this.setDrawer()
   },
@@ -123,6 +127,14 @@ export default {
       for (const store of this.stores) {
         if (!this.$store.hasModule(store.name)) {
           this.$store.registerModule(store.name, store.module)
+        }
+      }
+    },
+
+    unregisterStores () {
+      for (const store of this.stores) {
+        if (this.$store.hasModule(store.name)) {
+          this.$store.unregisterModule(store.name, store.module)
         }
       }
     },

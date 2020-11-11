@@ -120,7 +120,7 @@ export default {
 
     favoriteModel () {
       if (this.model.is_favorited) {
-        this.model.unfavorite()
+        this.model.favorite({ method: 'DELETE' })
         return
       }
 
@@ -129,7 +129,7 @@ export default {
 
     likeModel () {
       if (this.model.is_liked) {
-        this.model.unlike()
+        this.model.like({ method: 'DELETE' })
         return
       }
 

@@ -8,22 +8,13 @@ export default class Collection extends Model {
 
   relations () {
     return {
-      tags: Tag
+      'relationships.tags': Tag
     }
   }
 
-  subscribe () {
+  subscribe (params = {}) {
     return this.request({
-      method: 'POST',
-      url: `${this.endpoint()}/subscribe`
-    }).then((response) => {
-      return Object.assign(this, response.data)
-    })
-  }
-
-  unsubscribe () {
-    return this.request({
-      method: 'DELETE',
+      method: params.method || 'POST',
       url: `${this.endpoint()}/subscribe`
     }).then((response) => {
       return Object.assign(this, response.data)

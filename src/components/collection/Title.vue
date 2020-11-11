@@ -100,7 +100,7 @@ export default {
 
     subscribeModal () {
       if (this.model.is_subscribed) {
-        this.model.unsubscribe()
+        this.model.subscribe({ method: 'DELETE' })
         return
       }
 

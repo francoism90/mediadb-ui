@@ -10,8 +10,8 @@ export default class Video extends Model {
 
   relations () {
     return {
-      collections: Collection,
-      tags: Tag
+      'relationships.collections': Collection,
+      'relationships.tags': Tag
     }
   }
 
@@ -28,36 +28,18 @@ export default class Video extends Model {
     })
   }
 
-  favorite () {
+  favorite (params = {}) {
     return this.request({
-      method: 'POST',
+      method: params.method || 'POST',
       url: `${this.endpoint()}/favorite`
     }).then((response) => {
       return Object.assign(this, response.data)
     })
   }
 
-  unfavorite () {
+  like (params = {}) {
     return this.request({
-      method: 'DELETE',
-      url: `${this.endpoint()}/favorite`
-    }).then((response) => {
-      return Object.assign(this, response.data)
-    })
-  }
-
-  like () {
-    return this.request({
-      method: 'POST',
-      url: `${this.endpoint()}/like`
-    }).then((response) => {
-      return Object.assign(this, response.data)
-    })
-  }
-
-  unlike () {
-    return this.request({
-      method: 'DELETE',
+      method: params.method || 'POST',
       url: `${this.endpoint()}/like`
     }).then((response) => {
       return Object.assign(this, response.data)
