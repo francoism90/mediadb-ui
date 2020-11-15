@@ -14,23 +14,23 @@
   min-width: 200px;
 }
 
-/* Collection Title */
-.collection-title {
+/* Collection Hero */
+.collection-hero {
   height: 250px;
   max-height: 250px;
 }
 
-.collection-title-placeholder {
+.collection-hero-placeholder {
   background-color: $grey-11;
   background-size: cover;
   filter: blur(1px) brightness(80%);
 }
 
-.collection-title-elements {
+.collection-hero-elements {
   z-index: 30;
 }
 
-.collection-title-details {
+.collection-hero-details {
   max-width: 500px;
 }
 

@@ -16,7 +16,7 @@
     >
       <q-toolbar class="dropdown q-pa-md">
         <q-toolbar-title class="text-black text-weight-light">
-          Filters
+          Categories
         </q-toolbar-title>
 
         <q-btn

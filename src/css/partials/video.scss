@@ -14,23 +14,23 @@
   min-width: 200px;
 }
 
-/* Video Title */
-.video-title {
+/* Video Hero */
+.video-hero {
   height: 350px;
   max-height: 350px;
 }
 
-.video-title-placeholder {
+.video-hero-placeholder {
   background-color: $grey-11;
   background-size: cover;
   filter: blur(1px) brightness(80%);
 }
 
-.video-title-elements {
+.video-hero-elements {
   z-index: 30;
 }
 
-.video-title-details {
+.video-hero-details {
   max-width: 500px;
 }
 

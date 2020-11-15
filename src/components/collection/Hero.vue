@@ -3,12 +3,12 @@
     :alt="model.name"
     :src="model.thumbnail_url"
     loading="lazy"
-    class="collection-title"
-    img-class="collection-title-placeholder"
+    class="collection-hero"
+    img-class="collection-hero-placeholder"
   >
-    <div class="absolute-full collection-title-elements">
+    <div class="absolute-full collection-hero-elements">
       <div class="container absolute-top">
-        <div class="collection-title-details">
+        <div class="collection-hero-details">
           <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
             {{ model.name }}
           </div>
@@ -42,7 +42,6 @@
             size="13px"
             icon="o_play_arrow"
             label="Play All"
-            @click="queueModal"
           />
 
           <q-btn
@@ -52,7 +51,7 @@
             text-color="grey-1"
             size="13px"
             :icon="model.is_subscribed ? 'o_check' : 'o_add'"
-            @click="subscribeModal"
+            @click="subscribeModel"
           />
 
           <q-btn
@@ -63,7 +62,7 @@
             text-color="grey-1"
             size="13px"
             icon="o_article"
-            @click="editModal"
+            @click="editModel"
           />
         </div>
       </div>
@@ -90,7 +89,7 @@ export default {
   },
 
   methods: {
-    editModal () {
+    editModel () {
       this.$q.dialog({
         component: EditComponent,
         parent: this,
@@ -98,17 +97,13 @@ export default {
       })
     },
 
-    subscribeModal () {
+    subscribeModel () {
       if (this.model.is_subscribed) {
         this.model.subscribe({ method: 'DELETE' })
         return
       }
 
       this.model.subscribe()
-    },
-
-    queueModal () {
-      //
     }
   }
 }

@@ -13,7 +13,7 @@
     >
       <q-infinite-scroll
         :disable="!isReady"
-        class="row wrap justify-start items-start content-start q-col-gutter-md"
+        class="row wrap justify-start items-start content-start q-pb-md q-col-gutter-md"
         @load="onLoad"
       >
         <q-intersection
@@ -29,7 +29,8 @@
   </q-page>
 </template>
 
-<script>import { mapActions, mapState, mapGetters } from 'vuex'
+<script>
+import { mapActions, mapState, mapGetters } from 'vuex'
 import { createHelpers } from 'vuex-map-fields'
 import TagModel from 'src/models/Tag'
 

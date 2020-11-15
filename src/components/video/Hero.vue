@@ -3,12 +3,12 @@
     :alt="model.name"
     :src="model.thumbnail_url"
     loading="lazy"
-    class="video-title"
-    img-class="video-title-placeholder"
+    class="video-hero"
+    img-class="video-hero-placeholder"
   >
-    <div class="absolute-full video-title-elements">
+    <div class="absolute-full video-hero-elements">
       <div class="container absolute-top">
-        <div class="video-title-details">
+        <div class="video-hero-details">
           <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
             {{ model.name }}
           </div>
