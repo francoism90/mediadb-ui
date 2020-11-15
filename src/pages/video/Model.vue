@@ -1,7 +1,7 @@
 <template>
   <q-page :key="model.id">
-    <video-title />
-    <video-related />
+    <hero />
+    <related />
   </q-page>
 </template>
 
@@ -31,8 +31,8 @@ export default {
   },
 
   components: {
-    VideoRelated: () => import('components/video/Related'),
-    VideoTitle: () => import('components/video/Title')
+    Related: () => import('components/video/Related'),
+    Hero: () => import('components/video/Hero')
   },
 
   beforeRouteEnter (to, from, next) {

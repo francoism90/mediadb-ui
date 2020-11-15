@@ -3,10 +3,7 @@
     v-if="$auth.ready()"
     id="q-app"
   >
-    <component
-      :is="layout || 'Auth'"
-      v-if="$auth.ready()"
-    >
+    <component :is="layout">
       <router-view />
     </component>
   </div>
@@ -27,7 +24,7 @@ export default {
 
   computed: {
     layout () {
-      return this.$route.meta.layout
+      return this.$route.meta.layout || 'Auth'
     }
   },
 

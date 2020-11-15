@@ -22,7 +22,7 @@
         >
           <q-card-section class="row items-center q-pb-none">
             <div class="text-h6">
-              Login to MediaDB
+              Sign In to MediaDB
             </div>
           </q-card-section>
 
@@ -82,6 +82,12 @@ export default {
     })
   },
 
+  meta () {
+    return {
+      title: 'Sign In'
+    }
+  },
+
   methods: {
     async onSubmit () {
       try {
@@ -91,13 +97,12 @@ export default {
           await this.$http.get('sanctum/csrf-cookie')
         }
 
-        await this.$auth
-          .login({
-            data: this.form,
-            redirect: this.$route.query.redirect || '/',
-            staySignedIn: true,
-            fetchUser: true
-          })
+        await this.$auth.login({
+          data: this.form,
+          redirect: this.$route.query.redirect || '/',
+          staySignedIn: true,
+          fetchUser: true
+        })
       } catch (e) {
         this.setMessage(e.response)
         this.setErrors(e.response)

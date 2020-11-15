@@ -36,6 +36,12 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
+    name: 'settings',
+    path: '/settings',
+    component: () => import('pages/Settings.vue'),
+    meta: { auth: true, layout: 'Main' }
+  },
+  {
     path: '/collections',
     component: () => import('pages/Collection.vue'),
     meta: { auth: true, layout: 'Main' },

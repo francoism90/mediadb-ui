@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.9.10",
-    "@websanova/vue-auth": "^3.3.8",
+    "@websanova/vue-auth": "^4.0.1",
     "approximate-number": "^2.0.0",
     "axios": "^0.21.0",
     "core-js": "^3.7.0",
@@ -23,7 +23,7 @@
     "pusher-js": "^7.0.1",
     "quasar": "^1.14.3",
     "sanitize-html": "^2.1.2",
-    "shaka-player": "^3.0.5",
+    "shaka-player": "^3.0.6",
     "vue-api-query": "^1.8.1",
     "vue-i18n": "^8.22.1",
     "vue-shortkey": "^3.1.7",

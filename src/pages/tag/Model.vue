@@ -1,8 +1,8 @@
 <template>
   <q-page :key="model.id">
-    <tag-title />
-    <tag-videos />
-    <tag-collections />
+    <hero />
+    <videos />
+    <collections />
   </q-page>
 </template>
 
@@ -33,9 +33,9 @@ export default {
   },
 
   components: {
-    TagTitle: () => import('components/tag/Title'),
-    TagCollections: () => import('components/tag/Collections'),
-    TagVideos: () => import('components/tag/Videos')
+    Hero: () => import('components/tag/Hero'),
+    Collections: () => import('components/tag/Collections'),
+    Videos: () => import('components/tag/Videos')
   },
 
   meta () {

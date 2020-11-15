@@ -28,7 +28,6 @@
         <q-space />
 
         <notifications />
-        <account />
       </q-toolbar>
     </q-header>
 
@@ -75,7 +74,6 @@ import PaginateModule from 'src/store/paginate'
 
 export default {
   components: {
-    Account: () => import('components/toolbar/Account'),
     Notifications: () => import('components/toolbar/Notifications'),
     Search: () => import('components/toolbar/Search')
   },
@@ -88,7 +86,8 @@ export default {
         { label: 'Home', name: 'home', icon: 'o_home' },
         { label: 'Video', name: 'video', icon: 'o_theaters' },
         { label: 'Browse', name: 'collection', icon: 'o_folder' },
-        { label: 'Tags', name: 'tag', icon: 'o_label' }
+        { label: 'Tags', name: 'tag', icon: 'o_label' },
+        { label: 'Settings', name: 'settings', icon: 'o_settings' }
       ],
       stores: [
         { name: 'collections', module: PaginateModule },

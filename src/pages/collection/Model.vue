@@ -1,7 +1,7 @@
 <template>
   <q-page :key="model.id">
-    <collection-title />
-    <collection-videos />
+    <hero />
+    <videos />
   </q-page>
 </template>
 
@@ -31,8 +31,8 @@ export default {
   },
 
   components: {
-    CollectionTitle: () => import('components/collection/Title'),
-    CollectionVideos: () => import('components/collection/video/Models')
+    Hero: () => import('components/collection/Hero'),
+    Videos: () => import('components/collection/video/Models')
   },
 
   beforeRouteEnter (to, from, next) {

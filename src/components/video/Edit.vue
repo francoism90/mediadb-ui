@@ -225,7 +225,7 @@ export default {
     async filterCollections (val, update, abort) {
       this.collections = await CollectionModel
         .where('query', val || null)
-        .orderBy(val.length ? 'recommended' : 'updated_at')
+        .orderBy(val.length ? 'recommended' : 'trending')
         .page(1)
         .limit(5)
         .$get()
