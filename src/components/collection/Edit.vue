@@ -91,6 +91,21 @@
             />
 
             <q-select
+              v-model="form.status"
+              square
+              filled
+              :error-message="getError('status')"
+              :error="hasError('status')"
+              :input-debounce="300"
+              :options="statuses"
+              clearable
+              hide-dropdown-icon
+              label="Visibility"
+              emit-value
+              map-options
+            />
+
+            <q-select
               v-model="form.tags"
               square
               filled
@@ -172,6 +187,10 @@ export default {
     return {
       deleteDialog: false,
       collection: null,
+      statuses: [
+        { value: 'public', label: 'Public' },
+        { value: 'private', label: 'Private' }
+      ],
       tags: []
     }
   },
@@ -185,6 +204,7 @@ export default {
       this.setForm({
         id: this.collection.id,
         name: this.collection.name,
+        status: this.collection.status,
         overview: this.collection.overview,
         tags: this.collection.relationships.tags
       })

@@ -71,7 +71,7 @@ export default {
   },
 
   components: {
-    Controls: () => import('components/watch/Layout')
+    Controls: () => import('components/watch/Controls')
   },
 
   props: {

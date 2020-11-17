@@ -1,5 +1,8 @@
 <template>
-  <div class="player-element">
+  <div
+    v-if="metadata && model"
+    class="player-element"
+  >
     <q-img
       v-if="seekerHover"
       :position="tooltipPosition"
@@ -70,7 +73,7 @@ export default {
     ...mapFields({
       currentTime: 'data.currentTime',
       duration: 'data.duration',
-      metadata: 'data.model',
+      metadata: 'data.metadata',
       model: 'data.model',
       seekTime: 'data.seekTime'
     }),

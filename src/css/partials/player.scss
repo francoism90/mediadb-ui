@@ -8,7 +8,7 @@
 }
 
 .player-controls {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.25);
   z-index: 20;
 }
 
@@ -21,7 +21,7 @@
 
 .player-seeker {
   .q-slider__track-container {
-    background: $grey-9;
+    background: $grey-8;
     z-index: -1;
 
     &::before {
@@ -31,7 +31,7 @@
       top: 0;
       bottom: 0;
       right: 0;
-      background: $grey-9;
+      background: $grey-8;
     }
 
     &::after {
