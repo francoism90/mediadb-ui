@@ -90,9 +90,9 @@ export default {
 
   methods: {
     async onSubmit () {
-      try {
-        this.resetErrors()
+      this.resetErrors()
 
+      try {
         if (!this.$q.platform.is.cordova && !this.$q.platform.is.capacitor) {
           await this.$http.get('sanctum/csrf-cookie')
         }

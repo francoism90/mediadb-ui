@@ -84,8 +84,25 @@
               filled
               label="Name"
               clearable
+              counter
+              :maxlength="255"
               :error-message="getError('name')"
               :error="hasError('name')"
+            />
+
+            <q-select
+              v-model="form.status"
+              square
+              filled
+              :error-message="getError('status')"
+              :error="hasError('status')"
+              :input-debounce="300"
+              :options="statuses"
+              clearable
+              hide-dropdown-icon
+              label="Visibility"
+              emit-value
+              map-options
             />
 
             <q-select
@@ -140,6 +157,8 @@
               autogrow
               label="Overview"
               clearable
+              counter
+              :maxlength="1024"
               :error-message="getError('name')"
               :error="hasError('name')"
             />
@@ -192,6 +211,10 @@ export default {
       deleteDialog: false,
       video: null,
       collections: [],
+      statuses: [
+        { value: 'public', label: 'Public' },
+        { value: 'private', label: 'Private' }
+      ],
       tags: []
     }
   },
@@ -205,6 +228,7 @@ export default {
       this.setForm({
         id: this.video.id,
         name: this.video.name,
+        status: this.video.status,
         overview: this.video.overview,
         collections: this.video.relationships.collections,
         tags: this.video.relationships.tags
@@ -245,14 +269,19 @@ export default {
     },
 
     async onDelete () {
+      this.resetErrors()
+
       try {
         await this.video.delete()
-      } catch {
-        //
+      } catch (e) {
+        this.setMessage(e.response)
+        this.setErrors(e.response)
       }
     },
 
     async onSubmit () {
+      this.resetErrors()
+
       try {
         const video = new VideoModel(this.form)
 

@@ -14,7 +14,7 @@
         img-class="video-placeholder"
       >
         <div class="absolute-bottom-right">
-          <q-badge class="transparent-3 text-caption q-ma-sm">
+          <q-badge class="transparent-4 text-caption q-ma-sm">
             {{ Number(video.duration || 0) | timestamp }}
           </q-badge>
         </div>

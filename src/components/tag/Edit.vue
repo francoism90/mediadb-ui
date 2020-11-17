@@ -84,6 +84,8 @@
               filled
               label="Name"
               clearable
+              counter
+              :maxlength="255"
               :error-message="getError('name')"
               :error="hasError('name')"
             />
@@ -99,10 +101,8 @@
               clearable
               hide-dropdown-icon
               label="Type"
-              option-label="name"
-              option-value="id"
-              stack-label
-              use-input
+              emit-value
+              map-options
             />
           </q-card-section>
 
@@ -134,7 +134,6 @@
 <script>
 import { dialogHandler } from 'src/mixins/dialog'
 import { formHandler } from 'src/mixins/form'
-import { find } from 'lodash'
 import TagModel from 'src/models/Tag'
 
 export default {
@@ -152,17 +151,11 @@ export default {
       deleteDialog: false,
       tag: null,
       types: [
-        { id: 'actor', name: 'Actor' },
-        { id: 'genre', name: 'Genre' },
-        { id: 'language', name: 'Language' },
-        { id: 'studio', name: 'Studio' }
+        { value: 'actor', label: 'Actor' },
+        { value: 'genre', label: 'Genre' },
+        { value: 'language', label: 'Language' },
+        { value: 'studio', label: 'Studio' }
       ]
-    }
-  },
-
-  computed: {
-    type () {
-      return find(this.types, { id: this.tag.type }) || this.types[0]
     }
   },
 
@@ -175,7 +168,7 @@ export default {
       this.setForm({
         id: this.tag.id,
         name: this.tag.name,
-        type: this.type
+        type: this.tag.type
       })
     } catch {
       this.hide()
@@ -191,14 +184,19 @@ export default {
 
   methods: {
     async onDelete () {
+      this.resetErrors()
+
       try {
         await this.tag.delete()
-      } catch {
-        //
+      } catch (e) {
+        this.setMessage(e.response)
+        this.setErrors(e.response)
       }
     },
 
     async onSubmit () {
+      this.resetErrors()
+
       try {
         const tag = new TagModel(this.form)
 

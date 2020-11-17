@@ -84,6 +84,8 @@
               filled
               label="Name"
               clearable
+              counter
+              :maxlength="255"
               :error-message="getError('name')"
               :error="hasError('name')"
             />
@@ -118,6 +120,8 @@
               autogrow
               label="Overview"
               clearable
+              counter
+              :maxlength="1024"
               :error-message="getError('name')"
               :error="hasError('name')"
             />
@@ -211,12 +215,15 @@ export default {
     async onDelete () {
       try {
         await this.collection.delete()
-      } catch {
-        //
+      } catch (e) {
+        this.setMessage(e.response)
+        this.setErrors(e.response)
       }
     },
 
     async onSubmit () {
+      this.resetErrors()
+
       try {
         const collection = new CollectionModel(this.form)
 
