@@ -1,17 +1,17 @@
 <template>
   <q-card-section class="q-px-none">
     <q-list
-      v-for="(subtitle, index) in video.subtitles"
+      v-for="(caption, index) in video.captions"
       :key="index"
     >
       <q-item
-        v-if="subtitle.id && subtitle.name"
+        v-if="caption.id && caption.name"
         v-ripple
         tag="label"
       >
         <q-item-section>
           <q-item-label class="ellipsis">
-            {{ subtitle.name }}
+            {{ caption.name }}
           </q-item-label>
         </q-item-section>
 
@@ -19,7 +19,7 @@
           <q-toggle
             v-model="tracks"
             color="primary"
-            :val="subtitle.id"
+            :val="caption.id"
           />
         </q-item-section>
       </q-item>

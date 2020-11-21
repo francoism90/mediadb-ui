@@ -13,7 +13,6 @@ import createPersistedState from 'vuex-persistedstate'
 const persistedState = createPersistedState({
   paths: [
     'player.captionLocale',
-    'player.subtitleLocale',
     'player.playbackRate',
     'player.settings',
     'session'

@@ -2,7 +2,6 @@ export default function () {
   return {
     ready: false,
     captionLocale: null,
-    subtitleLocale: null,
     playbackRate: 1.0,
     controls: true,
     fullscreen: false,

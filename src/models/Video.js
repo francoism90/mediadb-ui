@@ -15,8 +15,8 @@ export default class Video extends Model {
     }
   }
 
-  get subtitles () {
-    return filter(this.tracks, { collection: 'subtitles' })
+  get captions () {
+    return filter(this.tracks, { kind: 'captions' })
   }
 
   frameshot () {

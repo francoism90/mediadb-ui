@@ -35,7 +35,7 @@
           v-for="(track, index) in video.tracks"
           :id="track.id"
           :key="index"
-          :kind="track.collection || 'subtitles'"
+          :kind="track.kind"
           :label="track.name"
           :srclang="track.language || 'en'"
           :src="track.download_url"
@@ -96,7 +96,6 @@ export default {
   computed: {
     ...mapFields({
       // captionLocale: 'captionLocale',
-      // subtitleLocale: 'subtitleLocale',
       controls: 'controls',
       fullscreen: 'fullscreen',
       playbackRate: 'playbackRate',
