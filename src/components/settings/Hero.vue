@@ -1,10 +1,16 @@
 <template>
   <div class="settings-hero settings-hero-details">
-    <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
+    <div
+      v-if="$auth.user().name"
+      class="q-pt-lg text-h4 text-white ellipsis-2-lines"
+    >
       {{ $auth.user().name }}
     </div>
 
-    <div class="text-subtitle1 text-grey-3 ellipsis-2-lines">
+    <div
+      v-if="$auth.user().created_at"
+      class="text-subtitle1 text-grey-3 ellipsis-2-lines"
+    >
       Joined {{ String($auth.user().created_at) | datestamp }}
     </div>
 
@@ -27,6 +33,8 @@
 export default {
   methods: {
     async logout () {
+      this.$store.dispatch('session/reset')
+
       await this.$auth.logout({
         makeRequest: true,
         redirect: {

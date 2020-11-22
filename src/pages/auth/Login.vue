@@ -97,9 +97,11 @@ export default {
           await this.$http.get('sanctum/csrf-cookie')
         }
 
+        const redirect = this.$auth.redirect()
+
         await this.$auth.login({
           data: this.form,
-          redirect: this.$route.query.redirect || '/',
+          redirect: redirect ? redirect.from.fullPath : '/',
           staySignedIn: true,
           fetchUser: true
         })

@@ -10,6 +10,6 @@ export function initialize ({ commit, state }, payload = {}) {
   commit('setReady', true)
 }
 
-export function resetState ({ commit }) {
+export function reset ({ commit }) {
   commit('resetState')
 }

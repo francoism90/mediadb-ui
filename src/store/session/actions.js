@@ -1,3 +1,3 @@
-export function resetState ({ commit }) {
+export function reset ({ commit }) {
   commit('resetState')
 }
