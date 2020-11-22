@@ -1,8 +1,14 @@
 export function initialize ({ commit, state }, payload = {}) {
-  const { model = null } = payload
+  const { id = null, model = null, startTime = 0, textTracks = [] } = payload
 
-  commit('resetData')
+  if (id && state.id !== id) {
+    commit('resetState')
+  }
+
+  commit('setId', id)
   commit('setModel', model)
+  commit('setSeekTime', startTime)
+  commit('setTextTracks', textTracks)
   commit('setReady', true)
 }
 

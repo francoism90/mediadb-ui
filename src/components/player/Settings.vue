@@ -1,6 +1,5 @@
 <template>
   <q-dialog
-    :key="id"
     ref="dialog"
     @hide="onDialogHide"
   >
@@ -8,7 +7,7 @@
       class="q-dialog-plugin"
       style="width: 500px; max-width: 100vw;"
     >
-      <q-inner-loading :showing="!video">
+      <q-inner-loading :showing="!model">
         <q-spinner
           size="50px"
           color="primary"
@@ -21,12 +20,12 @@
         leave-active-class="animated fadeOut"
       >
         <q-card-section
-          v-if="video"
+          v-if="model"
           class="q-pa-none"
         >
           <q-card-section class="row no-wrap justify-between items-center">
             <div class="col text-h6 ellipsis">
-              {{ video.name }}
+              {{ model.name }}
             </div>
 
             <div class="col-auto">
@@ -80,24 +79,21 @@
                 name="general"
                 class="q-pa-none no-scroll"
               >
-                <item-general :video="video" />
+                <general />
               </q-tab-panel>
 
               <q-tab-panel
                 name="tracks"
                 class="q-pa-none no-scroll"
               >
-                <item-tracks
-                  :text-tracks="textTracks"
-                  :video="video"
-                />
+                <text-tracks />
               </q-tab-panel>
 
               <q-tab-panel
                 name="debug"
                 class="q-pa-none no-scroll"
               >
-                <item-debug :video="video" />
+                <debug />
               </q-tab-panel>
             </q-tab-panels>
           </q-card-section>
@@ -109,51 +105,27 @@
 
 <script>
 import { dialogHandler } from 'src/mixins/dialog'
-import VideoModel from 'src/models/Video'
+import { mapState } from 'vuex'
 
 export default {
   components: {
-    ItemDebug: () => import('components/watch/Debug'),
-    ItemGeneral: () => import('components/watch/General'),
-    ItemTracks: () => import('components/watch/Tracks')
+    Debug: () => import('components/player/Debug'),
+    General: () => import('components/player/General'),
+    TextTracks: () => import('components/player/TextTracks')
   },
 
   mixins: [dialogHandler],
 
-  props: {
-    id: {
-      type: String,
-      required: true
-    },
-
-    textTracks: {
-      type: TextTrackList,
-      default: null
-    }
-  },
-
   data () {
     return {
-      tab: 'general',
-      video: null
+      tab: 'general'
     }
   },
 
-  async created () {
-    this.video = null
-
-    try {
-      this.video = await VideoModel.$find(this.id)
-    } catch {
-      this.hide()
-
-      this.$q.notify({
-        progress: true,
-        position: 'top',
-        message: 'Unable to load settings',
-        type: 'negative'
-      })
-    }
+  computed: {
+    ...mapState('player', [
+      'model'
+    ])
   }
 }
 </script>

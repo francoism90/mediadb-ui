@@ -28,7 +28,6 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
-import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
   getterType: 'player/getState',
@@ -36,13 +35,6 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  props: {
-    video: {
-      type: VideoModel,
-      required: true
-    }
-  },
-
   computed: {
     ...mapFields([
       'playbackRate'

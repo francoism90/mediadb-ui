@@ -71,6 +71,7 @@
 
 <script>
 import PaginateModule from 'src/store/paginate'
+import PlayerModule from 'src/store/player'
 
 export default {
   components: {
@@ -90,7 +91,9 @@ export default {
         { label: 'Settings', name: 'settings', icon: 'o_settings' }
       ],
       stores: [
+        { name: 'player', module: PlayerModule },
         { name: 'collections', module: PaginateModule },
+        { name: 'notifications', module: PaginateModule },
         { name: 'tags', module: PaginateModule },
         { name: 'videos', module: PaginateModule }
       ]

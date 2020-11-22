@@ -70,13 +70,14 @@ export default {
   },
 
   computed: {
-    ...mapFields({
-      currentTime: 'data.currentTime',
-      duration: 'data.duration',
-      metadata: 'data.metadata',
-      model: 'data.model',
-      seekTime: 'data.seekTime'
-    }),
+    ...mapFields([
+      'buffered',
+      'currentTime',
+      'duration',
+      'metadata',
+      'model',
+      'seekTime'
+    ]),
 
     seeker: {
       get () {

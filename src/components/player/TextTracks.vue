@@ -1,7 +1,14 @@
 <template>
   <q-card-section class="q-px-none">
+    <q-card-section
+      v-if="!model.captions.length"
+      class="text-body2 text-grey"
+    >
+      No closed captions or subtitles are available.
+    </q-card-section>
+
     <q-list
-      v-for="(caption, index) in video.captions"
+      v-for="(caption, index) in model.captions"
       :key="index"
     >
       <q-item
@@ -17,7 +24,7 @@
 
         <q-item-section avatar>
           <q-toggle
-            v-model="tracks"
+            v-model="textTracks"
             color="primary"
             :val="caption.id"
           />
@@ -29,7 +36,6 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
-import VideoModel from 'src/models/Video'
 
 const { mapFields } = createHelpers({
   getterType: 'player/getState',
@@ -37,17 +43,11 @@ const { mapFields } = createHelpers({
 })
 
 export default {
-  props: {
-    video: {
-      type: VideoModel,
-      required: true
-    }
-  },
-
   computed: {
-    ...mapFields({
-      tracks: 'data.tracks'
-    })
+    ...mapFields([
+      'model',
+      'textTracks'
+    ])
   }
 }
 </script>

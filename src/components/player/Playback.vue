@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!error"
+    v-if="metadata && model"
     class="absolute-center container fluid player-playback"
   >
     <div class="row no-wrap">
@@ -11,7 +11,7 @@
         size="24px"
         color="white"
         icon="o_replay_10"
-        :disable="isLoading"
+        :disable="!playable"
         @click="replay"
         @shortkey="replay"
       />
@@ -23,10 +23,10 @@
         size="36px"
         text-color="white"
         :icon="paused ? 'o_play_arrow' : 'o_pause'"
-        :disable="isLoading"
-        :loading="isLoading"
-        @click="togglePlay"
-        @shortkey="togglePlay"
+        :disable="!playable"
+        :loading="waiting"
+        @click="togglePlayback"
+        @shortkey="togglePlayback"
       />
 
       <q-btn
@@ -36,7 +36,7 @@
         size="24px"
         color="white"
         icon="o_forward_10"
-        :disable="isLoading"
+        :disable="!playable"
         @click="forward"
         @shortkey="forward"
       />
@@ -54,20 +54,16 @@ const { mapFields } = createHelpers({
 
 export default {
   computed: {
-    ...mapFields({
-      buffered: 'data.buffered',
-      currentTime: 'data.currentTime',
-      error: 'data.error',
-      metadata: 'data.metadata',
-      paused: 'data.paused',
-      play: 'data.play',
-      seekTime: 'data.seekTime',
-      waiting: 'data.waiting'
-    }),
-
-    isLoading () {
-      return !this.buffered || !this.metadata || this.waiting
-    }
+    ...mapFields([
+      'currentTime',
+      'metadata',
+      'model',
+      'playback',
+      'playable',
+      'paused',
+      'seekTime',
+      'waiting'
+    ])
   },
 
   methods: {
@@ -79,8 +75,8 @@ export default {
       this.seekTime = this.currentTime + 10
     },
 
-    togglePlay () {
-      this.play = !!this.paused
+    togglePlayback () {
+      this.playback = !!this.paused
     }
   }
 }

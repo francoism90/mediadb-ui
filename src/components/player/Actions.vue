@@ -11,8 +11,8 @@
         round
         size="18px"
         color="white"
-        :disable="isLoading"
-        @click="togglePlay"
+        :disable="!playable"
+        @click="togglePlayback"
       />
 
       <q-btn
@@ -22,7 +22,7 @@
         round
         size="18px"
         color="white"
-        :disable="isLoading"
+        :disable="!playable"
         @click="forward"
       />
 
@@ -36,7 +36,7 @@
         size="18px"
         color="white"
         icon="o_movie_creation"
-        :disable="isLoading"
+        :disable="!playable"
         @click="frameshot"
         @shortkey="frameshot"
       />
@@ -67,6 +67,7 @@
         size="18px"
         color="white"
         :icon="fullscreen ? 'o_fullscreen_exit' : 'o_fullscreen'"
+        :disable="!playable"
         @click="toggleFullscreen"
         @shortkey="toggleFullscreen"
       >
@@ -80,7 +81,7 @@
 
 <script>
 import { createHelpers } from 'vuex-map-fields'
-import SettingsComponent from 'components/watch/Settings'
+import SettingsComponent from 'components/player/Settings'
 
 const { mapFields } = createHelpers({
   getterType: 'player/getState',
@@ -89,24 +90,18 @@ const { mapFields } = createHelpers({
 
 export default {
   computed: {
-    ...mapFields({
-      buffered: 'data.buffered',
-      currentTime: 'data.currentTime',
-      duration: 'data.duration',
-      fullscreen: 'fullscreen',
-      metadata: 'data.metadata',
-      model: 'data.model',
-      paused: 'data.paused',
-      play: 'data.play',
-      playbackRate: 'playbackRate',
-      seekTime: 'data.seekTime',
-      settings: 'settings',
-      waiting: 'data.waiting'
-    }),
-
-    isLoading () {
-      return !this.buffered || !this.metadata || this.waiting
-    }
+    ...mapFields([
+      'currentTime',
+      'fullscreen',
+      'metadata',
+      'model',
+      'playable',
+      'playback',
+      'playbackRate',
+      'paused',
+      'seekTime',
+      'textTracks'
+    ])
   },
 
   methods: {
@@ -134,8 +129,8 @@ export default {
       this.fullscreen = !this.fullscreen
     },
 
-    togglePlay () {
-      this.play = !!this.paused
+    togglePlayback () {
+      this.playback = !!this.paused
     }
   }
 }

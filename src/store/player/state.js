@@ -1,23 +1,21 @@
 export default function () {
   return {
     ready: false,
-    captionLocale: null,
-    playbackRate: 1.0,
+    id: null,
+    buffered: null,
     controls: true,
+    currentTime: 0,
+    duration: Infinity,
+    failed: false,
     fullscreen: false,
-    settings: {},
-    data: {
-      model: null,
-      buffered: null,
-      currentTime: 0,
-      duration: Infinity,
-      error: false,
-      metadata: false,
-      paused: true,
-      play: null,
-      seekTime: null,
-      tracks: [],
-      waiting: true
-    }
+    metadata: false,
+    model: null,
+    paused: true,
+    playable: false,
+    playback: true,
+    playbackRate: 1.0,
+    seekTime: 0,
+    textTracks: [],
+    waiting: false
   }
 }

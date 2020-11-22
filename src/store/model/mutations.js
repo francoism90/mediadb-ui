@@ -1,7 +1,7 @@
 import { updateField } from 'vuex-map-fields'
 import defaultState from './state'
 
-export function setId (state, payload = 0) {
+export function setId (state, payload = null) {
   state.id = payload
 }
 

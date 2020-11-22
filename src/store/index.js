@@ -1,22 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// Vuex modules
-import notifications from './paginate'
-import player from './player'
-import session from './session'
-
 // Vuex plugins
 import createPersistedState from 'vuex-persistedstate'
 
+// Vuex modules
+import session from './session'
+
 // Register plugins
 const persistedState = createPersistedState({
-  paths: [
-    'player.captionLocale',
-    'player.playbackRate',
-    'player.settings',
-    'session'
-  ]
+  key: 'persist',
+  paths: ['session'] // allow-list
 })
 
 /*
@@ -33,8 +27,6 @@ Vue.use(Vuex)
 export default function (/* { ssrContext } */) {
   const Store = new Vuex.Store({
     modules: {
-      notifications,
-      player,
       session
     },
     plugins: [persistedState],
