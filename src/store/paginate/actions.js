@@ -10,6 +10,10 @@ export function initialize ({ commit, state }, payload = {}) {
   commit('setReady', true)
 }
 
+export function reset ({ commit }) {
+  commit('resetState')
+}
+
 export function setPage ({ commit, getters }, payload = {}) {
   const { data = [], meta = {} } = payload
 

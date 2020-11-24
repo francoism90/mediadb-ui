@@ -1,5 +1,5 @@
 <template>
-  <div class="container tag-hero">
+  <div class="container fluid tag-hero">
     <div class="tag-hero-details">
       <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
         {{ model.name }}

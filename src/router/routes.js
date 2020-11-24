@@ -36,6 +36,12 @@ const routes = [
     meta: { auth: false, layout: 'Auth' }
   },
   {
+    name: 'logout',
+    path: '/logout',
+    component: () => import('pages/auth/Logout.vue'),
+    meta: { auth: true, layout: 'Auth' }
+  },
+  {
     name: 'settings',
     path: '/settings',
     component: () => import('pages/Settings.vue'),

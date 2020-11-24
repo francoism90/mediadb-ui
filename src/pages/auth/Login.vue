@@ -73,6 +73,30 @@ import { formHandler } from 'src/mixins/form'
 export default {
   mixins: [formHandler],
 
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.initialize()
+    })
+  },
+
+  beforeRouteUpdate (to, from, next) {
+    this.initialize()
+    next()
+  },
+
+  computed: {
+    redirect () {
+      const redirect = this.$auth.redirect()
+      const denyRedirects = ['login', 'logout', 'register']
+
+      if (!redirect || denyRedirects.includes(redirect.from.name)) {
+        return '/'
+      }
+
+      return redirect.from.fullPath
+    }
+  },
+
   created () {
     this.setForm({
       email: '',
@@ -89,6 +113,23 @@ export default {
   },
 
   methods: {
+    initialize () {
+      const stores = [
+        'collections',
+        'notifications',
+        'player',
+        'session',
+        'tags',
+        'videos'
+      ]
+
+      for (const store of stores) {
+        if (this.$store.hasModule(store)) {
+          this.$store.dispatch(`${store}/reset`)
+        }
+      }
+    },
+
     async onSubmit () {
       this.resetErrors()
 
@@ -97,11 +138,9 @@ export default {
           await this.$http.get('sanctum/csrf-cookie')
         }
 
-        const redirect = this.$auth.redirect()
-
         await this.$auth.login({
           data: this.form,
-          redirect: redirect ? redirect.from.fullPath : '/',
+          redirect: this.redirect,
           staySignedIn: true,
           fetchUser: true
         })

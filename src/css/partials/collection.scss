@@ -1,17 +1,16 @@
 /* Collection Item */
 .collection-item {
-  min-height: 230px;
-  min-width: 200px;
+  min-height: 320px;
+  min-width: 160px;
+
+  @media (max-width: $breakpoint-sm-max) {
+    min-height: 300px;
+  }
 }
 
-.collection-item-description {
-  padding-top: 10px;
-}
-
-.collection-placeholder {
+.collection-thumbnail {
   background-size: 100% 100% !important;
-  min-height: 160px;
-  min-width: 200px;
+  height: 180px;
 }
 
 /* Collection Hero */
@@ -20,7 +19,7 @@
   max-height: 250px;
 }
 
-.collection-hero-placeholder {
+.collection-hero-thumbnail {
   background-color: $grey-11;
   background-size: cover;
   filter: blur(1px) brightness(80%);

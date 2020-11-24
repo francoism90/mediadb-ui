@@ -72,6 +72,7 @@
 <script>
 import PaginateModule from 'src/store/paginate'
 import PlayerModule from 'src/store/player'
+import SessionModule from 'src/store/session'
 
 export default {
   components: {
@@ -91,6 +92,7 @@ export default {
         { label: 'Settings', name: 'settings', icon: 'o_settings' }
       ],
       stores: [
+        { name: 'session', module: SessionModule },
         { name: 'player', module: PlayerModule },
         { name: 'collections', module: PaginateModule },
         { name: 'notifications', module: PaginateModule },
@@ -107,12 +109,11 @@ export default {
   },
 
   created () {
-    this.initialize()
     this.registerStores()
-  },
+    this.setBearer()
 
-  beforeDestroy () {
-    this.unregisterStores()
+    // Set watches
+    this.$watch(() => this.$auth.token(), this.setBearer)
   },
 
   mounted () {
@@ -120,11 +121,6 @@ export default {
   },
 
   methods: {
-    initialize () {
-      const userToken = this.$auth.token() || null
-      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
-    },
-
     registerStores () {
       for (const store of this.stores) {
         if (!this.$store.hasModule(store.name)) {
@@ -133,12 +129,9 @@ export default {
       }
     },
 
-    unregisterStores () {
-      for (const store of this.stores) {
-        if (this.$store.hasModule(store.name)) {
-          this.$store.unregisterModule(store.name, store.module)
-        }
-      }
+    setBearer () {
+      const userToken = this.$auth.token() || null
+      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
     },
 
     setDrawer () {

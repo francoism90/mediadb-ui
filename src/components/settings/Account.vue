@@ -1,9 +1,7 @@
 <template>
   <div>
-    <div class="text-caption text-uppercase text-grey">
+    <div class="q-pb-md text-h6 text-grey-5">
       Account Details
     </div>
-
-    <q-separator spaced />
   </div>
 </template>

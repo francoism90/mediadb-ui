@@ -1,11 +1,12 @@
 <template>
-  <div class="q-pt-xs q-gutter-xs">
+  <div class="q-gutter-xs">
     <q-chip
       v-for="(item, index) in items"
       :key="index"
       :label="item.name"
       size="0.75rem"
-      color="grey-8"
+      color="grey-12"
+      class="q-py-xs q-px-sm"
       clickable
       square
       @click="onClick(item)"

@@ -2,12 +2,11 @@
   <q-img
     :alt="model.name"
     :src="model.thumbnail_url"
-    loading="lazy"
     class="collection-hero"
-    img-class="collection-hero-placeholder"
+    img-class="collection-hero-thumbnail"
   >
     <div class="absolute-full collection-hero-elements">
-      <div class="container absolute-top">
+      <div class="container fluid absolute-top">
         <div class="collection-hero-details">
           <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
             {{ model.name }}
@@ -29,7 +28,6 @@
         <tags
           v-if="model.relationships.tags.length"
           :items="model.relationships.tags"
-          item-component="Collection"
           class="q-pt-lg"
         />
 
@@ -79,7 +77,7 @@ import EditComponent from 'components/collection/Edit'
 
 export default {
   components: {
-    Tags: () => import('components/tag/List')
+    Tags: () => import('components/tag/Collection')
   },
 
   computed: {

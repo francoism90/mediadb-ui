@@ -1,40 +1,31 @@
 <template>
   <div
     v-if="getTotal > 0"
-    class="container q-pt-lg"
+    class="container fluid q-pt-lg"
   >
-    <div class="row no-wrap justify-between items-center content-start">
-      <div class="col">
-        <div class="text-caption text-uppercase text-grey">
-          Videos
-        </div>
-      </div>
-
-      <div class="col-auto">
-        <a
-          class="text-caption text-uppercase text-grey cursor-pointer"
-          @click="onClick"
-        >
-          See All
-        </a>
-      </div>
+    <div class="q-pb-md">
+      <span class="text-h6 text-grey-5">Videos</span>
+      <span
+        class="q-ml-md text-caption text-grey-5 cursor-pointer"
+        @click="onClick"
+      >
+        See All
+      </span>
     </div>
-
-    <q-separator spaced />
 
     <q-pull-to-refresh
       :key="id"
       :disable="!isReady"
       @refresh="onRefresh"
     >
-      <div class="row wrap justify-start items-start content-start q-col-gutter-md q-pt-sm">
+      <div class="row wrap justify-start items-start content-start q-col-gutter-lg">
         <q-intersection
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 video-item"
         >
-          <video-item :video="item" />
+          <item :video="item" />
         </q-intersection>
       </div>
     </q-pull-to-refresh>
@@ -55,7 +46,7 @@ const { mapFields } = createHelpers({
 
 export default {
   components: {
-    VideoItem: () => import('components/video/Item')
+    Item: () => import('components/video/Item')
   },
 
   computed: {

@@ -20,12 +20,12 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="ellipsis">
+      <q-item-label class="text-subtitle1 ellipsis">
         {{ tag.name }}
       </q-item-label>
 
       <q-item-label
-        class="text-grey-5 ellipsis-2-lines"
+        class="text-caption text-grey-5 ellipsis-2-lines"
         caption
       >
         {{ Number(tag.items || 0) | approximate }} items

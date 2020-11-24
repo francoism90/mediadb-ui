@@ -4,18 +4,18 @@
 $body-font-size: 14px;
 $body-line-height: 1.4;
 
-$h1: (size: 3rem, line-height: 1.2, weight: 600, letter-spacing: unset);
-$h2: (size: 2.5rem, line-height: 1.2, weight: 600, letter-spacing: unset);
-$h3: (size: 2rem, line-height: 1.2, weight: 600, letter-spacing: unset);
-$h4: (size: 1.75rem, line-height: 1.2, weight: 600, letter-spacing: unset);
-$h5: (size: 1.5rem, line-height: 1.2, weight: 600, letter-spacing: unset);
-$h6: (size: 1rem, line-height: 1.2, weight: 600, letter-spacing: unset);
+$h1: (size: 3rem, line-height: 1.4, weight: 600, letter-spacing: unset);
+$h2: (size: 2.5rem, line-height: 1.4, weight: 600, letter-spacing: unset);
+$h3: (size: 2rem, line-height: 1.4, weight: 600, letter-spacing: unset);
+$h4: (size: 1.75rem, line-height: 1.4, weight: 600, letter-spacing: unset);
+$h5: (size: 1.5rem, line-height: 1.4, weight: 600, letter-spacing: unset);
+$h6: (size: 1rem, line-height: 1.4, weight: 600, letter-spacing: unset);
 $subtitle1: (size: 0.875rem, line-height: 1.4, weight: 500, letter-spacing: unset);
 $subtitle2: (size: 0.85rem, line-height: 1.4, weight: 500, letter-spacing: unset);
 $body1: (size: 0.975rem, line-height: 1.4, weight: 500, letter-spacing: unset);
 $body2: (size: 0.875rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$overline: (size: 0.85rem, line-height: 1.2, weight: 500, letter-spacing: unset);
-$caption: (size: 0.85rem, line-height: 1.2, weight: 500, letter-spacing: unset);
+$overline: (size: 0.75rem, line-height: 1.4, weight: 500, letter-spacing: unset);
+$caption: (size: 0.85rem, line-height: 1.4, weight: 500, letter-spacing: unset);
 
 $headings: (
   'h1': $h1,
@@ -90,8 +90,8 @@ $button-padding: 6px 14px;
 $button-dense-padding: 6px 8px;
 $button-font-size: 0.875rem;
 $button-font-weight: map-get($text-weights, 'regular');
-$button-rounded-border-radius: 12px;
-$button-push-border-radius: 4px;
+$button-rounded-border-radius: 8px;
+$button-push-border-radius: 8px;
 
 $toolbar-min-height: 40px;
 $toolbar-padding : 0;

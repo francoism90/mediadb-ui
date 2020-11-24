@@ -8,26 +8,24 @@
       <q-img
         :alt="collection.name"
         :src="collection.thumbnail_url"
-        height="160px"
-        loading="lazy"
-        class="bg-grey-8 cursor-pointer"
-        img-class="collection-placeholder"
+        height="180px"
+        class="bg-grey-9 collection-thumbnail cursor-pointer"
+        img-class="collection-thumbnail"
       />
     </router-link>
 
-    <q-card-section class="q-px-none collection-item-description">
-      <div class="text-subtitle1 ellipsis-2-lines">
+    <q-card-section class="q-px-none">
+      <div class="q-pb-xs text-subtitle1 ellipsis-2-lines">
         {{ collection.name }}
       </div>
 
-      <div class="text-subtitle2 ellipsis-2-lines text-grey-5">
+      <div class="q-pb-sm text-caption text-grey-5 ellipsis-2-lines">
         {{ Number(collection.item_count || 0) | approximate }} items
       </div>
 
       <tags
         v-if="collection.relationships.tags.length"
         :items="collection.relationships.tags"
-        item-component="Collection"
       />
     </q-card-section>
   </q-card>
@@ -38,7 +36,7 @@ import CollectionModel from 'src/models/Collection'
 
 export default {
   components: {
-    Tags: () => import('components/tag/List')
+    Tags: () => import('components/tag/Collection')
   },
 
   props: {

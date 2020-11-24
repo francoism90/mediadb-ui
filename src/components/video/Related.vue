@@ -1,10 +1,8 @@
 <template>
-  <div class="container">
-    <div class="text-caption text-uppercase text-grey">
-      Related
+  <div class="container fluid">
+    <div class="q-pb-md text-h6 text-grey-5">
+      Related Videos
     </div>
-
-    <q-separator spaced />
 
     <q-pull-to-refresh
       :key="id"
@@ -13,16 +11,16 @@
     >
       <q-infinite-scroll
         :disable="!isReady"
-        class="row wrap justify-start items-start content-start q-col-gutter-md q-pt-sm"
+        class="row wrap justify-start items-start content-start q-col-gutter-lg"
         @load="onLoad"
       >
         <q-intersection
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 video-item"
+          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 video-item"
         >
-          <video-item :video="item" />
+          <item :video="item" />
         </q-intersection>
       </q-infinite-scroll>
     </q-pull-to-refresh>
@@ -37,7 +35,7 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers('video/rela
 
 export default {
   components: {
-    VideoItem: () => import('components/video/Item')
+    Item: () => import('components/video/Item')
   },
 
   computed: {

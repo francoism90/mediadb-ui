@@ -1,12 +1,10 @@
 <template>
-  <div class="container">
-    <div class="text-caption text-uppercase text-grey">
+  <div class="container fluid">
+    <div class="q-pb-md text-h6 text-grey-5">
       Videos
     </div>
 
-    <q-separator spaced />
-
-    <q-toolbar class="q-pt-md q-pb-lg">
+    <q-toolbar class="q-pb-lg">
       <sorters />
     </q-toolbar>
 

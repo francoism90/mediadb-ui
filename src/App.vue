@@ -11,15 +11,15 @@
 
 <script>
 export default {
-  meta: {
-    title: '',
-    titleTemplate: title => `${title} | MediaDB`
-  },
-
   components: {
     Auth: () => import('layouts/Auth'),
     Error: () => import('layouts/Error'),
     Main: () => import('layouts/Main')
+  },
+
+  meta: {
+    title: '',
+    titleTemplate: title => `${title} | MediaDB`
   },
 
   computed: {

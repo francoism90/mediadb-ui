@@ -1,17 +1,16 @@
 /* Video Item */
 .video-item {
-  min-height: 240px;
+  min-height: 360px;
   min-width: 200px;
+
+  @media (max-width: $breakpoint-sm-max) {
+    min-height: 340px;
+  }
 }
 
-.video-item-description {
-  padding-top: 10px;
-}
-
-.video-placeholder {
+.video-thumbnail {
   background-size: 100% 100% !important;
-  min-height: 180px;
-  min-width: 200px;
+  height: 200px;
 }
 
 /* Video Hero */
@@ -20,7 +19,7 @@
   max-height: 350px;
 }
 
-.video-hero-placeholder {
+.video-hero-thumbnail {
   background-color: $grey-11;
   background-size: cover;
   filter: blur(1px) brightness(80%);

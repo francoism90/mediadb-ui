@@ -2,18 +2,17 @@
   <q-img
     :alt="model.name"
     :src="model.thumbnail_url"
-    loading="lazy"
     class="video-hero"
-    img-class="video-hero-placeholder"
+    img-class="video-hero-thumbnail"
   >
     <div class="absolute-full video-hero-elements">
-      <div class="container absolute-top">
+      <div class="container fluid absolute-top">
         <div class="video-hero-details">
           <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
             {{ model.name }}
           </div>
 
-          <div class="text-subtitle1 text-grey-3 ellipsis-2-lines">
+          <div class="q-pt-xs text-subtitle1 text-grey-3 ellipsis-2-lines">
             {{ String(model.created_at) | datestamp }} •
             {{ Number(model.duration) | timestamp }} •
             {{ Number(model.views) | approximate }} views
@@ -22,23 +21,22 @@
           <collections
             v-if="model.relationships.collections.length"
             :items="model.relationships.collections"
-            class="text-subtitle1 ellipsis-2-lines text-grey-4"
+            class="q-pt-xs text-subtitle1 ellipsis-2-lines text-grey-4"
+          />
+
+          <tags
+            v-if="model.relationships.tags.length"
+            :items="model.relationships.tags"
+            class="q-pt-md"
           />
 
           <div
             v-if="model.overview"
-            class="q-pt-md text-subtitle1 text-grey-3 ellipsis-3-lines"
+            class="q-pt-md text-subtitle1 text-grey-4 ellipsis-3-lines"
           >
             {{ model.overview }}
           </div>
         </div>
-
-        <tags
-          v-if="model.relationships.tags.length"
-          :items="model.relationships.tags"
-          item-component="Video"
-          class="q-pt-lg"
-        />
 
         <div class="q-pt-lg q-gutter-sm">
           <q-btn
@@ -100,7 +98,7 @@ import WatchComponent from 'components/video/Watch'
 export default {
   components: {
     Collections: () => import('components/collection/List'),
-    Tags: () => import('components/tag/List')
+    Tags: () => import('components/tag/Video')
   },
 
   computed: {
