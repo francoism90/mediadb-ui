@@ -43,7 +43,7 @@ export default {
 
   methods: {
     initialize () {
-      const user = this.$auth.user()
+      const user = this.$auth.user() || null
 
       if (!user) {
         this.resetStores()
