@@ -110,10 +110,6 @@ export default {
 
   created () {
     this.registerStores()
-    this.setBearer()
-
-    // Set watches
-    this.$watch(() => this.$auth.token(), this.setBearer)
   },
 
   mounted () {
@@ -127,11 +123,6 @@ export default {
           this.$store.registerModule(store.name, store.module)
         }
       }
-    },
-
-    setBearer () {
-      const userToken = this.$auth.token() || null
-      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
     },
 
     setDrawer () {

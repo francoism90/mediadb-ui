@@ -34,7 +34,43 @@ export default {
     }
   },
 
+  created () {
+    this.initialize()
+
+    // Set watches
+    this.$watch(() => this.$auth.user(), this.initialize)
+  },
+
   methods: {
+    initialize () {
+      const user = this.$auth.user()
+
+      if (!user) {
+        this.resetStores()
+      }
+
+      // Set pusher
+      const userToken = this.$auth.token() || null
+      this.$echo.connector.pusher.config.auth.headers.Authorization = `Bearer ${userToken}`
+    },
+
+    resetStores () {
+      const stores = [
+        'collections',
+        'notifications',
+        'player',
+        'session',
+        'tags',
+        'videos'
+      ]
+
+      for (const store of stores) {
+        if (this.$store.hasModule(store)) {
+          this.$store.dispatch(`${store}/reset`)
+        }
+      }
+    },
+
     setFullscreen (active = false) {
       if (!this.$q.platform.is.cordova) {
         return

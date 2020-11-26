@@ -73,17 +73,6 @@ import { formHandler } from 'src/mixins/form'
 export default {
   mixins: [formHandler],
 
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.initialize()
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.initialize()
-    next()
-  },
-
   computed: {
     redirect () {
       const redirect = this.$auth.redirect()
@@ -113,23 +102,6 @@ export default {
   },
 
   methods: {
-    initialize () {
-      const stores = [
-        'collections',
-        'notifications',
-        'player',
-        'session',
-        'tags',
-        'videos'
-      ]
-
-      for (const store of stores) {
-        if (this.$store.hasModule(store)) {
-          this.$store.dispatch(`${store}/reset`)
-        }
-      }
-    },
-
     async onSubmit () {
       this.resetErrors()
 
