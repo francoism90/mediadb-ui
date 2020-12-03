@@ -22,7 +22,7 @@
     "lodash": "^4.17.20",
     "pusher-js": "^7.0.1",
     "quasar": "^1.14.5",
-    "sanitize-html": "^2.1.2",
+    "sanitize-html": "^2.2.0",
     "shaka-player": "^3.0.6",
     "vue-api-query": "^1.8.1",
     "vue-i18n": "^8.22.2",
