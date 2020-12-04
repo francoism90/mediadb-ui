@@ -92,10 +92,10 @@ export default {
         { label: 'Settings', name: 'settings', icon: 'o_settings' }
       ],
       stores: [
-        { name: 'session', module: SessionModule },
-        { name: 'player', module: PlayerModule },
         { name: 'collections', module: PaginateModule },
         { name: 'notifications', module: PaginateModule },
+        { name: 'player', module: PlayerModule },
+        { name: 'session', module: SessionModule },
         { name: 'tags', module: PaginateModule },
         { name: 'videos', module: PaginateModule }
       ]

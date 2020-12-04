@@ -1,14 +1,12 @@
 <template>
-  <q-page
-    :key="refreshed"
-    class="container fluid"
-  >
+  <q-page class="container fluid">
     <q-pull-to-refresh
       scroll-target="body"
-      @refresh="refreshed = +new Date()"
+      class="q-pt-lg"
+      @refresh="refreshStores"
     >
-      <videos :refreshed-at="refreshed" />
-      <collections :refreshed-at="refreshed" />
+      <videos />
+      <collections />
     </q-pull-to-refresh>
   </q-page>
 </template>
@@ -17,30 +15,49 @@
 import PaginateModule from 'src/store/paginate'
 
 export default {
-  preFetch ({ store }) {
-    if (!store.hasModule('new-videos')) {
-      store.registerModule('new-videos', PaginateModule)
-    }
-
-    if (!store.hasModule('new-collections')) {
-      store.registerModule('new-collections', PaginateModule)
-    }
-  },
-
   components: {
-    Videos: () => import('components/home/Videos'),
-    Collections: () => import('components/home/Collections')
+    Collections: () => import('components/feed/Collections'),
+    Videos: () => import('components/feed/Videos')
   },
 
   data () {
     return {
-      refreshed: 0
+      id: +new Date(),
+      stores: [
+        { name: 'feed-collections', module: PaginateModule },
+        { name: 'feed-videos', module: PaginateModule }
+      ]
     }
   },
 
   meta () {
     return {
       title: 'Home'
+    }
+  },
+
+  created () {
+    this.registerStores()
+  },
+
+  methods: {
+    registerStores () {
+      for (const store of this.stores) {
+        if (!this.$store.hasModule(store.name)) {
+          this.$store.registerModule(store.name, store.module)
+          this.$store.dispatch(`${store.name}/initialize`)
+        }
+      }
+    },
+
+    refreshStores (done) {
+      for (const store of this.stores) {
+        if (this.$store.hasModule(store.name)) {
+          this.$store.dispatch(`${store.name}/resetItems`)
+        }
+      }
+
+      done()
     }
   }
 }
