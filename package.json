@@ -12,7 +12,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.11",
+    "@quasar/extras": "^1.9.12",
     "@websanova/vue-auth": "^4.0.3",
     "approximate-number": "^2.0.0",
     "axios": "^0.21.0",
@@ -31,17 +31,17 @@
     "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.1.11",
+    "@quasar/app": "^2.1.12",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.15.0",
+    "eslint": "^7.16.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.1.0",
-    "eslint-plugin-vue": "^7.2.0",
+    "eslint-plugin-vue": "^7.3.0",
     "stylelint-config-standard": "^20.0.0"
   },
   "browserslist": [
