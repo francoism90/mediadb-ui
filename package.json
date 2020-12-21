@@ -18,7 +18,7 @@
     "axios": "^0.21.0",
     "core-js": "^3.8.1",
     "dayjs": "^1.9.7",
-    "laravel-echo": "^1.9.0",
+    "laravel-echo": "^1.10.0",
     "lodash": "^4.17.20",
     "pusher-js": "^7.0.2",
     "quasar": "^1.14.7",
