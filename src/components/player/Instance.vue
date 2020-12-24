@@ -82,8 +82,8 @@ export default {
   },
 
   watch: {
-    playback (value) {
-      this.setPlayback(value)
+    playback () {
+      this.togglePlayback()
     },
 
     playbackRate (value) {
@@ -135,7 +135,7 @@ export default {
         this.setPlaybackRate(this.playbackRate)
         this.setTextTracks(this.textTracks)
 
-        await this.setPlayback(this.playback)
+        await this.togglePlayback()
       } catch {
         console.error('Unable to initialize player')
       } finally {
@@ -143,9 +143,9 @@ export default {
       }
     },
 
-    async setPlayback (payload = false) {
+    async togglePlayback () {
       try {
-        if (payload === true) {
+        if (this.player.paused) {
           await this.player.play()
         } else {
           await this.player.pause()

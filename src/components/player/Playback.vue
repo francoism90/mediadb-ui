@@ -76,7 +76,7 @@ export default {
     },
 
     togglePlayback () {
-      this.playback = !!this.paused
+      this.playback = !this.playback
     }
   }
 }
