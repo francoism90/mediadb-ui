@@ -33,9 +33,9 @@ export default {
   },
 
   components: {
-    Collections: () => import('components/tag/List'),
     Info: () => import('components/tag/Info'),
-    Videos: () => import('components/tag/List')
+    Collections: () => import('components/tag/Collections'),
+    Videos: () => import('components/tag/Videos')
   },
 
   beforeRouteEnter (to, from, next) {
