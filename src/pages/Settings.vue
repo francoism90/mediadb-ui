@@ -1,6 +1,6 @@
 <template>
-  <q-page class="container fluid">
-    <hero />
+  <q-page>
+    <info />
     <account />
   </q-page>
 </template>
@@ -9,7 +9,7 @@
 export default {
   components: {
     Account: () => import('components/settings/Account'),
-    Hero: () => import('components/settings/Hero')
+    Info: () => import('components/settings/Info')
   },
 
   meta () {

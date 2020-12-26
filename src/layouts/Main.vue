@@ -49,7 +49,6 @@
           <q-route-tab
             v-for="(link, index) in links"
             :key="index"
-            content-class="drawer-tab-item"
             :icon="link.icon"
             :label="link.label"
             :to="{ name: link.name }"

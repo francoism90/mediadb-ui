@@ -1,6 +1,6 @@
 <template>
   <q-page :key="model.id">
-    <hero />
+    <info />
     <related />
   </q-page>
 </template>
@@ -31,8 +31,8 @@ export default {
   },
 
   components: {
-    Related: () => import('components/video/Related'),
-    Hero: () => import('components/video/Hero')
+    Info: () => import('components/video/Info'),
+    Related: () => import('components/video/Related')
   },
 
   beforeRouteEnter (to, from, next) {

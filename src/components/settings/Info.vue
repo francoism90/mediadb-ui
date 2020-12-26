@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-hero settings-hero-details">
+  <hero>
     <div class="q-pt-lg text-h4 text-white ellipsis-2-lines">
       {{ $auth.user().name }}
     </div>
@@ -8,7 +8,7 @@
       Joined {{ String($auth.user().created_at) | datestamp }}
     </div>
 
-    <div class="q-pt-lg q-gutter-sm">
+    <div class="q-py-lg q-gutter-sm">
       <q-btn
         flat
         dense
@@ -20,5 +20,14 @@
         :to="{ name: 'logout' }"
       />
     </div>
-  </div>
+  </hero>
 </template>
+
+<script>
+
+export default {
+  components: {
+    Hero: () => import('components/ui/Hero')
+  }
+}
+</script>

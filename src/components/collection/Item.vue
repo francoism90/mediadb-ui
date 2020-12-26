@@ -15,17 +15,20 @@
     </router-link>
 
     <q-card-section class="q-px-none">
-      <div class="q-pb-xs text-subtitle1 ellipsis-2-lines">
+      <div class="text-subtitle1 ellipsis-2-lines">
         {{ collection.name }}
       </div>
 
-      <div class="q-pb-sm text-caption text-grey-5 ellipsis-2-lines">
+      <div class="q-pt-xs text-caption text-grey-5 ellipsis-2-lines">
         {{ Number(collection.item_count || 0) | approximate }} items
       </div>
 
       <tags
         v-if="collection.relationships.tags.length"
         :items="collection.relationships.tags"
+        class="q-pt-sm"
+        route="collection"
+        store="collections"
       />
     </q-card-section>
   </q-card>
@@ -36,7 +39,7 @@ import CollectionModel from 'src/models/Collection'
 
 export default {
   components: {
-    Tags: () => import('components/tag/Collection')
+    Tags: () => import('components/tag/List')
   },
 
   props: {

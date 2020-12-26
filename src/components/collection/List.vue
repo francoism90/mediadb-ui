@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="collections">
     <router-link
       v-for="(item, index) in items"
       :key="index"

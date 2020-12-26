@@ -1,6 +1,6 @@
 <template>
   <q-page :key="model.id">
-    <hero />
+    <info />
     <videos />
   </q-page>
 </template>
@@ -31,7 +31,7 @@ export default {
   },
 
   components: {
-    Hero: () => import('components/collection/Hero'),
+    Info: () => import('components/collection/Info'),
     Videos: () => import('components/collection/video/Models')
   },
 

@@ -21,24 +21,20 @@
     </router-link>
 
     <q-card-section class="q-px-none">
-      <collections
-        v-if="video.relationships.collections.length"
-        :items="video.relationships.collections"
-        class="q-pb-sm text-overline text-uppercase text-grey-5 ellipsis-2-lines"
-      />
-
-      <div class="q-pb-xs text-subtitle1 ellipsis-2-lines">
+      <div class="text-subtitle1 ellipsis-2-lines">
         {{ video.name }}
       </div>
 
-      <div class="q-pb-sm text-caption text-grey-5 ellipsis-2-lines">
-        {{ String(video.created_at) | datestamp }} •
-        {{ Number(video.views || 0) | approximate }} views
-      </div>
+      <collections
+        v-if="video.relationships.collections.length"
+        :items="video.relationships.collections"
+        class="q-pt-xs text-caption text-grey-5 ellipsis-2-lines"
+      />
 
       <tags
         v-if="video.relationships.tags.length"
         :items="video.relationships.tags"
+        class="q-pt-sm"
       />
     </q-card-section>
   </q-card>
@@ -50,7 +46,7 @@ import VideoModel from 'src/models/Video'
 export default {
   components: {
     Collections: () => import('components/collection/List'),
-    Tags: () => import('components/tag/Video')
+    Tags: () => import('components/tag/List')
   },
 
   props: {

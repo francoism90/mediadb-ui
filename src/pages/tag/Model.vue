@@ -1,6 +1,6 @@
 <template>
   <q-page :key="model.id">
-    <hero />
+    <info />
     <videos />
     <collections />
   </q-page>
@@ -33,9 +33,9 @@ export default {
   },
 
   components: {
-    Hero: () => import('components/tag/Hero'),
-    Collections: () => import('components/tag/Collections'),
-    Videos: () => import('components/tag/Videos')
+    Collections: () => import('components/tag/List'),
+    Info: () => import('components/tag/Info'),
+    Videos: () => import('components/tag/List')
   },
 
   beforeRouteEnter (to, from, next) {
