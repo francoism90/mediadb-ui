@@ -21,7 +21,7 @@
     "laravel-echo": "^1.10.0",
     "lodash": "^4.17.20",
     "pusher-js": "^7.0.2",
-    "quasar": "^1.14.7",
+    "quasar": "^1.15.0",
     "shaka-player": "^3.0.6",
     "vue-api-query": "^1.8.2",
     "vue-i18n": "^8.22.2",
@@ -31,7 +31,7 @@
     "vuex-persistedstate": "^3.1.0"
   },
   "devDependencies": {
-    "@quasar/app": "^2.1.13",
+    "@quasar/app": "^2.1.14",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.16.0",
