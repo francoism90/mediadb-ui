@@ -135,7 +135,7 @@ export default {
         this.setPlaybackRate(this.playbackRate)
         this.setTextTracks(this.textTracks)
 
-        await this.togglePlayback()
+        await this.player.play()
       } catch {
         console.error('Unable to initialize player')
       } finally {
