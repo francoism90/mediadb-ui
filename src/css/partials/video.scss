@@ -1,9 +1,32 @@
 /* Video Item */
 .video-item {
-  min-height: 360px;
+  height: 340px;
+  min-height: 340px;
   min-width: 200px;
 
-  @media (max-width: $breakpoint-sm-max) {
-    min-height: 340px;
+  @media (max-width: $breakpoint-xs-max) {
+    height: 280px;
+    min-height: 280px;
   }
+}
+
+.video-description {
+  min-height: 120px;
+  max-height: 150px;
+}
+
+.video-placeholder {
+  background-position: left top !important;
+  background-size: 100% 100% !important;
+}
+
+.video-placeholder::after {
+  background: rgb(0, 0, 0);
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0) 0%, rgba(10, 10, 10, 1) 100%);
+  content: '';
+  display: block;
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }

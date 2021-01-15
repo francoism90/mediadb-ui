@@ -42,68 +42,10 @@ const routes = [
     meta: { auth: true, layout: 'Auth' }
   },
   {
-    name: 'settings',
-    path: '/settings',
-    component: () => import('pages/Settings.vue'),
-    meta: { auth: true, layout: 'Main' }
-  },
-  {
-    path: '/collections',
-    component: () => import('pages/Collection.vue'),
-    meta: { auth: true, layout: 'Main' },
-    children: [
-      {
-        name: 'collection',
-        path: '',
-        component: () => import('pages/collection/Models.vue'),
-        meta: { auth: true, layout: 'Main' }
-      },
-      {
-        name: 'collection-model',
-        path: ':id/:slug?',
-        component: () => import('pages/collection/Model.vue'),
-        meta: { auth: true, layout: 'Main' }
-      }
-    ]
-  },
-  {
-    path: '/tags',
-    component: () => import('pages/Tag.vue'),
-    meta: { auth: true, layout: 'Main' },
-    children: [
-      {
-        name: 'tag',
-        path: '',
-        component: () => import('pages/tag/Models.vue'),
-        meta: { auth: true, layout: 'Main' }
-      },
-      {
-        name: 'tag-model',
-        path: ':id/:slug?',
-        component: () => import('pages/tag/Model.vue'),
-        meta: { auth: true, layout: 'Main' },
-        props: true
-      }
-    ]
-  },
-  {
-    path: '/videos',
+    name: 'video',
+    path: '/video/:id/:slug?',
     component: () => import('pages/Video.vue'),
-    meta: { auth: true, layout: 'Main' },
-    children: [
-      {
-        name: 'video',
-        path: '',
-        component: () => import('pages/video/Models.vue'),
-        meta: { auth: true, layout: 'Main' }
-      },
-      {
-        name: 'video-model',
-        path: ':id/:slug?',
-        component: () => import('pages/video/Model.vue'),
-        meta: { auth: true, layout: 'Main' }
-      }
-    ]
+    meta: { auth: true, layout: 'Main' }
   },
   {
     path: '*',

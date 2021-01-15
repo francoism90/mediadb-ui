@@ -106,28 +106,6 @@
             />
 
             <q-select
-              v-model="form.collections"
-              square
-              filled
-              :error-message="getError('collections')"
-              :error="hasError('collections')"
-              :input-debounce="300"
-              :options="collections"
-              :max-values="25"
-              clearable
-              hide-dropdown-icon
-              counter
-              use-chips
-              label="Collections"
-              option-label="name"
-              option-value="id"
-              stack-label
-              multiple
-              use-input
-              @filter="filterCollections"
-            />
-
-            <q-select
               v-model="form.tags"
               square
               filled
@@ -147,7 +125,27 @@
               multiple
               use-input
               @filter="filterTags"
-            />
+            >
+              <template #option="scope">
+                <q-item
+                  v-bind="scope.itemProps"
+                  v-on="scope.itemEvents"
+                >
+                  <q-item-section>
+                    <q-item-label>
+                      {{ scope.opt.name }}
+                    </q-item-label>
+
+                    <q-item-label
+                      caption
+                      class="text-capitalize"
+                    >
+                      {{ scope.opt.type }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
 
             <q-input
               v-model.trim="form.overview"
@@ -192,7 +190,6 @@
 <script>
 import { dialogHandler } from 'src/mixins/dialog'
 import { formHandler } from 'src/mixins/form'
-import CollectionModel from 'src/models/Collection'
 import TagModel from 'src/models/Tag'
 import VideoModel from 'src/models/Video'
 
@@ -210,7 +207,6 @@ export default {
     return {
       deleteDialog: false,
       video: null,
-      collections: [],
       statuses: [
         { value: 'public', label: 'Public' },
         { value: 'private', label: 'Private' }
@@ -230,7 +226,6 @@ export default {
         name: this.video.name,
         status: this.video.status,
         overview: this.video.overview,
-        collections: this.video.relationships.collections,
         tags: this.video.relationships.tags
       })
     } catch {
@@ -246,17 +241,6 @@ export default {
   },
 
   methods: {
-    async filterCollections (val, update, abort) {
-      this.collections = await CollectionModel
-        .where('query', val || null)
-        .orderBy(val.length ? 'recommended' : 'trending')
-        .page(1)
-        .limit(5)
-        .$get()
-
-      update()
-    },
-
     async filterTags (val, update, abort) {
       this.tags = await TagModel
         .where('query', val || null)

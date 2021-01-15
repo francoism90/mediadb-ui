@@ -1,39 +1,39 @@
 import { getField } from 'vuex-map-fields'
 import { get } from 'lodash'
 
-export function getId (state) {
+export const getId = (state) => {
   return state.id
 }
 
-export function getName (state) {
+export const getName = (state) => {
   return state.name
 }
 
-export function getData (state) {
+export const getData = (state) => {
   return state.data
 }
 
-export function getMeta (state) {
+export const getMeta = (state) => {
   return state.meta
 }
 
-export function getOption (state) {
+export const getOption = (state) => {
   return getField(state.options)
 }
 
-export function getOptions (state) {
+export const getOptions = (state) => {
   return state.options
 }
 
-export function getTotal (state) {
+export const getTotal = (state) => {
   return get(state.meta, 'total', 0)
 }
 
-export function isReady (state) {
+export const isReady = (state) => {
   return state.ready
 }
 
-export function isLoaded (state) {
+export const isLoaded = (state) => {
   const lastPage = get(state.meta, 'last_page', 1)
   const total = get(state.meta, 'total', 0)
 

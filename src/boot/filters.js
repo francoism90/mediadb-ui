@@ -9,6 +9,10 @@ export default function ({ Vue }) {
   })
 
   Vue.filter('timestamp', function (value) {
+    if (value === Infinity) {
+      value = 0
+    }
+
     return new Date(value * 1000)
       .toISOString()
       .substr(11, 8)
@@ -16,10 +20,6 @@ export default function ({ Vue }) {
   })
 
   Vue.filter('datestamp', function (value) {
-    return dayjs(value).format('D MMM YYYY')
-  })
-
-  Vue.filter('datestamp_ago', function (value) {
-    return dayjs(value).fromNow()
+    return dayjs(value).format('D MMMM YYYY')
   })
 }

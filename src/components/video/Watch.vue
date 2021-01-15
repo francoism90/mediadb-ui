@@ -5,7 +5,7 @@
     maximized
     @hide="onDialogHide"
   >
-    <q-card class="q-dialog-plugin">
+    <q-card class="q-dialog-plugin player">
       <q-inner-loading :showing="!video">
         <q-spinner
           size="50px"
@@ -18,7 +18,7 @@
         enter-active-class="animated fadeIn"
         leave-active-class="animated fadeOut"
       >
-        <video-player v-if="video" />
+        <player v-if="video" />
       </transition>
     </q-card>
   </q-dialog>
@@ -29,7 +29,7 @@ import { dialogHandler } from 'src/mixins/dialog'
 import { createHelpers } from 'vuex-map-fields'
 import { get } from 'lodash'
 import { mapState } from 'vuex'
-import VideoModel from 'src/models/Video'
+import Video from 'src/models/Video'
 
 const { mapFields } = createHelpers({
   getterType: 'session/getState',
@@ -38,11 +38,11 @@ const { mapFields } = createHelpers({
 
 export default {
   timers: {
-    syncSettings: { time: 2000, autostart: true, repeat: true }
+    syncOptions: { time: 2000, repeat: true }
   },
 
   components: {
-    VideoPlayer: () => import('components/player/Video')
+    Player: () => import('components/player/Video')
   },
 
   mixins: [dialogHandler],
@@ -65,7 +65,7 @@ export default {
       'currentTime',
       'failed',
       'playable',
-      'textTracks'
+      'requestTracks'
     ]),
 
     ...mapFields([
@@ -89,14 +89,16 @@ export default {
     this.video = null
 
     try {
-      this.video = await VideoModel.$find(this.id)
+      this.video = await Video.$find(this.id)
 
       this.$store.dispatch('player/initialize', {
         id: +new Date(),
         model: this.video,
-        startTime: this.timestamp,
-        textTracks: this.captions
+        requestTime: this.timestamp,
+        requestTracks: this.captions
       })
+
+      this.$timer.start('syncOptions')
     } catch {
       this.hide()
 
@@ -110,7 +112,7 @@ export default {
   },
 
   methods: {
-    syncSettings () {
+    syncOptions () {
       if (this.failed || !this.playable) {
         return
       }
@@ -118,7 +120,7 @@ export default {
       const modelSettings = {
         [this.video.id]: {
           timestamp: this.currentTime,
-          captions: this.textTracks
+          captions: this.requestTracks
         }
       }
 

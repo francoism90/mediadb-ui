@@ -1,36 +1,30 @@
 .hero {
-  background-color: $grey-10;
   background-position: center;
-  background-size: cover;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  max-height: 500px;
-}
+  min-height: 350px;
+  max-height: 450px;
+  z-index: 0;
 
-.hero-container {
-  z-index: 10;
-}
+  @media (min-width: $breakpoint-md-min) {
+    background-size: cover;
+  }
 
-.hero-main {
-  z-index: 30;
-}
+  > div,
+  > span {
+    position: relative;
+    z-index: 10;
+  }
 
-.hero-gradient-left {
-  z-index: 20;
-  background: $grey-11 !important;
-  background: linear-gradient(90deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
-  width: 50%;
-}
-
-.hero-gradient-right {
-  z-index: 20;
-  background: $grey-11 !important;
-  background: linear-gradient(270deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
-  width: 50%;
-}
-
-.hero-gradient-bottom {
-  z-index: 20;
-  background: $grey-11 !important;
-  background: linear-gradient(0deg, $grey-11 0%, rgba(30, 30, 30, 0) 100%) !important;
-  height: 75%;
+  &::after {
+    background: rgb(0, 0, 0);
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.35) 0%, rgba(10, 10, 10, 1) 100%);
+    content: '';
+    display: block;
+    filter: brightness(25%);
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
 }

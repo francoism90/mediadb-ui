@@ -1,46 +1,45 @@
 <template>
-  <component
-    :is="type.component"
-    v-if="type"
-  />
+  <q-form
+    v-if="visible"
+    class="q-mx-md toolbar-input"
+  >
+    <q-input
+      v-model="query"
+      debounce="900"
+      type="search"
+      placeholder="Search"
+      clearable
+      dense
+      square
+      filled
+      input-class="text-grey-5"
+    >
+      <template #prepend>
+        <q-icon
+          name="search"
+          color="grey-5"
+        />
+      </template>
+    </q-input>
+  </q-form>
 </template>
 
 <script>
-import { find } from 'lodash'
+import { createHelpers } from 'vuex-map-fields'
+
+const { mapFields } = createHelpers({
+  getterType: 'videos/getOption',
+  mutationType: 'videos/setOption'
+})
 
 export default {
-  components: {
-    Collection: () => import('components/search/Collection'),
-    Tag: () => import('components/search/Tag'),
-    Video: () => import('components/search/Video')
-  },
+  computed: {
+    ...mapFields([
+      'query'
+    ]),
 
-  data () {
-    return {
-      type: null,
-      types: [
-        { name: 'collection', component: 'Collection' },
-        { name: 'tag', component: 'Tag' },
-        { name: 'video', component: 'Video' }
-      ]
-    }
-  },
-
-  watch: {
-    '$route' () {
-      this.initialize()
-    }
-  },
-
-  created () {
-    this.initialize()
-  },
-
-  methods: {
-    initialize () {
-      const routeName = this.$route.name || 'home'
-
-      this.type = find(this.types, { name: routeName }) || null
+    visible () {
+      return this.$route.name === 'home'
     }
   }
 }

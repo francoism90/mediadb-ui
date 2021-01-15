@@ -145,6 +145,7 @@ module.exports = function (ctx) {
 
     // https://quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
+      BackgroundColor: '0xff0a0a0a'
     // noIosLegacyBuildFlag: true,
     },
 

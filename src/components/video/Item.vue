@@ -1,42 +1,40 @@
 <template>
   <q-card
     flat
+    square
     class="transparent video-item"
     draggable="false"
   >
-    <router-link :to="{ name: 'video-model', params: { id: video.id, slug: video.slug }}">
+    <router-link :to="{ name: 'video', params: { id: video.id, slug: video.slug }}">
       <q-img
         :alt="video.name"
         :src="video.thumbnail_url"
-        height="200px"
-        class="bg-grey-9 video-thumbnail cursor-pointer"
-        img-class="video-thumbnail"
+        placeholder-src="~assets/placeholder/16x16.webp"
+        class="cursor-pointer"
+        height="100%"
+        width="100%"
+        img-class="video-placeholder"
       >
-        <div class="absolute-bottom-right">
-          <q-badge class="q-py-xs q-px-sm transparent-5 no-border-radius text-caption">
-            {{ Number(video.duration || 0) | timestamp }}
-          </q-badge>
+        <div class="absolute-bottom">
+          <div class="video-description q-px-md">
+            <div class="text-h5 text-white ellipsis">
+              {{ video.name }}
+            </div>
+
+            <div class="text-overline">
+              {{ Number(video.duration || 0) | timestamp }} •
+              {{ video.resolution }}
+            </div>
+
+            <tags
+              v-if="video.relationships.tags.length"
+              :items="video.relationships.tags"
+              class="q-pt-xs"
+            />
+          </div>
         </div>
       </q-img>
     </router-link>
-
-    <q-card-section class="q-px-none">
-      <div class="text-subtitle1 ellipsis-2-lines">
-        {{ video.name }}
-      </div>
-
-      <collections
-        v-if="video.relationships.collections.length"
-        :items="video.relationships.collections"
-        class="q-pt-xs text-caption text-grey-5 ellipsis-2-lines"
-      />
-
-      <tags
-        v-if="video.relationships.tags.length"
-        :items="video.relationships.tags"
-        class="q-pt-sm"
-      />
-    </q-card-section>
   </q-card>
 </template>
 
@@ -45,7 +43,6 @@ import VideoModel from 'src/models/Video'
 
 export default {
   components: {
-    Collections: () => import('components/collection/List'),
     Tags: () => import('components/tag/List')
   },
 

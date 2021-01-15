@@ -2,35 +2,35 @@ import { updateField } from 'vuex-map-fields'
 import { findIndex, remove } from 'lodash'
 import defaultState from './state'
 
-export function resetState (state) {
+export const resetState = (state) => {
   state = Object.assign(state, defaultState())
 }
 
-export function setReady (state, payload = false) {
+export const setReady = (state, payload = false) => {
   state.ready = payload
 }
 
-export function setId (state, payload = null) {
+export const setId = (state, payload = null) => {
   state.id = payload || +new Date()
 }
 
-export function setName (state, payload = null) {
+export const setName = (state, payload = null) => {
   state.name = payload
 }
 
-export function concatData (state, payload = []) {
+export const concatData = (state, payload = []) => {
   state.data = state.data.concat(payload)
 }
 
-export function removeData (state, payload = {}) {
+export const removeData = (state, payload = []) => {
   remove(state.data, payload)
 }
 
-export function setData (state, payload = []) {
+export const setData = (state, payload = []) => {
   state.data = payload
 }
 
-export function updateData (state, payload = {}) {
+export const updateData = (state, payload = {}) => {
   const { attributes = {}, values = null } = payload
 
   const index = findIndex(state.data, attributes)
@@ -40,15 +40,15 @@ export function updateData (state, payload = {}) {
   }
 }
 
-export function setMeta (state, payload = {}) {
+export const setMeta = (state, payload = []) => {
   state.meta = payload
 }
 
-export function setPage (state, payload = 1) {
+export const setPage = (state, payload = 1) => {
   state.page = payload
 }
 
-export function setOption (state, payload) {
+export const setOption = (state, payload) => {
   updateField(state.options, payload)
 
   // Reset data
@@ -60,13 +60,13 @@ export function setOption (state, payload) {
   state.id = +new Date()
 }
 
-export function setOptions (state, payload = {}) {
+export const setOptions = (state, payload = {}) => {
   const currentOptions = state.options || {}
   const finalOptions = { ...currentOptions, ...payload }
 
   state.options = Object.assign({}, state.options, finalOptions)
 }
 
-export function increasePage (state) {
+export const increasePage = (state) => {
   state.page += 1
 }

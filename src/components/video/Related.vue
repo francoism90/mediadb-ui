@@ -1,6 +1,6 @@
 <template>
-  <div class="container fluid">
-    <div class="q-py-md text-h6 text-grey-5">
+  <div class="container">
+    <div class="q-py-lg text-h6">
       Related Videos
     </div>
 
@@ -18,7 +18,7 @@
           v-for="(item, index) in data"
           :key="index"
           :disable="!isReady"
-          class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 video-item"
+          class="col-xs-12 col-sm-6 col-md-6 col-lg-4 col-xl-4 video-item"
         >
           <item :video="item" />
         </q-intersection>
@@ -50,14 +50,14 @@ export default {
       'isReady'
     ]),
 
-    model () {
+    video () {
       return this.$store.getters['video/getModel']
     }
   },
 
   created () {
     this.initialize({
-      name: this.model.id
+      name: this.video.id
     })
   },
 
@@ -74,9 +74,9 @@ export default {
       }
 
       const response = await VideoModel
-        .where('related', this.model.id)
-        .include('model', 'collections', 'tags')
-        .append('duration', 'thumbnail_url')
+        .where('related', this.video.id)
+        .include('model', 'tags')
+        .append('duration', 'resolution', 'thumbnail_url')
         .orderBy('recommended')
         .page(this.page)
         .limit(12)

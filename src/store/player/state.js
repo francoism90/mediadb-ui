@@ -1,21 +1,21 @@
-export default function () {
+export default () => {
   return {
     ready: false,
     id: null,
+    model: null,
     buffered: null,
     controls: true,
     currentTime: 0,
     duration: Infinity,
     failed: false,
-    fullscreen: false,
-    metadata: false,
-    model: null,
-    paused: true,
     playable: false,
-    playback: true,
+    playing: false,
     playbackRate: 1.0,
-    seekTime: 0,
-    textTracks: [],
+    requestFullscreen: false,
+    requestPlayback: false,
+    requestRate: 1.0,
+    requestTime: 0,
+    requestTracks: [],
     waiting: false
   }
 }

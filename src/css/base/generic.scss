@@ -1,13 +1,12 @@
 html,
 body {
-  font-feature-settings: "liga", "tnum", "case", "calt", "zero", "ss01", "ss03", "locl";
   font-weight: map-get($text-weights, 'regular');
-  background: $grey-11;
+  background: $grey-14;
   color: $grey-5;
 }
 
 body.body--dark {
-  background: $grey-11;
+  background: $grey-14;
 }
 
 ::-moz-focus-inner {
@@ -21,24 +20,4 @@ body.body--dark {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-.transparent-1 {
-  background: rgba(255, 255, 255, 0.075);
-}
-
-.transparent-2 {
-  background: rgba(255, 255, 255, 0.125);
-}
-
-.transparent-3 {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.transparent-4 {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.transparent-5 {
-  background: rgba(0, 0, 0, 0.75);
 }

@@ -1,62 +1,125 @@
 <template>
-  <q-page class="container fluid">
+  <q-page class="container q-py-md">
+    <filters />
+
     <q-pull-to-refresh
-      scroll-target="body"
-      class="q-pt-lg"
-      @refresh="refreshStores"
+      :key="id"
+      :disable="!isReady"
+      @refresh="onRefresh"
     >
-      <videos />
-      <collections />
+      <q-infinite-scroll
+        :disable="!isReady"
+        class="row wrap justify-start items-start content-start q-col-gutter-md"
+        @load="onLoad"
+      >
+        <q-intersection
+          v-for="(item, index) in data"
+          :key="index"
+          :disable="!isReady"
+          class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 video-item"
+        >
+          <item :video="item" />
+        </q-intersection>
+      </q-infinite-scroll>
     </q-pull-to-refresh>
   </q-page>
 </template>
 
 <script>
-import PaginateModule from 'src/store/paginate'
+import { mapActions, mapState, mapGetters } from 'vuex'
+import { createHelpers } from 'vuex-map-fields'
+import { map } from 'lodash'
+import Video from 'src/models/Video'
+
+const { mapFields } = createHelpers({
+  getterType: 'videos/getOption',
+  mutationType: 'videos/setOption'
+})
 
 export default {
   components: {
-    Collections: () => import('components/feed/Collections'),
-    Videos: () => import('components/feed/Videos')
-  },
-
-  data () {
-    return {
-      id: +new Date(),
-      stores: [
-        { name: 'feed-collections', module: PaginateModule },
-        { name: 'feed-videos', module: PaginateModule }
-      ]
-    }
+    Item: () => import('components/video/Item'),
+    Filters: () => import('components/video/Filters')
   },
 
   meta () {
     return {
-      title: 'Home'
+      title: 'Videos'
+    }
+  },
+
+  computed: {
+    ...mapState('videos', [
+      'id',
+      'data',
+      'page'
+    ]),
+
+    ...mapGetters('videos', [
+      'isLoaded',
+      'isReady'
+    ]),
+
+    ...mapFields([
+      'duration',
+      'favorites',
+      'sorter',
+      'tags',
+      'query'
+    ]),
+
+    selectedTags () {
+      if (!this.tags.length) {
+        return []
+      }
+
+      return map(this.tags, 'slug')
     }
   },
 
   created () {
-    this.registerStores()
+    this.initialize({
+      name: 'videos',
+      options: {
+        duration: this.duration || { min: 0, max: 40 },
+        sorter: this.sorter || 'recommended',
+        tags: this.tags || [],
+        favorites: this.favorites || null,
+        query: this.query || null
+      }
+    })
   },
 
   methods: {
-    registerStores () {
-      for (const store of this.stores) {
-        if (!this.$store.hasModule(store.name)) {
-          this.$store.registerModule(store.name, store.module)
-          this.$store.dispatch(`${store.name}/initialize`)
-        }
-      }
+    ...mapActions('videos', [
+      'initialize',
+      'resetItems',
+      'setPage'
+    ]),
+
+    async setModels () {
+      const response = await Video
+        .where('query', this.query)
+        .where('favorites', this.favorites)
+        .whereIn('duration', [this.duration.min, this.duration.max])
+        .whereIn('tags', this.selectedTags)
+        .include('model', 'tags')
+        .append('duration', 'resolution', 'thumbnail_url')
+        .orderBy(this.sorter)
+        .page(this.page)
+        .limit(12)
+        .get()
+
+      this.setPage(response)
     },
 
-    refreshStores (done) {
-      for (const store of this.stores) {
-        if (this.$store.hasModule(store.name)) {
-          this.$store.dispatch(`${store.name}/resetItems`)
-        }
-      }
+    async onLoad (index, done) {
+      await this.setModels()
+      done(this.isLoaded)
+    },
 
+    async onRefresh (done) {
+      await this.resetItems()
       done()
     }
   }

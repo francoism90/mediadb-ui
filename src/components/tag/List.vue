@@ -7,9 +7,10 @@
       :color="itemColor"
       :size="itemSize"
       :class="itemClass"
+      :dense="itemDense"
       clickable
       square
-      @click="onClick(item)"
+      @click.prevent="onClick(item)"
     />
   </div>
 </template>
@@ -29,38 +30,31 @@ export default {
 
     itemColor: {
       type: String,
-      default: 'grey-9'
+      default: 'grey-8'
+    },
+
+    itemDense: {
+      type: Boolean,
+      default: true
     },
 
     itemSize: {
       type: [Number, String],
-      default: '0.75rem'
-    },
-
-    route: {
-      type: String,
-      default: 'video'
-    },
-
-    store: {
-      type: String,
-      default: 'videos'
+      default: '0.925rem'
     }
   },
 
   methods: {
     onClick (model) {
-      this.$store.dispatch(`${this.store}/resetItems`, {
+      this.$store.dispatch('videos/resetItems', {
         options: {
-          query: 'tag:' + model.slug
+          tags: [model]
         }
       })
 
-      if (this.$route.name === this.route) {
-        return
+      if (this.$route.name !== 'home') {
+        this.$router.push({ name: 'home' })
       }
-
-      this.$router.push({ name: this.route })
     }
   }
 }

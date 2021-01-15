@@ -1,9 +1,9 @@
 import { getField } from 'vuex-map-fields'
 
-export function getState (state) {
+export const getState = (state) => {
   return getField(state)
 }
 
-export function getModel (state) {
+export const getModel = (state) => {
   return state.model
 }

@@ -1,5 +1,5 @@
 export function initialize ({ commit, state }, payload = {}) {
-  const { id = null, model = null, startTime = 0, textTracks = [] } = payload
+  const { id = null, model = null, requestTime = 0, requestTracks = [] } = payload
 
   if (id && state.id !== id) {
     commit('resetState')
@@ -7,8 +7,8 @@ export function initialize ({ commit, state }, payload = {}) {
 
   commit('setId', id)
   commit('setModel', model)
-  commit('setSeekTime', startTime)
-  commit('setTextTracks', textTracks)
+  commit('setTime', requestTime)
+  commit('setTracks', requestTracks)
   commit('setReady', true)
 }
 

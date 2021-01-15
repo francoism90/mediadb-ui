@@ -16,7 +16,7 @@
           unelevated
           round
           icon="o_arrow_back"
-          :to="{ path: returnPath }"
+          @click="$router.back()"
         />
       </q-card-actions>
     </q-card>
@@ -25,32 +25,9 @@
 
 <script>
 export default {
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.setReturn(from)
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.setReturn(from)
-    next()
-  },
-
-  data () {
-    return {
-      returnPath: null
-    }
-  },
-
   meta () {
     return {
-      title: '403'
-    }
-  },
-
-  methods: {
-    setReturn (route = {}) {
-      this.returnPath = route.name !== '403' ? route.fullPath : '/'
+      title: '403 - Forbidden'
     }
   }
 }

@@ -6,7 +6,8 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        Looks like something went wrong.<br>
+        Looks like something went wrong,<br>
+        please try again later.
       </q-card-section>
 
       <q-card-actions align="center">
@@ -16,7 +17,7 @@
           unelevated
           round
           icon="o_refresh"
-          :to="{ path: returnPath }"
+          @click="$router.back()"
         />
       </q-card-actions>
     </q-card>
@@ -25,32 +26,9 @@
 
 <script>
 export default {
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.setReturn(from)
-    })
-  },
-
-  beforeRouteUpdate (to, from, next) {
-    this.setReturn(from)
-    next()
-  },
-
-  data () {
-    return {
-      returnPath: null
-    }
-  },
-
   meta () {
     return {
-      title: '500'
-    }
-  },
-
-  methods: {
-    setReturn (route = {}) {
-      this.returnPath = route.name !== '500' ? route.fullPath : '/'
+      title: '500 - Server Error'
     }
   }
 }

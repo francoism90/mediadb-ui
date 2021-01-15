@@ -1,0 +1,11 @@
+.drawer-avatar {
+  height: 175px;
+  text-align: center;
+  width: 100%;
+}
+
+.drawer-container {
+  height: calc(100% - 175px);
+  margin-top: 175px;
+  width: 100%;
+}

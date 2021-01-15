@@ -3,10 +3,10 @@ export function initialize ({ commit, state }, payload = {}) {
 
   if (name && state.name !== name) {
     commit('resetState')
+    commit('setName', name)
+    commit('setOptions', options)
   }
 
-  commit('setName', name)
-  commit('setOptions', options)
   commit('setReady', true)
 }
 
@@ -28,9 +28,9 @@ export function setPage ({ commit, getters }, payload = {}) {
 export function resetItems ({ commit }, payload = {}) {
   const { id = null, options = {} } = payload
 
-  commit('setData')
-  commit('setMeta')
-  commit('setPage')
+  commit('setData', [])
+  commit('setMeta', {})
+  commit('setPage', 1)
 
   commit('setOptions', options)
   commit('setId', id)

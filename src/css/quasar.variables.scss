@@ -1,21 +1,21 @@
-// Import variables
+// Import quasar variables
 @import '~quasar/src/css/variables';
 
 $body-font-size: 14px;
-$body-line-height: 1.4;
+$body-line-height: 1.2;
 
-$h1: (size: 3rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$h2: (size: 2.5rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$h3: (size: 2rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$h4: (size: 1.75rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$h5: (size: 1.5rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$h6: (size: 1rem, line-height: 1.4, weight: 600, letter-spacing: unset);
-$subtitle1: (size: 0.875rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$subtitle2: (size: 0.85rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$body1: (size: 0.975rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$body2: (size: 0.875rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$overline: (size: 0.75rem, line-height: 1.4, weight: 500, letter-spacing: unset);
-$caption: (size: 0.85rem, line-height: 1.4, weight: 500, letter-spacing: unset);
+$h1: (size: 3rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$h2: (size: 2.5rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$h3: (size: 2rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$h4: (size: 1.75rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$h5: (size: 1.5rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$h6: (size: 1.45rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$subtitle1: (size: 1.1rem, line-height: 1.4, weight: 400, letter-spacing: normal);
+$subtitle2: (size: 1.25rem, line-height: 1.4, weight: 400, letter-spacing: normal);
+$body1: (size: 0.975rem, line-height: 1.4, weight: 400, letter-spacing: normal);
+$body2: (size: 1.05rem, line-height: 1.4, weight: 400, letter-spacing: normal);
+$overline: (size: 0.95rem, line-height: 1.4, weight: 500, letter-spacing: normal);
+$caption: (size: 0.85rem, line-height: 1.4, weight: 500, letter-spacing: normal);
 
 $headings: (
   'h1': $h1,
@@ -42,12 +42,12 @@ $h-tags: (
 );
 
 $text-weights: (
-  thin: 300,
-  light: 400,
-  regular: 500,
-  medium: 600,
-  bold: 700,
-  bolder: 800
+  thin: 200,
+  light: 300,
+  regular: 400,
+  medium: 500,
+  bold: 600,
+  bolder: 700
 );
 
 $primary: #f44336;
@@ -65,9 +65,9 @@ $grey-7: #696970;
 $grey-8: #4a4b50;
 $grey-9: #3b3d42;
 $grey-10: #252628;
-$grey-11: #1c1d1e;
-$grey-12: #292a2d;
-$grey-13: #201f1f;
+$grey-11: #292a2d;
+$grey-12: #181818;
+$grey-13: #1c1d1e;
 $grey-14: #0a0a0a;
 
 $dark-page: $grey-11;
@@ -78,26 +78,26 @@ $negative: #c10015;
 $info: #f44336;
 $warning: #f2c037;
 
-$separator-color: $grey-11;
-$separator-dark-color: $grey-12;
+$separator-color: $grey-10;
+$separator-dark-color: $grey-9;
 
 $generic-border-radius: 4px;
-$typography-font-family: 'Inter', -apple-system, 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
+$typography-font-family: 'Fira Sans Condensed', -apple-system, 'BlinkMacSystemFont', 'Roboto', 'Segoe UI', 'Helvetica', 'Arial', sans-serif;
 $min-line-height: 1.2;
 
 $button-border-radius: 4px;
 $button-padding: 6px 14px;
 $button-dense-padding: 6px 8px;
-$button-font-size: 0.875rem;
-$button-font-weight: map-get($text-weights, 'regular');
-$button-rounded-border-radius: 8px;
+$button-font-size: 0.95rem;
+$button-font-weight: map-get($text-weights, 'medium');
+$button-rounded-border-radius: 60px;
 $button-push-border-radius: 8px;
 
 $toolbar-min-height: 40px;
 $toolbar-padding : 0;
 $toolbar-inset-size: 58px;
 $toolbar-title-font-size: 0.975rem;
-$toolbar-title-font-weight: map-get($text-weights, 'regular');
+$toolbar-title-font-weight: map-get($text-weights, 'medium');
 $toolbar-title-letter-spacing: 0;
 $toolbar-title-padding: 0;
 
@@ -115,7 +115,7 @@ $tooltip-fontsize: 0.75rem;
 $tooltip-mobile-padding: 4px 8px;
 $tooltip-mobile-fontsize: 0.75rem;
 
-$input-font-size: 14px;
+$input-font-size: 1rem;
 $input-text-color: $grey-5;
 $input-label-color: $grey-5;
 

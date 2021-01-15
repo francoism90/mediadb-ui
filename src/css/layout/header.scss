@@ -7,4 +7,8 @@
 .toolbar-input {
   width: 60vw;
   max-width: 900px;
+
+  @media (max-width: $breakpoint-xs-max) {
+    width: 100vw;
+  }
 }
