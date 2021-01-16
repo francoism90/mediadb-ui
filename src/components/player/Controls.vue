@@ -1,13 +1,48 @@
 <template>
   <div class="absolute-full player-controls">
-    <div class="absolute-top-right q-px-xl q-pt-lg">
+    <div class="absolute-top-left q-pl-xl q-pt-lg">
       <q-icon
         v-close-popup
-        class="cursor-pointer"
-        name="close"
+        name="arrow_back"
         size="48px"
-        color="white"
+        class="cursor-pointer"
       />
+    </div>
+
+    <div class="absolute-center">
+      <div class="row no-wrap justify-center items-center content-center">
+        <div class="col">
+          <q-icon
+            v-shortkey="['arrowleft']"
+            :disable="!playable || failed"
+            name="replay_10"
+            class="cursor-pointer"
+            size="36px"
+            @click="decreaseTime(10)"
+            @shortkey="decreaseTime(10)"
+          />
+
+          <q-icon
+            v-shortkey="['space']"
+            :name="playing ? 'pause' : 'play_arrow'"
+            :disable="!playable || failed"
+            class="cursor-pointer"
+            size="92px"
+            @click="togglePlayback"
+            @shortkey="togglePlayback"
+          />
+
+          <q-icon
+            v-shortkey="['arrowright']"
+            :disable="!playable || failed"
+            name="forward_10"
+            class="cursor-pointer"
+            size="36px"
+            @click="increaseTime(10)"
+            @shortkey="increaseTime(10)"
+          />
+        </div>
+      </div>
     </div>
 
     <div class="absolute-bottom q-px-xl q-pb-lg">
@@ -28,13 +63,46 @@
         </div>
       </q-img>
 
-      <div class="full-width row no-wrap justify-between items-center content-center q-pt-sm">
+      <div class="row no-wrap justify-between items-center content-center q-pt-sm">
         <div class="col">
-          <span class="text-overline">{{ Number(currentTime) | timestamp }}</span>
+          <span class="text-overline">
+            {{ Number(currentTime) | timestamp }} / {{ Number(duration) | timestamp }}
+          </span>
         </div>
 
         <div class="col-auto">
-          <span class="text-overline">{{ Number(duration) | timestamp }}</span>
+          <div class="q-gutter-sm">
+            <q-icon
+              v-if="$auth.check({ permissions: 'edit videos' })"
+              v-shortkey="['r']"
+              :disable="!playable"
+              name="movie_creation"
+              class="cursor-pointer hidden"
+              size="32px"
+              @click="frameshot"
+              @shortkey="frameshot"
+            />
+
+            <q-icon
+              v-shortkey="['s']"
+              :disable="!playable"
+              name="settings"
+              class="cursor-pointer"
+              size="32px"
+              @click="settingsModal"
+              @shortkey="settingsModal"
+            />
+
+            <q-icon
+              v-shortkey="['f']"
+              :disable="!playable || failed"
+              :name="requestFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+              class="cursor-pointer"
+              size="32px"
+              @click="toggleFullscreen"
+              @shortkey="toggleFullscreen"
+            />
+          </div>
         </div>
       </div>
 
@@ -52,79 +120,6 @@
           :step="0"
           color="primary"
         />
-      </div>
-
-      <div class="full-width row no-wrap justify-between items-center content-center">
-        <div class="col q-gutter-xs">
-          <q-icon
-            v-shortkey="['space']"
-            :name="playing ? 'pause' : 'play_arrow'"
-            :disable="!playable || failed"
-            class="cursor-pointer"
-            size="32px"
-            color="white"
-            @click="togglePlayback"
-            @shortkey="togglePlayback"
-          />
-
-          <q-icon
-            v-shortkey="['arrowleft']"
-            :disable="!playable || failed"
-            name="replay_10"
-            class="cursor-pointer"
-            size="32px"
-            color="white"
-            @click="decreaseTime(10)"
-            @shortkey="decreaseTime(10)"
-          />
-
-          <q-icon
-            v-shortkey="['arrowright']"
-            :disable="!playable || failed"
-            name="forward_10"
-            class="cursor-pointer"
-            size="32px"
-            color="white"
-            @click="increaseTime(10)"
-            @shortkey="increaseTime(10)"
-          />
-
-          <q-icon
-            v-if="$auth.check({ permissions: 'edit videos' })"
-            v-shortkey="['r']"
-            :disable="!playable"
-            name="o_movie_creation"
-            class="cursor-pointer hidden"
-            size="32px"
-            color="white"
-            @click="frameshot"
-            @shortkey="frameshot"
-          />
-        </div>
-
-        <div class="col-auto q-gutter-xs">
-          <q-icon
-            v-shortkey="['s']"
-            :disable="!playable"
-            name="settings"
-            class="cursor-pointer"
-            size="24px"
-            color="white"
-            @click="settingsModal"
-            @shortkey="settingsModal"
-          />
-
-          <q-icon
-            v-shortkey="['f']"
-            :disable="!playable || failed"
-            :name="requestFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-            class="cursor-pointer"
-            size="32px"
-            color="white"
-            @click="toggleFullscreen"
-            @shortkey="toggleFullscreen"
-          />
-        </div>
       </div>
     </div>
   </div>

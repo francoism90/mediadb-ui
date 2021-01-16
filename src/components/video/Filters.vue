@@ -126,6 +126,7 @@
           :options-dark="false"
           :max-values="10"
           clearable
+          counter
           hide-dropdown-icon
           use-chips
           option-label="name"
@@ -182,7 +183,8 @@ export default {
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
         { label: 'Most Recent', value: '-created_at' },
-        { label: 'Most Viewed', value: 'views' }
+        { label: 'Shortest to Longest', value: 'duration' },
+        { label: 'Longest to Shortest', value: '-duration' }
       ]
     }
   },

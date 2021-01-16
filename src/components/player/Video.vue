@@ -115,22 +115,27 @@ export default {
   watch: {
     requestFullscreen (payload = false) {
       this.setFullscreen(payload)
+      this.showControls()
     },
 
     requestPlayback (payload = false) {
       this.togglePlayback(payload)
+      this.showControls()
     },
 
     requestRate (payload = 1.0) {
       this.setRate(payload)
+      this.showControls()
     },
 
     requestTime (payload = 0) {
       this.setTime(payload)
+      this.showControls()
     },
 
     requestTracks (payload = []) {
       this.setTracks(payload)
+      this.showControls()
     }
   },
 
