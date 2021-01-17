@@ -5,19 +5,26 @@ export default class Model extends BaseModel {
     return process.env.API_URL
   }
 
+  request (config) {
+    return this.$http.request(config)
+  }
+
   parameterNames () {
-    return {
-      include: 'include',
-      filter: 'filter',
-      sort: 'sort',
-      fields: 'fields',
-      append: 'append',
+    const defaultParams = super.parameterNames()
+    const customParams = {
       page: 'page[number]',
       limit: 'page[size]'
     }
+
+    return { ...defaultParams, ...customParams }
   }
 
-  request (config) {
-    return this.$http.request(config)
+  formData () {
+    return {
+      indices: false,
+      nullsAsUndefineds: false,
+      booleansAsIntegers: true,
+      allowEmptyArrays: true
+    }
   }
 }
