@@ -16,7 +16,7 @@
     "@websanova/vue-auth": "^4.1.0",
     "approximate-number": "^2.0.0",
     "axios": "^0.21.1",
-    "core-js": "^3.8.2",
+    "core-js": "^3.8.3",
     "dayjs": "^1.10.3",
     "laravel-echo": "^1.10.0",
     "lodash": "^4.17.20",
