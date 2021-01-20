@@ -68,6 +68,14 @@
           <span class="text-overline">
             {{ Number(currentTime) | timestamp }} / {{ Number(duration) | timestamp }}
           </span>
+
+          <q-btn
+            v-if="waiting"
+            size="sm"
+            class="q-ml-sm"
+            dense
+            loading
+          />
         </div>
 
         <div class="col-auto">
@@ -114,6 +122,7 @@
       >
         <q-slider
           v-model="seeker"
+          :disable="!playable || failed"
           :style="bufferStyle"
           :min="0.0"
           :max="duration"

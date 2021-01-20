@@ -1,7 +1,7 @@
 <template>
   <q-page class="container">
-    <q-card flat>
-      <q-card-section class="text-h1 text-weight-thin">
+    <q-card class="transparent">
+      <q-card-section class="text-h1">
         429
       </q-card-section>
 
@@ -9,7 +9,7 @@
         You have triggered an abuse detection mechanism.
       </q-card-section>
 
-      <q-card-section class="q-pt-none">
+      <q-card-section class="q-pt-none text-body1">
         Please wait a few minutes before you try again;<br>
         in some cases this may take up to an hour.
       </q-card-section>
@@ -41,8 +41,6 @@ export default {
 <style lang="scss" scoped>
 .container {
   margin: 50px auto;
-  width: 600px;
-  max-width: 100vw;
   text-align: center;
 }
 </style>

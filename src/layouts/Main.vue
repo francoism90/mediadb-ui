@@ -21,9 +21,25 @@
       <router-view />
     </q-page-container>
 
-    <q-footer class="footer transparent">
-      <div class="container fluid q-py-lg" />
-    </q-footer>
+    <q-footer
+      height-hint="58"
+      class="footer transparent"
+    />
+
+    <q-page-scroller
+      position="bottom-right"
+      :scroll-offset="175"
+      :offset="[65, 0]"
+      class="page-scroller"
+      dense
+    >
+      <q-btn
+        icon="expand_less"
+        padding="2px 10px"
+        unelevated
+        color="grey-10"
+      />
+    </q-page-scroller>
   </q-layout>
 </template>
 

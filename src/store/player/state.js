@@ -16,6 +16,6 @@ export default () => {
     requestRate: 1.0,
     requestTime: 0,
     requestTracks: [],
-    waiting: false
+    waiting: true
   }
 }
