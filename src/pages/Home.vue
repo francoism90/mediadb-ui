@@ -1,6 +1,10 @@
 <template>
   <q-page class="container q-py-md">
-    <filters />
+    <q-toolbar class="q-pb-lg">
+      <sorter />
+      <q-space />
+      <filters />
+    </q-toolbar>
 
     <q-pull-to-refresh
       :key="id"
@@ -39,7 +43,8 @@ const { mapFields } = createHelpers({
 export default {
   components: {
     Item: () => import('components/video/Item'),
-    Filters: () => import('components/video/Filters')
+    Filters: () => import('components/video/Filters'),
+    Sorter: () => import('components/video/Sorter')
   },
 
   meta () {

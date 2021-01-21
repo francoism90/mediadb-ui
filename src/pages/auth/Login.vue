@@ -3,8 +3,12 @@
     <q-card
       class="bg-grey-12 fixed-center"
       style="width: 350px; max-width: 100vw;"
+      dark
     >
-      <q-inner-loading :showing="!form">
+      <q-inner-loading
+        :showing="!form"
+        dark
+      >
         <q-spinner
           size="50px"
           color="primary"
@@ -31,6 +35,7 @@
               v-model.trim="form.email"
               filled
               clearable
+              dark
               type="email"
               label="Your email"
               :error-message="getError('email')"
@@ -41,6 +46,7 @@
               v-model.trim="form.password"
               filled
               clearable
+              dark
               type="password"
               label="Your password"
               :error-message="getError('password')"
@@ -48,7 +54,7 @@
             />
           </q-card-section>
 
-          <q-separator />
+          <q-separator dark />
 
           <q-card-actions
             align="right"

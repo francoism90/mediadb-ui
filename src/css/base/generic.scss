@@ -1,8 +1,6 @@
 html,
 body {
-  font-weight: map-get($text-weights, 'regular');
   background: $grey-14;
-  color: $grey-5;
 }
 
 body.body--dark {

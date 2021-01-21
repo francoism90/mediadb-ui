@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="text-h3 text-weight-bold ellipsis-2-lines">
+    <div class="text-h3 text-grey-1 text-weight-bold ellipsis-2-lines">
       {{ video.name }}
     </div>
 

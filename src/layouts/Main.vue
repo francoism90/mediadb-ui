@@ -6,14 +6,13 @@
     >
       <q-toolbar class="container fluid">
         <drawer />
-
         <q-space />
-
         <search />
-
         <q-space />
 
-        <tray />
+        <div class="row no-wrap q-gutter-sm">
+          <notifications />
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -52,15 +51,18 @@ export default {
   components: {
     Drawer: () => import('components/toolbar/Drawer'),
     Search: () => import('components/toolbar/Search'),
-    Tray: () => import('components/toolbar/Tray')
+    Notifications: () => import('components/toolbar/Notifications')
   },
 
   data () {
     return {
       stores: [
+        { name: 'actors', module: PaginateModule },
+        { name: 'genres', module: PaginateModule },
         { name: 'notifications', module: PaginateModule },
         { name: 'player', module: PlayerModule },
         { name: 'session', module: SessionModule },
+        { name: 'studios', module: PaginateModule },
         { name: 'videos', module: PaginateModule }
       ]
     }

@@ -1,6 +1,9 @@
 <template>
   <q-page class="container">
-    <q-card class="transparent">
+    <q-card
+      class="transparent"
+      dark
+    >
       <q-card-section class="text-h1">
         429
       </q-card-section>

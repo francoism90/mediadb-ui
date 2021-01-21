@@ -33,12 +33,12 @@ $headings: (
 );
 
 $h-tags: (
-  h1: map-get($headings, "h1"),
-  h2: map-get($headings, "h2"),
-  h3: map-get($headings, "h3"),
-  h4: map-get($headings, "h4"),
-  h5: map-get($headings, "h5"),
-  h6: map-get($headings, "h6")
+  h1: map-get($headings, 'h1'),
+  h2: map-get($headings, 'h2'),
+  h3: map-get($headings, 'h3'),
+  h4: map-get($headings, 'h4'),
+  h5: map-get($headings, 'h5'),
+  h6: map-get($headings, 'h6')
 );
 
 $text-weights: (
@@ -78,7 +78,7 @@ $negative: #c10015;
 $info: #f44336;
 $warning: #f2c037;
 
-$separator-color: $grey-10;
+$separator-color: $grey-2;
 $separator-dark-color: $grey-9;
 
 $generic-border-radius: 4px;

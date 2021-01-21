@@ -10,6 +10,7 @@
       placeholder="Search"
       clearable
       dense
+      dark
       square
       filled
       input-class="text-grey-5"
