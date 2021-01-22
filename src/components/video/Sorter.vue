@@ -12,7 +12,7 @@
         Sort By
       </template>
 
-      <q-list>
+      <q-list style="width: 220px; max-width: 100vw;">
         <q-item
           v-for="(item, index) in sorters"
           :key="index"

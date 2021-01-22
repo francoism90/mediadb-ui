@@ -83,6 +83,7 @@ export default {
       this.$q.dialog({
         component: EditComponent,
         parent: this,
+        dark: true,
         id: this.video.id
       })
     },
@@ -100,6 +101,7 @@ export default {
       this.$q.dialog({
         component: WatchComponent,
         parent: this,
+        dark: true,
         id: this.video.id
       })
     }

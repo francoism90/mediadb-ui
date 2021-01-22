@@ -6,8 +6,12 @@
     <q-card
       class="q-dialog-plugin"
       style="width: 500px; max-width: 100vw;"
+      dark
     >
-      <q-inner-loading :showing="!model">
+      <q-inner-loading
+        :showing="!model"
+        dark
+      >
         <q-spinner
           size="50px"
           color="primary"
@@ -23,25 +27,22 @@
           v-if="model"
           class="q-pa-none"
         >
-          <q-card-section class="row no-wrap justify-between items-center">
+          <q-card-section class="row no-wrap justify-between items-center content-center">
             <div class="col text-h6 ellipsis">
               {{ model.name }}
             </div>
 
             <div class="col-auto">
-              <q-btn
+              <q-icon
                 v-close-popup
-                icon="close"
-                color="grey-9"
-                size="12px"
-                dense
-                round
-                unelevated
+                name="close"
+                size="32px"
+                class="cursor-pointer"
               />
             </div>
           </q-card-section>
 
-          <q-separator />
+          <q-separator dark />
 
           <q-card-section>
             <q-tabs
@@ -69,11 +70,12 @@
               />
             </q-tabs>
 
-            <q-separator />
+            <q-separator dark />
 
             <q-tab-panels
               v-model="tab"
               animated
+              dark
             >
               <q-tab-panel
                 name="general"

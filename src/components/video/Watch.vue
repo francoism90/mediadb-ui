@@ -5,8 +5,14 @@
     maximized
     @hide="onDialogHide"
   >
-    <q-card class="q-dialog-plugin player">
-      <q-inner-loading :showing="!video">
+    <q-card
+      class="q-dialog-plugin player"
+      dark
+    >
+      <q-inner-loading
+        :showing="!video"
+        dark
+      >
         <q-spinner
           size="50px"
           color="primary"

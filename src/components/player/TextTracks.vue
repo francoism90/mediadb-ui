@@ -1,5 +1,5 @@
 <template>
-  <q-card-section class="q-px-none">
+  <q-card-section class="q-px-sm">
     <q-card-section
       v-if="!model.captions.length"
       class="text-body2 text-grey"
@@ -10,11 +10,13 @@
     <q-list
       v-for="(caption, index) in model.captions"
       :key="index"
+      dark
     >
       <q-item
         v-if="caption.id && caption.name"
         v-ripple
         tag="label"
+        dark
       >
         <q-item-section>
           <q-item-label class="ellipsis">

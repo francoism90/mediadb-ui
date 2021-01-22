@@ -7,41 +7,48 @@
     <q-card
       class="q-dialog-plugin"
       style="width: 500px; max-width: 100vw;"
+      dark
     >
       <q-dialog
         v-model="deleteDialog"
         persistent
       >
-        <q-card>
-          <q-card-section class="row items-center">
-            <q-avatar
-              icon="delete_forever"
-              color="primary"
-              text-color="white"
-            />
-            <span class="q-ml-sm">Are you sure you want to delete this video?</span>
+        <q-card dark>
+          <q-card-section class="q-pt-lg q-px-xl text-body1">
+            Are you sure you want to delete this video?
           </q-card-section>
 
-          <q-card-actions align="right">
+          <q-card-actions
+            align="center"
+            class="q-pb-lg"
+          >
             <q-btn
-              v-close-popup
-              flat
-              label="Cancel"
-              color="primary"
+              v-close-popup="3"
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-primary"
+              type="submit"
+              label="Confirm"
+              @click.prevent="onDelete"
             />
 
             <q-btn
-              v-close-popup="3"
-              flat
-              label="Confirm"
-              color="primary"
-              @click.prevent="onDelete"
+              v-close-popup
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-secondary"
+              label="Cancel"
             />
           </q-card-actions>
         </q-card>
       </q-dialog>
 
-      <q-inner-loading :showing="!form || !video">
+      <q-inner-loading
+        :showing="!form || !video"
+        dark
+      >
         <q-spinner
           size="50px"
           color="primary"
@@ -57,58 +64,71 @@
           v-if="form"
           @submit="onSubmit"
         >
-          <q-card-section class="row no-wrap justify-between items-center">
+          <q-card-section class="row no-wrap justify-between items-center content-center">
             <div class="col text-h6 ellipsis">
               Video Details
             </div>
 
             <div class="col-auto">
-              <q-btn
+              <q-icon
                 v-close-popup
-                icon="close"
-                color="grey-9"
-                size="12px"
-                dense
-                round
-                unelevated
+                name="close"
+                size="32px"
+                class="cursor-pointer"
               />
             </div>
           </q-card-section>
 
-          <q-separator />
+          <q-separator dark />
 
-          <q-card-section class="q-gutter-md">
+          <q-card-section class="q-px-xl q-gutter-sm">
             <q-input
               v-model.trim="form.name"
-              square
-              filled
+              :error-message="getError('name')"
+              :error="hasError('name')"
+              :maxlength="255"
               label="Name"
               clearable
               counter
-              :maxlength="255"
-              :error-message="getError('name')"
-              :error="hasError('name')"
+              dark
             />
 
             <q-select
               v-model="form.status"
-              square
-              filled
               :error-message="getError('status')"
               :error="hasError('status')"
               :input-debounce="300"
               :options="statuses"
+              option-label="label"
+              option-value="value"
               clearable
+              dark
               hide-dropdown-icon
               label="Visibility"
               emit-value
               map-options
-            />
+            >
+              <template #option="scope">
+                <q-item
+                  v-bind="scope.itemProps"
+                  class="bg-white text-black"
+                  v-on="scope.itemEvents"
+                >
+                  <q-item-section>
+                    <q-item-label class="text-black text-weight-medium">
+                      {{ scope.opt.label }}
+                    </q-item-label>
+
+                    <q-item-label class="text-grey-8">
+                      {{ scope.opt.description }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
 
             <q-select
               v-model="form.tags"
-              square
-              filled
               :error-message="getError('tags')"
               :error="hasError('tags')"
               :input-debounce="300"
@@ -117,6 +137,7 @@
               clearable
               hide-dropdown-icon
               counter
+              dark
               use-chips
               label="Tags"
               option-label="name"
@@ -129,17 +150,15 @@
               <template #option="scope">
                 <q-item
                   v-bind="scope.itemProps"
+                  class="bg-white text-black"
                   v-on="scope.itemEvents"
                 >
                   <q-item-section>
-                    <q-item-label>
+                    <q-item-label class="text-black text-weight-medium">
                       {{ scope.opt.name }}
                     </q-item-label>
 
-                    <q-item-label
-                      caption
-                      class="text-capitalize"
-                    >
+                    <q-item-label class="text-grey-8 text-capitalize">
                       {{ scope.opt.type }}
                     </q-item-label>
                   </q-item-section>
@@ -150,35 +169,37 @@
             <q-input
               v-model.trim="form.overview"
               type="textarea"
-              square
-              filled
               autogrow
               label="Overview"
               clearable
               counter
+              dark
               :maxlength="1024"
               :error-message="getError('name')"
               :error="hasError('name')"
             />
           </q-card-section>
 
-          <q-separator />
-
           <q-card-actions
-            align="right"
+            align="center"
+            class="q-pb-lg"
           >
             <q-btn
-              flat
-              label="Delete"
-              color="primary"
-              @click="deleteDialog = true"
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-primary btn-stretch"
+              type="submit"
+              label="Save"
             />
 
             <q-btn
-              flat
-              type="submit"
-              label="Save"
-              color="primary"
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-secondary btn-stretch"
+              label="Delete"
+              @click="deleteDialog = true"
             />
           </q-card-actions>
         </q-form>
@@ -208,8 +229,8 @@ export default {
       deleteDialog: false,
       video: null,
       statuses: [
-        { value: 'public', label: 'Public' },
-        { value: 'private', label: 'Private' }
+        { value: 'public', label: 'Public', description: 'Everyone can view this video' },
+        { value: 'private', label: 'Private', description: 'Can only be viewed with specific rights' }
       ],
       tags: []
     }

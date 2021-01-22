@@ -1,11 +1,12 @@
 <template>
-  <q-card-section class="q-px-none">
+  <q-card-section class="q-px-sm">
     <q-input
       v-if="model.codec_name"
       :value="model.codec_name"
       square
       readonly
       filled
+      dark
       label="Codec Name"
     />
 
@@ -15,6 +16,7 @@
       square
       readonly
       filled
+      dark
       label="Bitrate"
     />
 
@@ -24,6 +26,7 @@
       square
       readonly
       filled
+      dark
       label="Resolution"
     />
   </q-card-section>

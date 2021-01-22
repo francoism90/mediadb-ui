@@ -1,11 +1,14 @@
 <template>
-  <q-card-section class="q-px-none">
-    <q-list dense>
+  <q-card-section class="q-px-sm">
+    <q-list
+      dense
+      dark
+    >
       <q-item-label header>
         Playback Speed
       </q-item-label>
 
-      <q-item>
+      <q-item dark>
         <q-item-section side>
           <q-icon name="speed" />
         </q-item-section>
@@ -16,6 +19,7 @@
             :min="0.25"
             :max="2"
             :step="0.25"
+            dark
             markers
             snap
             label

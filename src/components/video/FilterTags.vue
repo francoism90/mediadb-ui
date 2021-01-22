@@ -106,7 +106,7 @@ export default {
 
   created () {
     this.initialize({
-      name: 'tags_actors'
+      name: `${this.namespace}_tags_` + new Date()
     })
   },
 
@@ -132,7 +132,7 @@ export default {
         .append('items')
         .orderBy('name')
         .page(this.state.page)
-        .limit(30)
+        .limit(15)
         .get()
 
       this.setPage(response)
