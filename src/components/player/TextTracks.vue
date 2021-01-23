@@ -26,7 +26,7 @@
 
         <q-item-section avatar>
           <q-toggle
-            v-model="textTracks"
+            v-model="requestTracks"
             color="primary"
             :val="caption.id"
           />
@@ -48,7 +48,7 @@ export default {
   computed: {
     ...mapFields([
       'model',
-      'textTracks'
+      'requestTracks'
     ])
   }
 }

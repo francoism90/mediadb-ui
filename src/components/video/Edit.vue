@@ -23,6 +23,15 @@
             class="q-pb-lg"
           >
             <q-btn
+              v-close-popup
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-secondary"
+              label="Cancel"
+            />
+
+            <q-btn
               v-close-popup="3"
               no-caps
               unelevated
@@ -31,15 +40,6 @@
               type="submit"
               label="Confirm"
               @click.prevent="onDelete"
-            />
-
-            <q-btn
-              v-close-popup
-              no-caps
-              unelevated
-              rounded
-              class="btn-outline btn-secondary"
-              label="Cancel"
             />
           </q-card-actions>
         </q-card>
@@ -188,18 +188,18 @@
               no-caps
               unelevated
               rounded
-              class="btn-outline btn-primary btn-stretch"
-              type="submit"
-              label="Save"
+              class="btn-outline btn-secondary btn-stretch"
+              label="Delete"
+              @click="deleteDialog = true"
             />
 
             <q-btn
               no-caps
               unelevated
               rounded
-              class="btn-outline btn-secondary btn-stretch"
-              label="Delete"
-              @click="deleteDialog = true"
+              class="btn-outline btn-primary btn-stretch"
+              type="submit"
+              label="Save"
             />
           </q-card-actions>
         </q-form>

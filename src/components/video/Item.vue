@@ -1,9 +1,10 @@
 <template>
   <q-card
-    flat
-    square
     class="transparent video-item"
     draggable="false"
+    dark
+    flat
+    square
   >
     <router-link :to="{ name: 'video', params: { id: video.id, slug: video.slug }}">
       <q-img
