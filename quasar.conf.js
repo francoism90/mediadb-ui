@@ -101,15 +101,18 @@ module.exports = function (ctx) {
     // https://quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
-      workboxOptions: {}, // only for GenerateSW
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
+      },
       manifest: {
         name: 'Quasar App',
         short_name: 'Quasar App',
         description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
+        background_color: '#0a0a0a',
+        theme_color: '#f44336',
         icons: [
           {
             src: 'icons/icon-128x128.png',
@@ -137,6 +140,11 @@ module.exports = function (ctx) {
             type: 'image/png'
           }
         ]
+      },
+      metaVariables: {
+        appleMobileWebAppCapable: 'yes',
+        appleMobileWebAppStatusBarStyle: 'default',
+        msapplicationTileColor: '#000000'
       }
     },
 

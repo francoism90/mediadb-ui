@@ -2,6 +2,7 @@
   <q-form
     v-if="visible"
     class="q-mx-md toolbar-input"
+    @submit.prevent
   >
     <q-input
       v-model="query"

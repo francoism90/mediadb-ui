@@ -27,7 +27,7 @@
 
     <q-drawer
       v-model="drawer"
-      :width="230"
+      :width="240"
       behavior="mobile"
       content-class="bg-grey-12"
     >

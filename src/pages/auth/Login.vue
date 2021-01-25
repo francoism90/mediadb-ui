@@ -2,7 +2,7 @@
   <q-page class="container fluid">
     <q-card
       class="bg-grey-12 fixed-center"
-      style="width: 350px; max-width: 100vw;"
+      style="width: 400px; max-width: 100vw;"
       dark
     >
       <q-inner-loading
@@ -24,47 +24,47 @@
           v-if="form"
           @submit="onSubmit"
         >
-          <q-card-section class="row items-center q-pb-none">
-            <div class="text-h6">
+          <q-card-section class="row no-wrap justify-between items-center content-center">
+            <div class="col text-h6 ellipsis">
               Sign In to MediaDB
             </div>
           </q-card-section>
 
-          <q-card-section class="q-gutter-md">
+          <q-separator dark />
+
+          <q-card-section class="q-px-xl q-gutter-sm">
             <q-input
               v-model.trim="form.email"
-              filled
-              clearable
-              dark
-              type="email"
-              label="Your email"
               :error-message="getError('email')"
               :error="hasError('email')"
+              clearable
+              dark
+              label="Your email"
+              type="email"
             />
 
             <q-input
               v-model.trim="form.password"
-              filled
-              clearable
-              dark
-              type="password"
-              label="Your password"
               :error-message="getError('password')"
               :error="hasError('password')"
+              clearable
+              dark
+              label="Your password"
+              type="password"
             />
           </q-card-section>
 
-          <q-separator dark />
-
           <q-card-actions
-            align="right"
+            align="center"
+            class="q-pb-lg"
           >
             <q-btn
-              label="Login"
-              size="md"
-              color="primary"
-              flat
+              no-caps
+              unelevated
+              rounded
+              class="btn-outline btn-primary btn-stretch"
               type="submit"
+              label="Sign In"
             />
           </q-card-actions>
         </q-form>
