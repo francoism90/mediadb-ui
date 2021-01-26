@@ -20,7 +20,7 @@
     "dayjs": "^1.10.4",
     "laravel-echo": "^1.10.0",
     "lodash": "^4.17.20",
-    "pusher-js": "^7.0.2",
+    "pusher-js": "^7.0.3",
     "quasar": "^1.15.1",
     "shaka-player": "^3.0.7",
     "vue-api-query": "^1.9.0",
