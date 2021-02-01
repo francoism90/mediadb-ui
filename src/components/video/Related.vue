@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="q-py-lg text-h6">
+    <div class="q-py-lg text-h6 text-grey-1">
       Related Videos
     </div>
 

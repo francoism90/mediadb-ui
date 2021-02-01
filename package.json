@@ -12,7 +12,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.14",
+    "@quasar/extras": "^1.9.15",
     "@websanova/vue-auth": "^4.1.1",
     "approximate-number": "^2.0.0",
     "axios": "^0.21.1",
@@ -20,7 +20,7 @@
     "dayjs": "^1.10.4",
     "laravel-echo": "^1.10.0",
     "lodash": "^4.17.20",
-    "pusher-js": "^7.0.2",
+    "pusher-js": "^7.0.3",
     "quasar": "^1.15.1",
     "shaka-player": "^3.0.7",
     "vue-api-query": "^1.9.0",
@@ -34,7 +34,7 @@
     "@quasar/app": "^2.1.14",
     "@quasar/quasar-app-extension-dotenv": "^1.0.5",
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.18.0",
+    "eslint": "^7.19.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
@@ -43,7 +43,7 @@
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^7.5.0",
     "stylelint-config-standard": "^20.0.0",
-    "workbox-webpack-plugin": "^6.0.2"
+    "workbox-webpack-plugin": "^6.1.0"
   },
   "browserslist": [
     "last 4 Chrome versions",
