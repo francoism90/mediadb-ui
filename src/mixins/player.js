@@ -29,7 +29,7 @@ export const playerHandler = {
 
     tooltipPosition () {
       if (!this.seekerHoverFrame) {
-        return 0
+        return '0'
       }
 
       return `-${this.seekerHoverFrame.x}px -${this.seekerHoverFrame.y}px`

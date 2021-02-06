@@ -188,13 +188,13 @@ export default {
       this.playing = false
     },
 
-    setFullscreen (value) {
+    async setFullscreen () {
       if (!this.$q.fullscreen.isCapable) {
         alert('Fullscreen is not supported')
         return
       }
 
-      this.$q.fullscreen.toggle(this.container)
+      await this.$q.fullscreen.toggle()
     },
 
     setFailed () {
