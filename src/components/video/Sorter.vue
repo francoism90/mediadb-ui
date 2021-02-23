@@ -59,6 +59,7 @@ export default {
       sorters: [
         { label: 'Recommended', value: 'recommended' },
         { label: 'Trending', value: 'trending' },
+        { label: 'Random', value: 'random' },
         { label: 'Most Recent', value: '-created_at' },
         { label: 'Shortest to Longest', value: 'duration' },
         { label: 'Longest to Shortest', value: '-duration' }
