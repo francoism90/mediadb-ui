@@ -43,7 +43,7 @@
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^7.6.0",
     "stylelint-config-standard": "^20.0.0",
-    "workbox-webpack-plugin": "^6.1.0"
+    "workbox-webpack-plugin": "^6.1.1"
   },
   "browserslist": [
     "last 4 Chrome versions",
