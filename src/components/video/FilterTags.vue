@@ -129,7 +129,7 @@ export default {
       const response = await Tag
         .where('type', this.type)
         .include('model', 'tags')
-        .append('items')
+        .append('item_count')
         .orderBy('name')
         .page(this.state.page)
         .limit(15)
