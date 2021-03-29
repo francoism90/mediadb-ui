@@ -21,7 +21,7 @@
     "laravel-echo": "^1.10.0",
     "lodash": "^4.17.21",
     "pusher-js": "^7.0.3",
-    "quasar": "^1.15.5",
+    "quasar": "^1.15.9",
     "shaka-player": "^3.0.10",
     "vue-api-query": "^1.9.0",
     "vue-i18n": "^8.24.1",
